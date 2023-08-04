@@ -11,5 +11,5 @@ jobs:
       - uses: hkusu/review-assign-action@v1
         with:
           assignees: ${{ github.actor }} # assign pull request author
-          reviewers: peppone-choi, 지은, jodonghyeon3, HyunsooZo
+          reviewers: peppone-choi, itonse, jodonghyeon3, HyunsooZo
           max-num-of-reviewers: 1
