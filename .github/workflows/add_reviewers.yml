@@ -1,0 +1,15 @@
+name: 리뷰어 자동 지정
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hkusu/review-assign-action@v1
+        with:
+          assignees: ${{ github.actor }} # assign pull request author
+          reviewers: peppone-choi, 지은, jodonghyeon3, HyunsooZo
+          max-num-of-reviewers: 1
