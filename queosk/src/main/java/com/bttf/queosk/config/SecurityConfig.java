@@ -17,6 +17,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(c -> c.disable()).cors(c -> c.disable())
                 .headers(c -> c.frameOptions(f -> f.disable()).disable())
+                .authorizeHttpRequests(auth -> auth.antMatchers("/error").permitAll())
+                .authorizeHttpRequests(auth -> auth.antMatchers("/favicion").permitAll())
+                .authorizeHttpRequests(auth -> auth.antMatchers("/h2-console/**").permitAll())
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         return http.build();
     }
