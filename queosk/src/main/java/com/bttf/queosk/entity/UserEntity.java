@@ -39,4 +39,5 @@ public class UserEntity extends BaseTimeEntity {
 
     private String imageUrl;
 
+    private String refreshToken;
 }
