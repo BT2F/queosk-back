@@ -1,7 +1,7 @@
 package com.bttf.queosk.repository;
 
 import com.bttf.queosk.config.JpaAuditingConfiguration;
-import com.bttf.queosk.domain.enumerate.Verified;
+import com.bttf.queosk.domain.enumerate.UserStatus;
 import com.bttf.queosk.entity.UserEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class UserRepositoryTest {
                 .email("a@x.com")
                 .password("test")
                 .phone("0100000000")
-                .verified(Verified.FALSE)
+                .status(UserStatus.NOT_VERIFIED)
                 .build();
 
         userRepository.save(user);

@@ -2,12 +2,13 @@ package com.bttf.queosk.repository;
 
 import com.bttf.queosk.config.JpaAuditingConfiguration;
 import com.bttf.queosk.entity.RestaurantEntity;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(JpaAuditingConfiguration.class)
 @DataJpaTest
@@ -31,8 +32,8 @@ public class RestaurantRepositoryTest {
         RestaurantEntity savedRestaurant = restaurantRepository.save(restaurant);
 
         // then
-        Assertions.assertThat(savedRestaurant.getOwnerId()).isSameAs(restaurant.getOwnerId());
-        Assertions.assertThat(savedRestaurant.getName()).isSameAs(restaurant.getName());
+        assertThat(savedRestaurant.getOwnerId()).isSameAs(restaurant.getOwnerId());
+        assertThat(savedRestaurant.getName()).isSameAs(restaurant.getName());
     }
 
     @Test
@@ -56,8 +57,8 @@ public class RestaurantRepositoryTest {
                         new IllegalArgumentException("잘못된 ID" + restaurant.getId()));
         // then
 
-        Assertions.assertThat(restaurantRepository.count()).isEqualTo(1);
-        Assertions.assertThat(findRestaurant.getId()).isEqualTo(1L);
-        Assertions.assertThat(findRestaurant.getOwnerId()).isEqualTo("test");
+        assertThat(restaurantRepository.count()).isEqualTo(1);
+        assertThat(findRestaurant.getId()).isEqualTo(1L);
+        assertThat(findRestaurant.getOwnerId()).isEqualTo("test");
     }
 }

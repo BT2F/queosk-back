@@ -1,8 +1,7 @@
 package com.bttf.queosk.entity;
 
 import com.bttf.queosk.config.BaseTimeEntity;
-import com.bttf.queosk.domain.enumerate.LoginApi;
-import com.bttf.queosk.domain.enumerate.UserStatus;
+import com.bttf.queosk.domain.enumerate.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,32 +10,31 @@ import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
 
-@Entity(name = "user")
+@Entity(name = "order")
 @AuditOverride(forClass = BaseTimeEntity.class)
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEntity extends BaseTimeEntity {
-
+public class OrderEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "table_id")
+    private TableEntity table;
 
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
+    private RestaurantEntity restaurant;
 
-    private String password;
+    @ManyToOne
+    @JoinColumn(name = "menu_id")
+    private MenuEntity menu;
 
-    private String phone;
+    private long count;
 
     @Enumerated(EnumType.STRING)
-    private LoginApi loginApi;
-
-    @Enumerated(EnumType.STRING)
-    private UserStatus status;
-
-    private String imageUrl;
-
+    private OrderStatus status;
 }
