@@ -1,21 +1,20 @@
 package com.bttf.queosk.repository;
 
 import com.bttf.queosk.config.JpaAuditingConfiguration;
-import com.bttf.queosk.entity.MenuEntity;
-import com.bttf.queosk.entity.OrderEntity;
-import com.bttf.queosk.entity.RestaurantEntity;
-import com.bttf.queosk.entity.TableEntity;
+import com.bttf.queosk.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+
+import java.time.LocalDateTime;
 
 import static com.bttf.queosk.domain.enumerate.TableStatus.OPEN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(JpaAuditingConfiguration.class)
 @DataJpaTest
-class OrderRepositoryTest {
+class CalculateRepositoryTest {
 
     @Autowired
     private OrderRepository orderRepository;
@@ -29,8 +28,11 @@ class OrderRepositoryTest {
     @Autowired
     private MenuRepository menuRepository;
 
+    @Autowired
+    private CalculateRepository calculateRepository;
+
     @Test
-    public void makeOrder_test() throws Exception {
+    public void CalculateRepository_test() throws Exception {
         // given
 
         RestaurantEntity restaurant = restaurantRepository.save(RestaurantEntity
@@ -44,17 +46,12 @@ class OrderRepositoryTest {
                 .restaurant(restaurant)
                 .build();
 
-
         MenuEntity menu = MenuEntity.builder()
                 .id(1L)
                 .name("test Menu")
                 .price(20000L)
                 .restaurant(restaurant)
                 .build();
-
-        tableRepository.save(table);
-
-        menuRepository.save(menu);
 
         OrderEntity order = OrderEntity.builder()
                 .id(1L)
@@ -64,16 +61,31 @@ class OrderRepositoryTest {
                 .count(3L)
                 .build();
 
-        // when
+        tableRepository.save(table);
+
+        menuRepository.save(menu);
 
         orderRepository.save(order);
 
+        CalculateEntity calculate = CalculateEntity.builder()
+                .id(1L)
+                .order(order)
+                .date(LocalDateTime.now())
+                .restaurant(restaurant)
+                .build();
+
+        // when
+
+        calculateRepository.save(calculate);
+
         // then
 
-        assertThat(orderRepository
-                .findById(order.getId())
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."))
-                .getRestaurant()).isEqualTo(restaurant);
+        assertThat(calculateRepository.existsById(calculate.getId())).isTrue();
+        assertThat(calculateRepository.findById(calculate.getId())
+                .orElseThrow(() ->
+                        new IllegalArgumentException("해당 id의 정산 내역이 존재하지 않습니다."))
+                .getRestaurant())
+                .isEqualTo(restaurant);
     }
 
 }
