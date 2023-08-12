@@ -15,4 +15,4 @@ spring:
 
 logging:
   level.org.hibernate.sql=debug
-  level.org.hibernate.type.descriptor.sql=tr
+  level.org.hibernate.type.descriptor.sql=trace
