@@ -45,6 +45,11 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 	// BaseEntity
 	implementation group: 'org.springframework.data', name: 'spring-data-envers'
+	testImplementation 'org.projectlombok:lombok:1.18.28'
+
+	// Mockito
+	testImplementation 'org.mockito:mockito-core:4.8.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	// Test 용 H2DB
 	runtimeOnly 'com.h2database:h2'
