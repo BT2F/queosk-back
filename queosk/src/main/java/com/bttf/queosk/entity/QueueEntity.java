@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,9 +17,10 @@ import org.springframework.data.redis.core.RedisHash;
 @RedisHash(value = "queue")
 public class QueueEntity {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    private String restaurantId;
+    private RestaurantEntity restaurantId;
 
-    private String userId;
+    private UserEntity userId;
 }

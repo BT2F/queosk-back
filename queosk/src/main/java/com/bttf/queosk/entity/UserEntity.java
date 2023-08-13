@@ -1,7 +1,7 @@
 package com.bttf.queosk.entity;
 
 import com.bttf.queosk.config.BaseTimeEntity;
-import com.bttf.queosk.domain.enumerate.LoginApi;
+import com.bttf.queosk.domain.enumerate.LoginType;
 import com.bttf.queosk.domain.enumerate.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +32,7 @@ public class UserEntity extends BaseTimeEntity {
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    private LoginApi loginApi;
+    private LoginType loginType;
 
     @Enumerated(EnumType.STRING)
     private UserStatus status;

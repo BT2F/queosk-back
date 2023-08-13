@@ -17,7 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class CommentEntity extends BaseTimeEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
