@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(JpaAuditingConfiguration.class)
 @DataJpaTest
-class CalculateRepositoryTest {
+class SettlementRepositoryTest {
 
     @Autowired
     private OrderRepository orderRepository;
@@ -29,7 +29,7 @@ class CalculateRepositoryTest {
     private MenuRepository menuRepository;
 
     @Autowired
-    private CalculateRepository calculateRepository;
+    private SettlementRepository settlementRepository;
 
     @Test
     public void CalculateRepository_test() throws Exception {
@@ -67,7 +67,7 @@ class CalculateRepositoryTest {
 
         orderRepository.save(order);
 
-        CalculateEntity calculate = CalculateEntity.builder()
+        SettlementEntity calculate = SettlementEntity.builder()
                 .id(1L)
                 .order(order)
                 .date(LocalDateTime.now())
@@ -76,12 +76,12 @@ class CalculateRepositoryTest {
 
         // when
 
-        calculateRepository.save(calculate);
+        settlementRepository.save(calculate);
 
         // then
 
-        assertThat(calculateRepository.existsById(calculate.getId())).isTrue();
-        assertThat(calculateRepository.findById(calculate.getId())
+        assertThat(settlementRepository.existsById(calculate.getId())).isTrue();
+        assertThat(settlementRepository.findById(calculate.getId())
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 id의 정산 내역이 존재하지 않습니다."))
                 .getRestaurant())
