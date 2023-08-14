@@ -26,13 +26,15 @@ public class RestaurantEntity extends BaseTimeEntity {
 
     private String ownerId;
 
-    private String name;
+    private String ownerName;
 
     private String password;
 
     private String email;
 
     private String phone;
+
+    private String restaurantName;
 
     private String restaurantPhone;
 

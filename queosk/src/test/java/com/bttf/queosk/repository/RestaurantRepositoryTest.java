@@ -24,16 +24,17 @@ public class RestaurantRepositoryTest {
         RestaurantEntity restaurant = RestaurantEntity.builder()
                 .id(1L)
                 .ownerId("test")
-                .name("test")
+                .ownerName("test")
                 .password("asd")
                 .build();
 
         // when
-        RestaurantEntity savedRestaurant = restaurantRepository.save(restaurant);
+        RestaurantEntity savedRestaurant =
+                restaurantRepository.save(restaurant);
 
         // then
         assertThat(savedRestaurant.getOwnerId()).isSameAs(restaurant.getOwnerId());
-        assertThat(savedRestaurant.getName()).isSameAs(restaurant.getName());
+        assertThat(savedRestaurant.getOwnerName()).isSameAs(restaurant.getOwnerName());
     }
 
     @Test
@@ -45,7 +46,7 @@ public class RestaurantRepositoryTest {
                         RestaurantEntity.builder()
                                 .id(1L)
                                 .ownerId("test")
-                                .name("test")
+                                .ownerName("test")
                                 .password("asd")
                                 .build()
                 );

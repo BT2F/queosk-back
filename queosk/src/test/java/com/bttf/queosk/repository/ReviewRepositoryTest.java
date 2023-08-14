@@ -5,13 +5,12 @@ import com.bttf.queosk.domain.enumerate.UserStatus;
 import com.bttf.queosk.entity.RestaurantEntity;
 import com.bttf.queosk.entity.ReviewEntity;
 import com.bttf.queosk.entity.UserEntity;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(JpaAuditingConfiguration.class)
 @DataJpaTest
@@ -43,7 +42,7 @@ class ReviewRepositoryTest {
         RestaurantEntity restaurant = RestaurantEntity.builder()
                 .id(1L)
                 .ownerId("test")
-                .name("test")
+                .ownerName("test")
                 .password("asd")
                 .build();
 

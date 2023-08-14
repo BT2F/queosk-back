@@ -1,4 +1,5 @@
 spring:
+
   h2:
     console:
       enabled: true
@@ -20,6 +21,7 @@ spring:
     properties:
       hibernate:
         globally_quoted_identifiers: true
+    show-sql: true
 
 logging:
   level.org.hibernate.sql=debug

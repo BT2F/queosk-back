@@ -47,7 +47,7 @@ class CommentRepositoryTest {
         RestaurantEntity restaurant = RestaurantEntity.builder()
                 .id(1L)
                 .ownerId("test")
-                .name("test")
+                .ownerName("test")
                 .password("asd")
                 .build();
 
