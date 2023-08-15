@@ -42,7 +42,8 @@ public class RestaurantController {
     @ApiOperation(value = "사업자 회원가입")
     public ResponseEntity signIn(@Valid @RequestBody RestaurantSignInForm restaurantSignInForm, Errors errors) throws Exception {
         ResponseEntity<?> responseErrorList = getErrorResponse(errors);
-        if (responseErrorList != null) throw new RuntimeException(); // TODO : 익셉션 제작
+        if (responseErrorList != null)
+            throw new RuntimeException(); // TODO : 익셉션 제작
         restaurantService.signIn(restaurantSignInForm);
         return ResponseEntity.status(201).build();
     }

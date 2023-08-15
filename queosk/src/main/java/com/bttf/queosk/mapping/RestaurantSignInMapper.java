@@ -13,7 +13,7 @@ import org.mapstruct.factory.Mappers;
         ReportingPolicy.IGNORE)
 public interface RestaurantSignInMapper extends EntityMapper<RestaurantSignInForm, RestaurantEntity> {
 
-        RestaurantSignInMapper MAPPER =
+    RestaurantSignInMapper MAPPER =
             Mappers.getMapper(RestaurantSignInMapper.class);
 
     @Override
