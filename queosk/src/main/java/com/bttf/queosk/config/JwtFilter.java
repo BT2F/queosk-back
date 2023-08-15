@@ -1,6 +1,6 @@
 package com.bttf.queosk.config;
 
-import com.bttf.queosk.service.RefreshTokenService;
+import com.bttf.queosk.service.RefreshTokenService.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -45,9 +45,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 String newAccessToken = refreshTokenService.issueNewAccessToken(email);
                 response.setHeader(HttpHeaders.AUTHORIZATION, newAccessToken);
                 response.setStatus(HttpServletResponse.SC_OK); // 200 Ok
-            }else{
+                response.getWriter().write("토큰이 갱신되었습니다.");
+            } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-                response.getWriter().write("리프레시 토큰이 만료되었습니다. 다시 로그인 하세요.");
+                response.getWriter().write("토큰이 만료되었습니다. 다시 로그인 하세요.");
                 response.getWriter().flush();
             }
         }
