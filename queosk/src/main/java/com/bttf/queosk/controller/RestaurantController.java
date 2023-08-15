@@ -1,6 +1,6 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.domain.RestaurantSignInDto;
+import com.bttf.queosk.domain.RestaurantSignInForm;
 import com.bttf.queosk.service.RestaurantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,9 +40,10 @@ public class RestaurantController {
 
     @PostMapping("/sign-in")
     @ApiOperation(value = "사업자 회원가입")
-    public ResponseEntity<?> signIn(@Valid @RequestBody RestaurantSignInDto restaurantSignInDto, Errors errors) {
+    public ResponseEntity signIn(@Valid @RequestBody RestaurantSignInForm restaurantSignInForm, Errors errors) throws Exception {
         ResponseEntity<?> responseErrorList = getErrorResponse(errors);
-        if (responseErrorList != null) return responseErrorList;
-        return ResponseEntity.status(201).body(restaurantService.signIn(restaurantSignInDto));
+        if (responseErrorList != null) throw new RuntimeException(); // TODO : 익셉션 제작
+        restaurantService.signIn(restaurantSignInForm);
+        return ResponseEntity.status(201).build();
     }
 }

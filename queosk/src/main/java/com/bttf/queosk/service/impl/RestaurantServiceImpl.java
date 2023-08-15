@@ -1,6 +1,6 @@
 package com.bttf.queosk.service.impl;
 
-import com.bttf.queosk.domain.RestaurantSignInDto;
+import com.bttf.queosk.domain.RestaurantSignInForm;
 import com.bttf.queosk.entity.RestaurantEntity;
 import com.bttf.queosk.mapping.RestaurantSignInMapper;
 import com.bttf.queosk.repository.RestaurantRepository;
@@ -19,10 +19,12 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Transactional
     @Override
-    public Object signIn(RestaurantSignInDto restaurantSignInDto) {
+    public void signIn(RestaurantSignInForm restaurantSignInForm) throws Exception {
+        if (restaurantRepository.existsByEmail(restaurantSignInForm.getEmail())) {
+            throw new Exception(); // TODO : 이메일 중복 익셉션 제작
+        }
         RestaurantEntity restaurant =
-                RestaurantSignInMapper.MAPPER.toEntity(restaurantSignInDto);
+                RestaurantSignInMapper.MAPPER.toEntity(restaurantSignInForm);
         restaurantRepository.save(restaurant);
-        return restaurant.getId();
     }
 }

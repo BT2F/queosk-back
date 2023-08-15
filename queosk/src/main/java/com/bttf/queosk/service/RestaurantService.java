@@ -1,7 +1,7 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.domain.RestaurantSignInDto;
+import com.bttf.queosk.domain.RestaurantSignInForm;
 
 public interface RestaurantService {
-    Object signIn(RestaurantSignInDto restaurantSignInDto);
+    void signIn(RestaurantSignInForm restaurantSignInForm) throws Exception;
 }

@@ -1,7 +1,7 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.controller.RestaurantController;
-import com.bttf.queosk.domain.RestaurantSignInDto;
+import com.bttf.queosk.domain.RestaurantSignInForm;
 import com.bttf.queosk.domain.enumerate.RestaurantCategory;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 
 @Transactional
 @Rollback
@@ -48,8 +49,8 @@ class RestaurantServiceTest {
     public void 매장_생성() throws Exception {
         // given
 
-        RestaurantSignInDto restaurantSignInDto =
-                RestaurantSignInDto.builder()
+        RestaurantSignInForm restaurantSignInForm =
+                RestaurantSignInForm.builder()
                         .ownerId("test")
                         .ownerName("test")
                         .password("1234")
@@ -60,18 +61,15 @@ class RestaurantServiceTest {
                         .category(RestaurantCategory.ASIAN)
                         .businessNumber("123-45-67890")
                         .businessStartDate("19900428")
-                        .address("노원구 노원동")
+                        .address("경기도 부천시 소사로276번길 63")
                         .build();
-
-        Mockito.doReturn(null).when(restaurantService)
-                .signIn(ArgumentMatchers.any(RestaurantSignInDto.class));
 
 
         // when
         ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.post(
                         "/api/restaurant/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new Gson().toJson(restaurantSignInDto))
+                .content(new Gson().toJson(restaurantSignInForm))
         );
 
         // then

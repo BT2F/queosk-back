@@ -26,3 +26,6 @@ spring:
 logging:
   level.org.hibernate.sql=debug
   level.org.hibernate.type.descriptor.sql=trace
+
+kakao:
+  apiKey: afd1424272e23370e80792c29e7834c7
