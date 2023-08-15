@@ -35,7 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder
                     .getContext()
                     .setAuthentication(authentication);
-        } else {
+        } else if (token != null) {
             //만약 AccessToken이 유효하지 않을 경우 사용자의 이메일로 RefreshToken 조회
             String email = jwtTokenProvider.getEmailFromToken(token);
             String refreshToken = refreshTokenService.getRefreshToken(email);
