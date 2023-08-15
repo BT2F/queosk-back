@@ -15,12 +15,12 @@ import javax.persistence.GenerationType;
 @NoArgsConstructor
 @Builder
 @RedisHash(value = "queue")
-public class QueueEntity {
+public class Queue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    private RestaurantEntity restaurantId;
+    private Restaurant restaurantId;
 
-    private UserEntity userId;
+    private User userId;
 }

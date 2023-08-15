@@ -2,9 +2,9 @@ package com.bttf.queosk.repository;
 
 import com.bttf.queosk.config.JpaAuditingConfiguration;
 import com.bttf.queosk.dto.UserStatus;
-import com.bttf.queosk.entity.RestaurantEntity;
-import com.bttf.queosk.entity.ReviewEntity;
-import com.bttf.queosk.entity.UserEntity;
+import com.bttf.queosk.entity.Restaurant;
+import com.bttf.queosk.entity.Review;
+import com.bttf.queosk.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -28,7 +28,7 @@ class ReviewRepositoryTest {
     @Test
     public void MenuRepository_test() throws Exception {
         // given
-        UserEntity user = UserEntity.builder()
+        User user = User.builder()
                 .id(1L)
                 .userId("test")
                 .email("a@x.com")
@@ -39,7 +39,7 @@ class ReviewRepositoryTest {
 
         userRepository.save(user);
 
-        RestaurantEntity restaurant = RestaurantEntity.builder()
+        Restaurant restaurant = Restaurant.builder()
                 .id(1L)
                 .ownerId("test")
                 .ownerName("test")
@@ -48,7 +48,7 @@ class ReviewRepositoryTest {
 
         restaurantRepository.save(restaurant);
 
-        ReviewEntity review = ReviewEntity.builder()
+        Review review = Review.builder()
                 .id(1L)
                 .restaurant(restaurant)
                 .user(user)

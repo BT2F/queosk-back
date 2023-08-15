@@ -1,9 +1,9 @@
 package com.bttf.queosk.repository;
 
 import com.bttf.queosk.dto.UserStatus;
-import com.bttf.queosk.entity.QueueEntity;
-import com.bttf.queosk.entity.RestaurantEntity;
-import com.bttf.queosk.entity.UserEntity;
+import com.bttf.queosk.entity.Queue;
+import com.bttf.queosk.entity.Restaurant;
+import com.bttf.queosk.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
@@ -17,14 +17,14 @@ class QueueRepositoryTest {
     @Test
     public void QueueRepository_test() throws Exception {
         // given
-        RestaurantEntity restaurant = RestaurantEntity.builder()
+        Restaurant restaurant = Restaurant.builder()
                 .id(1L)
                 .ownerId("test")
                 .ownerName("test")
                 .password("asd")
                 .build();
 
-        UserEntity user = UserEntity.builder()
+        User user = User.builder()
                 .id(1L)
                 .userId("test")
                 .email("a@x.com")
@@ -33,7 +33,7 @@ class QueueRepositoryTest {
                 .status(UserStatus.NOT_VERIFIED)
                 .build();
 
-        QueueEntity queue = QueueEntity.builder()
+        Queue queue = Queue.builder()
                 .id(1L)
                 .restaurantId(restaurant)
                 .userId(user)

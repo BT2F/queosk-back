@@ -1,7 +1,7 @@
 package com.bttf.queosk.repository;
 
 import com.bttf.queosk.config.JpaAuditingConfiguration;
-import com.bttf.queosk.entity.RestaurantEntity;
+import com.bttf.queosk.entity.Restaurant;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class RestaurantRepositoryTest {
     @DisplayName("매장이 DB에 저장되는지 확인한다.")
     public void signInRestaurant_test() throws Exception {
         // given
-        RestaurantEntity restaurant = RestaurantEntity.builder()
+        Restaurant restaurant = Restaurant.builder()
                 .id(1L)
                 .ownerId("test")
                 .ownerName("test")
@@ -29,7 +29,7 @@ public class RestaurantRepositoryTest {
                 .build();
 
         // when
-        RestaurantEntity savedRestaurant =
+        Restaurant savedRestaurant =
                 restaurantRepository.save(restaurant);
 
         // then
@@ -41,9 +41,9 @@ public class RestaurantRepositoryTest {
     @DisplayName("DB에 저장된 매장을 불러올 수 있는지 확인한다.")
     public void findRestorant_test() throws Exception {
         // given
-        RestaurantEntity restaurant = restaurantRepository
+        Restaurant restaurant = restaurantRepository
                 .save(
-                        RestaurantEntity.builder()
+                        Restaurant.builder()
                                 .id(1L)
                                 .ownerId("test")
                                 .ownerName("test")
@@ -52,7 +52,7 @@ public class RestaurantRepositoryTest {
                 );
 
         // when
-        RestaurantEntity findRestaurant = restaurantRepository
+        Restaurant findRestaurant = restaurantRepository
                 .findById(restaurant.getId())
                 .orElseThrow(() ->
                         new IllegalArgumentException("잘못된 ID" + restaurant.getId()));

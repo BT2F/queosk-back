@@ -2,7 +2,7 @@ package com.bttf.queosk.repository;
 
 import com.bttf.queosk.config.JpaAuditingConfiguration;
 import com.bttf.queosk.dto.UserStatus;
-import com.bttf.queosk.entity.UserEntity;
+import com.bttf.queosk.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ class UserRepositoryTest {
     @DisplayName("회원가입이 잘 된다.")
     public void setUserData_test() throws Exception {
         // given
-        UserEntity user = UserEntity.builder()
+        User user = User.builder()
                 .id(1L)
                 .userId("test")
                 .email("a@x.com")
@@ -34,7 +34,7 @@ class UserRepositoryTest {
         userRepository.save(user);
         // when
 
-        UserEntity savedUser = userRepository.findById(user.getId())
+        User savedUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 
         // then

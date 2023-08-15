@@ -1,8 +1,6 @@
 package com.bttf.queosk.entity;
 
 import com.bttf.queosk.config.BaseTimeEntity;
-import com.bttf.queosk.dto.LoginType;
-import com.bttf.queosk.dto.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,34 +8,26 @@ import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
-@Entity(name = "user")
+@Entity(name = "calculate")
 @AuditOverride(forClass = BaseTimeEntity.class)
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEntity extends BaseTimeEntity {
-
+public class Settlement extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurant;
 
-    private String password;
-
-    private String phone;
-
-    @Enumerated(EnumType.STRING)
-    private LoginType loginType;
-
-    @Enumerated(EnumType.STRING)
-    private UserStatus status;
-
-    private String imageUrl;
-
-    private String refreshToken;
+    private LocalDateTime date;
 }
