@@ -18,11 +18,11 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestaurantEntity extends BaseTimeEntity {
+public class Restaurant extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String ownerId;
 
@@ -47,16 +47,18 @@ public class RestaurantEntity extends BaseTimeEntity {
 
     private String address;
 
-    private double latitude;
+    private Double latitude;
 
-    private double longitude;
+    private Double longitude;
 
-    private double ratingAverage;
+    private Double ratingAverage;
 
     private String imageUrl;
 
     @Enumerated(EnumType.STRING)
     private OperationStatus operationStatus;
 
-    private long maxWaiting;
+    private Long maxWaiting;
+
+    private Boolean isDeleted;
 }

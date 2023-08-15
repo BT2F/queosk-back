@@ -1,7 +1,7 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.RestaurantSignInForm;
-import com.bttf.queosk.entity.RestaurantEntity;
+import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.mapper.RestaurantSignInMapper;
 import com.bttf.queosk.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class RestaurantService {
         if (restaurantRepository.existsByEmail(restaurantSignInForm.getEmail())) {
             throw new Exception(); // TODO : 이메일 중복 익셉션 제작
         }
-        RestaurantEntity restaurant =
+        Restaurant restaurant =
                 RestaurantSignInMapper.MAPPER.toEntity(restaurantSignInForm);
         restaurantRepository.save(restaurant);
     }

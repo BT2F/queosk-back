@@ -35,25 +35,25 @@ class SettlementRepositoryTest {
     public void CalculateRepository_test() throws Exception {
         // given
 
-        RestaurantEntity restaurant = restaurantRepository.save(RestaurantEntity
+        Restaurant restaurant = restaurantRepository.save(Restaurant
                 .builder()
                 .id(1L)
                 .build());
 
-        TableEntity table = TableEntity.builder()
+        Table table = Table.builder()
                 .id(1L)
                 .status(OPEN)
                 .restaurant(restaurant)
                 .build();
 
-        MenuEntity menu = MenuEntity.builder()
+        Menu menu = Menu.builder()
                 .id(1L)
                 .name("test Menu")
                 .price(20000L)
                 .restaurant(restaurant)
                 .build();
 
-        OrderEntity order = OrderEntity.builder()
+        Order order = Order.builder()
                 .id(1L)
                 .table(table)
                 .restaurant(restaurant)
@@ -67,7 +67,7 @@ class SettlementRepositoryTest {
 
         orderRepository.save(order);
 
-        SettlementEntity calculate = SettlementEntity.builder()
+        Settlement calculate = Settlement.builder()
                 .id(1L)
                 .order(order)
                 .date(LocalDateTime.now())

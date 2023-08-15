@@ -1,8 +1,8 @@
 package com.bttf.queosk.repository;
 
 import com.bttf.queosk.config.JpaAuditingConfiguration;
-import com.bttf.queosk.entity.MenuEntity;
-import com.bttf.queosk.entity.RestaurantEntity;
+import com.bttf.queosk.entity.Menu;
+import com.bttf.queosk.entity.Restaurant;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +26,15 @@ class MenuRepositoryTest {
     public void menuRepository_test() throws Exception {
         // given
 
-        RestaurantEntity savedRestaurant =
-                restaurantRepository.save(RestaurantEntity.builder()
+        Restaurant savedRestaurant =
+                restaurantRepository.save(Restaurant.builder()
                         .id(1L)
                         .ownerId("test")
                         .ownerName("test")
                         .password("asd")
                         .build());
 
-        MenuEntity menu = MenuEntity.builder()
+        Menu menu = Menu.builder()
                 .id(1L)
                 .name("test Menu")
                 .price(20000L)
@@ -42,7 +42,7 @@ class MenuRepositoryTest {
                 .build();
         // when
 
-        MenuEntity savedMenu = menuRepository.save(menu);
+        Menu savedMenu = menuRepository.save(menu);
 
         // then
 
@@ -53,15 +53,15 @@ class MenuRepositoryTest {
     @Test
     public void loadMenu_test() throws Exception {
         // given
-        RestaurantEntity savedRestaurant =
-                restaurantRepository.save(RestaurantEntity.builder()
+        Restaurant savedRestaurant =
+                restaurantRepository.save(Restaurant.builder()
                         .id(1L)
                         .ownerId("test")
                         .ownerName("test")
                         .password("asd")
                         .build());
 
-        MenuEntity menu = MenuEntity.builder()
+        Menu menu = Menu.builder()
                 .id(1L)
                 .name("test Menu")
                 .price(20000L)
@@ -71,7 +71,7 @@ class MenuRepositoryTest {
         menuRepository.save(menu);
 
         // when
-        MenuEntity findMenu = menuRepository.findById(menu.getId())
+        Menu findMenu = menuRepository.findById(menu.getId())
                 .orElseThrow(() -> new IllegalArgumentException("메뉴 ID를 찾을 수 없습니다."));
 
         // then

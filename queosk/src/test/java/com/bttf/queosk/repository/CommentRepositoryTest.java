@@ -2,10 +2,10 @@ package com.bttf.queosk.repository;
 
 import com.bttf.queosk.config.JpaAuditingConfiguration;
 import com.bttf.queosk.dto.UserStatus;
-import com.bttf.queosk.entity.CommentEntity;
-import com.bttf.queosk.entity.RestaurantEntity;
-import com.bttf.queosk.entity.ReviewEntity;
-import com.bttf.queosk.entity.UserEntity;
+import com.bttf.queosk.entity.Comment;
+import com.bttf.queosk.entity.Restaurant;
+import com.bttf.queosk.entity.Review;
+import com.bttf.queosk.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -33,7 +33,7 @@ class CommentRepositoryTest {
     public void CommentRepository_test() throws Exception {
         // given
 
-        UserEntity user = UserEntity.builder()
+        User user = User.builder()
                 .id(1L)
                 .userId("test")
                 .email("a@x.com")
@@ -44,7 +44,7 @@ class CommentRepositoryTest {
 
         userRepository.save(user);
 
-        RestaurantEntity restaurant = RestaurantEntity.builder()
+        Restaurant restaurant = Restaurant.builder()
                 .id(1L)
                 .ownerId("test")
                 .ownerName("test")
@@ -53,7 +53,7 @@ class CommentRepositoryTest {
 
         restaurantRepository.save(restaurant);
 
-        ReviewEntity review = ReviewEntity.builder()
+        Review review = Review.builder()
                 .id(1L)
                 .restaurant(restaurant)
                 .user(user)
@@ -64,7 +64,7 @@ class CommentRepositoryTest {
 
         reviewRepository.save(review);
 
-        CommentEntity comment = CommentEntity.builder()
+        Comment comment = Comment.builder()
                 .id(1L)
                 .review(review)
                 .restaurant(restaurant)

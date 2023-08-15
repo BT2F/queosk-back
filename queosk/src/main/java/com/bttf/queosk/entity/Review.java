@@ -9,25 +9,28 @@ import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
 
-@Entity(name = "comment")
+@Entity(name = "review")
 @AuditOverride(forClass = BaseTimeEntity.class)
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentEntity extends BaseTimeEntity {
+public class Review extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "review_id")
-    private ReviewEntity review;
+    @JoinColumn(name = "restorant_id")
+    private Restaurant restaurant;
 
     @ManyToOne
-    @JoinColumn(name = "restaurant_id")
-    private RestaurantEntity restaurant;
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private String subject;
 
     private String content;
 
+    private Double rate;
 }
