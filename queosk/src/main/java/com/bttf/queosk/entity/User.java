@@ -1,8 +1,7 @@
 package com.bttf.queosk.entity;
 
 import com.bttf.queosk.config.BaseTimeEntity;
-import com.bttf.queosk.dto.LoginType;
-import com.bttf.queosk.dto.UserStatus;
+import com.bttf.queosk.model.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +22,7 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userId;
+    private String nickName;
 
     private String email;
 
@@ -32,12 +31,9 @@ public class User extends BaseTimeEntity {
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    private LoginType loginType;
-
-    @Enumerated(EnumType.STRING)
     private UserStatus status;
 
     private String imageUrl;
 
-    private String refreshToken;
+    private String loginApi;
 }
