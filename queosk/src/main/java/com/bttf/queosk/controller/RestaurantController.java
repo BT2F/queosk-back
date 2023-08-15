@@ -2,6 +2,7 @@ package com.bttf.queosk.controller;
 
 import com.bttf.queosk.domain.RestaurantSignInForm;
 import com.bttf.queosk.service.RestaurantService;
+import com.bttf.queosk.util.KakaoGeoAddress;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class RestaurantController {
         return null;
     }
 
-    @PostMapping("/sign-in")
+    @PostMapping("/signup")
     @ApiOperation(value = "사업자 회원가입")
     public ResponseEntity signIn(@Valid @RequestBody RestaurantSignInForm restaurantSignInForm, Errors errors) throws Exception {
         ResponseEntity<?> responseErrorList = getErrorResponse(errors);
