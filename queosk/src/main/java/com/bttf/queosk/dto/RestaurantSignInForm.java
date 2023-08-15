@@ -1,6 +1,5 @@
-package com.bttf.queosk.domain;
+package com.bttf.queosk.dto;
 
-import com.bttf.queosk.domain.enumerate.RestaurantCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

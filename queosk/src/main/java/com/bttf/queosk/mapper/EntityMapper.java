@@ -1,4 +1,4 @@
-package com.bttf.queosk.mapping;
+package com.bttf.queosk.mapper;
 
 public interface EntityMapper<D, E> {
     E toEntity(final D dto);

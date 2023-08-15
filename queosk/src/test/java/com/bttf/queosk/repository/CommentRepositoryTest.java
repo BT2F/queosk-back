@@ -1,7 +1,7 @@
 package com.bttf.queosk.repository;
 
 import com.bttf.queosk.config.JpaAuditingConfiguration;
-import com.bttf.queosk.domain.enumerate.UserStatus;
+import com.bttf.queosk.dto.UserStatus;
 import com.bttf.queosk.entity.CommentEntity;
 import com.bttf.queosk.entity.RestaurantEntity;
 import com.bttf.queosk.entity.ReviewEntity;

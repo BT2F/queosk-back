@@ -1,16 +1,13 @@
-package com.bttf.queosk.mapping;
+package com.bttf.queosk.mapper;
 
-import com.bttf.queosk.domain.RestaurantSignInForm;
+import com.bttf.queosk.dto.RestaurantSignInForm;
 import com.bttf.queosk.entity.RestaurantEntity;
 import com.bttf.queosk.util.KakaoGeoAddress;
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy =
         ReportingPolicy.IGNORE)
