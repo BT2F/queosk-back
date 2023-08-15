@@ -1,7 +1,11 @@
 package com.bttf.queosk.service.userService;
 
 import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.dto.tokenDto.TokenDto;
+import com.bttf.queosk.dto.userDto.UserSignInDto;
+import com.bttf.queosk.dto.userDto.UserSignInForm;
 import com.bttf.queosk.dto.userDto.UserSignUpForm;
+import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.repository.RefreshTokenRepository;
@@ -14,7 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class UserServiceTest {
@@ -47,7 +55,7 @@ class UserServiceTest {
 
         when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
         when(passwordEncoder.encode(any())).thenReturn("encryptedPassword");
-        when(passwordEncoder.matches(userSignUpForm.getPassword(),"encryptedPassword"))
+        when(passwordEncoder.matches(userSignUpForm.getPassword(), "encryptedPassword"))
                 .thenReturn(true);
 
         // When
@@ -76,5 +84,66 @@ class UserServiceTest {
 
         verify(userRepository, times(1)).findByEmail(eq("existing@example.com"));
         verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    void signInUser_Success() {
+        // Arrange
+        String email = "user@example.com";
+        String password = "password";
+        String encodedPassword = "encodedPassword"; // Encoded password
+        String accessToken = "accessToken";
+        String refreshToken = "refreshToken";
+        User user = User.builder()
+                .email(email)
+                .password(encodedPassword)
+                .build();
+
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
+        when(jwtTokenProvider.generateAccessToken(any(TokenDto.class))).thenReturn(accessToken);
+        when(jwtTokenProvider.generateRefreshToken()).thenReturn(refreshToken);
+
+        // Act
+        UserSignInDto result = userService.signInUser(new UserSignInForm(email, password));
+
+        // Assert
+        assertNotNull(result);
+        assertThat(email).isEqualTo(result.getEmail());
+        assertThat(accessToken).isEqualTo(result.getAccessToken());
+        assertThat(refreshToken).isEqualTo(result.getRefreshToken());
+        verify(refreshTokenRepository, times(1)).save(any(RefreshToken.class));
+    }
+
+    @Test
+    void signInUser_InvalidEmail() {
+        // Arrange
+        String invalidEmail = "invalid@example.com";
+        String password = "password";
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(CustomException.class, () -> {
+            userService.signInUser(new UserSignInForm(invalidEmail, password));
+        });
+    }
+
+    @Test
+    void signInUser_InvalidPassword() {
+        // Arrange
+        String email = "user@example.com";
+        String invalidPassword = "invalidPassword";
+        String encodedPassword = "encodedPassword"; // Encoded password
+        User user = User.builder()
+                .email(email)
+                .password(encodedPassword)
+                .build();
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
+
+        // Act & Assert
+        assertThrows(CustomException.class, () -> {
+            userService.signInUser(new UserSignInForm(email, invalidPassword));
+        });
     }
 }
