@@ -1,7 +1,7 @@
 package com.bttf.queosk.entity;
 
 import com.bttf.queosk.config.BaseTimeEntity;
-import com.bttf.queosk.domain.enumerate.TableStatus;
+import com.bttf.queosk.model.TableStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,11 +20,16 @@ public class TableEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private TableStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id")
-    private RestaurantEntity restaurant;
+    private long restaurantId;
+
+    public static TableEntity of(long restaurantId) {
+        return TableEntity.builder()
+                .status(TableStatus.OPEN)
+                .restaurantId(restaurantId)
+                .build();
+    }
 }

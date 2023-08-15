@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
 
-import static com.bttf.queosk.domain.enumerate.TableStatus.OPEN;
+import static com.bttf.queosk.model.TableStatus.OPEN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(JpaAuditingConfiguration.class)

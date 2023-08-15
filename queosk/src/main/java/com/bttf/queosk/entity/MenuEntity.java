@@ -1,7 +1,7 @@
 package com.bttf.queosk.entity;
 
 import com.bttf.queosk.config.BaseTimeEntity;
-import com.bttf.queosk.domain.enumerate.MenuStatus;
+import com.bttf.queosk.model.MenuStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

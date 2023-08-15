@@ -1,11 +1,10 @@
 package com.bttf.queosk.repository;
 
 import com.bttf.queosk.config.JpaAuditingConfiguration;
-import com.bttf.queosk.domain.enumerate.UserStatus;
+import com.bttf.queosk.model.UserStatus;
 import com.bttf.queosk.entity.RestaurantEntity;
 import com.bttf.queosk.entity.ReviewEntity;
 import com.bttf.queosk.entity.UserEntity;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
