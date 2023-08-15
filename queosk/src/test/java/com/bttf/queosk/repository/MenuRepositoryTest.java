@@ -30,7 +30,7 @@ class MenuRepositoryTest {
                 restaurantRepository.save(RestaurantEntity.builder()
                         .id(1L)
                         .ownerId("test")
-                        .name("test")
+                        .ownerName("test")
                         .password("asd")
                         .build());
 
@@ -57,7 +57,7 @@ class MenuRepositoryTest {
                 restaurantRepository.save(RestaurantEntity.builder()
                         .id(1L)
                         .ownerId("test")
-                        .name("test")
+                        .ownerName("test")
                         .password("asd")
                         .build());
 

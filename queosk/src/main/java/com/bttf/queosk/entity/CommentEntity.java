@@ -25,7 +25,7 @@ public class CommentEntity extends BaseTimeEntity {
     private ReviewEntity review;
 
     @ManyToOne
-    @JoinColumn (name = "restaurant_id")
+    @JoinColumn(name = "restaurant_id")
     private RestaurantEntity restaurant;
 
     private String content;

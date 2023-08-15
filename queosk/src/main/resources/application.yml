@@ -20,7 +20,10 @@ spring:
     properties:
       hibernate:
         globally_quoted_identifiers: true
+    show-sql: true
 
 logging:
   level.org.hibernate.sql=debug
   level.org.hibernate.type.descriptor.sql=trace
+
+kakaoApiKey: afd1424272e23370e80792c29e7834c7

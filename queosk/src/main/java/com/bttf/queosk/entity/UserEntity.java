@@ -1,8 +1,8 @@
 package com.bttf.queosk.entity;
 
 import com.bttf.queosk.config.BaseTimeEntity;
-import com.bttf.queosk.domain.enumerate.LoginType;
-import com.bttf.queosk.domain.enumerate.UserStatus;
+import com.bttf.queosk.dto.LoginType;
+import com.bttf.queosk.dto.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
