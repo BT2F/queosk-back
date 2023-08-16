@@ -1,9 +1,7 @@
 package com.bttf.queosk.service.userService;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.userDto.UserSignUpForm;
-import com.bttf.queosk.entity.User;
-import com.bttf.queosk.exception.CustomException;
+
 import com.bttf.queosk.dto.tokenDto.TokenDto;
 import com.bttf.queosk.dto.userDto.UserSignInDto;
 import com.bttf.queosk.dto.userDto.UserSignInForm;
@@ -18,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.bttf.queosk.exception.ErrorCode.EXISTING_USER;
 import static com.bttf.queosk.exception.ErrorCode.*;
 import static com.bttf.queosk.model.UserStatus.NOT_VERIFIED;
 
