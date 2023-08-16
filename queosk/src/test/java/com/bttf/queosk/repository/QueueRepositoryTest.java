@@ -1,6 +1,6 @@
 package com.bttf.queosk.repository;
 
-import com.bttf.queosk.dto.UserStatus;
+import com.bttf.queosk.model.UserStatus;
 import com.bttf.queosk.entity.Queue;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
@@ -26,7 +26,6 @@ class QueueRepositoryTest {
 
         User user = User.builder()
                 .id(1L)
-                .userId("test")
                 .email("a@x.com")
                 .password("test")
                 .phone("0100000000")
