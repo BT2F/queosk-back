@@ -1,10 +1,7 @@
 package com.bttf.queosk.service.userService;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.userDto.UserDto;
-import com.bttf.queosk.dto.userDto.UserSignInDto;
-import com.bttf.queosk.dto.userDto.UserSignInForm;
-import com.bttf.queosk.dto.userDto.UserSignUpForm;
+import com.bttf.queosk.dto.userDto.*;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
@@ -109,5 +106,17 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
 
         return UserDtoMapper.INSTANCE.userToUserDto(targetUser);
+    }
+
+    @Override
+    public UserDto editUserInformation(Long userId, UserEditForm userEditForm) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+
+        user.editInformation(userEditForm);
+
+        userRepository.save(user);
+
+        return UserDtoMapper.INSTANCE.userToUserDto(user);
     }
 }

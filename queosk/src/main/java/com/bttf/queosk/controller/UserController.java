@@ -1,9 +1,6 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.userDto.UserCheckForm;
-import com.bttf.queosk.dto.userDto.UserDto;
-import com.bttf.queosk.dto.userDto.UserSignInForm;
-import com.bttf.queosk.dto.userDto.UserSignUpForm;
+import com.bttf.queosk.dto.userDto.*;
 import com.bttf.queosk.service.userService.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,14 +46,25 @@ public class UserController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 사용중인 이메일 입니다.");
     }
 
-    @GetMapping("/{id}")
+    @GetMapping
     @ApiOperation(value = "사용자 상세정보", notes = "사용자의 상세정보를 조회합니다.")
-    public ResponseEntity<?> getUserDetails(@PathVariable Long id,
-                                            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<?> getUserDetails(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         UserDto user = userService.getUserFromToken(token);
-        UserDto targetUser = userService.getUserFromId(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(targetUser);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @PutMapping
+    @ApiOperation(value = "사용자 정보 수정", notes = "사용자의 상세정보를 수정합니다.")
+    public ResponseEntity<?> editUserDetails(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody UserEditForm userEditForm) {
+
+        UserDto userDto = userService.getUserFromToken(token);
+
+        UserDto result = userService.editUserInformation(userDto.getId(),userEditForm);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
