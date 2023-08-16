@@ -1,4 +1,4 @@
-package com.bttf.queosk.ImageService;
+package com.bttf.queosk.service.ImageService;
 
 import org.springframework.web.multipart.MultipartFile;
 
