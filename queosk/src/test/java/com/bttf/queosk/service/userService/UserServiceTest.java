@@ -1,14 +1,12 @@
 package com.bttf.queosk.service.userService;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-
 import com.bttf.queosk.dto.tokenDto.TokenDto;
-import com.bttf.queosk.dto.userDto.UserSignInDto;
-import com.bttf.queosk.dto.userDto.UserSignInForm;
-import com.bttf.queosk.dto.userDto.UserSignUpForm;
+import com.bttf.queosk.dto.userDto.*;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
+import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,11 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -147,5 +143,189 @@ class UserServiceTest {
         assertThrows(CustomException.class, () -> {
             userService.signInUser(new UserSignInForm(email, invalidPassword));
         });
+    }
+
+    @Test
+    public void testCheckDuplication() {
+        // Given
+        String email = "test@example.com";
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        // When
+        boolean result = userService.checkDuplication(email);
+
+        // Then
+        assertThat(result).isTrue();
+        verify(userRepository, times(1)).findByEmail(email);
+    }
+
+    @Test
+    public void testGetUserFromToken() {
+        // Given
+        String token = "testToken";
+        Long userId = 1L;
+        User user = User.builder().id(1L).build();
+        when(jwtTokenProvider.getIdFromToken(token)).thenReturn(userId);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // When
+        UserDto userDto = userService.getUserFromToken(token);
+
+        // Then
+        assertThat(userDto.getId()).isEqualTo(userId);
+        verify(jwtTokenProvider, times(1)).getIdFromToken(token);
+        verify(userRepository, times(1)).findById(userId);
+    }
+
+    @Test
+    public void testGetUserFromTokenThrowsExceptionWhenUserNotExists() {
+        // Given
+        String token = "testToken";
+        Long userId = 1L;
+        when(jwtTokenProvider.getIdFromToken(token)).thenReturn(userId);
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // When, Then
+        assertThrows(CustomException.class, () -> userService.getUserFromToken(token));
+        verify(jwtTokenProvider, times(1)).getIdFromToken(token);
+        verify(userRepository, times(1)).findById(userId);
+    }
+
+    @Test
+    public void testGetUserFromId() {
+        // Given
+        Long userId = 1L;
+        User user = User.builder().id(1L).build();
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // When
+        UserDto userDto = userService.getUserFromId(userId);
+
+        // Then
+        assertThat(userDto.getId()).isEqualTo(userId);
+        verify(userRepository, times(1)).findById(userId);
+    }
+
+    @Test
+    public void testGetUserFromIdThrowsExceptionWhenUserNotExists() {
+        // Given
+        Long userId = 1L;
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // When, Then
+        assertThrows(CustomException.class, () -> userService.getUserFromId(userId));
+        verify(userRepository, times(1)).findById(userId);
+    }
+
+    @Test
+    public void testEditUserInformation() {
+        // Given
+        Long userId = 1L;
+        UserEditForm userEditForm = new UserEditForm();
+        User user = User.builder().id(1L).build();
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // When
+        UserDto userDto = userService.editUserInformation(userId, userEditForm);
+
+        // Then
+        assertThat(userDto.getId()).isEqualTo(userId);
+        verify(userRepository, times(1)).findById(userId);
+        verify(userRepository, times(1)).save(user);
+    }
+
+    @Test
+    public void testEditUserInformationThrowsExceptionWhenUserNotExists() {
+        // Given
+        Long userId = 1L;
+        UserEditForm userEditForm = new UserEditForm();
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // When, Then
+        assertThrows(CustomException.class, () -> userService.editUserInformation(userId, userEditForm));
+        verify(userRepository, times(1)).findById(userId);
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    public void testChangeUserPassword() {
+        // Given
+        Long userId = 1L;
+        String existingPassword = "oldPassword";
+        String newPassword = "newPassword";
+
+        User user = User.builder().id(userId).password("encodedOldPassword").build();
+
+        UserPasswordChangeForm userPasswordChangeForm =
+                UserPasswordChangeForm.builder()
+                        .existingPassword("oldPassword")
+                        .newPassword(newPassword)
+                        .build();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(existingPassword, user.getPassword())).thenReturn(true);
+        when(passwordEncoder.encode(newPassword)).thenReturn("encodedNewPassword");
+
+        // When
+        userService.changeUserPassword(userId, userPasswordChangeForm);
+
+        // Then
+        verify(userRepository).findById(userId);
+        verify(passwordEncoder).encode(newPassword);
+        verify(userRepository).save(user);
+
+        assertThat(user.getPassword()).isEqualTo("encodedNewPassword");
+    }
+
+    @Test
+    public void testChangeUserPasswordInvalidExistingPassword() {
+        // Given
+        Long userId = 1L;
+        String existingPassword = "invalidOldPassword";
+        String newPassword = "newPassword";
+
+        User user = User.builder().id(userId).password("encodedOldPassword").build();
+
+        UserPasswordChangeForm userPasswordChangeForm =
+                UserPasswordChangeForm.builder()
+                        .existingPassword("invalidOldPassword")
+                        .newPassword(newPassword)
+                        .build();
+
+        // Mock userRepository
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(existingPassword, user.getPassword())).thenReturn(false);
+
+        // When & Then
+        assertThatThrownBy(() -> userService.changeUserPassword(userId, userPasswordChangeForm))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.PASSWORD_NOT_MATCH.getMessage());
+
+        verify(userRepository).findById(userId);
+        verify(passwordEncoder).matches(existingPassword, user.getPassword());
+        verifyNoMoreInteractions(passwordEncoder, userRepository);
+    }
+
+    @Test
+    public void testChangeUserPasswordUserNotFound() {
+        // Given
+        Long userId = 1L;
+
+        UserPasswordChangeForm userPasswordChangeForm =
+                UserPasswordChangeForm.builder()
+                        .existingPassword("oldPassword")
+                        .newPassword("newPassword")
+                        .build();
+
+        // Mock userRepository
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // When & Then
+        assertThatThrownBy(() -> userService.changeUserPassword(userId, userPasswordChangeForm))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.USER_NOT_EXISTS.getMessage());
+
+        verify(userRepository).findById(userId);
+        verifyNoMoreInteractions(passwordEncoder, userRepository);
     }
 }
