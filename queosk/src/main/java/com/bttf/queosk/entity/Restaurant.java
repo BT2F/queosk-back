@@ -61,4 +61,8 @@ public class Restaurant extends BaseTimeEntity {
     private Long maxWaiting;
 
     private Boolean isDeleted;
+
+    public void updateImage(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
