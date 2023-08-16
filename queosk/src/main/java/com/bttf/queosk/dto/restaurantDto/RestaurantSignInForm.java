@@ -1,9 +1,11 @@
-package com.bttf.queosk.dto;
+package com.bttf.queosk.dto.restaurantDto;
 
+import com.bttf.queosk.dto.enumerate.RestaurantCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
