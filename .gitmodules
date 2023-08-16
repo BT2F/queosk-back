@@ -1,0 +1,3 @@
+[submodule "queosk/private"]
+	path = queosk/private
+	url = https://github.com/BT2F/sub-module
