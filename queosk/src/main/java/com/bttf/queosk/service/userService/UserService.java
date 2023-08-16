@@ -8,4 +8,6 @@ public interface UserService {
     void createUser(UserSignUpForm userSignUpForm);
 
     UserSignInDto signInUser(UserSignInForm userSignInForm);
+
+    boolean checkDuplication(String email);
 }
