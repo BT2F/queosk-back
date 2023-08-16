@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 import static com.bttf.queosk.exception.ErrorCode.EXISTING_USER;
 import static com.bttf.queosk.exception.ErrorCode.*;
 import static com.bttf.queosk.model.UserStatus.NOT_VERIFIED;
