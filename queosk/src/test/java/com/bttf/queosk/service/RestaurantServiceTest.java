@@ -59,13 +59,13 @@ class RestaurantServiceTest {
                         .category(RestaurantCategory.ASIAN)
                         .businessNumber("123-45-67890")
                         .businessStartDate("19900428")
-                        .address("경기도 부천시 소사로276번길 63")
+                        .address("청와대로 1")
                         .build();
 
 
         // when
         ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.post(
-                        "/api/restaurant/sign-in")
+                        "/api/restaurant/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new Gson().toJson(restaurantSignInForm))
         );

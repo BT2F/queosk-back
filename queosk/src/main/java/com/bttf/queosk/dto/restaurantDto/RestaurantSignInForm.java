@@ -41,5 +41,4 @@ public class RestaurantSignInForm {
     private String businessStartDate;
     @NotBlank(message = "주소는 비워둘 수 없습니다.")
     private String address;
-    private MultipartFile imageUrl;
 }

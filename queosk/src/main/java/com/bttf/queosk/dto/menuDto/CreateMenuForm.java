@@ -16,7 +16,7 @@ import javax.validation.constraints.NotEmpty;
 public class CreateMenuForm {
     @NotEmpty(message = "이름은 비워둘 수 없습니다.")
     private String name;
-    private MultipartFile imageUrl;
+    private String imageUrl;
     @NotEmpty(message = "가격은 비워둘 수 없습니다.")
     private Long price;
     private MenuStatus status;
