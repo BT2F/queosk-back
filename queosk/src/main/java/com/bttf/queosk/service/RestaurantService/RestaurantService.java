@@ -1,6 +1,6 @@
-package com.bttf.queosk.service;
+package com.bttf.queosk.service.RestaurantService;
 
-import com.bttf.queosk.dto.RestaurantSignInForm;
+import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.mapper.RestaurantSignInMapper;
 import com.bttf.queosk.repository.RestaurantRepository;

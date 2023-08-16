@@ -1,8 +1,9 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.controller.RestaurantController;
-import com.bttf.queosk.dto.RestaurantSignInForm;
-import com.bttf.queosk.dto.RestaurantCategory;
+import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
+import com.bttf.queosk.dto.enumerate.RestaurantCategory;
+import com.bttf.queosk.service.RestaurantService.RestaurantService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

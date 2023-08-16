@@ -1,6 +1,6 @@
 package com.bttf.queosk.mapper;
 
-import com.bttf.queosk.dto.RestaurantSignInForm;
+import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.util.KakaoGeoAddress;
 import org.mapstruct.Mapper;

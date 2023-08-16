@@ -1,7 +1,7 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.RestaurantSignInForm;
-import com.bttf.queosk.service.RestaurantService;
+import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
+import com.bttf.queosk.service.RestaurantService.RestaurantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
