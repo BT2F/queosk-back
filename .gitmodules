@@ -1,6 +1,3 @@
-[submodule "queosk/private"]
-	path = queosk/private
-	url = https://github.com/BT2F/sub-module
 [submodule "queosk/lib"]
-	path = queosk/lib
+	path = queosk/src/main/resource
 	url = https://github.com/BT2F/sub-module.git
