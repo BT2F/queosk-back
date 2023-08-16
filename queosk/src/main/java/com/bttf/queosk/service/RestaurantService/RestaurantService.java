@@ -12,13 +12,16 @@ import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.mapper.RestaurantSignInMapper;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
+import com.bttf.queosk.ImageService.ImageService;
 import com.bttf.queosk.util.KakaoGeoAddress;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
@@ -33,6 +36,7 @@ public class RestaurantService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final KakaoGeoAddress kakaoGeoAddress;
+    private final ImageService imageService;
 
     @Transactional
     public void signUp(RestaurantSignUpForm restaurantSignUpForm) throws Exception {
@@ -92,4 +96,16 @@ public class RestaurantService {
 
 
     }
+
+    public void imageUpload(Long id, MultipartFile image) throws IOException {
+        Restaurant restaurant = restaurantRepository
+                .findById(id)
+                .orElseThrow(() -> new CustomException(INVALID_USER_ID));
+        restaurant.updateImage(imageService.saveFile(image));
+        restaurantRepository.save(restaurant);
+    }
+
+
+
+
 }
