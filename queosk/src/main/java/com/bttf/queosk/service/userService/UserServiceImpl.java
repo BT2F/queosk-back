@@ -1,14 +1,17 @@
 package com.bttf.queosk.service.userService;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.tokenDto.TokenDto;
+import com.bttf.queosk.dto.userDto.UserDto;
 import com.bttf.queosk.dto.userDto.UserSignInDto;
 import com.bttf.queosk.dto.userDto.UserSignInForm;
 import com.bttf.queosk.dto.userDto.UserSignUpForm;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.mapper.UserSignInMapper;
+import com.bttf.queosk.exception.ErrorCode;
+import com.bttf.queosk.mapper.userMapper.TokenDtoMapper;
+import com.bttf.queosk.mapper.userMapper.UserDtoMapper;
+import com.bttf.queosk.mapper.userMapper.UserSignInMapper;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
+import static com.bttf.queosk.model.UserRole.ROLE_USER;
 import static com.bttf.queosk.model.UserStatus.NOT_VERIFIED;
 
 @RequiredArgsConstructor
@@ -49,6 +53,7 @@ public class UserServiceImpl implements UserService {
                         .password(encryptedPassword)
                         .phone(trimmedPhoneNumber)
                         .status(NOT_VERIFIED)
+                        .userRole(ROLE_USER)
                         .build()
         );
     }
@@ -67,10 +72,7 @@ public class UserServiceImpl implements UserService {
 
         //엑세스 토큰 발행
         String accessToken = jwtTokenProvider.generateAccessToken(
-                TokenDto.builder()
-                        .email(user.getEmail())
-                        .id(user.getId())
-                        .build()
+                TokenDtoMapper.INSTANCE.userToTokenDto(user)
         );
 
         //리프레시 토큰 발행
@@ -90,5 +92,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkDuplication(String email) {
         return !userRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public UserDto getUserFromToken(String token) {
+        Long userId = jwtTokenProvider.getIdFromToken(token);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+
+        return UserDtoMapper.INSTANCE.userToUserDto(user);
+    }
+
+    @Override
+    public UserDto getUserFromId(Long id) {
+        User targetUser = userRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+
+        return UserDtoMapper.INSTANCE.userToUserDto(targetUser);
     }
 }
