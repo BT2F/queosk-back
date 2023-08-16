@@ -1,7 +1,7 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
+import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
 import com.bttf.queosk.service.RestaurantService.RestaurantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,4 +34,6 @@ public class RestaurantController {
     public ResponseEntity<?> signIn(@Valid @RequestBody RestaurantSignInForm restaurantSignInForm) {
         return ResponseEntity.ok().body(restaurantService.signIn(restaurantSignInForm));
     }
+
+
 }
