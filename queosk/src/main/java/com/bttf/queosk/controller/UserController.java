@@ -59,12 +59,25 @@ public class UserController {
     @ApiOperation(value = "사용자 정보 수정", notes = "사용자의 상세정보를 수정합니다.")
     public ResponseEntity<?> editUserDetails(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody UserEditForm userEditForm) {
+            @Valid @RequestBody UserEditForm userEditForm) {
 
         UserDto userDto = userService.getUserFromToken(token);
 
-        UserDto result = userService.editUserInformation(userDto.getId(),userEditForm);
+        UserDto result = userService.editUserInformation(userDto.getId(), userEditForm);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PutMapping("/password/change")
+    @ApiOperation(value = "사용자 비밀번호 변경", notes = "사용자의 비밀번호를 변경합니다.")
+    public ResponseEntity<?> changeUserPassword(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @Valid @RequestBody UserPasswordChangeForm userPasswordChangeForm) {
+
+        UserDto userDto = userService.getUserFromToken(token);
+
+        userService.changeUserPassword(userDto.getId(), userPasswordChangeForm);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

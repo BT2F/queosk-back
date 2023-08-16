@@ -21,4 +21,7 @@ public interface UserService {
 
     //입력받은 정보로 사용자정보 수정
     UserDto editUserInformation(Long id, UserEditForm userEditForm);
+
+    //비밀번호 변경
+    void changeUserPassword(Long userId, UserPasswordChangeForm userPasswordChangeForm);
 }
