@@ -1,9 +1,9 @@
 package com.bttf.queosk.repository;
 
-import com.bttf.queosk.model.UserStatus;
 import com.bttf.queosk.entity.Queue;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
+import com.bttf.queosk.model.UserStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
