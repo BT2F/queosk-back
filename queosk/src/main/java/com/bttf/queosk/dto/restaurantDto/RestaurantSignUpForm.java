@@ -1,5 +1,6 @@
-package com.bttf.queosk.dto;
+package com.bttf.queosk.dto.restaurantDto;
 
+import com.bttf.queosk.dto.enumerate.RestaurantCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import javax.validation.constraints.Pattern;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestaurantSignInForm {
+public class RestaurantSignUpForm {
     @NotBlank(message = "아이디는 비워둘 수 없습니다.")
     private String ownerId;
     @NotBlank(message = "이름은 비워둘 수 없습니다.")
