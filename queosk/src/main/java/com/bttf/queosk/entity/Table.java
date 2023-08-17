@@ -32,4 +32,10 @@ public class Table extends BaseTimeEntity {
                 .restaurantId(restaurantId)
                 .build();
     }
+
+    public static Table updateStatus(Table table, TableStatus status) {
+        return table.builder()
+                .status(status)
+                .build();
+    }
 }

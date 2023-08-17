@@ -1,6 +1,7 @@
 package com.bttf.queosk.service;
 
 
+import com.bttf.queosk.dto.enumerate.TableStatus;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
@@ -27,5 +28,14 @@ public class TableService {
         );
 
         tableRepository.save(Table.of(restaurantId));
+    }
+
+    public void updateTable(Long tableId, TableStatus tableStatus) {
+
+        Table table = tableRepository.findById(tableId).orElseThrow(
+                () -> new CustomException(ErrorCode.INVALID_TABLE)
+        );
+
+        Table.updateStatus(table, tableStatus);
     }
 }

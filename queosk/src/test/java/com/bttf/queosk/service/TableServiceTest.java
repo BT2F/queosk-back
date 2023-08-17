@@ -1,7 +1,10 @@
 package com.bttf.queosk.service;
 
+import com.bttf.queosk.dto.enumerate.TableStatus;
 import com.bttf.queosk.entity.Restaurant;
+import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.exception.CustomException;
+import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.TableRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +41,7 @@ class TableServiceTest {
 
     @Test
     @DisplayName("테이블 생성 테스트 - 성공 케이스")
-    public void successCreateTable() {
+    public void testCreateTable_success() {
         //given
         Long restaurantId = 1L;
         Restaurant restaurant = Restaurant.builder()
@@ -57,7 +60,7 @@ class TableServiceTest {
 
     @Test
     @DisplayName("테이블 생성 테스트 - restaurantId가 없을 경우")
-    public void failCreateTableNotFoundRestaurantId() {
+    public void testCreateTable_fail_invalidRestaurantException() {
         //given
         Long restaurantId = 1L;
         Restaurant restaurant = Restaurant.builder()
@@ -68,7 +71,47 @@ class TableServiceTest {
 
         //then
         assertThatThrownBy(() -> tableService.createTable(restaurantId))
-                .isExactlyInstanceOf(CustomException.class);
+                .isExactlyInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.INVALID_RESTAURANT.getMessage());
         then(tableService).should(times(1)).createTable(restaurantId);
+    }
+
+    @Test
+    @DisplayName("테이블 수정 테스트 - 성공 케이스")
+    public void testUpdateTable_success() {
+        //given
+        Table table = Table.builder()
+                .id(1L)
+                .status(TableStatus.OPEN)
+                .restaurantId(1L)
+                .build();
+
+        given(tableRepository.findById(table.getId())).willReturn(Optional.of(table));
+
+        //when
+        tableService.updateTable(table.getId(), TableStatus.USING);
+
+        //then
+        then(tableService).should(times(1)).updateTable(table.getId(), TableStatus.USING);
+
+    }
+
+    @Test
+    @DisplayName("테이블 수정 테스트 - tableId가 없을 경우")
+    public void testUpdateTable_fail_invalidTableException() {
+        //given
+        Table table = Table.builder()
+                .id(1L)
+                .status(TableStatus.OPEN)
+                .restaurantId(1L)
+                .build();
+
+        given(tableRepository.findById(anyLong())).willReturn(Optional.empty());
+
+        //then
+        assertThatThrownBy(() -> tableService.updateTable(table.getId(), TableStatus.USING))
+                .isExactlyInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.INVALID_TABLE.getMessage());
+        then(tableService).should(times(1)).updateTable(table.getId(), TableStatus.USING);
     }
 }
