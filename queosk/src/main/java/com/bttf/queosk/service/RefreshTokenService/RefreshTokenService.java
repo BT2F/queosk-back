@@ -1,6 +1,6 @@
 package com.bttf.queosk.service.RefreshTokenService;
 
-import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.tokenDto.TokenDto;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
