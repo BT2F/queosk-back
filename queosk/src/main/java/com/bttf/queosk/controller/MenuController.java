@@ -1,7 +1,7 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.dto.menuDto.CreateMenuForm;
-import com.bttf.queosk.service.MenuService.MenuService;
+import com.bttf.queosk.service.menuService.MenuService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

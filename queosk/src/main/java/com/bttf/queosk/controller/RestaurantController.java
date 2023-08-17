@@ -2,7 +2,7 @@ package com.bttf.queosk.controller;
 
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
-import com.bttf.queosk.service.RestaurantService.RestaurantService;
+import com.bttf.queosk.service.restaurantService.RestaurantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import javax.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
