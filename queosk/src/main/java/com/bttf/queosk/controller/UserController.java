@@ -1,18 +1,17 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.dto.userDto.UserCheckForm;
+import com.bttf.queosk.dto.userDto.UserDto;
 import com.bttf.queosk.dto.userDto.UserSignInForm;
 import com.bttf.queosk.dto.userDto.UserSignUpForm;
 import com.bttf.queosk.service.userService.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -48,5 +47,16 @@ public class UserController {
         return userService.checkDuplication(userCheckForm.getEmail()) ?
                 ResponseEntity.status(HttpStatus.OK).body("사용가능한 이메일 입니다.") :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 사용중인 이메일 입니다.");
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation(value = "사용자 상세정보", notes = "사용자의 상세정보를 조회합니다.")
+    public ResponseEntity<?> getUserDetails(@PathVariable Long id,
+                                            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
+        UserDto user = userService.getUserFromToken(token);
+        UserDto targetUser = userService.getUserFromId(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(targetUser);
     }
 }

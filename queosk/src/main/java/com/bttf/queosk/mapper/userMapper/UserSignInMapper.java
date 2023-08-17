@@ -1,4 +1,4 @@
-package com.bttf.queosk.mapper;
+package com.bttf.queosk.mapper.userMapper;
 
 import com.bttf.queosk.dto.userDto.UserSignInDto;
 import com.bttf.queosk.entity.User;
