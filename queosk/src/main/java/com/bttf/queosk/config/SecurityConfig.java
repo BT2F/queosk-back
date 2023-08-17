@@ -20,7 +20,10 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable).disable())
                 //개발 초기 일단 모두 permitAll
-                .authorizeHttpRequests(auth -> auth.antMatchers("/**").permitAll());
+                .authorizeHttpRequests(auth -> auth
+                        .antMatchers("/restaurant/**").hasRole("RESTAURANT")
+                        .antMatchers("/user/**").hasRole("USER")
+                        .antMatchers("/**").permitAll());
 
         return http.build();
     }

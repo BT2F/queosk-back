@@ -3,7 +3,6 @@ package com.bttf.queosk.config;
 import com.bttf.queosk.service.RefreshTokenService.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -30,11 +29,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
 
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-
             SecurityContextHolder
                     .getContext()
-                    .setAuthentication(authentication);
+                    .setAuthentication(jwtTokenProvider.getAuthentication(token));
+
         } else if (token != null) {
             //만약 AccessToken이 유효하지 않을 경우 사용자의 이메일로 RefreshToken 조회
             String email = jwtTokenProvider.getEmailFromToken(token);

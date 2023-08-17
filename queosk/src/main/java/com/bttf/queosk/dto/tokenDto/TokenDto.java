@@ -1,5 +1,6 @@
 package com.bttf.queosk.dto.tokenDto;
 
+import com.bttf.queosk.model.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class TokenDto {
     private String email;
     private Long id;
+    private UserRole userRole;
 }

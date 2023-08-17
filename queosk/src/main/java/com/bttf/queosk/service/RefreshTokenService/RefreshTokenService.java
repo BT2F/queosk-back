@@ -31,6 +31,7 @@ public class RefreshTokenService {
         return jwtTokenProvider.generateAccessToken(
                 TokenDto.builder()
                         .id(user.getId())
+                        .userRole(user.getUserRole())
                         .email(user.getEmail())
                         .build()
         );

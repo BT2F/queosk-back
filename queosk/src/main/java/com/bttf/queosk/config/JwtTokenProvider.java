@@ -1,6 +1,8 @@
 package com.bttf.queosk.config;
 
 import com.bttf.queosk.dto.tokenDto.TokenDto;
+import com.bttf.queosk.model.UserRole;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -8,14 +10,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.security.Key;
+import javax.crypto.SecretKey;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -28,7 +33,7 @@ public class JwtTokenProvider {
 
     @Value("${jwt.tokenIssuer}")
     private String issuer;
-    private Key key;
+    private SecretKey key;
 
     @PostConstruct
     public void init() {
@@ -36,9 +41,12 @@ public class JwtTokenProvider {
     }
 
     public String generateAccessToken(TokenDto tokenDto) {
+        Claims claims = Jwts.claims().setSubject(tokenDto.getId().toString());
+        claims.put("email", tokenDto.getEmail());
+        claims.put("userRole", tokenDto.getUserRole().getRoleName()); // 역할 정보 추가
+
         return Jwts.builder()
-                .setSubject(tokenDto.getId().toString())
-                .claim("email", tokenDto.getEmail())
+                .setClaims(claims)
                 .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + (60 * 60 * 1000)))
@@ -48,6 +56,7 @@ public class JwtTokenProvider {
 
     public String generateRefreshToken() {
         return Jwts.builder()
+                .claim("userRole", UserRole.ROLE_USER.getRoleName())
                 .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + (60 * 60 * 1000)))
@@ -68,6 +77,9 @@ public class JwtTokenProvider {
     }
 
     public Long getIdFromToken(String token) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
         return Long.parseLong(Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -77,6 +89,9 @@ public class JwtTokenProvider {
     }
 
     public String getEmailFromToken(String token) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -86,18 +101,26 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
 
-        String email = Jwts.parserBuilder()
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .get("email", String.class);
+                .getBody();
+
+        String email = claims.get("email", String.class);
+        UserRole userRole = UserRole.valueOf(claims.get("userRole", String.class));
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
+        List<GrantedAuthority> authorities = new ArrayList<>(userDetails.getAuthorities());
+        authorities.addAll(userRole.getAuthorities()); // 추가된 역할 권한
+
         return new UsernamePasswordAuthenticationToken(
-                userDetails, "", userDetails.getAuthorities()
+                userDetails, "", authorities
         );
     }
 }

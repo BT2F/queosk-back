@@ -1,6 +1,7 @@
 package com.bttf.queosk.entity;
 
 import com.bttf.queosk.config.BaseTimeEntity;
+import com.bttf.queosk.model.UserRole;
 import com.bttf.queosk.model.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,4 +37,7 @@ public class User extends BaseTimeEntity {
     private String imageUrl;
 
     private String loginApi;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 }
