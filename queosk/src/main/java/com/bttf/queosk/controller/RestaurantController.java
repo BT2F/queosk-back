@@ -31,6 +31,7 @@ public class RestaurantController {
     @ApiOperation(value = "사업자 회원가입", notes = "주어진 정보로 사업자 회원가입을 진행합니다.")
     public ResponseEntity<?> signUp(@Valid @RequestBody RestaurantSignUpForm restaurantSignUpForm) throws Exception {
         restaurantService.signUp(restaurantSignUpForm);
+
         return ResponseEntity.status(201).build();
     }
 
@@ -47,4 +48,9 @@ public class RestaurantController {
         return ResponseEntity.status(201).build();
     }
 
+    @PostMapping("/signin")
+    @ApiOperation(value = "사업자 로그인", notes = "주어진 정보로 사업자 로그인을 진행합니다.")
+    public ResponseEntity<?> signIn(@Valid @RequestBody RestaurantSignInForm restaurantSignInForm) {
+        return ResponseEntity.ok().body(restaurantService.signIn(restaurantSignInForm));
+    }
 }
