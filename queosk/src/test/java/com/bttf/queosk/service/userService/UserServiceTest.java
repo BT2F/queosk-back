@@ -400,4 +400,65 @@ class UserServiceTest {
                 .isInstanceOf(CustomException.class);
         verify(userRepository, never()).save(any());
     }
+
+    @Test
+    public void testWithdrawUser_Success() {
+        // Given
+        User user =
+                User.builder()
+                        .id(1L)
+                        .password(passwordEncoder.encode("correctPassword"))
+                        .build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("correctPassword", user.getPassword()))
+                .thenReturn(true);
+
+        UserWithdrawalForm withdrawalForm =
+                UserWithdrawalForm.builder()
+                        .password("correctPassword")
+                        .build();
+        // When
+        userService.withdrawUser(1L, withdrawalForm);
+
+        // Then
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    public void testWithdrawUser_UserNotExists() {
+        // Given
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        UserWithdrawalForm withdrawalForm =
+                UserWithdrawalForm.builder()
+                        .password("correctPassword")
+                        .build();
+
+        // When, Then
+        assertThatThrownBy(() -> userService.withdrawUser(1L, withdrawalForm))
+                .isInstanceOf(CustomException.class);
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    public void testWithdrawUser_IncorrectPassword() {
+        // Given
+        User user = User.builder()
+                .id(1L)
+                .password(passwordEncoder.encode("correctPassword"))
+                .build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
+
+        // When, Then
+        UserWithdrawalForm withdrawalForm =
+                UserWithdrawalForm.builder()
+                        .password("correctPassword")
+                        .build();
+
+        assertThatThrownBy(() -> userService.withdrawUser(1L, withdrawalForm))
+                .isInstanceOf(CustomException.class);
+
+        verify(userRepository, never()).save(any());
+    }
 }
