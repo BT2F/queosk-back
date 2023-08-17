@@ -1,6 +1,6 @@
 package com.bttf.queosk.repository;
 
-import com.bttf.queosk.config.JpaAuditingConfiguration;
+import com.bttf.queosk.config.baseEntity.JpaAuditingConfiguration;
 import com.bttf.queosk.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

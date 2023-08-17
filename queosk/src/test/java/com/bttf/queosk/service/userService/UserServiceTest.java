@@ -1,6 +1,6 @@
 package com.bttf.queosk.service.userService;
 
-import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.tokenDto.TokenDto;
 import com.bttf.queosk.dto.userDto.*;
 import com.bttf.queosk.entity.RefreshToken;
@@ -9,6 +9,7 @@ import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
+import com.bttf.queosk.config.emailSender.EmailSender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -32,13 +33,17 @@ class UserServiceTest {
     private BCryptPasswordEncoder passwordEncoder;
     @Mock
     private JwtTokenProvider jwtTokenProvider;
+    @Mock
+    private EmailSender emailSender;
 
     private UserService userService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        userService = new UserServiceImpl(userRepository, refreshTokenRepository, passwordEncoder, jwtTokenProvider);
+        userService = new UserServiceImpl(
+                userRepository, refreshTokenRepository,
+                passwordEncoder, jwtTokenProvider, emailSender);
     }
 
     @Test

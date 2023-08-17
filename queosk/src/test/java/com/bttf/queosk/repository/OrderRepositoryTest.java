@@ -1,6 +1,6 @@
 package com.bttf.queosk.repository;
 
-import com.bttf.queosk.config.JpaAuditingConfiguration;
+import com.bttf.queosk.config.baseEntity.JpaAuditingConfiguration;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.Order;
 import com.bttf.queosk.entity.Restaurant;
