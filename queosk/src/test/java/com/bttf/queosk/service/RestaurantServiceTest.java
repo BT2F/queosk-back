@@ -3,7 +3,7 @@ package com.bttf.queosk.service;
 import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
 import com.bttf.queosk.dto.enumerate.RestaurantCategory;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDTO;
+import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDto;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
 import com.bttf.queosk.dto.tokenDto.TokenDto;
@@ -60,6 +60,8 @@ class RestaurantServiceTest {
     private RestaurantService restaurantService;
     @Mock
     private KakaoGeoAddress kakaoGeoAddress;
+    @Mock
+    private ImageService imageService;
 
     @Mock
     private ImageService imageService;
@@ -140,7 +142,7 @@ class RestaurantServiceTest {
         when(jwtTokenProvider.generateAccessToken(any(TokenDto.class))).thenReturn(accessToken);
         when(jwtTokenProvider.generateRefreshToken()).thenReturn(refreshToken);
 
-        RestaurantSignInDTO result = restaurantService.signIn(restaurantSignInForm);
+        RestaurantSignInDto result = restaurantService.signIn(restaurantSignInForm);
 
 
         // then

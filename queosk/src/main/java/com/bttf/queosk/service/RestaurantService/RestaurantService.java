@@ -2,13 +2,15 @@ package com.bttf.queosk.service.RestaurantService;
 
 import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.enumerate.OperationStatus;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDTO;
+import com.bttf.queosk.dto.restaurantDto.RestaurantDto;
+import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDto;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
 import com.bttf.queosk.dto.tokenDto.TokenDto;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.exception.CustomException;
+import com.bttf.queosk.mapper.RestaurantDtoMapper;
 import com.bttf.queosk.mapper.RestaurantSignInMapper;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
@@ -68,7 +70,7 @@ public class RestaurantService {
     }
 
 
-    public RestaurantSignInDTO signIn(RestaurantSignInForm restaurantSignInForm) {
+    public RestaurantSignInDto signIn(RestaurantSignInForm restaurantSignInForm) {
         Restaurant restaurant = restaurantRepository.findByOwnerId(restaurantSignInForm.getOwnerId())
                 .orElseThrow(() -> new CustomException(INVALID_USER_ID));
 
@@ -105,4 +107,11 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
     }
 
+
+    public RestaurantDto getRestaurantInfoFromToken(String token) {
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
+        return RestaurantDtoMapper.MAPPER.toDto(restaurant);
+    }
 }

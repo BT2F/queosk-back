@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RestaurantSignInDTO {
+public class RestaurantSignInDto {
     private String accessToken;
     private String refreshToken;
     private String ownerId;
