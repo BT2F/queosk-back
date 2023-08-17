@@ -1,4 +1,4 @@
-package com.bttf.queosk.config;
+package com.bttf.queosk.config.springSecurity;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

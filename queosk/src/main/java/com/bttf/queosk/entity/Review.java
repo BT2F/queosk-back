@@ -1,6 +1,6 @@
 package com.bttf.queosk.entity;
 
-import com.bttf.queosk.config.BaseTimeEntity;
+import com.bttf.queosk.config.baseEntity.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

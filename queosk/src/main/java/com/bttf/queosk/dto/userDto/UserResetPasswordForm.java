@@ -1,6 +1,5 @@
-package com.bttf.queosk.dto.tokenDto;
+package com.bttf.queosk.dto.userDto;
 
-import com.bttf.queosk.model.userModel.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,8 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TokenDto {
+public class UserResetPasswordForm {
     private String email;
-    private Long id;
-    private UserRole userRole;
+    private String nickName;
 }

@@ -1,4 +1,4 @@
-package com.bttf.queosk.config;
+package com.bttf.queosk.config.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

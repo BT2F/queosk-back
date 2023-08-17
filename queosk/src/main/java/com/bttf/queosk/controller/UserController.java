@@ -80,4 +80,14 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @PutMapping("/password/reset")
+    @ApiOperation(value="사용자 비밀번호 초기화",notes = "사용자의 비밀번호를 초기화 후 이메일로 새 비밀번호를 전송 합니다.")
+    public ResponseEntity<?> resetUserPassword(
+            @Valid @RequestBody UserResetPasswordForm userResetPasswordForm){
+
+        userService.resetUserPassword(userResetPasswordForm.getEmail(), userResetPasswordForm.getNickName());
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
