@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Component
 public class KakaoGeoAddress {
 
-    @Value("${kakaoApiKey}")
+    @Value("${kakao.apiKey}")
     private String apiKey;
 
     public double addressToCoordinate(String address, String xOrY) {
