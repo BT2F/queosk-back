@@ -2,6 +2,7 @@ package com.bttf.queosk.service.userService;
 
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.userDto.UserDto;
+import com.bttf.queosk.dto.tokenDto.TokenDto;
 import com.bttf.queosk.dto.userDto.UserSignInDto;
 import com.bttf.queosk.dto.userDto.UserSignInForm;
 import com.bttf.queosk.dto.userDto.UserSignUpForm;
@@ -110,4 +111,5 @@ public class UserServiceImpl implements UserService {
 
         return UserDtoMapper.INSTANCE.userToUserDto(targetUser);
     }
+
 }

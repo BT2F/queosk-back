@@ -1,0 +1,3 @@
+[submodule "queosk/lib"]
+	path = queosk/src/main/resources
+	url = https://github.com/BT2F/sub-module.git
