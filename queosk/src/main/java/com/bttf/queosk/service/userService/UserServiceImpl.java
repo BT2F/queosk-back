@@ -1,11 +1,7 @@
 package com.bttf.queosk.service.userService;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.userDto.UserDto;
-import com.bttf.queosk.dto.tokenDto.TokenDto;
-import com.bttf.queosk.dto.userDto.UserSignInDto;
-import com.bttf.queosk.dto.userDto.UserSignInForm;
-import com.bttf.queosk.dto.userDto.UserSignUpForm;
+import com.bttf.queosk.dto.userDto.*;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
@@ -18,6 +14,7 @@ import com.bttf.queosk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
 import static com.bttf.queosk.model.UserRole.ROLE_USER;
@@ -32,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
+    @Transactional
     public void createUser(UserSignUpForm userSignUpForm) {
 
         //기존회원 여부 확인
@@ -60,6 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserSignInDto signInUser(UserSignInForm userSignInForm) {
 
         //입력된 email 로 사용자 조회
@@ -112,4 +111,31 @@ public class UserServiceImpl implements UserService {
         return UserDtoMapper.INSTANCE.userToUserDto(targetUser);
     }
 
+    @Override
+    @Transactional
+    public UserDto editUserInformation(Long userId, UserEditForm userEditForm) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+
+        user.editInformation(userEditForm);
+
+        userRepository.save(user);
+
+        return UserDtoMapper.INSTANCE.userToUserDto(user);
+    }
+
+    @Override
+    @Transactional
+    public void changeUserPassword(Long userId, UserPasswordChangeForm userPasswordChangeForm){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+
+        if(!passwordEncoder.matches(userPasswordChangeForm.getExistingPassword(),user.getPassword())){
+            throw new CustomException(PASSWORD_NOT_MATCH);
+        }
+
+        user.changePassword(passwordEncoder.encode(userPasswordChangeForm.getNewPassword()));
+
+        userRepository.save(user);
+    }
 }

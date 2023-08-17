@@ -1,9 +1,6 @@
 package com.bttf.queosk.service.userService;
 
-import com.bttf.queosk.dto.userDto.UserDto;
-import com.bttf.queosk.dto.userDto.UserSignInDto;
-import com.bttf.queosk.dto.userDto.UserSignInForm;
-import com.bttf.queosk.dto.userDto.UserSignUpForm;
+import com.bttf.queosk.dto.userDto.*;
 
 public interface UserService {
 
@@ -22,4 +19,9 @@ public interface UserService {
     //아이디로 사용자 정보조회
     UserDto getUserFromId(Long id);
 
+    //입력받은 정보로 사용자정보 수정
+    UserDto editUserInformation(Long id, UserEditForm userEditForm);
+
+    //비밀번호 변경
+    void changeUserPassword(Long userId, UserPasswordChangeForm userPasswordChangeForm);
 }

@@ -1,4 +1,4 @@
-package com.bttf.queosk.ImageService;
+package com.bttf.queosk.service.ImageService;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;

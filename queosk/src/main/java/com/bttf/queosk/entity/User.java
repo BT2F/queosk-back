@@ -1,6 +1,7 @@
 package com.bttf.queosk.entity;
 
 import com.bttf.queosk.config.BaseTimeEntity;
+import com.bttf.queosk.dto.userDto.UserEditForm;
 import com.bttf.queosk.model.UserRole;
 import com.bttf.queosk.model.UserStatus;
 import lombok.AllArgsConstructor;
@@ -40,4 +41,16 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
+
+    public void editInformation(UserEditForm userEditForm) {
+        this.nickName =
+                userEditForm.getNickName() == null ? this.nickName : userEditForm.getNickName();
+
+        this.phone =
+                userEditForm.getPhone() == null ? this.nickName : userEditForm.getPhone();
+    }
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }
