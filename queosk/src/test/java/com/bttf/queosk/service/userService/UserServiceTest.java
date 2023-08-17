@@ -1,5 +1,6 @@
 package com.bttf.queosk.service.userService;
 
+import com.bttf.queosk.config.emailSender.EmailSender;
 import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.tokenDto.TokenDto;
 import com.bttf.queosk.dto.userDto.*;
@@ -9,7 +10,7 @@ import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
-import com.bttf.queosk.config.emailSender.EmailSender;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
+import static com.bttf.queosk.model.userModel.UserStatus.VERIFIED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -99,6 +101,7 @@ class UserServiceTest {
         String refreshToken = "refreshToken";
         User user = User.builder()
                 .email(email)
+                .status(VERIFIED)
                 .password(encodedPassword)
                 .build();
 
@@ -332,5 +335,46 @@ class UserServiceTest {
 
         verify(userRepository).findById(userId);
         verifyNoMoreInteractions(passwordEncoder, userRepository);
+    }
+    @Test
+    public void testResetUserPassword_Success() {
+        // Given
+        User user = User.builder().email("user@example.com").nickName("testuser").build();
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+
+        // When
+        userService.resetUserPassword("user@example.com", "testuser");
+
+        // Then
+        verify(emailSender).sendEmail(eq("user@example.com"), anyString(), anyString());
+        verify(userRepository).save(user);
+    }
+    @Test
+    public void testResetUserPassword_UserNotExists() {
+        // Given
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+
+        // When, Then
+        Assertions.assertThatThrownBy(() -> userService.resetUserPassword("user@example.com", "testuser"))
+                .isInstanceOf(CustomException.class);
+        verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    public void testResetUserPassword_NickNameNotMatch() {
+        // Given
+        User user = User.builder()
+                .email("user@example.com")
+                .nickName("testuser")
+                .build();
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+
+        // When, Then
+        assertThatThrownBy(() -> userService.resetUserPassword("user@example.com", "wrongnick"))
+                .isInstanceOf(CustomException.class);
+        verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
+        verify(userRepository, never()).save(any());
     }
 }
