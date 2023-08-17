@@ -12,7 +12,7 @@ import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.mapper.RestaurantSignInMapper;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
-import com.bttf.queosk.ImageService.ImageService;
+import com.bttf.queosk.service.ImageService.ImageService;
 import com.bttf.queosk.util.KakaoGeoAddress;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
