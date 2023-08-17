@@ -1,6 +1,6 @@
 package com.bttf.queosk.service.RestaurantService;
 
-import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.enumerate.OperationStatus;
 import com.bttf.queosk.dto.restaurantDto.RestaurantDto;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDto;

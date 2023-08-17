@@ -1,6 +1,6 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
 import com.bttf.queosk.dto.enumerate.RestaurantCategory;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDto;
@@ -37,7 +37,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @Transactional
@@ -62,12 +63,16 @@ class RestaurantServiceTest {
     @Mock
     private ImageService imageService;
 
+    @Mock
+    private ImageService imageService;
+
     private MockMvc mockMvc;
 
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(restaurantController).build();
-        restaurantService = new RestaurantService(restaurantRepository, refreshTokenRepository, passwordEncoder, jwtTokenProvider, kakaoGeoAddress, imageService);
+        restaurantService = new RestaurantService(restaurantRepository, refreshTokenRepository,
+                passwordEncoder, jwtTokenProvider, kakaoGeoAddress,imageService);
     }
 
     @DisplayName("매장 생성 테스트")

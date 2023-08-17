@@ -51,7 +51,7 @@ class MenuRepositoryTest {
     }
 
     @Test
-    public void loadMenu_test() throws Exception {
+    public void loadMenu_test() {
         // given
         Restaurant savedRestaurant =
                 restaurantRepository.save(Restaurant.builder()
@@ -71,13 +71,11 @@ class MenuRepositoryTest {
         menuRepository.save(menu);
 
         // when
-        Menu findMenu = menuRepository.findById(menu.getId())
-                .orElseThrow(() -> new IllegalArgumentException("메뉴 ID를 찾을 수 없습니다."));
+        Menu findMenu = menuRepository.findById(menu.getId()).get();
 
         // then
 
         assertThat(findMenu.getName()).isEqualTo(menu.getName());
         assertThat(findMenu.getPrice()).isEqualTo(menu.getPrice());
     }
-
 }
