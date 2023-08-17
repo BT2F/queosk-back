@@ -1,4 +1,4 @@
-package com.bttf.queosk.config;
+package com.bttf.queosk.config.baseEntity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
 package com.bttf.queosk.service.userService;
 
-import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.userDto.*;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
@@ -11,14 +11,17 @@ import com.bttf.queosk.mapper.userMapper.UserDtoMapper;
 import com.bttf.queosk.mapper.userMapper.UserSignInMapper;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
+import com.bttf.queosk.config.emailSender.EmailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 import static com.bttf.queosk.exception.ErrorCode.*;
-import static com.bttf.queosk.model.UserRole.ROLE_USER;
-import static com.bttf.queosk.model.UserStatus.NOT_VERIFIED;
+import static com.bttf.queosk.model.userModel.UserRole.ROLE_USER;
+import static com.bttf.queosk.model.userModel.UserStatus.NOT_VERIFIED;
 
 @RequiredArgsConstructor
 @Service
@@ -27,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final EmailSender emailSender;
 
     @Override
     @Transactional
@@ -126,16 +130,39 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void changeUserPassword(Long userId, UserPasswordChangeForm userPasswordChangeForm){
+    public void changeUserPassword(Long userId, UserPasswordChangeForm userPasswordChangeForm) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
 
-        if(!passwordEncoder.matches(userPasswordChangeForm.getExistingPassword(),user.getPassword())){
+        if (!passwordEncoder.matches(userPasswordChangeForm.getExistingPassword(), user.getPassword())) {
             throw new CustomException(PASSWORD_NOT_MATCH);
         }
 
         user.changePassword(passwordEncoder.encode(userPasswordChangeForm.getNewPassword()));
 
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void resetUserPassword(String email, String nickName) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+
+        if (!user.getNickName().equals(nickName)) {
+            throw new CustomException(ErrorCode.NICKNAME_NOT_MATCH);
+        }
+
+        String randomPassword = UUID.randomUUID().toString().substring(0, 10);
+
+        String encryptedPassword = passwordEncoder.encode(randomPassword);
+
+        emailSender.sendEmail(
+                user.getEmail(),
+                "비밀번호 초기화 완료",
+                "새로운 비밀번호 : " + randomPassword + "를 입력해 로그인 해주세요."
+        );
+
+        user.changePassword(encryptedPassword);
     }
 }

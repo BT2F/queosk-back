@@ -1,4 +1,4 @@
-package com.bttf.queosk.config;
+package com.bttf.queosk.config.springSecurity;
 
 import com.bttf.queosk.service.RefreshTokenService.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
