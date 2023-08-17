@@ -24,4 +24,7 @@ public interface UserService {
 
     //비밀번호 변경
     void changeUserPassword(Long userId, UserPasswordChangeForm userPasswordChangeForm);
+
+    //이메일로 사용자정보 조회
+    void resetUserPassword(String email, String nickName);
 }
