@@ -1,14 +1,12 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
 import com.bttf.queosk.dto.enumerate.RestaurantCategory;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDTO;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
 import com.bttf.queosk.dto.tokenDto.TokenDto;
-import com.bttf.queosk.dto.userDto.UserSignInDto;
-import com.bttf.queosk.dto.userDto.UserSignInForm;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.repository.RefreshTokenRepository;
@@ -25,7 +23,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -39,7 +36,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @Transactional

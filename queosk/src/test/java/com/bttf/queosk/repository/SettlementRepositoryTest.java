@@ -43,7 +43,7 @@ class SettlementRepositoryTest {
         Table table = Table.builder()
                 .id(1L)
                 .status(OPEN)
-                .restaurant(restaurant)
+//                .restaurant(restaurant)
                 .build();
 
         Menu menu = Menu.builder()

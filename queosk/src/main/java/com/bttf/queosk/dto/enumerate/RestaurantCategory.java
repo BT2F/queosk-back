@@ -1,5 +1,6 @@
 package com.bttf.queosk.dto.enumerate;
 
+
 public enum RestaurantCategory {
     DONKASU_SUSHI_JAPANESE,
     CHINESE,

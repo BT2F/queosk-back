@@ -24,7 +24,12 @@ public class Table extends BaseTimeEntity {
 
     private TableStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;
+    private Long restaurantId;
+
+    public static Table of(Long restaurantId) {
+        return Table.builder()
+                .status(TableStatus.OPEN)
+                .restaurantId(restaurantId)
+                .build();
+    }
 }
