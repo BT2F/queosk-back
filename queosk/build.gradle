@@ -45,11 +45,6 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 	// BaseEntity
 	implementation group: 'org.springframework.data', name: 'spring-data-envers'
-	testImplementation 'org.projectlombok:lombok:1.18.28'
-
-	// Mockito
-	testImplementation 'org.mockito:mockito-core:4.8.0'
-
 	compileOnly 'org.projectlombok:lombok'
 	// Test 용 H2DB
 	runtimeOnly 'com.h2database:h2'
@@ -65,16 +60,6 @@ dependencies {
 	// AssertJ를 통한 테스트
 	testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.24.2'
 	testImplementation group: 'org.mariadb', name: 'r2dbc-mariadb', version: '1.1.4'
-
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webflux
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.7.14'
-
-	// jwt 관련 의존성
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
-	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
-	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
-	// AWS 관련 라이브러리
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {
