@@ -27,3 +27,17 @@ logging:
   level.org.hibernate.type.descriptor.sql=trace
 
 kakaoApiKey: afd1424272e23370e80792c29e7834c7
+
+jwt:
+  secretKey: elderechodevivirpaz
+  tokenIssuer: elderechodevivirpaz
+
+cloud:
+  aws:
+    s3:
+      bucket: queost-bucket
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: AKIAZFYBURHVZBQREOIR
+      secretKey: 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
