@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
 import static com.bttf.queosk.model.userModel.UserRole.ROLE_USER;
+import static com.bttf.queosk.model.userModel.UserStatus.DELETED;
 import static com.bttf.queosk.model.userModel.UserStatus.NOT_VERIFIED;
 
 @RequiredArgsConstructor
@@ -74,6 +75,13 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(PASSWORD_NOT_MATCH);
         }
 
+        //탈퇴한 사용자의 경우
+        if (user.getStatus().equals(DELETED)){
+            throw new CustomException(WITHDRAWN_USER);
+        }else if(user.getStatus().equals(NOT_VERIFIED)){
+            throw new CustomException(ErrorCode.NOT_VERIFIED_USER);
+        }
+
         //엑세스 토큰 발행
         String accessToken = jwtTokenProvider.generateAccessToken(
                 TokenDtoMapper.INSTANCE.userToTokenDto(user)
@@ -102,7 +110,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserFromToken(String token) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
         return UserDtoMapper.INSTANCE.userToUserDto(user);
     }
@@ -110,7 +118,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserFromId(Long id) {
         User targetUser = userRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
         return UserDtoMapper.INSTANCE.userToUserDto(targetUser);
     }
@@ -119,7 +127,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto editUserInformation(Long userId, UserEditForm userEditForm) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
         user.editInformation(userEditForm);
 
@@ -132,7 +140,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void changeUserPassword(Long userId, UserPasswordChangeForm userPasswordChangeForm) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
         if (!passwordEncoder.matches(userPasswordChangeForm.getExistingPassword(), user.getPassword())) {
             throw new CustomException(PASSWORD_NOT_MATCH);
@@ -147,10 +155,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void resetUserPassword(String email, String nickName) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
         if (!user.getNickName().equals(nickName)) {
-            throw new CustomException(ErrorCode.NICKNAME_NOT_MATCH);
+            throw new CustomException(NICKNAME_NOT_MATCH);
         }
 
         String randomPassword = UUID.randomUUID().toString().substring(0, 10);
@@ -169,11 +177,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateImageUrl(Long id, String url) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
         user.updateImageUrl(url);
+
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void withdrawUser(Long id, UserWithdrawalForm userWithdrawalForm) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
+
+        if(!passwordEncoder.matches(userWithdrawalForm.getPassword(),user.getPassword())){
+            throw new CustomException(PASSWORD_NOT_MATCH);
+        }
+
+        user.withdrawUser();
 
         userRepository.save(user);
     }

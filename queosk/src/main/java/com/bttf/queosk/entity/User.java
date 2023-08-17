@@ -12,6 +12,8 @@ import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
 
+import static com.bttf.queosk.model.userModel.UserStatus.*;
+
 @Entity(name = "user")
 @AuditOverride(forClass = BaseTimeEntity.class)
 @Builder
@@ -54,7 +56,7 @@ public class User extends BaseTimeEntity {
         this.password = newPassword;
     }
 
-    public void updateImageUrl(String url) {
-        this.imageUrl = url;
-    }
+    public void updateImageUrl(String url) { this.imageUrl = url; }
+
+    public void withdrawUser() { this.status = DELETED; }
 }

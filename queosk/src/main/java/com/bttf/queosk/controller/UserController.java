@@ -99,7 +99,7 @@ public class UserController {
 
     @PostMapping("/signout")
     @ApiOperation(value = "사용자 로그아웃", notes = "사용자의 계정에서 로그아웃합니다.")
-    public ResponseEntity<?> signOutUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+    public ResponseEntity<?> signOutUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         UserDto userDto = userService.getUserFromToken(token);
 
@@ -118,8 +118,20 @@ public class UserController {
 
         UserDto userDto = userService.getUserFromToken(token);
 
-        userService.updateImageUrl(userDto.getId(),url);
+        userService.updateImageUrl(userDto.getId(), url);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping("/withdrawal")
+    @ApiOperation(value = "사용자 회원탈퇴", notes = "사용자 상태를 '삭제' 상태로 변경합니다.")
+    public ResponseEntity<?> withdrawUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                          @Valid @RequestBody UserWithdrawalForm userWithdrawalForm) {
+
+        UserDto userDto = userService.getUserFromToken(token);
+
+        userService.withdrawUser(userDto.getId(),userWithdrawalForm);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

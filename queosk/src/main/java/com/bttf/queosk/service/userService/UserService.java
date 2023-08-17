@@ -30,4 +30,7 @@ public interface UserService {
 
     //프로필 이미지경로를 사용자 정보에 업데이트
     void updateImageUrl(Long id, String url);
+
+    //사용자 탈퇴 (상태변경)
+    void withdrawUser(Long id, UserWithdrawalForm userWithdrawalForm);
 }
