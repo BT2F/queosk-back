@@ -1,0 +1,83 @@
+package com.bttf.queosk.controller;
+
+import com.bttf.queosk.dto.userDto.*;
+import com.bttf.queosk.service.userService.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+@RequiredArgsConstructor
+@Api(tags = "User API", description = "사용자와 관련된 API")
+@RequestMapping("/api/users")
+@RestController
+public class UserController {
+    private final UserService userService;
+
+    @PostMapping("/signup")
+    @ApiOperation(value = "사용자 회원가입", notes = "입력된 정보로 회원가입을 진행합니다.")
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserSignUpForm userSignUpForm) {
+
+        userService.createUser(userSignUpForm);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/signin")
+    @ApiOperation(value = "사용자 로그인", notes = "입력된 정보로 로그인을 진행합니다.")
+    public ResponseEntity<?> signIn(@Valid @RequestBody UserSignInForm userSignInForm) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.signInUser(userSignInForm));
+    }
+
+    @PostMapping("/check")
+    @ApiOperation(value = "이메일 중복 확인", notes = "사용하고자 하는 이메일의 중복여부를 확인합니다.")
+    public ResponseEntity<?> checkDuplication(@Valid @RequestBody UserCheckForm userCheckForm) {
+
+        return userService.checkDuplication(userCheckForm.getEmail()) ?
+                ResponseEntity.status(HttpStatus.OK).body("사용가능한 이메일 입니다.") :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 사용중인 이메일 입니다.");
+    }
+
+    @GetMapping
+    @ApiOperation(value = "사용자 상세정보", notes = "사용자의 상세정보를 조회합니다.")
+    public ResponseEntity<?> getUserDetails(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
+        UserDto user = userService.getUserFromToken(token);
+
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @PutMapping
+    @ApiOperation(value = "사용자 정보 수정", notes = "사용자의 상세정보를 수정합니다.")
+    public ResponseEntity<?> editUserDetails(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @Valid @RequestBody UserEditForm userEditForm) {
+
+        UserDto userDto = userService.getUserFromToken(token);
+
+        UserDto result = userService.editUserInformation(userDto.getId(), userEditForm);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PutMapping("/password/change")
+    @ApiOperation(value = "사용자 비밀번호 변경", notes = "사용자의 비밀번호를 변경합니다.")
+    public ResponseEntity<?> changeUserPassword(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @Valid @RequestBody UserPasswordChangeForm userPasswordChangeForm) {
+
+        UserDto userDto = userService.getUserFromToken(token);
+
+        userService.changeUserPassword(userDto.getId(), userPasswordChangeForm);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+}
