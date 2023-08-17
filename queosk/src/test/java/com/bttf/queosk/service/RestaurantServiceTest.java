@@ -3,16 +3,15 @@ package com.bttf.queosk.service;
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
 import com.bttf.queosk.dto.enumerate.RestaurantCategory;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDTO;
+import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDto;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
 import com.bttf.queosk.dto.tokenDto.TokenDto;
-import com.bttf.queosk.dto.userDto.UserSignInDto;
-import com.bttf.queosk.dto.userDto.UserSignInForm;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
+import com.bttf.queosk.service.ImageService.ImageService;
 import com.bttf.queosk.service.RestaurantService.RestaurantService;
 import com.bttf.queosk.util.KakaoGeoAddress;
 import com.google.gson.Gson;
@@ -25,7 +24,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -61,13 +59,15 @@ class RestaurantServiceTest {
     private RestaurantService restaurantService;
     @Mock
     private KakaoGeoAddress kakaoGeoAddress;
+    @Mock
+    private ImageService imageService;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(restaurantController).build();
-        restaurantService = new RestaurantService(restaurantRepository, refreshTokenRepository, passwordEncoder, jwtTokenProvider, kakaoGeoAddress);
+        restaurantService = new RestaurantService(restaurantRepository, refreshTokenRepository, passwordEncoder, jwtTokenProvider, kakaoGeoAddress, imageService);
     }
 
     @DisplayName("매장 생성 테스트")
@@ -137,7 +137,7 @@ class RestaurantServiceTest {
         when(jwtTokenProvider.generateAccessToken(any(TokenDto.class))).thenReturn(accessToken);
         when(jwtTokenProvider.generateRefreshToken()).thenReturn(refreshToken);
 
-        RestaurantSignInDTO result = restaurantService.signIn(restaurantSignInForm);
+        RestaurantSignInDto result = restaurantService.signIn(restaurantSignInForm);
 
 
         // then

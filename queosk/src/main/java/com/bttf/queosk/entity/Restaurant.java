@@ -3,6 +3,7 @@ package com.bttf.queosk.entity;
 import com.bttf.queosk.config.BaseTimeEntity;
 import com.bttf.queosk.dto.enumerate.OperationStatus;
 import com.bttf.queosk.dto.enumerate.RestaurantCategory;
+import com.bttf.queosk.model.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,6 +62,8 @@ public class Restaurant extends BaseTimeEntity {
     private Long maxWaiting;
 
     private Boolean isDeleted;
+
+    private UserRole userRole;
 
     public void updateImage(String imageUrl) {
         this.imageUrl = imageUrl;
