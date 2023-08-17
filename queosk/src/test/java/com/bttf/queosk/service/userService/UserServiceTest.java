@@ -19,7 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
-import static com.bttf.queosk.model.userModel.UserStatus.VERIFIED;
+import static com.bttf.queosk.model.userModel.UserStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -336,6 +336,7 @@ class UserServiceTest {
         verify(userRepository).findById(userId);
         verifyNoMoreInteractions(passwordEncoder, userRepository);
     }
+
     @Test
     public void testResetUserPassword_Success() {
         // Given
@@ -350,6 +351,7 @@ class UserServiceTest {
         verify(emailSender).sendEmail(eq("user@example.com"), anyString(), anyString());
         verify(userRepository).save(user);
     }
+
     @Test
     public void testResetUserPassword_UserNotExists() {
         // Given
@@ -377,6 +379,7 @@ class UserServiceTest {
         verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
         verify(userRepository, never()).save(any());
     }
+
     @Test
     public void testUpdateImageUrl_Success() {
         // Given
@@ -460,5 +463,58 @@ class UserServiceTest {
                 .isInstanceOf(CustomException.class);
 
         verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    public void testVerifyUser_Success() {
+        // Given
+        User user = User.builder().id(1L).status(NOT_VERIFIED).build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+        // When
+        String result = userService.verifyUser(1L);
+
+        // Then
+        verify(userRepository).save(user);
+        assertThat(result).isEqualTo("static/verification-success.html");
+    }
+
+    @Test
+    public void testVerifyUser_UserNotExists() {
+        // Given
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // When, Then
+        assertThatThrownBy(() -> userService.verifyUser(1L))
+                .isInstanceOf(CustomException.class);
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    public void testVerifyUser_UserDeleted() {
+        // Given
+        User user = User.builder().id(1L).status(DELETED).build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+        // When
+        String result = userService.verifyUser(1L);
+
+        // Then
+        verify(userRepository, never()).save(any());
+        assertThat(result).isEqualTo("static/verification-fail-deleted.html");
+    }
+
+    @Test
+    public void testVerifyUser_UserAlreadyVerified() {
+        // Given
+        User user = User.builder().id(1L).status(VERIFIED).build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+        // When
+        String result = userService.verifyUser(1L);
+
+        // Then
+        verify(userRepository, never()).save(any());
+        assertThat(result).isEqualTo("static/verification-already-done.html");
     }
 }
