@@ -1,7 +1,6 @@
 package com.bttf.queosk.service.userService;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-
 import com.bttf.queosk.dto.tokenDto.TokenDto;
 import com.bttf.queosk.dto.userDto.UserSignInDto;
 import com.bttf.queosk.dto.userDto.UserSignInForm;
@@ -86,5 +85,10 @@ public class UserServiceImpl implements UserService {
         );
 
         return UserSignInMapper.INSTANCE.userToUserSignInDto(user, refreshToken, accessToken);
+    }
+
+    @Override
+    public boolean checkDuplication(String email) {
+        return !userRepository.findByEmail(email).isPresent();
     }
 }

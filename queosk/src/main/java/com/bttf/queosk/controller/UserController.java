@@ -1,5 +1,6 @@
 package com.bttf.queosk.controller;
 
+import com.bttf.queosk.dto.userDto.UserCheckForm;
 import com.bttf.queosk.dto.userDto.UserSignInForm;
 import com.bttf.queosk.dto.userDto.UserSignUpForm;
 import com.bttf.queosk.service.userService.UserService;
@@ -38,5 +39,14 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.signInUser(userSignInForm));
+    }
+
+    @PostMapping("/check")
+    @ApiOperation(value = "이메일 중복 확인", notes = "사용하고자 하는 이메일의 중복여부를 확인합니다.")
+    public ResponseEntity<?> checkDuplication(@Valid @RequestBody UserCheckForm userCheckForm) {
+
+        return userService.checkDuplication(userCheckForm.getEmail()) ?
+                ResponseEntity.status(HttpStatus.OK).body("사용가능한 이메일 입니다.") :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 사용중인 이메일 입니다.");
     }
 }
