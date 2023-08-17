@@ -33,4 +33,7 @@ public interface UserService {
 
     //사용자 탈퇴 (상태변경)
     void withdrawUser(Long id, UserWithdrawalForm userWithdrawalForm);
+
+    //사용자 인증
+    String verifyUser(Long userId);
 }

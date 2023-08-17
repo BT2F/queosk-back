@@ -7,8 +7,11 @@ import com.bttf.queosk.service.userService.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -130,8 +133,20 @@ public class UserController {
 
         UserDto userDto = userService.getUserFromToken(token);
 
-        userService.withdrawUser(userDto.getId(),userWithdrawalForm);
+        userService.withdrawUser(userDto.getId(), userWithdrawalForm);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    //사용자가 이메일 내 링크로 호출하므로 GET 메서드가 호출됨. 따라서 GetMapping 으로 표기.
+    @GetMapping("/{id}/verification")
+    @ApiOperation(value = "사용자 회원인증", notes = "사용자 상태를 '인증' 상태로 변경합니다.")
+    public ResponseEntity<Resource> verifyUser(@PathVariable Long id) {
+
+        Resource resource = new ClassPathResource(userService.verifyUser(id));
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_HTML)
+                .body(resource);
     }
 }

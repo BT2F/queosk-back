@@ -1,17 +1,16 @@
 package com.bttf.queosk.service.userService;
 
+import com.bttf.queosk.config.emailSender.EmailSender;
 import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.userDto.*;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.mapper.userMapper.TokenDtoMapper;
 import com.bttf.queosk.mapper.userMapper.UserDtoMapper;
 import com.bttf.queosk.mapper.userMapper.UserSignInMapper;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
-import com.bttf.queosk.config.emailSender.EmailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,8 +20,7 @@ import java.util.UUID;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
 import static com.bttf.queosk.model.userModel.UserRole.ROLE_USER;
-import static com.bttf.queosk.model.userModel.UserStatus.DELETED;
-import static com.bttf.queosk.model.userModel.UserStatus.NOT_VERIFIED;
+import static com.bttf.queosk.model.userModel.UserStatus.*;
 
 @RequiredArgsConstructor
 @Service
@@ -50,16 +48,23 @@ public class UserServiceImpl implements UserService {
         String trimmedPhoneNumber =
                 userSignUpForm.getPhone().replaceAll("\\D", "");
 
-        userRepository.save(
-                User.builder()
-                        .email(userSignUpForm.getEmail())
-                        .nickName(userSignUpForm.getNickName())
-                        .password(encryptedPassword)
-                        .phone(trimmedPhoneNumber)
-                        .status(NOT_VERIFIED)
-                        .userRole(ROLE_USER)
-                        .build()
-        );
+        User user = User.builder()
+                .email(userSignUpForm.getEmail())
+                .nickName(userSignUpForm.getNickName())
+                .password(encryptedPassword)
+                .phone(trimmedPhoneNumber)
+                .status(NOT_VERIFIED)
+                .userRole(ROLE_USER)
+                .build();
+
+        userRepository.save(user);
+
+        //회원 이메일 주소로 인증이메일 전송
+        emailSender.sendEmail(userSignUpForm.getEmail(),
+                "Queosk 이메일 인증",
+                String.format("Queosk에 가입해 주셔서 감사합니다. \n" +
+                        "아래 링크를 클릭 하시어 이메일 인증을 완료해주세요.\n" +
+                        "http://localhost:8080/api/users/%d/verification", user.getId()));
     }
 
     @Override
@@ -76,10 +81,10 @@ public class UserServiceImpl implements UserService {
         }
 
         //탈퇴한 사용자의 경우
-        if (user.getStatus().equals(DELETED)){
+        if (user.getStatus().equals(DELETED)) {
             throw new CustomException(WITHDRAWN_USER);
-        }else if(user.getStatus().equals(NOT_VERIFIED)){
-            throw new CustomException(ErrorCode.NOT_VERIFIED_USER);
+        } else if (user.getStatus().equals(NOT_VERIFIED)) {
+            throw new CustomException(NOT_VERIFIED_USER);
         }
 
         //엑세스 토큰 발행
@@ -193,12 +198,33 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
-        if(!passwordEncoder.matches(userWithdrawalForm.getPassword(),user.getPassword())){
+        if (!passwordEncoder.matches(userWithdrawalForm.getPassword(), user.getPassword())) {
             throw new CustomException(PASSWORD_NOT_MATCH);
         }
 
         user.withdrawUser();
 
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public String verifyUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
+
+        String root = "static/verification-";
+
+        if (user.getStatus().equals(DELETED)) {
+            return root + "fail-deleted.html";
+        } else if (user.getStatus().equals(VERIFIED)) {
+            return root + "already-done.html";
+        }
+
+        user.verifyUser();
+
+        userRepository.save(user);
+
+        return root + "success.html";
     }
 }

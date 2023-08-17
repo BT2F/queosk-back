@@ -59,4 +59,7 @@ public class User extends BaseTimeEntity {
     public void updateImageUrl(String url) { this.imageUrl = url; }
 
     public void withdrawUser() { this.status = DELETED; }
+
+    public void verifyUser() { this.status = VERIFIED; }
+
 }
