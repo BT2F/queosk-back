@@ -164,5 +164,17 @@ public class UserServiceImpl implements UserService {
         );
 
         user.changePassword(encryptedPassword);
+
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateImageUrl(Long id, String url) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+
+        user.updateImageUrl(url);
+
+        userRepository.save(user);
     }
 }

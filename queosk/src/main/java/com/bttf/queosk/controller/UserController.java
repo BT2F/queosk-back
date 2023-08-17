@@ -1,6 +1,7 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.dto.userDto.*;
+import com.bttf.queosk.service.imageService.ImageService;
 import com.bttf.queosk.service.refreshTokenService.RefreshTokenService;
 import com.bttf.queosk.service.userService.UserService;
 import io.swagger.annotations.Api;
@@ -10,8 +11,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RequiredArgsConstructor
 @Api(tags = "User API", description = "사용자와 관련된 API")
@@ -20,6 +23,7 @@ import javax.validation.Valid;
 public class UserController {
     private final UserService userService;
     private final RefreshTokenService refreshTokenService;
+    private final ImageService imageService;
 
     @PostMapping("/signup")
     @ApiOperation(value = "사용자 회원가입", notes = "입력된 정보로 회원가입을 진행합니다.")
@@ -102,5 +106,20 @@ public class UserController {
         refreshTokenService.deleteRefreshToken(userDto.getEmail());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PutMapping("/image")
+    @ApiOperation(value = "프로필 이미지 업로드", notes = "사용자의 프로필 사진을 이미지서버에 업로드 하고 URL을 사용자정보에 저장합니다.")
+    public ResponseEntity<?> uploadImage(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody MultipartFile imageFile) throws IOException {
+
+        String url = imageService.saveFile(imageFile);
+
+        UserDto userDto = userService.getUserFromToken(token);
+
+        userService.updateImageUrl(userDto.getId(),url);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
