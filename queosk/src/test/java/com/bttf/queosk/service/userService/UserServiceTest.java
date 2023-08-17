@@ -377,4 +377,27 @@ class UserServiceTest {
         verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
         verify(userRepository, never()).save(any());
     }
+    @Test
+    public void testUpdateImageUrl_Success() {
+        // Given
+        User user = User.builder().id(1L).build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+        // When
+        userService.updateImageUrl(1L, "newImageUrl");
+
+        // Then
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    public void testUpdateImageUrl_UserNotExists() {
+        // Given
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // When, Then
+        assertThatThrownBy(() -> userService.updateImageUrl(1L, "newImageUrl"))
+                .isInstanceOf(CustomException.class);
+        verify(userRepository, never()).save(any());
+    }
 }
