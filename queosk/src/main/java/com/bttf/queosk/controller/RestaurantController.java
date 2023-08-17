@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @Api(tags = "Restaurant API", description = "매장 API")
@@ -34,4 +39,12 @@ public class RestaurantController {
     public ResponseEntity<?> signIn(@Valid @RequestBody RestaurantSignInForm restaurantSignInForm) {
         return ResponseEntity.ok().body(restaurantService.signIn(restaurantSignInForm));
     }
+
+    @PostMapping("/image/{id}")
+    @ApiOperation(value = "이미지 추가", notes = "업장의 이미지를 추가합니다.")
+    public ResponseEntity<?> restaurantImageUpload(@PathVariable(name = "id") long id, @RequestBody MultipartFile image) throws IOException {
+        restaurantService.imageUpload(id, image);
+        return ResponseEntity.status(201).build();
+    }
+
 }
