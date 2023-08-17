@@ -1,6 +1,7 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.dto.userDto.*;
+import com.bttf.queosk.service.refreshTokenService.RefreshTokenService;
 import com.bttf.queosk.service.userService.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 @RestController
 public class UserController {
     private final UserService userService;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/signup")
     @ApiOperation(value = "사용자 회원가입", notes = "입력된 정보로 회원가입을 진행합니다.")
@@ -82,11 +84,22 @@ public class UserController {
     }
 
     @PutMapping("/password/reset")
-    @ApiOperation(value="사용자 비밀번호 초기화",notes = "사용자의 비밀번호를 초기화 후 이메일로 새 비밀번호를 전송 합니다.")
+    @ApiOperation(value = "사용자 비밀번호 초기화", notes = "사용자의 비밀번호를 초기화 후 이메일로 새 비밀번호를 전송 합니다.")
     public ResponseEntity<?> resetUserPassword(
-            @Valid @RequestBody UserResetPasswordForm userResetPasswordForm){
+            @Valid @RequestBody UserResetPasswordForm userResetPasswordForm) {
 
         userService.resetUserPassword(userResetPasswordForm.getEmail(), userResetPasswordForm.getNickName());
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/signout")
+    @ApiOperation(value = "사용자 로그아웃", notes = "사용자의 계정에서 로그아웃합니다.")
+    public ResponseEntity<?> signOutUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+
+        UserDto userDto = userService.getUserFromToken(token);
+
+        refreshTokenService.deleteRefreshToken(userDto.getEmail());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
