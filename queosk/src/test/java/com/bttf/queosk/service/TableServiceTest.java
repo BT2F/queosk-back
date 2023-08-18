@@ -114,4 +114,42 @@ class TableServiceTest {
                 .hasMessage(ErrorCode.INVALID_TABLE.getMessage());
         then(tableService).should(times(1)).updateTable(table.getId(), TableStatus.USING);
     }
+
+    @Test
+    @DisplayName("테이블 삭제 테스트 - 성공 케이스")
+    public void testDeleteTable_success() {
+        //given
+        Table table = Table.builder()
+                .id(1L)
+                .status(TableStatus.OPEN)
+                .restaurantId(1L)
+                .build();
+
+        given(tableRepository.findById(table.getId())).willReturn(Optional.of(table));
+
+        //when
+        tableService.deleteTable(table.getId());
+
+        //then
+        then(tableService).should(times(1)).deleteTable(table.getId());
+
+    }
+    @Test
+    @DisplayName("테이블 삭제 테스트 - tableId가 없을 경우")
+    public void testDeleteTable_fail_invalidTableException() {
+        //given
+        Table table = Table.builder()
+                .id(1L)
+                .status(TableStatus.OPEN)
+                .restaurantId(1L)
+                .build();
+
+        given(tableRepository.findById(anyLong())).willReturn(Optional.empty());
+
+        //then
+        assertThatThrownBy(() -> tableService.deleteTable(table.getId()))
+                .isExactlyInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.INVALID_TABLE.getMessage());
+        then(tableService).should(times(1)).deleteTable(table.getId());
+    }
 }
