@@ -16,11 +16,8 @@ public enum ErrorCode {
     PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     USER_NOT_EXISTS(HttpStatus.NOT_FOUND, "해당 회원을 찾을 수 없습니다."),
     NICKNAME_NOT_MATCH(HttpStatus.BAD_REQUEST,"닉네임 정보가 일치가하지 않습니다." ),
-
-    // Table 관련 Exception
-    INVALID_TABLE(HttpStatus.NOT_FOUND, "존재하지 않는 테이블입니다."),
-    // Restaurant 관련 Exception
-    INVALID_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 상점입니다.");
+    WITHDRAWN_USER(HttpStatus.BAD_REQUEST,"이미 탈퇴한 회원입니다." ),
+    NOT_VERIFIED_USER(HttpStatus.BAD_REQUEST,"이메일 검증 진행 후 로그인이 가능합니다." );
 
 
     private final HttpStatus status;

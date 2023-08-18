@@ -27,4 +27,13 @@ public interface UserService {
 
     //이메일로 사용자정보 조회
     void resetUserPassword(String email, String nickName);
+
+    //프로필 이미지경로를 사용자 정보에 업데이트
+    void updateImageUrl(Long id, String url);
+
+    //사용자 탈퇴 (상태변경)
+    void withdrawUser(Long id, UserWithdrawalForm userWithdrawalForm);
+
+    //사용자 인증
+    String verifyUser(Long userId);
 }

@@ -1,5 +1,6 @@
 package com.bttf.queosk.service.userService;
 
+import com.bttf.queosk.config.emailSender.EmailSender;
 import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.tokenDto.TokenDto;
 import com.bttf.queosk.dto.userDto.*;
@@ -9,7 +10,7 @@ import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
-import com.bttf.queosk.config.emailSender.EmailSender;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
+import static com.bttf.queosk.model.userModel.UserStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -99,6 +101,7 @@ class UserServiceTest {
         String refreshToken = "refreshToken";
         User user = User.builder()
                 .email(email)
+                .status(VERIFIED)
                 .password(encodedPassword)
                 .build();
 
@@ -332,5 +335,186 @@ class UserServiceTest {
 
         verify(userRepository).findById(userId);
         verifyNoMoreInteractions(passwordEncoder, userRepository);
+    }
+
+    @Test
+    public void testResetUserPassword_Success() {
+        // Given
+        User user = User.builder().email("user@example.com").nickName("testuser").build();
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+
+        // When
+        userService.resetUserPassword("user@example.com", "testuser");
+
+        // Then
+        verify(emailSender).sendEmail(eq("user@example.com"), anyString(), anyString());
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    public void testResetUserPassword_UserNotExists() {
+        // Given
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+
+        // When, Then
+        Assertions.assertThatThrownBy(() -> userService.resetUserPassword("user@example.com", "testuser"))
+                .isInstanceOf(CustomException.class);
+        verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    public void testResetUserPassword_NickNameNotMatch() {
+        // Given
+        User user = User.builder()
+                .email("user@example.com")
+                .nickName("testuser")
+                .build();
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+
+        // When, Then
+        assertThatThrownBy(() -> userService.resetUserPassword("user@example.com", "wrongnick"))
+                .isInstanceOf(CustomException.class);
+        verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    public void testUpdateImageUrl_Success() {
+        // Given
+        User user = User.builder().id(1L).build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+        // When
+        userService.updateImageUrl(1L, "newImageUrl");
+
+        // Then
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    public void testUpdateImageUrl_UserNotExists() {
+        // Given
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // When, Then
+        assertThatThrownBy(() -> userService.updateImageUrl(1L, "newImageUrl"))
+                .isInstanceOf(CustomException.class);
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    public void testWithdrawUser_Success() {
+        // Given
+        User user =
+                User.builder()
+                        .id(1L)
+                        .password(passwordEncoder.encode("correctPassword"))
+                        .build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("correctPassword", user.getPassword()))
+                .thenReturn(true);
+
+        UserWithdrawalForm withdrawalForm =
+                UserWithdrawalForm.builder()
+                        .password("correctPassword")
+                        .build();
+        // When
+        userService.withdrawUser(1L, withdrawalForm);
+
+        // Then
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    public void testWithdrawUser_UserNotExists() {
+        // Given
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        UserWithdrawalForm withdrawalForm =
+                UserWithdrawalForm.builder()
+                        .password("correctPassword")
+                        .build();
+
+        // When, Then
+        assertThatThrownBy(() -> userService.withdrawUser(1L, withdrawalForm))
+                .isInstanceOf(CustomException.class);
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    public void testWithdrawUser_IncorrectPassword() {
+        // Given
+        User user = User.builder()
+                .id(1L)
+                .password(passwordEncoder.encode("correctPassword"))
+                .build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
+
+        // When, Then
+        UserWithdrawalForm withdrawalForm =
+                UserWithdrawalForm.builder()
+                        .password("correctPassword")
+                        .build();
+
+        assertThatThrownBy(() -> userService.withdrawUser(1L, withdrawalForm))
+                .isInstanceOf(CustomException.class);
+
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    public void testVerifyUser_Success() {
+        // Given
+        User user = User.builder().id(1L).status(NOT_VERIFIED).build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+        // When
+        String result = userService.verifyUser(1L);
+
+        // Then
+        verify(userRepository).save(user);
+        assertThat(result).isEqualTo("static/verification-success.html");
+    }
+
+    @Test
+    public void testVerifyUser_UserNotExists() {
+        // Given
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // When, Then
+        assertThatThrownBy(() -> userService.verifyUser(1L))
+                .isInstanceOf(CustomException.class);
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    public void testVerifyUser_UserDeleted() {
+        // Given
+        User user = User.builder().id(1L).status(DELETED).build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+        // When
+        String result = userService.verifyUser(1L);
+
+        // Then
+        verify(userRepository, never()).save(any());
+        assertThat(result).isEqualTo("static/verification-fail-deleted.html");
+    }
+
+    @Test
+    public void testVerifyUser_UserAlreadyVerified() {
+        // Given
+        User user = User.builder().id(1L).status(VERIFIED).build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+        // When
+        String result = userService.verifyUser(1L);
+
+        // Then
+        verify(userRepository, never()).save(any());
+        assertThat(result).isEqualTo("static/verification-already-done.html");
     }
 }
