@@ -1,4 +1,4 @@
-package com.bttf.queosk.service.RefreshTokenService;
+package com.bttf.queosk.service.refreshTokenService;
 
 import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.tokenDto.TokenDto;
@@ -35,5 +35,8 @@ public class RefreshTokenService {
                         .email(user.getEmail())
                         .build()
         );
+    }
+    public void deleteRefreshToken(String email) {
+        refreshTokenRepository.deleteById(email);
     }
 }

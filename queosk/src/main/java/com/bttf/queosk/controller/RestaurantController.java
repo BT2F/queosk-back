@@ -1,18 +1,16 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
+import com.bttf.queosk.dto.restaurantDto.RestaurantDto;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
+import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
+import com.bttf.queosk.dto.userDto.UserDto;
 import com.bttf.queosk.service.RestaurantService.RestaurantService;
+import com.bttf.queosk.service.userService.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,9 +41,20 @@ public class RestaurantController {
 
     @PostMapping("/image/{id}")
     @ApiOperation(value = "이미지 추가", notes = "업장의 이미지를 추가합니다.")
-    public ResponseEntity<?> restaurantImageUpload(@PathVariable(name = "id") long id, @RequestBody MultipartFile image) throws IOException {
+    public ResponseEntity<?> restaurantImageUpload(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @PathVariable(name = "id") long id, @RequestBody MultipartFile image) throws IOException {
+
         restaurantService.imageUpload(id, image);
         return ResponseEntity.status(201).build();
+    }
+
+    @GetMapping
+    @ApiOperation(value = "매장 정보 확인", notes = "업장의 정보를 확인합니다.")
+    public ResponseEntity<?> restaurantGetInfo(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        RestaurantDto restaurant = restaurantService.getRestaurantInfoFromToken(token);
+        return ResponseEntity.ok().body(restaurant);
     }
 
 }

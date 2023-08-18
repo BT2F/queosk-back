@@ -1,6 +1,6 @@
 package com.bttf.queosk.config.springSecurity;
 
-import com.bttf.queosk.service.RefreshTokenService.RefreshTokenService;
+import com.bttf.queosk.service.refreshTokenService.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;

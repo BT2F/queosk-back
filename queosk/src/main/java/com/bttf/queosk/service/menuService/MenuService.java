@@ -1,4 +1,4 @@
-package com.bttf.queosk.service.MenuService;
+package com.bttf.queosk.service.menuService;
 
 import com.bttf.queosk.dto.menuDto.CreateMenuForm;
 import com.bttf.queosk.entity.Menu;
