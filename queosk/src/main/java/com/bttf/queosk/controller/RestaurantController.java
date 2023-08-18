@@ -44,7 +44,7 @@ public class RestaurantController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @PathVariable(name = "id") long id, @RequestBody MultipartFile image) throws IOException {
 
-        restaurantService.imageUpload(id, image);
+        restaurantService.imageUpload(token, image);
         return ResponseEntity.status(201).build();
     }
 
