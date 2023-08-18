@@ -1,11 +1,9 @@
 package com.bttf.queosk.service.restaurantService;
 
+import com.bttf.queosk.config.emailSender.EmailSender;
 import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.enumerate.OperationStatus;
-import com.bttf.queosk.dto.restaurantDto.RestaurantDto;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDto;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
+import com.bttf.queosk.dto.restaurantDto.*;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.exception.CustomException;
@@ -26,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
 
@@ -40,6 +39,7 @@ public class RestaurantService {
     private final JwtTokenProvider jwtTokenProvider;
     private final KakaoGeoAddress kakaoGeoAddress;
     private final ImageService imageService;
+    private final EmailSender emailSender;
 
     @Transactional
     public void signUp(RestaurantSignUpForm restaurantSignUpForm) throws Exception {
@@ -98,6 +98,7 @@ public class RestaurantService {
 
     }
 
+    @Transactional
     public void imageUpload(String token, MultipartFile image) throws IOException {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
@@ -114,5 +115,42 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
         return RestaurantDtoMapper.MAPPER.toDto(restaurant);
+    }
+
+    @Transactional
+    public void resetRestaurantPassword(String email, String ownerName) {
+        Restaurant restaurant = restaurantRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+        if (!restaurant.getOwnerName().equals(ownerName)) {
+            throw new CustomException(OWNER_NAME_NOT_MATCH);
+        }
+
+        String randomPassword = UUID.randomUUID().toString().substring(0, 10);
+        String encryptedPassword = passwordEncoder.encode(randomPassword);
+
+        emailSender.sendEmail(
+                restaurant.getEmail(),
+                "비밀번호 초기화 완료",
+                "새로운 비밀번호 : " + randomPassword + "를 입력해 로그인 해주세요."
+        );
+
+        restaurant.changePassword(encryptedPassword);
+
+        restaurantRepository.save(restaurant);
+    }
+
+    @Transactional
+    public void updateRestaurantPassword(Long id, RestaurantUpdatePasswordForm updatePassword) {
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+
+        if (!passwordEncoder.matches(updatePassword.getOldPassword(), restaurant.getPassword())) {
+            throw new CustomException(PASSWORD_NOT_MATCH);
+        }
+
+        restaurant.changePassword(passwordEncoder.encode(updatePassword.getNewPassword()));
+
+        restaurantRepository.save(restaurant);
+
     }
 }

@@ -69,4 +69,8 @@ public class Restaurant extends BaseTimeEntity {
     public void updateImage(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
 }

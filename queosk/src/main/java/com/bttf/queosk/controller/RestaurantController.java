@@ -1,20 +1,23 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.restaurantDto.RestaurantDto;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
+import com.bttf.queosk.dto.restaurantDto.*;
 
+import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.service.restaurantService.RestaurantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @Api(tags = "Restaurant API", description = "매장 API")
@@ -42,9 +45,9 @@ public class RestaurantController {
     @ApiOperation(value = "이미지 추가", notes = "업장의 이미지를 추가합니다.")
     public ResponseEntity<?> restaurantImageUpload(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @PathVariable(name = "id") long id, @RequestBody MultipartFile image) throws IOException {
+            @RequestBody MultipartFile image) throws IOException {
 
-        restaurantService.imageUpload(id, image);
+        restaurantService.imageUpload(token, image);
         return ResponseEntity.status(201).build();
     }
 
@@ -54,6 +57,20 @@ public class RestaurantController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         RestaurantDto restaurant = restaurantService.getRestaurantInfoFromToken(token);
         return ResponseEntity.ok().body(restaurant);
+    }
+
+    @PutMapping("/resetpassword")
+    @ApiOperation(value = "매장 비밀번호 초기화", notes = "매장의 비밀번호를 초기화 합니다.")
+    public ResponseEntity<?> resetRestaurantPassword(@Valid @RequestBody
+                                                         RestaurantResetPasswordForm restaurantResetPasswordForm) {
+        restaurantService.resetRestaurantPassword(restaurantResetPasswordForm.getEmail(), restaurantResetPasswordForm.getOwnerName());
+        return ResponseEntity.status(NO_CONTENT).build();
+    }
+
+    @PutMapping("/updatepassword/{id}")
+    ResponseEntity<?> updateRestaurantPassword(@PathVariable(name = "id") Long id, @RequestBody RestaurantUpdatePasswordForm updatePassword) {
+        restaurantService.updateRestaurantPassword(id, updatePassword);
+        return ResponseEntity.status(CREATED).build();
     }
 
 }
