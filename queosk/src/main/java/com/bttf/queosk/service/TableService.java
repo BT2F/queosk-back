@@ -38,4 +38,13 @@ public class TableService {
 
         Table.updateStatus(table, tableStatus);
     }
+
+    public void deleteTable(Long tableId) {
+
+        Table table = tableRepository.findById(tableId).orElseThrow(
+                () -> new CustomException(ErrorCode.INVALID_TABLE)
+        );
+
+        tableRepository.delete(table);
+    }
 }
