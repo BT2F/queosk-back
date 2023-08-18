@@ -88,8 +88,8 @@ public class RestaurantService {
 
         refreshTokenRepository.save(
                 RefreshToken.builder()
-                        .user_email(restaurant.getEmail())
-                        .refresh_token(refreshToken)
+                        .email(restaurant.getEmail())
+                        .token(refreshToken)
                         .build()
         );
 

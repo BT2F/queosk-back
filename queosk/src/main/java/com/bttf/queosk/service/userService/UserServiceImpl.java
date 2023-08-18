@@ -98,8 +98,8 @@ public class UserServiceImpl implements UserService {
         //리프테시 토큰 저장(기존에 있었다면 덮어쓰기 - 성능상 조회 후 수정보다 덮어쓰기가 더 빠르고 가벼움)
         refreshTokenRepository.save(
                 RefreshToken.builder()
-                        .user_email(user.getEmail())
-                        .refresh_token(refreshToken)
+                        .email(user.getEmail())
+                        .token(refreshToken)
                         .build()
         );
 
