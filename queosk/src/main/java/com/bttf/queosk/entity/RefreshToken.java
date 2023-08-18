@@ -13,7 +13,7 @@ import org.springframework.data.redis.core.RedisHash;
 @Builder
 @RedisHash(value = "refresh_token")
 public class RefreshToken {
-    @Id
-    private String user_email;
-    private String refresh_token;
+    @Id // 정책변경으로 인해 아이디 email - > token 으로 교체
+    private String token;
+    private String email;
 }
