@@ -6,12 +6,13 @@ import com.bttf.queosk.dto.restaurantDto.RestaurantDto;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDto;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
-import com.bttf.queosk.dto.tokenDto.TokenDto;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.mapper.RestaurantDtoMapper;
 import com.bttf.queosk.mapper.RestaurantSignInMapper;
+import com.bttf.queosk.mapper.userMapper.TokenDtoMapper;
+import com.bttf.queosk.model.userModel.UserRole;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.service.imageService.ImageService;
@@ -63,6 +64,7 @@ public class RestaurantService {
                         .longitude(kakaoGeoAddress.addressToCoordinate(restaurantSignUpForm.getAddress(), "x"))
                         .operationStatus(OperationStatus.CLOSED)
                         .isDeleted(false)
+                        .userRole(UserRole.ROLE_ADMIN)
                         .build();
 
 
@@ -79,10 +81,7 @@ public class RestaurantService {
         }
 
         String accessToken = jwtTokenProvider.generateAccessToken(
-                TokenDto.builder()
-                        .email(restaurant.getEmail())
-                        .id(restaurant.getId())
-                        .build()
+                TokenDtoMapper.INSTANCE.restaurantToTokenDto(restaurant)
         );
 
         String refreshToken = jwtTokenProvider.generateRefreshToken();
@@ -99,9 +98,11 @@ public class RestaurantService {
 
     }
 
-    public void imageUpload(Long id, MultipartFile image) throws IOException {
+    public void imageUpload(String token, MultipartFile image) throws IOException {
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
         Restaurant restaurant = restaurantRepository
-                .findById(id)
+                .findById(restaurantId)
                 .orElseThrow(() -> new CustomException(INVALID_USER_ID));
         restaurant.updateImage(imageService.saveFile(image));
         restaurantRepository.save(restaurant);
