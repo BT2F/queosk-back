@@ -2,9 +2,17 @@ package com.bttf.queosk.dto.restaurantDto;
 
 import com.bttf.queosk.dto.enumerate.OperationStatus;
 import com.bttf.queosk.dto.enumerate.RestaurantCategory;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class RestaurantDto {
     private String ownerId;
 
