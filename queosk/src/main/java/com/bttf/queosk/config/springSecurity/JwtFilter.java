@@ -34,21 +34,9 @@ public class JwtFilter extends OncePerRequestFilter {
                     .setAuthentication(jwtTokenProvider.getAuthentication(token));
 
         } else if (token != null) {
-            //만약 AccessToken이 유효하지 않을 경우 사용자의 이메일로 RefreshToken 조회
-            String email = jwtTokenProvider.getEmailFromToken(token);
-            String refreshToken = refreshTokenService.getRefreshToken(email);
-
-            //리프레시 토큰이 유효할 경우 , 헤더에 리프레시 토큰 담기
-            if (jwtTokenProvider.validateToken(refreshToken)) {
-                String newAccessToken = refreshTokenService.issueNewAccessToken(email);
-                response.setHeader(HttpHeaders.AUTHORIZATION, newAccessToken);
-                response.setStatus(HttpServletResponse.SC_OK); // 200 Ok
-                response.getWriter().write("토큰이 갱신되었습니다.");
-            } else {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-                response.getWriter().write("토큰이 만료되었습니다. 다시 로그인 하세요.");
-                response.getWriter().flush();
-            }
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+            response.getWriter().write("엑세스 토큰이 만료되었습니다.");
+            response.getWriter().flush();
         }
         chain.doFilter(request, response);
     }
