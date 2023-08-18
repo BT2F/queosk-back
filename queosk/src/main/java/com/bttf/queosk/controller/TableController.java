@@ -36,4 +36,16 @@ public class TableController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @DeleteMapping("/table/{tableId}")
+    @ApiOperation(value = "테이블 삭제", notes = "테이블을 삭제 합니다.")
+    public ResponseEntity<?> tableDelete(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                         @PathVariable(name = "restaurantId") Long restaurantId,
+                                         @PathVariable Long tableId) {
+
+        tableService.deleteTable(tableId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
+
 }

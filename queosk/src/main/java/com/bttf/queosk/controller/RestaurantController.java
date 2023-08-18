@@ -3,9 +3,8 @@ package com.bttf.queosk.controller;
 import com.bttf.queosk.dto.restaurantDto.RestaurantDto;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
-import com.bttf.queosk.dto.userDto.UserDto;
-import com.bttf.queosk.service.RestaurantService.RestaurantService;
-import com.bttf.queosk.service.userService.UserService;
+
+import com.bttf.queosk.service.restaurantService.RestaurantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

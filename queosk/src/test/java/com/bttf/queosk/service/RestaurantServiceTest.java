@@ -63,9 +63,6 @@ class RestaurantServiceTest {
     @Mock
     private ImageService imageService;
 
-    @Mock
-    private ImageService imageService;
-
     private MockMvc mockMvc;
 
     @BeforeEach
