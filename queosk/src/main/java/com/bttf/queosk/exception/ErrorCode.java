@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     // ex) NOT_FOUND_USER(HttpStatus.BAD_REQUEST, "회원 정보를 찾을 수 없습니다.")
+    // 공통 Exception
+    NOT_PERMITTED(HttpStatus.NOT_ACCEPTABLE, "접근 권한이 없습니다."),
 
     //UserService 관련 Exception
     INVALID_USER_ID(HttpStatus.NOT_FOUND, "존재하지 않는 아이디입니다."),
