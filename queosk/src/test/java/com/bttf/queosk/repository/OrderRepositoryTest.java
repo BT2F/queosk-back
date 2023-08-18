@@ -41,7 +41,7 @@ class OrderRepositoryTest {
         Table table = Table.builder()
                 .id(1L)
                 .status(OPEN)
-                .restaurant(restaurant)
+                .restaurantId(restaurant.getId())
                 .build();
 
 

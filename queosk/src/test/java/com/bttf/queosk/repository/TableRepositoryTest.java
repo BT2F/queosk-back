@@ -29,7 +29,7 @@ public class TableRepositoryTest {
         Table table = Table.builder()
                 .id(1L)
                 .status(OPEN)
-                .restaurant(restaurant)
+                .restaurantId(restaurant.getId())
                 .build();
         // when
         Table savedTable = tableRepository.save(table);
@@ -48,7 +48,7 @@ public class TableRepositoryTest {
         Table table = Table.builder()
                 .id(1L)
                 .status(OPEN)
-                .restaurant(restaurant)
+                .restaurantId(restaurant.getId())
                 .build();
         tableRepository.save(table);
         // when
