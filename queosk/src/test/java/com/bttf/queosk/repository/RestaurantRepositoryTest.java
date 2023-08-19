@@ -1,6 +1,6 @@
 package com.bttf.queosk.repository;
 
-import com.bttf.queosk.config.baseEntity.JpaAuditingConfiguration;
+import com.bttf.queosk.entity.baseentity.JpaAuditingConfiguration;
 import com.bttf.queosk.entity.Restaurant;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
