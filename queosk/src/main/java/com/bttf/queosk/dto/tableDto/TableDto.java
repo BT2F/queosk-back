@@ -1,6 +1,6 @@
 package com.bttf.queosk.dto.tableDto;
 
-import com.bttf.queosk.dto.enumerate.TableStatus;
+import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.entity.Table;
 import lombok.Builder;
 import lombok.Getter;
