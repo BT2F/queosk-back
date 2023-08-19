@@ -69,6 +69,7 @@ public class RestaurantController {
     }
 
     @PutMapping("/updatepassword/{id}")
+    @ApiOperation(value = "매장 비밀번호 변경", notes = "매장의 비밀번호를 변경합니다.")
     ResponseEntity<?> updateRestaurantPassword(@PathVariable(name = "id") Long id, @RequestBody RestaurantUpdatePasswordForm updatePassword) {
         restaurantService.updateRestaurantPassword(id, updatePassword);
         return ResponseEntity.status(CREATED).build();
