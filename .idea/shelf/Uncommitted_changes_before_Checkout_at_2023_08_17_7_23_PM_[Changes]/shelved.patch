@@ -1,0 +1,127 @@
+Index: queosk/src/test/java/com/bttf/queosk/service/RestaurantServiceTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.bttf.queosk.service;\n\nimport com.bttf.queosk.config.JwtTokenProvider;\nimport com.bttf.queosk.controller.RestaurantController;\nimport com.bttf.queosk.dto.enumerate.RestaurantCategory;\nimport com.bttf.queosk.dto.restaurantDto.RestaurantSignInDTO;\nimport com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;\nimport com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;\nimport com.bttf.queosk.dto.tokenDto.TokenDto;\nimport com.bttf.queosk.dto.userDto.UserSignInDto;\nimport com.bttf.queosk.dto.userDto.UserSignInForm;\nimport com.bttf.queosk.entity.RefreshToken;\nimport com.bttf.queosk.entity.Restaurant;\nimport com.bttf.queosk.repository.RefreshTokenRepository;\nimport com.bttf.queosk.repository.RestaurantRepository;\nimport com.bttf.queosk.service.RestaurantService.RestaurantService;\nimport com.bttf.queosk.util.KakaoGeoAddress;\nimport com.google.gson.Gson;\nimport org.junit.jupiter.api.BeforeEach;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\nimport org.junit.jupiter.api.extension.ExtendWith;\nimport org.mockito.InjectMocks;\nimport org.mockito.Mock;\nimport org.mockito.junit.jupiter.MockitoExtension;\nimport org.springframework.http.MediaType;\nimport org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;\nimport org.springframework.security.crypto.password.PasswordEncoder;\nimport org.springframework.test.annotation.Rollback;\nimport org.springframework.test.web.servlet.MockMvc;\nimport org.springframework.test.web.servlet.MvcResult;\nimport org.springframework.test.web.servlet.ResultActions;\nimport org.springframework.test.web.servlet.request.MockMvcRequestBuilders;\nimport org.springframework.test.web.servlet.result.MockMvcResultMatchers;\nimport org.springframework.test.web.servlet.setup.MockMvcBuilders;\nimport org.springframework.transaction.annotation.Transactional;\n\nimport java.util.Optional;\n\nimport static org.assertj.core.api.Assertions.assertThat;\nimport static org.hibernate.validator.internal.util.Contracts.assertNotNull;\nimport static org.mockito.ArgumentMatchers.*;\nimport static org.mockito.Mockito.*;\n\n@Transactional\n@Rollback\n@ExtendWith(MockitoExtension.class)\nclass RestaurantServiceTest {\n\n    @InjectMocks\n    private RestaurantController restaurantController;\n    @Mock\n    private RestaurantRepository restaurantRepository;\n    @Mock\n    private BCryptPasswordEncoder passwordEncoder;\n    @Mock\n    private JwtTokenProvider jwtTokenProvider;\n    @Mock\n    private RefreshTokenRepository refreshTokenRepository;\n    @Mock\n    private RestaurantService restaurantService;\n    @Mock\n    private KakaoGeoAddress kakaoGeoAddress;\n\n    private MockMvc mockMvc;\n\n    @BeforeEach\n    public void init() {\n        mockMvc = MockMvcBuilders.standaloneSetup(restaurantController).build();\n        restaurantService = new RestaurantService(restaurantRepository, refreshTokenRepository, passwordEncoder, jwtTokenProvider, kakaoGeoAddress);\n    }\n\n    @DisplayName(\"매장 생성 테스트\")\n    @Test\n    public void 매장_생성() throws Exception {\n        // given\n\n        RestaurantSignUpForm restaurantSignUpForm =\n                RestaurantSignUpForm.builder()\n                        .ownerId(\"test\")\n                        .ownerName(\"test\")\n                        .password(\"1234\")\n                        .email(\"a@x.com\")\n                        .phone(\"01001234567\")\n                        .restaurantPhone(\"0101234567\")\n                        .restaurantName(\"테스트네 식당\")\n                        .category(RestaurantCategory.ASIAN)\n                        .businessNumber(\"123-45-67890\")\n                        .businessStartDate(\"19900428\")\n                        .address(\"청와대로 1\")\n                        .build();\n\n\n        // when\n        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.post(\n                        \"/api/restaurant/signup\")\n                .contentType(MediaType.APPLICATION_JSON)\n                .content(new Gson().toJson(restaurantSignUpForm))\n        );\n\n        // then\n\n        MvcResult mvcResult =\n                actions.andExpect(MockMvcResultMatchers.status().is2xxSuccessful())\n                        .andReturn();\n\n        String id = mvcResult.getResponse().getContentAsString();\n\n        assertThat(id).isNotNull();\n    }\n\n    @Test\n    public void RestaurantSignIn_Test() throws Exception {\n        // given\n\n        String id = \"test\";\n        String password = \"password\";\n        String encodedPassword = \"encodedPassword\"; // Encoded password\n        String accessToken = \"accessToken\";\n        String refreshToken = \"refreshToken\";\n\n        RestaurantSignInForm restaurantSignInForm = RestaurantSignInForm\n                .builder()\n                .ownerId(id)\n                .password(password)\n                .build();\n\n        Restaurant restaurant = Restaurant.builder()\n                .ownerId(id)\n                .password(encodedPassword)\n                .build();\n\n        // when\n\n        when(restaurantRepository.findByOwnerId(anyString())).thenReturn(Optional.of(restaurant));\n        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);\n        when(jwtTokenProvider.generateAccessToken(any(TokenDto.class))).thenReturn(accessToken);\n        when(jwtTokenProvider.generateRefreshToken()).thenReturn(refreshToken);\n\n        RestaurantSignInDTO result = restaurantService.signIn(restaurantSignInForm);\n\n\n        // then\n\n        assertNotNull(result);\n        assertThat(id).isEqualTo(result.getOwnerId());\n        assertThat(accessToken).isEqualTo(result.getAccessToken());\n        assertThat(refreshToken).isEqualTo(result.getRefreshToken());\n        verify(refreshTokenRepository, times(1)).save(any(RefreshToken.class));\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/queosk/src/test/java/com/bttf/queosk/service/RestaurantServiceTest.java b/queosk/src/test/java/com/bttf/queosk/service/RestaurantServiceTest.java
+--- a/queosk/src/test/java/com/bttf/queosk/service/RestaurantServiceTest.java	(revision c2c8f174c474d83b77f10cd4e811ba1153054476)
++++ b/queosk/src/test/java/com/bttf/queosk/service/RestaurantServiceTest.java	(date 1692267572548)
+@@ -7,8 +7,6 @@
+ import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
+ import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
+ import com.bttf.queosk.dto.tokenDto.TokenDto;
+-import com.bttf.queosk.dto.userDto.UserSignInDto;
+-import com.bttf.queosk.dto.userDto.UserSignInForm;
+ import com.bttf.queosk.entity.RefreshToken;
+ import com.bttf.queosk.entity.Restaurant;
+ import com.bttf.queosk.repository.RefreshTokenRepository;
+@@ -25,7 +23,6 @@
+ import org.mockito.junit.jupiter.MockitoExtension;
+ import org.springframework.http.MediaType;
+ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+-import org.springframework.security.crypto.password.PasswordEncoder;
+ import org.springframework.test.annotation.Rollback;
+ import org.springframework.test.web.servlet.MockMvc;
+ import org.springframework.test.web.servlet.MvcResult;
+@@ -39,7 +36,8 @@
+ 
+ import static org.assertj.core.api.Assertions.assertThat;
+ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+-import static org.mockito.ArgumentMatchers.*;
++import static org.mockito.ArgumentMatchers.any;
++import static org.mockito.ArgumentMatchers.anyString;
+ import static org.mockito.Mockito.*;
+ 
+ @Transactional
+Index: queosk/src/test/java/com/bttf/queosk/repository/UserRepositoryTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.bttf.queosk.repository;\n\nimport com.bttf.queosk.config.baseEntity.JpaAuditingConfiguration;\nimport com.bttf.queosk.model.userModel.UserStatus;\nimport com.bttf.queosk.entity.User;\nimport com.bttf.queosk.model.UserStatus;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;\nimport org.springframework.context.annotation.Import;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\n@Import(JpaAuditingConfiguration.class)\n@DataJpaTest\nclass UserRepositoryTest {\n\n    @Autowired\n    private UserRepository userRepository;\n\n    @Test\n    @DisplayName(\"회원가입이 잘 된다.\")\n    public void setUserData_test() throws Exception {\n        // given\n        User user = User.builder()\n                .id(1L)\n                .email(\"a@x.com\")\n                .password(\"test\")\n                .phone(\"0100000000\")\n                .status(UserStatus.NOT_VERIFIED)\n                .build();\n\n        userRepository.save(user);\n        // when\n\n        User savedUser = userRepository.findById(user.getId())\n                .orElseThrow(() -> new IllegalArgumentException(\"유저를 찾을 수 없습니다.\"));\n\n        // then\n\n        assertThat(savedUser.getId()).isEqualTo(user.getId());\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/queosk/src/test/java/com/bttf/queosk/repository/UserRepositoryTest.java b/queosk/src/test/java/com/bttf/queosk/repository/UserRepositoryTest.java
+--- a/queosk/src/test/java/com/bttf/queosk/repository/UserRepositoryTest.java	(revision c2c8f174c474d83b77f10cd4e811ba1153054476)
++++ b/queosk/src/test/java/com/bttf/queosk/repository/UserRepositoryTest.java	(date 1692267687126)
+@@ -1,9 +1,8 @@
+ package com.bttf.queosk.repository;
+ 
+ import com.bttf.queosk.config.baseEntity.JpaAuditingConfiguration;
+-import com.bttf.queosk.model.userModel.UserStatus;
+ import com.bttf.queosk.entity.User;
+-import com.bttf.queosk.model.UserStatus;
++import com.bttf.queosk.model.userModel.UserStatus;
+ import org.junit.jupiter.api.DisplayName;
+ import org.junit.jupiter.api.Test;
+ import org.springframework.beans.factory.annotation.Autowired;
+Index: queosk/src/test/java/com/bttf/queosk/repository/CommentRepositoryTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.bttf.queosk.repository;\n\nimport com.bttf.queosk.config.baseEntity.JpaAuditingConfiguration;\nimport com.bttf.queosk.model.userModel.UserStatus;\nimport com.bttf.queosk.entity.Comment;\nimport com.bttf.queosk.entity.Restaurant;\nimport com.bttf.queosk.entity.Review;\nimport com.bttf.queosk.entity.User;\nimport com.bttf.queosk.model.UserStatus;\nimport org.junit.jupiter.api.Test;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;\nimport org.springframework.context.annotation.Import;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\n@Import(JpaAuditingConfiguration.class)\n@DataJpaTest\nclass CommentRepositoryTest {\n\n    @Autowired\n    private RestaurantRepository restaurantRepository;\n\n    @Autowired\n    private UserRepository userRepository;\n\n    @Autowired\n    private ReviewRepository reviewRepository;\n\n    @Autowired\n    private CommentRepository commentRepository;\n\n    @Test\n    public void CommentRepository_test() throws Exception {\n        // given\n\n        User user = User.builder()\n                .id(1L)\n                .email(\"a@x.com\")\n                .password(\"test\")\n                .phone(\"0100000000\")\n                .status(UserStatus.NOT_VERIFIED)\n                .build();\n\n        userRepository.save(user);\n\n        Restaurant restaurant = Restaurant.builder()\n                .id(1L)\n                .ownerId(\"test\")\n                .ownerName(\"test\")\n                .password(\"asd\")\n                .build();\n\n        restaurantRepository.save(restaurant);\n\n        Review review = Review.builder()\n                .id(1L)\n                .restaurant(restaurant)\n                .user(user)\n                .content(\"test\")\n                .subject(\"노맛\")\n                .rate(1.2)\n                .build();\n\n        reviewRepository.save(review);\n\n        Comment comment = Comment.builder()\n                .id(1L)\n                .review(review)\n                .restaurant(restaurant)\n                .content(\"죄송합니다.\")\n                .build();\n\n        // when\n\n        commentRepository.save(comment);\n\n        // then\n\n        assertThat(commentRepository.existsById(comment.getId())).isTrue();\n        assertThat(commentRepository.findById(comment.getId()).orElseThrow(\n                () -> new IllegalArgumentException(\"해당 id의 코멘트가 없습니다.\")\n        ).getContent()).isEqualTo(comment.getContent());\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/queosk/src/test/java/com/bttf/queosk/repository/CommentRepositoryTest.java b/queosk/src/test/java/com/bttf/queosk/repository/CommentRepositoryTest.java
+--- a/queosk/src/test/java/com/bttf/queosk/repository/CommentRepositoryTest.java	(revision c2c8f174c474d83b77f10cd4e811ba1153054476)
++++ b/queosk/src/test/java/com/bttf/queosk/repository/CommentRepositoryTest.java	(date 1692267690188)
+@@ -1,12 +1,11 @@
+ package com.bttf.queosk.repository;
+ 
+ import com.bttf.queosk.config.baseEntity.JpaAuditingConfiguration;
+-import com.bttf.queosk.model.userModel.UserStatus;
+ import com.bttf.queosk.entity.Comment;
+ import com.bttf.queosk.entity.Restaurant;
+ import com.bttf.queosk.entity.Review;
+ import com.bttf.queosk.entity.User;
+-import com.bttf.queosk.model.UserStatus;
++import com.bttf.queosk.model.userModel.UserStatus;
+ import org.junit.jupiter.api.Test;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+Index: queosk/src/test/java/com/bttf/queosk/repository/ReviewRepositoryTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.bttf.queosk.repository;\n\nimport com.bttf.queosk.config.baseEntity.JpaAuditingConfiguration;\nimport com.bttf.queosk.model.userModel.UserStatus;\nimport com.bttf.queosk.entity.Restaurant;\nimport com.bttf.queosk.entity.Review;\nimport com.bttf.queosk.entity.User;\nimport com.bttf.queosk.model.UserStatus;\nimport org.junit.jupiter.api.Test;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;\nimport org.springframework.context.annotation.Import;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\n@Import(JpaAuditingConfiguration.class)\n@DataJpaTest\nclass ReviewRepositoryTest {\n\n    @Autowired\n    private RestaurantRepository restaurantRepository;\n\n    @Autowired\n    private UserRepository userRepository;\n\n    @Autowired\n    private ReviewRepository reviewRepository;\n\n    @Test\n    public void MenuRepository_test() throws Exception {\n        // given\n        User user = User.builder()\n                .id(1L)\n                .email(\"a@x.com\")\n                .password(\"test\")\n                .phone(\"0100000000\")\n                .status(UserStatus.NOT_VERIFIED)\n                .build();\n\n        userRepository.save(user);\n\n        Restaurant restaurant = Restaurant.builder()\n                .id(1L)\n                .ownerId(\"test\")\n                .ownerName(\"test\")\n                .password(\"asd\")\n                .build();\n\n        restaurantRepository.save(restaurant);\n\n        Review review = Review.builder()\n                .id(1L)\n                .restaurant(restaurant)\n                .user(user)\n                .content(\"test\")\n                .subject(\"노맛\")\n                .rate(1.2)\n                .build();\n        // when\n\n        reviewRepository.save(review);\n\n        // then\n\n        assertThat(reviewRepository.count()).isEqualTo(1);\n        assertThat(reviewRepository.findById(review.getId()).orElseThrow(\n                () -> new IllegalArgumentException(\"해당 id의 리뷰가 없습니다.\")\n        ).getSubject()).isEqualTo(review.getSubject());\n        assertThat(reviewRepository.findById(review.getId()).orElseThrow(\n                () -> new IllegalArgumentException(\"해당 id의 리뷰가 없습니다.\")\n        ).getContent()).isEqualTo(review.getContent());\n        assertThat(reviewRepository.findById(review.getId()).orElseThrow(\n                () -> new IllegalArgumentException(\"해당 id의 리뷰가 없습니다.\")\n        ).getRate()).isEqualTo(review.getRate());\n\n\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/queosk/src/test/java/com/bttf/queosk/repository/ReviewRepositoryTest.java b/queosk/src/test/java/com/bttf/queosk/repository/ReviewRepositoryTest.java
+--- a/queosk/src/test/java/com/bttf/queosk/repository/ReviewRepositoryTest.java	(revision c2c8f174c474d83b77f10cd4e811ba1153054476)
++++ b/queosk/src/test/java/com/bttf/queosk/repository/ReviewRepositoryTest.java	(date 1692267681678)
+@@ -1,11 +1,10 @@
+ package com.bttf.queosk.repository;
+ 
+ import com.bttf.queosk.config.baseEntity.JpaAuditingConfiguration;
+-import com.bttf.queosk.model.userModel.UserStatus;
+ import com.bttf.queosk.entity.Restaurant;
+ import com.bttf.queosk.entity.Review;
+ import com.bttf.queosk.entity.User;
+-import com.bttf.queosk.model.UserStatus;
++import com.bttf.queosk.model.userModel.UserStatus;
+ import org.junit.jupiter.api.Test;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+Index: queosk/src/test/java/com/bttf/queosk/repository/QueueRepositoryTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.bttf.queosk.repository;\n\nimport com.bttf.queosk.model.userModel.UserStatus;\nimport com.bttf.queosk.entity.Queue;\nimport com.bttf.queosk.entity.Restaurant;\nimport com.bttf.queosk.entity.User;\nimport com.bttf.queosk.model.UserStatus;\nimport org.junit.jupiter.api.Test;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;\n\n@DataRedisTest\nclass QueueRepositoryTest {\n\n    @Autowired\n    private QueueRepository queueRepository;\n\n    @Test\n    public void QueueRepository_test() throws Exception {\n        // given\n        Restaurant restaurant = Restaurant.builder()\n                .id(1L)\n                .ownerId(\"test\")\n                .ownerName(\"test\")\n                .password(\"asd\")\n                .build();\n\n        User user = User.builder()\n                .id(1L)\n                .email(\"a@x.com\")\n                .password(\"test\")\n                .phone(\"0100000000\")\n                .status(UserStatus.NOT_VERIFIED)\n                .build();\n\n        Queue queue = Queue.builder()\n                .id(1L)\n                .restaurantId(restaurant)\n                .userId(user)\n                .build();\n        // when\n        queueRepository.save(queue);\n\n        // then\n\n        queueRepository.findById(queue.getId());\n\n        queueRepository.count();\n\n        queueRepository.delete(queue);\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/queosk/src/test/java/com/bttf/queosk/repository/QueueRepositoryTest.java b/queosk/src/test/java/com/bttf/queosk/repository/QueueRepositoryTest.java
+--- a/queosk/src/test/java/com/bttf/queosk/repository/QueueRepositoryTest.java	(revision c2c8f174c474d83b77f10cd4e811ba1153054476)
++++ b/queosk/src/test/java/com/bttf/queosk/repository/QueueRepositoryTest.java	(date 1692267677589)
+@@ -1,10 +1,9 @@
+ package com.bttf.queosk.repository;
+ 
+-import com.bttf.queosk.model.userModel.UserStatus;
+ import com.bttf.queosk.entity.Queue;
+ import com.bttf.queosk.entity.Restaurant;
+ import com.bttf.queosk.entity.User;
+-import com.bttf.queosk.model.UserStatus;
++import com.bttf.queosk.model.userModel.UserStatus;
+ import org.junit.jupiter.api.Test;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
