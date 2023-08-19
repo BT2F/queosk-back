@@ -1,20 +1,27 @@
 package com.bttf.queosk.service;
 
+import com.bttf.queosk.config.emailSender.EmailSender;
 import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
 import com.bttf.queosk.dto.enumerate.RestaurantCategory;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDto;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
 import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
+import com.bttf.queosk.dto.restaurantDto.RestaurantUpdatePasswordForm;
 import com.bttf.queosk.dto.tokenDto.TokenDto;
+import com.bttf.queosk.dto.userDto.UserPasswordChangeForm;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
+import com.bttf.queosk.entity.User;
+import com.bttf.queosk.exception.CustomException;
+import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.service.imageService.ImageService;
 import com.bttf.queosk.service.restaurantService.RestaurantService;
 import com.bttf.queosk.util.KakaoGeoAddress;
 import com.google.gson.Gson;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -62,6 +70,8 @@ class RestaurantServiceTest {
     private KakaoGeoAddress kakaoGeoAddress;
     @Mock
     private ImageService imageService;
+    @Mock
+    private EmailSender emailSender;
 
     private MockMvc mockMvc;
 
@@ -69,7 +79,7 @@ class RestaurantServiceTest {
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(restaurantController).build();
         restaurantService = new RestaurantService(restaurantRepository, refreshTokenRepository,
-                passwordEncoder, jwtTokenProvider, kakaoGeoAddress,imageService);
+                passwordEncoder, jwtTokenProvider, kakaoGeoAddress, imageService, emailSender);
     }
 
     @DisplayName("매장 생성 테스트")
@@ -151,4 +161,128 @@ class RestaurantServiceTest {
         verify(refreshTokenRepository, times(1)).save(any(RefreshToken.class));
     }
 
+    @Test
+    public void testUpdateRestaurantPassword() {
+        // Given
+        Long restaurantId = 1L;
+        String existingPassword = "oldPassword";
+        String newPassword = "newPassword";
+
+        Restaurant restaurant = Restaurant.builder().id(restaurantId).password("encodedOldPassword").build();
+
+        RestaurantUpdatePasswordForm restaurantUpdatePasswordForm =
+                RestaurantUpdatePasswordForm.builder()
+                        .oldPassword("oldPassword")
+                        .newPassword(newPassword)
+                        .build();
+
+        when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.of(restaurant));
+        when(passwordEncoder.matches(existingPassword, restaurant.getPassword())).thenReturn(true);
+        when(passwordEncoder.encode(newPassword)).thenReturn("encodedNewPassword");
+
+        // When
+        restaurantService.updateRestaurantPassword(restaurantId, restaurantUpdatePasswordForm);
+
+        // Then
+        verify(restaurantRepository).findById(restaurantId);
+        verify(passwordEncoder).encode(newPassword);
+        verify(restaurantRepository).save(restaurant);
+
+        assertThat(restaurant.getPassword()).isEqualTo("encodedNewPassword");
+    }
+
+    @Test
+    public void testUpdateRestaurantPasswordInvalidExistingPassword() {
+        // Given
+        Long restaurantId = 1L;
+        String existingPassword = "invalidOldPassword";
+        String newPassword = "newPassword";
+
+        Restaurant restaurant = Restaurant.builder().id(restaurantId).password("encodedOldPassword").build();
+
+        RestaurantUpdatePasswordForm restaurantUpdatePasswordForm =
+                RestaurantUpdatePasswordForm.builder()
+                        .oldPassword("invalidOldPassword")
+                        .newPassword(newPassword)
+                        .build();
+
+        // Mock userRepository
+        when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.of(restaurant));
+        when(passwordEncoder.matches(existingPassword, restaurant.getPassword())).thenReturn(false);
+
+        // When & Then
+        assertThatThrownBy(() -> restaurantService.updateRestaurantPassword(restaurantId, restaurantUpdatePasswordForm))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.PASSWORD_NOT_MATCH.getMessage());
+
+        verify(restaurantRepository).findById(restaurantId);
+        verify(passwordEncoder).matches(existingPassword, restaurant.getPassword());
+        verifyNoMoreInteractions(passwordEncoder, restaurantRepository);
+    }
+
+    @Test
+    public void testUpdateRestaurantPasswordRestaurantNotFound() {
+        // Given
+        Long restaurant = 1L;
+
+        RestaurantUpdatePasswordForm restaurantUpdatePasswordForm =
+                RestaurantUpdatePasswordForm.builder()
+                        .oldPassword("oldPassword")
+                        .newPassword("newPassword")
+                        .build();
+
+        // Mock userRepository
+        when(restaurantRepository.findById(restaurant)).thenReturn(Optional.empty());
+
+        // When & Then
+        assertThatThrownBy(() -> restaurantService.updateRestaurantPassword(restaurant, restaurantUpdatePasswordForm))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.INVALID_RESTAURANT.getMessage());
+
+        verify(restaurantRepository).findById(restaurant);
+        verifyNoMoreInteractions(passwordEncoder, restaurantRepository);
+    }
+
+    @Test
+    public void testResetRestaurantPassword_Success() {
+        // Given
+        Restaurant restaurant = Restaurant.builder().email("user@example.com").ownerName("testuser").build();
+        when(restaurantRepository.findByEmail(anyString())).thenReturn(Optional.of(restaurant));
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+
+        // When
+        restaurantService.resetRestaurantPassword("user@example.com", "testuser");
+
+        // Then
+        verify(emailSender).sendEmail(eq("user@example.com"), anyString(), anyString());
+        verify(restaurantRepository).save(restaurant);
+    }
+
+    @Test
+    public void testResetRestaurantPassword_UserNotExists() {
+        // Given
+        when(restaurantRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+
+        // When, Then
+        Assertions.assertThatThrownBy(() -> restaurantService.resetRestaurantPassword("user@example.com", "testuser"))
+                .isInstanceOf(CustomException.class);
+        verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
+        verify(restaurantRepository, never()).save(any());
+    }
+
+    @Test
+    public void testResetUserPassword_OwnerNameNotMatch() {
+        // Given
+        Restaurant restaurant = Restaurant.builder()
+                .email("user@example.com")
+                .ownerName("testuser")
+                .build();
+        when(restaurantRepository.findByEmail(anyString())).thenReturn(Optional.of(restaurant));
+
+        // When, Then
+        assertThatThrownBy(() -> restaurantService.resetRestaurantPassword("user@example.com", "wrongname"))
+                .isInstanceOf(CustomException.class);
+        verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
+        verify(restaurantRepository, never()).save(any());
+    }
 }
