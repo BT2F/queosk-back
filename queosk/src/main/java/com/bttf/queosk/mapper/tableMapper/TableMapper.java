@@ -15,12 +15,5 @@ public interface TableMapper {
 
     TableForm tableDtoToTableForm(TableDto tableDto);
 
-    TableDto tableToTableDto(Table table);
-
     Table restaurantToTable(Restaurant restaurant);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "status", ignore = true)
-    @Mapping(target = "restaurant", source = "restaurantId")
-    Table updateStatusWithDto(TableStatus status, TableDto tableDto);
 }

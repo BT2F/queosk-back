@@ -2,6 +2,7 @@ package com.bttf.queosk.service.tableService;
 
 
 import com.bttf.queosk.dto.enumerate.TableStatus;
+import com.bttf.queosk.dto.tableDto.TableDto;
 import com.bttf.queosk.dto.tableDto.TableForm;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.exception.CustomException;
@@ -35,17 +36,14 @@ public class TableService {
     }
 
     public void updateTable(Long tableId, TableStatus tableStatus, Long restaurantId) {
+
         Table table = getTableFromRepository(tableId);
 
         if (!restaurantId.equals(table.getRestaurantId())) {
             throw new CustomException(NOT_PERMITTED);
         }
 
-        tableRepository.save(
-                TableMapper.INSTANCE.updateStatusWithDto(
-                        tableStatus, TableMapper.INSTANCE.tableToTableDto(table)
-                )
-        );
+        Table.updateStatus(table, tableStatus);
     }
 
     public void deleteTable(Long tableId, Long restaurantId) {
@@ -60,6 +58,7 @@ public class TableService {
     }
 
     public TableForm getTable(Long tableId, Long restaurantId) {
+
         Table table = getTableFromRepository(tableId);
 
         if (!restaurantId.equals(table.getRestaurantId())) {
@@ -67,7 +66,7 @@ public class TableService {
         }
 
         return TableMapper.INSTANCE.tableDtoToTableForm(
-                TableMapper.INSTANCE.tableToTableDto(table));
+                TableDto.of(table));
     }
 
     private Table getTableFromRepository(Long tableId) {
