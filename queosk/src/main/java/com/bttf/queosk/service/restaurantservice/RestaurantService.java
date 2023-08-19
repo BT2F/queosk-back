@@ -154,11 +154,28 @@ public class RestaurantService {
 
     }
 
+    @Transactional
     public void deleteRestaurant(String token) {
         Restaurant restaurant = restaurantRepository
                 .findById(jwtTokenProvider.getIdFromToken(token))
                 .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
         restaurant.delete();
         restaurantRepository.save(restaurant);
+
+    @Transactional
+    public RestaurantDto updateRestaurantInfo(String token, UpdateRestorantInfoForm updateRestorantInfoForm) {
+        Restaurant restaurant = restaurantRepository
+                .findById(jwtTokenProvider.getIdFromToken(token))
+                .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+
+        restaurant.updateRestaurantInfo(updateRestorantInfoForm);
+
+        restaurant.setGeoPoint(
+                kakaoGeoAddressService.addressToCoordinate(restaurant.getAddress(), "x"),
+                kakaoGeoAddressService.addressToCoordinate(restaurant.getAddress(), "y"));
+
+        restaurantRepository.save(restaurant);
+
+        return RestaurantDto.of(restaurant);
     }
 }
