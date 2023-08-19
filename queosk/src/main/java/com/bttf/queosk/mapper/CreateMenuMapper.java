@@ -1,6 +1,6 @@
 package com.bttf.queosk.mapper;
 
-import com.bttf.queosk.dto.menuDto.CreateMenuForm;
+import com.bttf.queosk.dto.menudto.CreateMenuForm;
 import com.bttf.queosk.entity.Menu;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

@@ -1,9 +1,9 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.userDto.*;
-import com.bttf.queosk.service.imageService.ImageService;
-import com.bttf.queosk.service.refreshTokenService.RefreshTokenService;
-import com.bttf.queosk.service.userService.UserService;
+import com.bttf.queosk.dto.userdto.*;
+import com.bttf.queosk.service.imageservice.ImageService;
+import com.bttf.queosk.service.refreshtokenservice.RefreshTokenService;
+import com.bttf.queosk.service.userservice.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
