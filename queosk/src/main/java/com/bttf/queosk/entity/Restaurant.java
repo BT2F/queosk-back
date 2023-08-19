@@ -75,11 +75,10 @@ public class Restaurant extends BaseTimeEntity {
         this.password = password;
     }
 
-
     public void delete() {
         this.isDeleted = true;
     }
-  
+
     public void updateRestaurantInfo(UpdateRestorantInfoForm updateRestorantInfoForm) {
         this.ownerId = updateRestorantInfoForm.getOwnerId();
         this.ownerName = updateRestorantInfoForm.getOwnerName();

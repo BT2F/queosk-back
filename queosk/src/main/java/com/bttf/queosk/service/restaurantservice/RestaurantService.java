@@ -162,6 +162,8 @@ public class RestaurantService {
         restaurant.delete();
         restaurantRepository.save(restaurant);
 
+    }
+
     @Transactional
     public RestaurantDto updateRestaurantInfo(String token, UpdateRestorantInfoForm updateRestorantInfoForm) {
         Restaurant restaurant = restaurantRepository

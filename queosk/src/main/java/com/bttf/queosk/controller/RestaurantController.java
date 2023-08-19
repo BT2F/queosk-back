@@ -1,6 +1,7 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.dto.restaurantdto.*;
+
 import com.bttf.queosk.service.refreshtokenservice.RefreshTokenService;
 import com.bttf.queosk.service.restaurantservice.RestaurantService;
 import io.swagger.annotations.Api;
@@ -87,7 +88,7 @@ public class RestaurantController {
         restaurantService.deleteRestaurant(token);
         return ResponseEntity.status(NO_CONTENT).build();
     }
-  
+
     @PostMapping
     @ApiOperation(value = "매장 조회", notes = "업장 계정의 정보를 수정합니다.")
     public ResponseEntity<?> updateRestaurantInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
