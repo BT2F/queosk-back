@@ -1,7 +1,7 @@
 package com.bttf.queosk.config.springsecurity;
 
 import com.bttf.queosk.dto.tokendto.TokenDto;
-import com.bttf.queosk.model.userModel.UserRole;
+import com.bttf.queosk.enumerate.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,9 +28,6 @@ public class JwtTokenProvider {
 
     private final UserDetailsService userDetailsService;
 
-    @Value("${jwt.secretKey}")
-    private String secretKey;
-
     @Value("${jwt.tokenIssuer}")
     private String issuer;
     private SecretKey key;
@@ -49,7 +46,8 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + (60 * 60 * 1000)))
+                // 유효기간 1일 (24시간)
+                .setExpiration(new Date(System.currentTimeMillis() + (24 * 60 * 60 * 1000)))
                 .signWith(key)
                 .compact();
     }
@@ -59,7 +57,8 @@ public class JwtTokenProvider {
                 .claim("userRole", UserRole.ROLE_USER.getRoleName())
                 .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + (60 * 60 * 1000)))
+                //유효기간 15일 (24시간 *15 )
+                .setExpiration(new Date(System.currentTimeMillis() + (15 * 24 * 60 * 60 * 1000)))
                 .signWith(key)
                 .compact();
     }
