@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
-import static com.bttf.queosk.model.userModel.UserRole.ROLE_USER;
-import static com.bttf.queosk.model.userModel.UserStatus.*;
+import static com.bttf.queosk.model.usermodel.UserRole.ROLE_USER;
+import static com.bttf.queosk.model.usermodel.UserStatus.*;
 
 @RequiredArgsConstructor
 @Service

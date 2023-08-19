@@ -8,7 +8,7 @@ import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.TableRepository;
-import com.bttf.queosk.service.tableService.TableService;
+import com.bttf.queosk.service.tableservice.TableService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

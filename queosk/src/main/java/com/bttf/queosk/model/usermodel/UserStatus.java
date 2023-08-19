@@ -1,4 +1,4 @@
-package com.bttf.queosk.model.userModel;
+package com.bttf.queosk.model.usermodel;
 
 public enum UserStatus {
     VERIFIED,

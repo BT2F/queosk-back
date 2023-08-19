@@ -1,6 +1,6 @@
 package com.bttf.queosk.dto.tokendto;
 
-import com.bttf.queosk.model.userModel.UserRole;
+import com.bttf.queosk.model.usermodel.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

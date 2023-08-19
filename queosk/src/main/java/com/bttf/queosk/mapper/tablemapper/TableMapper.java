@@ -1,4 +1,4 @@
-package com.bttf.queosk.mapper.tableMapper;
+package com.bttf.queosk.mapper.tablemapper;
 
 import com.bttf.queosk.dto.enumerate.TableStatus;
 import com.bttf.queosk.dto.tableDto.TableDto;
@@ -6,7 +6,6 @@ import com.bttf.queosk.dto.tableDto.TableForm;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Table;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
