@@ -73,6 +73,8 @@ public class RestaurantController {
     ResponseEntity<?> updateRestaurantPassword(@PathVariable(name = "id") Long id, @RequestBody RestaurantUpdatePasswordForm updatePassword) {
         restaurantService.updateRestaurantPassword(id, updatePassword);
         return ResponseEntity.status(CREATED).build();
+    }
+
     @PostMapping("/signout")
     @ApiOperation(value = "매장 로그 아웃", notes = "업장 계정을 로그아웃 합니다.")
     public ResponseEntity<?> restaurantSignOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
@@ -80,5 +82,13 @@ public class RestaurantController {
         refreshTokenService.deleteRefreshToken(restaurant.getEmail());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @DeleteMapping
+    @ApiOperation(value = "사업자 탈퇴", notes = "업장 계정을 삭제합니다.")
+    public ResponseEntity<?> deleteRestaurant(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        restaurantService.deleteRestaurant(token);
+        return ResponseEntity.status(NO_CONTENT).build();
+    }
+
 
 }

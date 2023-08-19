@@ -285,4 +285,22 @@ class RestaurantServiceTest {
         verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
         verify(restaurantRepository, never()).save(any());
     }
+
+    @Test
+    public void testDeleteRestaurant() throws Exception {
+        // Given
+        String accessToken = "accessToken";
+        String refreshToken = "refreshToken";
+        Restaurant restaurant = Restaurant.builder()
+                .email("user@example.com")
+                .ownerName("testuser")
+                .build();
+        when(jwtTokenProvider.getIdFromToken(accessToken)).thenReturn(restaurant.getId());
+        when(restaurantRepository.findById(restaurant.getId())).thenReturn(Optional.of(restaurant));
+        // when
+        restaurantService.deleteRestaurant(accessToken);
+
+        // then
+        assertThat(restaurant.getIsDeleted()).isTrue();
+    }
 }

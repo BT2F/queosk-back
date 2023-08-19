@@ -73,4 +73,8 @@ public class Restaurant extends BaseTimeEntity {
     public void changePassword(String password) {
         this.password = password;
     }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
 }

@@ -153,4 +153,12 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
 
     }
+
+    public void deleteRestaurant(String token) {
+        Restaurant restaurant = restaurantRepository
+                .findById(jwtTokenProvider.getIdFromToken(token))
+                .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+        restaurant.delete();
+        restaurantRepository.save(restaurant);
+    }
 }
