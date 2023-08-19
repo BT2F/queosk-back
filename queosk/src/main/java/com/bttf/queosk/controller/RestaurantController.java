@@ -1,10 +1,9 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.restaurantDto.*;
+import com.bttf.queosk.dto.restaurantdto.*;
 
-import com.bttf.queosk.entity.Restaurant;
-import com.bttf.queosk.service.refreshTokenService.RefreshTokenService;
-import com.bttf.queosk.service.restaurantService.RestaurantService;
+import com.bttf.queosk.service.refreshtokenservice.RefreshTokenService;
+import com.bttf.queosk.service.restaurantservice.RestaurantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +72,8 @@ public class RestaurantController {
     ResponseEntity<?> updateRestaurantPassword(@PathVariable(name = "id") Long id, @RequestBody RestaurantUpdatePasswordForm updatePassword) {
         restaurantService.updateRestaurantPassword(id, updatePassword);
         return ResponseEntity.status(CREATED).build();
+    }
+
     @PostMapping("/signout")
     @ApiOperation(value = "매장 로그 아웃", notes = "업장 계정을 로그아웃 합니다.")
     public ResponseEntity<?> restaurantSignOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {

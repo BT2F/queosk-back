@@ -1,25 +1,23 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.config.emailSender.EmailSender;
-import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
+import com.bttf.queosk.service.emailsender.EmailSender;
+import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
-import com.bttf.queosk.dto.enumerate.RestaurantCategory;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDto;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
-import com.bttf.queosk.dto.restaurantDto.RestaurantUpdatePasswordForm;
-import com.bttf.queosk.dto.tokenDto.TokenDto;
-import com.bttf.queosk.dto.userDto.UserPasswordChangeForm;
+import com.bttf.queosk.enumerate.RestaurantCategory;
+import com.bttf.queosk.dto.restaurantdto.RestaurantSignInDto;
+import com.bttf.queosk.dto.restaurantdto.RestaurantSignInForm;
+import com.bttf.queosk.dto.restaurantdto.RestaurantSignUpForm;
+import com.bttf.queosk.dto.restaurantdto.RestaurantUpdatePasswordForm;
+import com.bttf.queosk.dto.tokendto.TokenDto;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
-import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
-import com.bttf.queosk.service.imageService.ImageService;
-import com.bttf.queosk.service.restaurantService.RestaurantService;
-import com.bttf.queosk.util.KakaoGeoAddress;
+import com.bttf.queosk.service.kakaoservice.KakaoGeoAddressService;
+import com.bttf.queosk.service.imageservice.ImageService;
+import com.bttf.queosk.service.restaurantservice.RestaurantService;
 import com.google.gson.Gson;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +65,7 @@ class RestaurantServiceTest {
     @Mock
     private RestaurantService restaurantService;
     @Mock
-    private KakaoGeoAddress kakaoGeoAddress;
+    private KakaoGeoAddressService kakaoGeoAddressService;
     @Mock
     private ImageService imageService;
     @Mock
@@ -79,7 +77,7 @@ class RestaurantServiceTest {
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(restaurantController).build();
         restaurantService = new RestaurantService(restaurantRepository, refreshTokenRepository,
-                passwordEncoder, jwtTokenProvider, kakaoGeoAddress, imageService, emailSender);
+                passwordEncoder, jwtTokenProvider, kakaoGeoAddressService, imageService, emailSender);
     }
 
     @DisplayName("매장 생성 테스트")
