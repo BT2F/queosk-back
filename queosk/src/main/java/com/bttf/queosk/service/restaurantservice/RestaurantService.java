@@ -10,7 +10,7 @@ import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.mapper.RestaurantDtoMapper;
 import com.bttf.queosk.mapper.RestaurantSignInMapper;
 import com.bttf.queosk.mapper.usermapper.TokenDtoMapper;
-import com.bttf.queosk.model.userModel.UserRole;
+import com.bttf.queosk.model.usermodel.UserRole;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.service.imageservice.ImageService;

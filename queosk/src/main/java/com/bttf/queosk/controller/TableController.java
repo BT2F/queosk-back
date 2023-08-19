@@ -1,10 +1,10 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.tabledto.TableForm;
+import com.bttf.queosk.dto.tableDto.TableForm;
 import com.bttf.queosk.dto.userdto.UserDto;
+import com.bttf.queosk.service.tableservice.TableService;
 import com.bttf.queosk.service.userservice.UserService;
 import com.bttf.queosk.enumerate.TableStatus;
-import com.bttf.queosk.service.TableService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -67,7 +67,4 @@ public class TableController {
         UserDto userDto = userService.getUserFromToken(token);
         return ResponseEntity.status(HttpStatus.OK).body(tableService.getTableList(userDto.getId()));
     }
-
-
-
 }

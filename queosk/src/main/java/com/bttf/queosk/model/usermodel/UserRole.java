@@ -1,4 +1,4 @@
-package com.bttf.queosk.model.userModel;
+package com.bttf.queosk.model.usermodel;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

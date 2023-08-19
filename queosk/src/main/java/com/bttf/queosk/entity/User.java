@@ -2,8 +2,8 @@ package com.bttf.queosk.entity;
 
 import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
 import com.bttf.queosk.dto.userdto.UserEditForm;
-import com.bttf.queosk.model.userModel.UserRole;
-import com.bttf.queosk.model.userModel.UserStatus;
+import com.bttf.queosk.model.usermodel.UserRole;
+import com.bttf.queosk.model.usermodel.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
 
-import static com.bttf.queosk.model.userModel.UserStatus.*;
+import static com.bttf.queosk.model.usermodel.UserStatus.*;
 
 @Entity(name = "user")
 @AuditOverride(forClass = BaseTimeEntity.class)

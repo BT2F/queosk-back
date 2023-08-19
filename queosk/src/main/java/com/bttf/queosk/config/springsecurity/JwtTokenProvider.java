@@ -1,7 +1,7 @@
 package com.bttf.queosk.config.springsecurity;
 
 import com.bttf.queosk.dto.tokendto.TokenDto;
-import com.bttf.queosk.model.userModel.UserRole;
+import com.bttf.queosk.model.usermodel.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

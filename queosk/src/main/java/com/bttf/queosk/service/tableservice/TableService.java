@@ -1,16 +1,15 @@
-package com.bttf.queosk.service.tableService;
+package com.bttf.queosk.service.tableservice;
 
 
-import com.bttf.queosk.dto.enumerate.TableStatus;
+import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.dto.tableDto.TableDto;
 import com.bttf.queosk.dto.tableDto.TableForm;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.mapper.tableMapper.TableMapper;
+import com.bttf.queosk.mapper.tablemapper.TableMapper;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.TableRepository;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
