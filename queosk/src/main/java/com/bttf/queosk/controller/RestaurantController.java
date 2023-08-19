@@ -72,6 +72,8 @@ public class RestaurantController {
     ResponseEntity<?> updateRestaurantPassword(@PathVariable(name = "id") Long id, @RequestBody RestaurantUpdatePasswordForm updatePassword) {
         restaurantService.updateRestaurantPassword(id, updatePassword);
         return ResponseEntity.status(CREATED).build();
+    }
+
     @PostMapping("/signout")
     @ApiOperation(value = "매장 로그 아웃", notes = "업장 계정을 로그아웃 합니다.")
     public ResponseEntity<?> restaurantSignOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {

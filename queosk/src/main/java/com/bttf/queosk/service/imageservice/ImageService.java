@@ -18,8 +18,8 @@ public class ImageService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String saveFile(MultipartFile multipartFile) throws IOException {
-        String originalFileName = UUID.randomUUID().toString().substring(0, 20) + ".." + multipartFile.getOriginalFilename();
+    public String saveFile(MultipartFile multipartFile, String dir) throws IOException {
+        String originalFileName = dir + "/" + UUID.randomUUID().toString().substring(0, 20) + ".." + multipartFile.getOriginalFilename();
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
