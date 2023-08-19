@@ -117,9 +117,9 @@ public class UserController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody MultipartFile imageFile) throws IOException {
 
-        String url = imageService.saveFile(imageFile);
-
         UserDto userDto = userService.getUserFromToken(token);
+
+        String url = imageService.saveFile(imageFile, "user/" + userDto.getId());
 
         userService.updateImageUrl(userDto.getId(), url);
 
