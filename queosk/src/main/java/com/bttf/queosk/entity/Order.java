@@ -1,7 +1,7 @@
 package com.bttf.queosk.entity;
 
-import com.bttf.queosk.config.baseEntity.BaseTimeEntity;
-import com.bttf.queosk.dto.enumerate.OrderStatus;
+import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
+import com.bttf.queosk.enumerate.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

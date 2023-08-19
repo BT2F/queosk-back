@@ -1,6 +1,6 @@
 package com.bttf.queosk.repository;
 
-import com.bttf.queosk.config.baseEntity.JpaAuditingConfiguration;
+import com.bttf.queosk.entity.baseentity.JpaAuditingConfiguration;
 import com.bttf.queosk.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
 
-import static com.bttf.queosk.dto.enumerate.TableStatus.OPEN;
+import static com.bttf.queosk.enumerate.TableStatus.OPEN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(JpaAuditingConfiguration.class)

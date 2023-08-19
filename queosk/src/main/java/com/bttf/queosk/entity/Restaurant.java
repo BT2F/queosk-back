@@ -1,9 +1,9 @@
 package com.bttf.queosk.entity;
 
 
-import com.bttf.queosk.config.baseEntity.BaseTimeEntity;
-import com.bttf.queosk.dto.enumerate.OperationStatus;
-import com.bttf.queosk.dto.enumerate.RestaurantCategory;
+import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
+import com.bttf.queosk.enumerate.OperationStatus;
+import com.bttf.queosk.enumerate.RestaurantCategory;
 import com.bttf.queosk.model.userModel.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

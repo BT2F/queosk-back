@@ -1,10 +1,10 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.enumerate.TableStatus;
-import com.bttf.queosk.dto.tableDto.TableForm;
-import com.bttf.queosk.dto.userDto.UserDto;
-import com.bttf.queosk.service.tableService.TableService;
-import com.bttf.queosk.service.userService.UserService;
+import com.bttf.queosk.dto.tabledto.TableForm;
+import com.bttf.queosk.dto.userdto.UserDto;
+import com.bttf.queosk.service.userservice.UserService;
+import com.bttf.queosk.enumerate.TableStatus;
+import com.bttf.queosk.service.TableService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
