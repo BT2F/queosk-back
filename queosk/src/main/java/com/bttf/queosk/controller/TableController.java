@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/restaurant")
 @RequiredArgsConstructor
@@ -56,6 +58,14 @@ public class TableController {
 
         UserDto userDto = userService.getUserFromToken(token);
         return ResponseEntity.status(HttpStatus.OK).body(tableService.getTable(tableId, userDto.getId()));
+    }
+
+    @GetMapping("/tables")
+    @ApiOperation(value = "테이블 조회", notes = "테이블을 조회 합니다.")
+    public ResponseEntity<List<TableForm>> tableListGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
+        UserDto userDto = userService.getUserFromToken(token);
+        return ResponseEntity.status(HttpStatus.OK).body(tableService.getTableList(userDto.getId()));
     }
 
 

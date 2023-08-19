@@ -10,9 +10,14 @@ import com.bttf.queosk.mapper.tableMapper.TableMapper;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.TableRepository;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
 
@@ -69,9 +74,27 @@ public class TableService {
                 TableDto.of(table));
     }
 
+    public List<TableForm> getTableList(Long restaurantId) {
+
+        List<TableDto> tableDtos = tableRepository.findByRestaurantId(restaurantId)
+                .stream()
+                .map(TableDto::of)
+                .collect(Collectors.toList());
+
+        List<TableForm> tableForms = new ArrayList<>();
+        for (TableDto dto : tableDtos) {
+            TableForm tableForm = TableMapper.INSTANCE.tableDtoToTableForm(dto);
+            tableForms.add(tableForm);
+        }
+
+        return tableForms;
+    }
+
     private Table getTableFromRepository(Long tableId) {
         return tableRepository.findById(tableId).orElseThrow(
                 () -> new CustomException(INVALID_TABLE)
         );
     }
+
+
 }

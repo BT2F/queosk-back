@@ -18,11 +18,12 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -237,5 +238,35 @@ class TableServiceTest {
                 .isExactlyInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.NOT_PERMITTED.getMessage());
         then(tableService).should(times(1)).getTable(table.getId(), 2L);
+    }
+    @Test
+    @DisplayName("가게의 테이블 가져오기 테스트 - 성공 케이스")
+    public void testGetTableList_success() {
+        Long tableId = 1L;
+        Long restaurantId = 1L;
+        List<Table> tableList = new ArrayList<>();
+        Table table1 = Table.builder()
+                .id(1L)
+                .status(TableStatus.OPEN)
+                .restaurantId(restaurantId)
+                .build();
+        Table table2 = Table.builder()
+                .id(2L)
+                .status(TableStatus.OPEN)
+                .restaurantId(restaurantId)
+                .build();
+
+        tableList.add(table1);
+        tableList.add(table2);
+
+
+        given(tableRepository.findByRestaurantId(restaurantId)).willReturn(tableList);
+
+        // When
+        List<TableForm> tableList1 = tableService.getTableList(restaurantId);
+
+        then(tableService).should(times(1)).getTableList(restaurantId);
+        assertThat(tableList.get(0).getId()).isEqualTo(1L);
+        assertThat(tableList.get(1).getId()).isEqualTo(2L);
     }
 }
