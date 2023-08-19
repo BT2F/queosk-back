@@ -2,6 +2,7 @@ package com.bttf.queosk.service.restaurantService;
 
 import com.bttf.queosk.config.emailSender.EmailSender;
 import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
+import com.bttf.queosk.dto.restaurantDto.UpdateRestorantInfoForm;
 import com.bttf.queosk.dto.enumerate.OperationStatus;
 import com.bttf.queosk.dto.restaurantDto.*;
 import com.bttf.queosk.entity.RefreshToken;
@@ -152,5 +153,22 @@ public class RestaurantService {
 
         restaurantRepository.save(restaurant);
 
+    }
+
+    @Transactional
+    public RestaurantDto updateRestaurantInfo(String token, UpdateRestorantInfoForm updateRestorantInfoForm) {
+        Restaurant restaurant = restaurantRepository
+                .findById(jwtTokenProvider.getIdFromToken(token))
+                .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+
+        restaurant.updateRestaurantInfo(updateRestorantInfoForm);
+
+        restaurant.setGeoPoint(
+                kakaoGeoAddress.addressToCoordinate(restaurant.getAddress(), "x"),
+                kakaoGeoAddress.addressToCoordinate(restaurant.getAddress(), "y"));
+
+        restaurantRepository.save(restaurant);
+
+        return RestaurantDto.of(restaurant);
     }
 }

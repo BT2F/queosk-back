@@ -4,15 +4,10 @@ import com.bttf.queosk.config.emailSender.EmailSender;
 import com.bttf.queosk.config.springSecurity.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
 import com.bttf.queosk.dto.enumerate.RestaurantCategory;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignInDto;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
-import com.bttf.queosk.dto.restaurantDto.RestaurantUpdatePasswordForm;
+import com.bttf.queosk.dto.restaurantDto.*;
 import com.bttf.queosk.dto.tokenDto.TokenDto;
-import com.bttf.queosk.dto.userDto.UserPasswordChangeForm;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
-import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RefreshTokenRepository;
@@ -284,5 +279,30 @@ class RestaurantServiceTest {
                 .isInstanceOf(CustomException.class);
         verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
         verify(restaurantRepository, never()).save(any());
+    }
+
+    @Test
+    public void updateRestaurantInfo_success() throws Exception {
+        // given
+        String accessToken = "accessToken";
+
+        UpdateRestorantInfoForm updateRestorantInfoForm = new UpdateRestorantInfoForm();
+
+        Restaurant restaurant = Restaurant.builder()
+                .id(1L)
+                .build();
+        when(restaurantRepository.findById(1L)).thenReturn(Optional.of(restaurant));
+        when(jwtTokenProvider.getIdFromToken(accessToken)).thenReturn(1L);
+
+
+        // when
+
+       RestaurantDto restaurantDto = restaurantService.updateRestaurantInfo(accessToken, updateRestorantInfoForm);
+
+        // then
+
+        assertThat(restaurantDto.getId()).isEqualTo(1L);
+        verify(restaurantRepository, times(1)).findById(1L);
+        verify(restaurantRepository, times(1)).save(restaurant);
     }
 }

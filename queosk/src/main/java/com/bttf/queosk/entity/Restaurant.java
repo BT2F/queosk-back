@@ -4,6 +4,7 @@ package com.bttf.queosk.entity;
 import com.bttf.queosk.config.baseEntity.BaseTimeEntity;
 import com.bttf.queosk.dto.enumerate.OperationStatus;
 import com.bttf.queosk.dto.enumerate.RestaurantCategory;
+import com.bttf.queosk.dto.restaurantDto.UpdateRestorantInfoForm;
 import com.bttf.queosk.model.userModel.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -72,5 +73,22 @@ public class Restaurant extends BaseTimeEntity {
 
     public void changePassword(String password) {
         this.password = password;
+    }
+
+    public void updateRestaurantInfo(UpdateRestorantInfoForm updateRestorantInfoForm) {
+        this.ownerId = updateRestorantInfoForm.getOwnerId();
+        this.ownerName = updateRestorantInfoForm.getOwnerName();
+        this.email = updateRestorantInfoForm.getEmail();
+        this.phone = updateRestorantInfoForm.getPhone();
+        this.restaurantName = updateRestorantInfoForm.getRestaurantName();
+        this.restaurantPhone = updateRestorantInfoForm.getRestaurantPhone();
+        this.category = updateRestorantInfoForm.getCategory();
+        this.address = updateRestorantInfoForm.getAddress();
+        this.maxWaiting = updateRestorantInfoForm.getMaxWaiting();
+    }
+
+    public void setGeoPoint(double longitude, double latitude) {
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 }
