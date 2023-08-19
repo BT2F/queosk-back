@@ -1,7 +1,6 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.dto.restaurantdto.*;
-
 import com.bttf.queosk.service.refreshtokenservice.RefreshTokenService;
 import com.bttf.queosk.service.restaurantservice.RestaurantService;
 import io.swagger.annotations.Api;
@@ -63,7 +62,7 @@ public class RestaurantController {
     @PutMapping("/resetpassword")
     @ApiOperation(value = "매장 비밀번호 초기화", notes = "매장의 비밀번호를 초기화 합니다.")
     public ResponseEntity<?> resetRestaurantPassword(@Valid @RequestBody
-                                                         RestaurantResetPasswordForm restaurantResetPasswordForm) {
+                                                     RestaurantResetPasswordForm restaurantResetPasswordForm) {
         restaurantService.resetRestaurantPassword(restaurantResetPasswordForm.getEmail(), restaurantResetPasswordForm.getOwnerName());
         return ResponseEntity.status(NO_CONTENT).build();
     }
@@ -88,6 +87,4 @@ public class RestaurantController {
         restaurantService.deleteRestaurant(token);
         return ResponseEntity.status(NO_CONTENT).build();
     }
-
-
 }
