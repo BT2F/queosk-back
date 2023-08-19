@@ -1,9 +1,8 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.restaurantDto.RestaurantDto;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignInForm;
-import com.bttf.queosk.dto.restaurantDto.RestaurantSignUpForm;
+import com.bttf.queosk.dto.restaurantDto.*;
 
+import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.service.refreshTokenService.RefreshTokenService;
 import com.bttf.queosk.service.restaurantService.RestaurantService;
 import io.swagger.annotations.Api;
@@ -17,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @Api(tags = "Restaurant API", description = "매장 API")
@@ -59,6 +61,18 @@ public class RestaurantController {
         return ResponseEntity.ok().body(restaurant);
     }
 
+    @PutMapping("/resetpassword")
+    @ApiOperation(value = "매장 비밀번호 초기화", notes = "매장의 비밀번호를 초기화 합니다.")
+    public ResponseEntity<?> resetRestaurantPassword(@Valid @RequestBody
+                                                         RestaurantResetPasswordForm restaurantResetPasswordForm) {
+        restaurantService.resetRestaurantPassword(restaurantResetPasswordForm.getEmail(), restaurantResetPasswordForm.getOwnerName());
+        return ResponseEntity.status(NO_CONTENT).build();
+    }
+
+    @PutMapping("/updatepassword/{id}")
+    ResponseEntity<?> updateRestaurantPassword(@PathVariable(name = "id") Long id, @RequestBody RestaurantUpdatePasswordForm updatePassword) {
+        restaurantService.updateRestaurantPassword(id, updatePassword);
+        return ResponseEntity.status(CREATED).build();
     @PostMapping("/signout")
     @ApiOperation(value = "매장 로그 아웃", notes = "업장 계정을 로그아웃 합니다.")
     public ResponseEntity<?> restaurantSignOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
