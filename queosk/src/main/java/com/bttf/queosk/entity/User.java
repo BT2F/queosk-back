@@ -1,7 +1,7 @@
 package com.bttf.queosk.entity;
 
-import com.bttf.queosk.config.baseEntity.BaseTimeEntity;
-import com.bttf.queosk.dto.userDto.UserEditForm;
+import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
+import com.bttf.queosk.dto.userdto.UserEditForm;
 import com.bttf.queosk.model.userModel.UserRole;
 import com.bttf.queosk.model.userModel.UserStatus;
 import lombok.AllArgsConstructor;

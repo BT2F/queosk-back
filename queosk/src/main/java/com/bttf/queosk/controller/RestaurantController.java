@@ -1,10 +1,9 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.restaurantDto.*;
+import com.bttf.queosk.dto.restaurantdto.*;
 
-import com.bttf.queosk.entity.Restaurant;
-import com.bttf.queosk.service.refreshTokenService.RefreshTokenService;
-import com.bttf.queosk.service.restaurantService.RestaurantService;
+import com.bttf.queosk.service.refreshtokenservice.RefreshTokenService;
+import com.bttf.queosk.service.restaurantservice.RestaurantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

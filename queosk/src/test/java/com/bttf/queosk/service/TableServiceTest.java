@@ -1,6 +1,6 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.enumerate.TableStatus;
+import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.exception.CustomException;
