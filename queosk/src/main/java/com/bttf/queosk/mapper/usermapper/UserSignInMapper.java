@@ -13,5 +13,7 @@ public interface UserSignInMapper {
     @Mapping(source = "user.email", target = "email")
     @Mapping(source = "user.nickName", target = "nickname")
     @Mapping(source = "user.imageUrl", target = "imageUrl")
+    @Mapping(source = "user.loginType", target = "loginType")
+    @Mapping(source = "user.id", target = "id")
     UserSignInDto userToUserSignInDto(User user, String refreshToken, String accessToken);
 }

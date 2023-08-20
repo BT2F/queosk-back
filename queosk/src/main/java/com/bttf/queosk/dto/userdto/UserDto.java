@@ -18,7 +18,7 @@ public class UserDto {
     private String phone;
     private String status;
     private String imageUrl;
-    private String loginApi;
+    private String loginType;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
