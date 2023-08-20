@@ -1,8 +1,10 @@
 package com.bttf.queosk.service.userservice;
 
-import com.bttf.queosk.service.emailsender.EmailSender;
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
-import com.bttf.queosk.dto.userdto.*;
+import com.bttf.queosk.dto.userdto.UserDto;
+import com.bttf.queosk.dto.userdto.UserSignInDto;
+import com.bttf.queosk.dto.userdto.UserSignInForm;
+import com.bttf.queosk.dto.userdto.UserSignUpForm;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
@@ -11,27 +13,27 @@ import com.bttf.queosk.mapper.usermapper.UserDtoMapper;
 import com.bttf.queosk.mapper.usermapper.UserSignInMapper;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
+import com.bttf.queosk.service.emailsender.EmailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
-import static com.bttf.queosk.exception.ErrorCode.*;
+import static com.bttf.queosk.enumerate.LoginType.NORMAL;
 import static com.bttf.queosk.enumerate.UserRole.ROLE_USER;
-import static com.bttf.queosk.enumerate.UserStatus.*;
+import static com.bttf.queosk.enumerate.UserStatus.DELETED;
+import static com.bttf.queosk.enumerate.UserStatus.NOT_VERIFIED;
+import static com.bttf.queosk.exception.ErrorCode.*;
 
 @RequiredArgsConstructor
 @Service
-public class UserServiceImpl implements UserService {
+public class UserLoginService {
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final EmailSender emailSender;
 
-    @Override
     @Transactional
     public void createUser(UserSignUpForm userSignUpForm) {
 
@@ -53,6 +55,7 @@ public class UserServiceImpl implements UserService {
                 .nickName(userSignUpForm.getNickName())
                 .password(encryptedPassword)
                 .phone(trimmedPhoneNumber)
+                .loginType(NORMAL)
                 .status(NOT_VERIFIED)
                 .userRole(ROLE_USER)
                 .build();
@@ -67,7 +70,6 @@ public class UserServiceImpl implements UserService {
                         "http://localhost:8080/api/users/%d/verification", user.getId()));
     }
 
-    @Override
     @Transactional
     public UserSignInDto signInUser(UserSignInForm userSignInForm) {
 
@@ -106,12 +108,10 @@ public class UserServiceImpl implements UserService {
         return UserSignInMapper.INSTANCE.userToUserSignInDto(user, refreshToken, accessToken);
     }
 
-    @Override
     public boolean checkDuplication(String email) {
         return !userRepository.findByEmail(email).isPresent();
     }
 
-    @Override
     public UserDto getUserFromToken(String token) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         User user = userRepository.findById(userId)
@@ -120,111 +120,10 @@ public class UserServiceImpl implements UserService {
         return UserDtoMapper.INSTANCE.userToUserDto(user);
     }
 
-    @Override
     public UserDto getUserFromId(Long id) {
         User targetUser = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
         return UserDtoMapper.INSTANCE.userToUserDto(targetUser);
-    }
-
-    @Override
-    @Transactional
-    public UserDto editUserInformation(Long userId, UserEditForm userEditForm) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
-
-        user.editInformation(userEditForm);
-
-        userRepository.save(user);
-
-        return UserDtoMapper.INSTANCE.userToUserDto(user);
-    }
-
-    @Override
-    @Transactional
-    public void changeUserPassword(Long userId, UserPasswordChangeForm userPasswordChangeForm) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
-
-        if (!passwordEncoder.matches(userPasswordChangeForm.getExistingPassword(), user.getPassword())) {
-            throw new CustomException(PASSWORD_NOT_MATCH);
-        }
-
-        user.changePassword(passwordEncoder.encode(userPasswordChangeForm.getNewPassword()));
-
-        userRepository.save(user);
-    }
-
-    @Override
-    @Transactional
-    public void resetUserPassword(String email, String nickName) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
-
-        if (!user.getNickName().equals(nickName)) {
-            throw new CustomException(NICKNAME_NOT_MATCH);
-        }
-
-        String randomPassword = UUID.randomUUID().toString().substring(0, 10);
-
-        String encryptedPassword = passwordEncoder.encode(randomPassword);
-
-        emailSender.sendEmail(
-                user.getEmail(),
-                "비밀번호 초기화 완료",
-                "새로운 비밀번호 : " + randomPassword + "를 입력해 로그인 해주세요."
-        );
-
-        user.changePassword(encryptedPassword);
-
-        userRepository.save(user);
-    }
-
-    @Override
-    @Transactional
-    public void updateImageUrl(Long id, String url) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
-
-        user.updateImageUrl(url);
-
-        userRepository.save(user);
-    }
-
-    @Override
-    @Transactional
-    public void withdrawUser(Long id, UserWithdrawalForm userWithdrawalForm) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
-
-        if (!passwordEncoder.matches(userWithdrawalForm.getPassword(), user.getPassword())) {
-            throw new CustomException(PASSWORD_NOT_MATCH);
-        }
-
-        user.withdrawUser();
-
-        userRepository.save(user);
-    }
-
-    @Override
-    @Transactional
-    public String verifyUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
-
-        String root = "static/verification-";
-
-        if (user.getStatus().equals(DELETED)) {
-            return root + "fail-deleted.html";
-        } else if (user.getStatus().equals(VERIFIED)) {
-            return root + "already-done.html";
-        }
-
-        user.verifyUser();
-
-        userRepository.save(user);
-
-        return root + "success.html";
     }
 }
