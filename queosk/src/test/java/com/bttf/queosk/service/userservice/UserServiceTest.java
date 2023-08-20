@@ -3,6 +3,7 @@ package com.bttf.queosk.service.userservice;
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.tokendto.TokenDto;
 import com.bttf.queosk.dto.userdto.*;
+import com.bttf.queosk.repository.KakaoAuthRepository;
 import com.bttf.queosk.service.emailsender.EmailSender;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
@@ -38,15 +39,21 @@ class UserServiceTest {
     private JwtTokenProvider jwtTokenProvider;
     @Mock
     private EmailSender emailSender;
+    @Mock
+    private KakaoAuthRepository kakaoAuthRepository;
 
-    private UserService userService;
+    private UserLoginService userLoginService;
+    private UserInfoService userInfoService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        userService = new UserServiceImpl(
+        userLoginService = new UserLoginService(
                 userRepository, refreshTokenRepository,
                 passwordEncoder, jwtTokenProvider, emailSender);
+        userInfoService = new UserInfoService(
+                userRepository,passwordEncoder,emailSender,
+                refreshTokenRepository,kakaoAuthRepository);
     }
 
     @Test
@@ -66,7 +73,7 @@ class UserServiceTest {
                 .thenReturn(true);
 
         // When
-        userService.createUser(userSignUpForm);
+        userLoginService.createUser(userSignUpForm);
 
         // Then
         verify(userRepository, times(1)).findByEmail(eq("test@example.com"));
@@ -86,7 +93,7 @@ class UserServiceTest {
                 .thenReturn(Optional.of(new User()));
 
         // When and Then
-        assertThatThrownBy(() -> userService.createUser(userSignUpForm))
+        assertThatThrownBy(() -> userLoginService.createUser(userSignUpForm))
                 .isInstanceOf(CustomException.class)
                 .hasMessageContaining("이미 가입된 회원입니다.");
 
@@ -115,7 +122,7 @@ class UserServiceTest {
         when(jwtTokenProvider.generateRefreshToken()).thenReturn(refreshToken);
 
         // Act
-        UserSignInDto result = userService.signInUser(new UserSignInForm(email, password));
+        UserSignInDto result = userLoginService.signInUser(new UserSignInForm(email, password));
 
         // Assert
         assertNotNull(result);
@@ -135,7 +142,7 @@ class UserServiceTest {
 
         // Act & Assert
         assertThrows(CustomException.class, () -> {
-            userService.signInUser(new UserSignInForm(invalidEmail, password));
+            userLoginService.signInUser(new UserSignInForm(invalidEmail, password));
         });
     }
 
@@ -155,7 +162,7 @@ class UserServiceTest {
 
         // Act & Assert
         assertThrows(CustomException.class, () -> {
-            userService.signInUser(new UserSignInForm(email, invalidPassword));
+            userLoginService.signInUser(new UserSignInForm(email, invalidPassword));
         });
     }
 
@@ -167,7 +174,7 @@ class UserServiceTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
         // When
-        boolean result = userService.checkDuplication(email);
+        boolean result = userLoginService.checkDuplication(email);
 
         // Then
         assertThat(result).isTrue();
@@ -185,7 +192,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // When
-        UserDto userDto = userService.getUserFromToken(token);
+        UserDto userDto = userLoginService.getUserFromToken(token);
 
         // Then
         assertThat(userDto.getId()).isEqualTo(userId);
@@ -203,7 +210,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(CustomException.class, () -> userService.getUserFromToken(token));
+        assertThrows(CustomException.class, () -> userLoginService.getUserFromToken(token));
         verify(jwtTokenProvider, times(1)).getIdFromToken(token);
         verify(userRepository, times(1)).findById(userId);
     }
@@ -217,7 +224,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // When
-        UserDto userDto = userService.getUserFromId(userId);
+        UserDto userDto = userLoginService.getUserFromId(userId);
 
         // Then
         assertThat(userDto.getId()).isEqualTo(userId);
@@ -232,7 +239,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(CustomException.class, () -> userService.getUserFromId(userId));
+        assertThrows(CustomException.class, () -> userLoginService.getUserFromId(userId));
         verify(userRepository, times(1)).findById(userId);
     }
 
@@ -246,7 +253,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // When
-        UserDto userDto = userService.editUserInformation(userId, userEditForm);
+        UserDto userDto = userInfoService.editUserInformation(userId, userEditForm);
 
         // Then
         assertThat(userDto.getId()).isEqualTo(userId);
@@ -263,7 +270,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(CustomException.class, () -> userService.editUserInformation(userId, userEditForm));
+        assertThrows(CustomException.class, () -> userInfoService.editUserInformation(userId, userEditForm));
         verify(userRepository, times(1)).findById(userId);
         verify(userRepository, never()).save(any(User.class));
     }
@@ -289,7 +296,7 @@ class UserServiceTest {
         when(passwordEncoder.encode(newPassword)).thenReturn("encodedNewPassword");
 
         // When
-        userService.changeUserPassword(userId, userPasswordChangeForm);
+        userInfoService.changeUserPassword(userId, userPasswordChangeForm);
 
         // Then
         verify(userRepository).findById(userId);
@@ -320,7 +327,7 @@ class UserServiceTest {
         when(passwordEncoder.matches(existingPassword, user.getPassword())).thenReturn(false);
 
         // When & Then
-        assertThatThrownBy(() -> userService.changeUserPassword(userId, userPasswordChangeForm))
+        assertThatThrownBy(() -> userInfoService.changeUserPassword(userId, userPasswordChangeForm))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.PASSWORD_NOT_MATCH.getMessage());
 
@@ -345,7 +352,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When & Then
-        assertThatThrownBy(() -> userService.changeUserPassword(userId, userPasswordChangeForm))
+        assertThatThrownBy(() -> userInfoService.changeUserPassword(userId, userPasswordChangeForm))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.USER_NOT_EXISTS.getMessage());
 
@@ -362,7 +369,7 @@ class UserServiceTest {
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
         // When
-        userService.resetUserPassword("user@example.com", "testuser");
+        userInfoService.resetUserPassword("user@example.com", "testuser");
 
         // Then
         verify(emailSender).sendEmail(eq("user@example.com"), anyString(), anyString());
@@ -376,7 +383,7 @@ class UserServiceTest {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
         // When, Then
-        Assertions.assertThatThrownBy(() -> userService.resetUserPassword("user@example.com", "testuser"))
+        Assertions.assertThatThrownBy(() -> userInfoService.resetUserPassword("user@example.com", "testuser"))
                 .isInstanceOf(CustomException.class);
         verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
         verify(userRepository, never()).save(any());
@@ -393,7 +400,7 @@ class UserServiceTest {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
         // When, Then
-        assertThatThrownBy(() -> userService.resetUserPassword("user@example.com", "wrongnick"))
+        assertThatThrownBy(() -> userInfoService.resetUserPassword("user@example.com", "wrongnick"))
                 .isInstanceOf(CustomException.class);
         verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
         verify(userRepository, never()).save(any());
@@ -407,7 +414,7 @@ class UserServiceTest {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
         // When
-        userService.updateImageUrl(1L, "newImageUrl");
+        userInfoService.updateImageUrl(1L, "newImageUrl");
 
         // Then
         verify(userRepository).save(user);
@@ -420,7 +427,7 @@ class UserServiceTest {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // When, Then
-        assertThatThrownBy(() -> userService.updateImageUrl(1L, "newImageUrl"))
+        assertThatThrownBy(() -> userInfoService.updateImageUrl(1L, "newImageUrl"))
                 .isInstanceOf(CustomException.class);
         verify(userRepository, never()).save(any());
     }
@@ -438,12 +445,8 @@ class UserServiceTest {
         when(passwordEncoder.matches("correctPassword", user.getPassword()))
                 .thenReturn(true);
 
-        UserWithdrawalForm withdrawalForm =
-                UserWithdrawalForm.builder()
-                        .password("correctPassword")
-                        .build();
         // When
-        userService.withdrawUser(1L, withdrawalForm);
+        userInfoService.withdrawUser(1L);
 
         // Then
         verify(userRepository).save(user);
@@ -455,13 +458,8 @@ class UserServiceTest {
         // Given
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        UserWithdrawalForm withdrawalForm =
-                UserWithdrawalForm.builder()
-                        .password("correctPassword")
-                        .build();
-
         // When, Then
-        assertThatThrownBy(() -> userService.withdrawUser(1L, withdrawalForm))
+        assertThatThrownBy(() -> userInfoService.withdrawUser(1L))
                 .isInstanceOf(CustomException.class);
         verify(userRepository, never()).save(any());
     }
@@ -475,17 +473,8 @@ class UserServiceTest {
                 .password(passwordEncoder.encode("correctPassword"))
                 .build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
         // When, Then
-        UserWithdrawalForm withdrawalForm =
-                UserWithdrawalForm.builder()
-                        .password("correctPassword")
-                        .build();
-
-        assertThatThrownBy(() -> userService.withdrawUser(1L, withdrawalForm))
-                .isInstanceOf(CustomException.class);
-
         verify(userRepository, never()).save(any());
     }
 
@@ -497,7 +486,7 @@ class UserServiceTest {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
         // When
-        String result = userService.verifyUser(1L);
+        String result = userInfoService.verifyUser(1L);
 
         // Then
         verify(userRepository).save(user);
@@ -511,7 +500,7 @@ class UserServiceTest {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // When, Then
-        assertThatThrownBy(() -> userService.verifyUser(1L))
+        assertThatThrownBy(() -> userInfoService.verifyUser(1L))
                 .isInstanceOf(CustomException.class);
         verify(userRepository, never()).save(any());
     }
@@ -524,7 +513,7 @@ class UserServiceTest {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
         // When
-        String result = userService.verifyUser(1L);
+        String result = userInfoService.verifyUser(1L);
 
         // Then
         verify(userRepository, never()).save(any());
@@ -539,7 +528,7 @@ class UserServiceTest {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
         // When
-        String result = userService.verifyUser(1L);
+        String result = userInfoService.verifyUser(1L);
 
         // Then
         verify(userRepository, never()).save(any());
