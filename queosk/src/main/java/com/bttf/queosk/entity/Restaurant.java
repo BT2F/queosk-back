@@ -1,6 +1,7 @@
 package com.bttf.queosk.entity;
 
 
+import com.bttf.queosk.dto.restaurantdto.UpdateRestaurantInfoForm;
 import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
 import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.RestaurantCategory;
@@ -53,6 +54,8 @@ public class Restaurant extends BaseTimeEntity {
 
     private Double longitude;
 
+    private String region;
+
     private Double ratingAverage;
 
     private String imageUrl;
@@ -72,5 +75,31 @@ public class Restaurant extends BaseTimeEntity {
 
     public void changePassword(String password) {
         this.password = password;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public void updateRestaurantInfo(UpdateRestaurantInfoForm updateRestaurantInfoForm) {
+        this.ownerId = updateRestaurantInfoForm.getOwnerId();
+        this.ownerName = updateRestaurantInfoForm.getOwnerName();
+        this.email = updateRestaurantInfoForm.getEmail();
+        this.phone = updateRestaurantInfoForm.getPhone();
+        this.restaurantName = updateRestaurantInfoForm.getRestaurantName();
+        this.restaurantPhone = updateRestaurantInfoForm.getRestaurantPhone();
+        this.category = updateRestaurantInfoForm.getCategory();
+        this.address = updateRestaurantInfoForm.getAddress();
+        this.maxWaiting = updateRestaurantInfoForm.getMaxWaiting();
+
+    }
+
+    public void setGeoPoint(double longitude, double latitude) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 }

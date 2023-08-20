@@ -1,7 +1,7 @@
 package com.bttf.queosk.repository;
 
 import com.bttf.queosk.entity.baseentity.JpaAuditingConfiguration;
-import com.bttf.queosk.model.userModel.UserStatus;
+import com.bttf.queosk.model.usermodel.UserStatus;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Review;
 import com.bttf.queosk.entity.User;

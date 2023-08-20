@@ -1,12 +1,15 @@
 package com.bttf.queosk.controller;
 
+import com.bttf.queosk.dto.restaurantdto.GetCoordRestaurantInfoForm;
 import com.bttf.queosk.dto.restaurantdto.*;
 
+import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.service.refreshtokenservice.RefreshTokenService;
 import com.bttf.queosk.service.restaurantservice.RestaurantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.awt.print.Pageable;
 import java.io.IOException;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -63,12 +68,13 @@ public class RestaurantController {
     @PutMapping("/resetpassword")
     @ApiOperation(value = "매장 비밀번호 초기화", notes = "매장의 비밀번호를 초기화 합니다.")
     public ResponseEntity<?> resetRestaurantPassword(@Valid @RequestBody
-                                                         RestaurantResetPasswordForm restaurantResetPasswordForm) {
+                                                     RestaurantResetPasswordForm restaurantResetPasswordForm) {
         restaurantService.resetRestaurantPassword(restaurantResetPasswordForm.getEmail(), restaurantResetPasswordForm.getOwnerName());
         return ResponseEntity.status(NO_CONTENT).build();
     }
 
     @PutMapping("/updatepassword/{id}")
+    @ApiOperation(value = "매장 비밀번호 변경", notes = "매장의 비밀번호를 변경합니다.")
     ResponseEntity<?> updateRestaurantPassword(@PathVariable(name = "id") Long id, @RequestBody RestaurantUpdatePasswordForm updatePassword) {
         restaurantService.updateRestaurantPassword(id, updatePassword);
         return ResponseEntity.status(CREATED).build();
@@ -82,4 +88,25 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @DeleteMapping
+    @ApiOperation(value = "사업자 탈퇴", notes = "업장 계정을 삭제합니다.")
+    public ResponseEntity<?> deleteRestaurant(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        restaurantService.deleteRestaurant(token);
+        return ResponseEntity.status(NO_CONTENT).build();
+    }
+
+    @PostMapping
+    @ApiOperation(value = "매장 수정", notes = "업장 계정의 정보를 수정합니다.")
+    public ResponseEntity<?> updateRestaurantInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                  UpdateRestaurantInfoForm updateRestaurantInfoForm) {
+        RestaurantDto restaurant = restaurantService.updateRestaurantInfo(token, updateRestaurantInfoForm);
+        return ResponseEntity.status(201).body(restaurant);
+    }
+
+    @GetMapping("s/coord")
+    @ApiOperation(value = "동네 매장 검색 (좌표)", notes = "해당 좌표가 위치한 동네의 매장 리스트를 제공합니다.")
+    public ResponseEntity<?> getCoordRestaurantInfo(@RequestBody GetCoordRestaurantInfoForm getCoordRestaurantInfoForm) {
+        Page<RestaurantDto> restaurantPage = restaurantService.getCoordRestaurantInfoForm(getCoordRestaurantInfoForm);
+        return ResponseEntity.ok().body(restaurantPage);
+    }
 }
