@@ -45,6 +45,8 @@ public class RestaurantDto {
 
     private Long maxWaiting;
 
+    private String region;
+
     public static RestaurantDto of(Restaurant restaurant) {
         return RestaurantDto.builder()
                 .id(restaurant.getId())
@@ -62,6 +64,7 @@ public class RestaurantDto {
                 .imageUrl(restaurant.getImageUrl())
                 .operationStatus(restaurant.getOperationStatus())
                 .maxWaiting(restaurant.getMaxWaiting())
+                .region(restaurant.getRegion())
                 .build();
     }
 }

@@ -1,6 +1,6 @@
 package com.bttf.queosk.mapper.tablemapper;
 
-import com.bttf.queosk.dto.enumerate.TableStatus;
+import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.dto.tableDto.TableDto;
 import com.bttf.queosk.dto.tableDto.TableForm;
 import com.bttf.queosk.entity.Restaurant;

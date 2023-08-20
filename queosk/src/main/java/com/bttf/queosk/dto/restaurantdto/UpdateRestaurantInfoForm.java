@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UpdateRestorantInfoForm {
+public class UpdateRestaurantInfoForm {
 
     private String ownerId;
 
