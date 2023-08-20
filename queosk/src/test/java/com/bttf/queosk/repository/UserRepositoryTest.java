@@ -2,7 +2,7 @@ package com.bttf.queosk.repository;
 
 import com.bttf.queosk.entity.baseentity.JpaAuditingConfiguration;
 import com.bttf.queosk.entity.User;
-import com.bttf.queosk.model.usermodel.UserStatus;
+import com.bttf.queosk.enumerate.UserStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
