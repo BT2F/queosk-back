@@ -91,6 +91,7 @@ public class Restaurant extends BaseTimeEntity {
         this.category = updateRestaurantInfoForm.getCategory();
         this.address = updateRestaurantInfoForm.getAddress();
         this.maxWaiting = updateRestaurantInfoForm.getMaxWaiting();
+
     }
 
     public void setGeoPoint(double longitude, double latitude) {
