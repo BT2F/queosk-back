@@ -19,11 +19,11 @@ public class UserSignUpForm {
     @NotBlank(message = "이메일은 비워둘 수 없습니다.")
     private String email;
 
-    @Size(min = 4, max = 12, message = "비밀번호는 4~20자 이내로 입력해주세요.")
+    @Size(min = 2, max = 10, message = "닉네임은 2~10자 사이로 입력해주세요.")
     @NotBlank(message = "닉네임은 비워둘 수 없습니다.")
     private String nickName;
 
-    @Size(min = 2, max = 10, message = "닉네임은 2~10자 사이로 입력해주세요.")
+    @Size(min = 4, max = 20, message = "비밀번호는 4~20자 이내로 입력해주세요.")
     @NotBlank(message = "비밀번호는 비워둘 수 없습니다.")
     private String password;
 

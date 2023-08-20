@@ -14,6 +14,6 @@ import org.springframework.data.redis.core.RedisHash;
 @RedisHash(value = "refresh_token")
 public class RefreshToken {
     @Id
-    private String user_email;
-    private String refresh_token;
+    private String token;
+    private String email;
 }
