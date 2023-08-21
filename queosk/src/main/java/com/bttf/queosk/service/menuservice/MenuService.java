@@ -30,6 +30,7 @@ public class MenuService {
                         .name(menuCreationForm.getName())
                         .price(menuCreationForm.getPrice())
                         .status(ON_SALE)
+                        .imageUrl(menuCreationForm.getImageUrl())
                         .restaurantId(restaurantId)
                         .build()
         );
