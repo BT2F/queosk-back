@@ -71,7 +71,7 @@ public class RestaurantService {
                         .region(kakaoGeoAddressService.coordinateToZone(x, y))
                         .operationStatus(OperationStatus.CLOSED)
                         .isDeleted(false)
-                        .userRole(UserRole.ROLE_ADMIN)
+                        .userRole(UserRole.ROLE_RESTAURANT)
                         .build();
 
 
