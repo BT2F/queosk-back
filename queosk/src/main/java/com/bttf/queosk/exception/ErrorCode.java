@@ -31,7 +31,18 @@ public enum ErrorCode {
 
     // Restaurant 관련 Exception
     INVALID_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 상점입니다."),
-    OWNER_NAME_NOT_MATCH(HttpStatus.BAD_REQUEST, "매장 계정 사용자 이름이 일치 하지 않습니다.");
+    OWNER_NAME_NOT_MATCH(HttpStatus.BAD_REQUEST, "매장 계정 사용자 이름이 일치 하지 않습니다."),
+
+    // Cart 관련 Exception
+    CART_IS_EMPTY(HttpStatus.NOT_FOUND, "장바구니가 비어있습니다."),
+    DIFFERENT_RESTAURANT(HttpStatus.BAD_REQUEST, "같은 식당의 메뉴만 장바구니에 담을 수 있습니다. " +
+            "장바구니를 초기화하고 선택하신 식당의 메뉴를 담으시겠습니까?"),
+    CART_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 기존 장바구니가 존재합니다."),
+
+    // Menu 관련 Exception
+    MENU_NOT_FOUND(HttpStatus.NOT_FOUND,"아직 해당 식당에 대한 메뉴가 등록되지 않습니다."),
+    UNAUTHORIZED_SERVICE(HttpStatus.BAD_REQUEST, "본인매장의 메뉴만 수정할 수 있습니다.");
+
 
     private final HttpStatus status;
     private final String message;
