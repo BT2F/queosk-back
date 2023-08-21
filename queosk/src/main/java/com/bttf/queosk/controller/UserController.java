@@ -2,8 +2,10 @@ package com.bttf.queosk.controller;
 
 import com.bttf.queosk.dto.userdto.*;
 import com.bttf.queosk.service.imageservice.ImageService;
+import com.bttf.queosk.service.kakaoservice.KakaoLoginService;
 import com.bttf.queosk.service.refreshtokenservice.RefreshTokenService;
-import com.bttf.queosk.service.userservice.UserService;
+import com.bttf.queosk.service.userservice.UserInfoService;
+import com.bttf.queosk.service.userservice.UserLoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -19,20 +21,24 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 
+import static com.bttf.queosk.enumerate.LoginType.KAKAO;
+
 @RequiredArgsConstructor
 @Api(tags = "User API", description = "사용자와 관련된 API")
 @RequestMapping("/api/users")
 @RestController
 public class UserController {
-    private final UserService userService;
+    private final UserLoginService userLoginService;
+    private final UserInfoService userInfoService;
     private final RefreshTokenService refreshTokenService;
     private final ImageService imageService;
+    private final KakaoLoginService kakaoLoginService;
 
     @PostMapping("/signup")
     @ApiOperation(value = "사용자 회원가입", notes = "입력된 정보로 회원가입을 진행합니다.")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserSignUpForm userSignUpForm) {
 
-        userService.createUser(userSignUpForm);
+        userLoginService.createUser(userSignUpForm);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -43,14 +49,14 @@ public class UserController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.signInUser(userSignInForm));
+                .body(userLoginService.signInUser(userSignInForm));
     }
 
     @PostMapping("/check")
     @ApiOperation(value = "이메일 중복 확인", notes = "사용하고자 하는 이메일의 중복여부를 확인합니다.")
     public ResponseEntity<?> checkDuplication(@Valid @RequestBody UserCheckForm userCheckForm) {
 
-        return userService.checkDuplication(userCheckForm.getEmail()) ?
+        return userLoginService.checkDuplication(userCheckForm.getEmail()) ?
                 ResponseEntity.status(HttpStatus.OK).body("사용가능한 이메일 입니다.") :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 사용중인 이메일 입니다.");
     }
@@ -59,7 +65,7 @@ public class UserController {
     @ApiOperation(value = "사용자 상세정보", notes = "사용자의 상세정보를 조회합니다.")
     public ResponseEntity<?> getUserDetails(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
-        UserDto user = userService.getUserFromToken(token);
+        UserDto user = userLoginService.getUserFromToken(token);
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
@@ -70,9 +76,9 @@ public class UserController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @Valid @RequestBody UserEditForm userEditForm) {
 
-        UserDto userDto = userService.getUserFromToken(token);
+        UserDto userDto = userLoginService.getUserFromToken(token);
 
-        UserDto result = userService.editUserInformation(userDto.getId(), userEditForm);
+        UserDto result = userInfoService.editUserInformation(userDto.getId(), userEditForm);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -83,9 +89,9 @@ public class UserController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @Valid @RequestBody UserPasswordChangeForm userPasswordChangeForm) {
 
-        UserDto userDto = userService.getUserFromToken(token);
+        UserDto userDto = userLoginService.getUserFromToken(token);
 
-        userService.changeUserPassword(userDto.getId(), userPasswordChangeForm);
+        userInfoService.changeUserPassword(userDto.getId(), userPasswordChangeForm);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -95,7 +101,8 @@ public class UserController {
     public ResponseEntity<?> resetUserPassword(
             @Valid @RequestBody UserResetPasswordForm userResetPasswordForm) {
 
-        userService.resetUserPassword(userResetPasswordForm.getEmail(), userResetPasswordForm.getNickName());
+        userInfoService.resetUserPassword(userResetPasswordForm.getEmail(),
+                userResetPasswordForm.getNickName());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -104,7 +111,11 @@ public class UserController {
     @ApiOperation(value = "사용자 로그아웃", notes = "사용자의 계정에서 로그아웃합니다.")
     public ResponseEntity<?> signOutUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
-        UserDto userDto = userService.getUserFromToken(token);
+        UserDto userDto = userLoginService.getUserFromToken(token);
+
+        if(userDto.getLoginType().equals(KAKAO.toString())){
+            kakaoLoginService.getKakaoLogout(userDto.getEmail());
+        }
 
         refreshTokenService.deleteRefreshToken(userDto.getEmail());
 
@@ -117,23 +128,22 @@ public class UserController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody MultipartFile imageFile) throws IOException {
 
-        UserDto userDto = userService.getUserFromToken(token);
+        UserDto userDto = userLoginService.getUserFromToken(token);
 
         String url = imageService.saveFile(imageFile, "user/" + userDto.getId());
 
-        userService.updateImageUrl(userDto.getId(), url);
+        userInfoService.updateImageUrl(userDto.getId(), url);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/withdrawal")
     @ApiOperation(value = "사용자 회원탈퇴", notes = "사용자 상태를 '삭제' 상태로 변경합니다.")
-    public ResponseEntity<?> withdrawUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                          @Valid @RequestBody UserWithdrawalForm userWithdrawalForm) {
+    public ResponseEntity<?> withdrawUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
-        UserDto userDto = userService.getUserFromToken(token);
+        UserDto userDto = userLoginService.getUserFromToken(token);
 
-        userService.withdrawUser(userDto.getId(), userWithdrawalForm);
+        userInfoService.withdrawUser(userDto.getId());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -143,7 +153,7 @@ public class UserController {
     @ApiOperation(value = "사용자 회원인증", notes = "사용자 상태를 '인증' 상태로 변경합니다.")
     public ResponseEntity<Resource> verifyUser(@PathVariable Long id) {
 
-        Resource resource = new ClassPathResource(userService.verifyUser(id));
+        Resource resource = new ClassPathResource(userInfoService.verifyUser(id));
 
         return ResponseEntity.ok()
                 .contentType(MediaType.TEXT_HTML)

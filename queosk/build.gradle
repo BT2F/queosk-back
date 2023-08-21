@@ -89,11 +89,3 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
-task copyPrivate(type: Copy) {
-	from 'submodule-queosk/src/main/resources'
-	include 'application.yml'
-	into 'src/main/resources'
-}
-
-processResources.dependsOn copyPrivate

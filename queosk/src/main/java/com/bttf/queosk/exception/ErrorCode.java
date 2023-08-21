@@ -12,7 +12,7 @@ public enum ErrorCode {
     // 공통 Exception
     NOT_PERMITTED(HttpStatus.NOT_ACCEPTABLE, "접근 권한이 없습니다."),
 
-    //UserService 관련 Exception
+    // UserService 관련 Exception
     INVALID_USER_ID(HttpStatus.NOT_FOUND, "존재하지 않는 아이디입니다."),
     EXISTING_USER(HttpStatus.BAD_REQUEST, "이미 가입된 회원입니다."),
     PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
@@ -20,8 +20,10 @@ public enum ErrorCode {
     NICKNAME_NOT_MATCH(HttpStatus.BAD_REQUEST,"닉네임 정보가 일치가하지 않습니다." ),
     WITHDRAWN_USER(HttpStatus.BAD_REQUEST,"이미 탈퇴한 회원입니다." ),
     NOT_VERIFIED_USER(HttpStatus.BAD_REQUEST,"이메일 검증 진행 후 로그인이 가능합니다." ),
+    KAKAO_LOGIN_FAILED(HttpStatus.BAD_REQUEST,"카카오 소셜 로그인 도중 예외가 발생했습니다."),
+    KAKAO_USER_UNSUPPORTED_SERVICE(HttpStatus.BAD_REQUEST,"카카오 소셜 로그인 회원이게는 지원되지 않는 기능입니다." ),
 
-    //Token 관련 Exception
+    // Token 관련 Exception
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED,"만료되거나 유효하지 않은 토큰입니다." ),
 
     // Table 관련 Exception
