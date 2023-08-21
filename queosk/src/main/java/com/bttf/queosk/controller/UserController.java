@@ -1,5 +1,6 @@
 package com.bttf.queosk.controller;
 
+import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.userdto.*;
 import com.bttf.queosk.service.imageservice.ImageService;
 import com.bttf.queosk.service.kakaoservice.KakaoLoginService;
@@ -33,6 +34,7 @@ public class UserController {
     private final RefreshTokenService refreshTokenService;
     private final ImageService imageService;
     private final KakaoLoginService kakaoLoginService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/signup")
     @ApiOperation(value = "사용자 회원가입", notes = "입력된 정보로 회원가입을 진행합니다.")
@@ -76,9 +78,9 @@ public class UserController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @Valid @RequestBody UserEditForm userEditForm) {
 
-        UserDto userDto = userLoginService.getUserFromToken(token);
+        Long userId = jwtTokenProvider.getIdFromToken(token);
 
-        UserDto result = userInfoService.editUserInformation(userDto.getId(), userEditForm);
+        UserDto result = userInfoService.editUserInformation(userId, userEditForm);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -89,9 +91,9 @@ public class UserController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @Valid @RequestBody UserPasswordChangeForm userPasswordChangeForm) {
 
-        UserDto userDto = userLoginService.getUserFromToken(token);
+        Long userId = jwtTokenProvider.getIdFromToken(token);
 
-        userInfoService.changeUserPassword(userDto.getId(), userPasswordChangeForm);
+        userInfoService.changeUserPassword(userId, userPasswordChangeForm);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -128,11 +130,11 @@ public class UserController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody MultipartFile imageFile) throws IOException {
 
-        UserDto userDto = userLoginService.getUserFromToken(token);
+        Long userId = jwtTokenProvider.getIdFromToken(token);
 
-        String url = imageService.saveFile(imageFile, "user/" + userDto.getId());
+        String url = imageService.saveFile(imageFile, "user/" + userId);
 
-        userInfoService.updateImageUrl(userDto.getId(), url);
+        userInfoService.updateImageUrl(userId, url);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -141,9 +143,9 @@ public class UserController {
     @ApiOperation(value = "사용자 회원탈퇴", notes = "사용자 상태를 '삭제' 상태로 변경합니다.")
     public ResponseEntity<?> withdrawUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
-        UserDto userDto = userLoginService.getUserFromToken(token);
+        Long userId = jwtTokenProvider.getIdFromToken(token);
 
-        userInfoService.withdrawUser(userDto.getId());
+        userInfoService.withdrawUser(userId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
