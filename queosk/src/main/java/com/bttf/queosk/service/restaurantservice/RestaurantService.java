@@ -198,6 +198,6 @@ public class RestaurantService {
         double x = getCoordRestaurantInfoForm.getX();
         double y = getCoordRestaurantInfoForm.getY();
 
-        return restaurantRepository.findAllByRegion(kakaoGeoAddressService.coordinateToZone(x, y), pageable).map(RestaurantDto::of);
+        return restaurantRepository.getRestaurantListByDistance(kakaoGeoAddressService.coordinateToZone(x, y), x, y, pageable).map(RestaurantDto::of);
     }
 }
