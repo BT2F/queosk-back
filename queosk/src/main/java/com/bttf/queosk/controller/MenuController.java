@@ -1,9 +1,9 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
-import com.bttf.queosk.dto.menudto.CreateMenuForm;
+import com.bttf.queosk.dto.menudto.MenuCreationForm;
 import com.bttf.queosk.dto.menudto.MenuDto;
-import com.bttf.queosk.entity.Menu;
+import com.bttf.queosk.dto.menudto.MenuUpdateForm;
 import com.bttf.queosk.service.menuservice.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,11 +29,11 @@ public class MenuController {
     @ApiOperation(value = "식당 메뉴 목록 추가", notes = "점주가 본인 식당의 메뉴목록을 추가합니다.")
     public ResponseEntity<?> createMenu(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @Valid @RequestBody CreateMenuForm createMenuForm) {
+            @Valid @RequestBody MenuCreationForm menuCreationForm) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        menuService.createMenu(restaurantId,createMenuForm);
+        menuService.createMenu(restaurantId,menuCreationForm);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -46,5 +46,19 @@ public class MenuController {
         List<MenuDto> menuList = menuService.getMenu(restaurantId);
 
         return ResponseEntity.status(HttpStatus.OK).body(menuList);
+    }
+
+    @PutMapping("/menus/{menuId}")
+    @ApiOperation(value = "식당 메뉴정보 수정", notes = "점주가 본인 식당의 메뉴정보를 수정합니다.")
+    public ResponseEntity<?> updateMenuInfo(
+            @PathVariable Long menuId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody MenuUpdateForm menuUpdateForm){
+
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
+        menuService.updateMenuInfo(restaurantId,menuId,menuUpdateForm);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
