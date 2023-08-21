@@ -1,11 +1,12 @@
 package com.bttf.queosk.service.kakaoservice;
 
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
-import com.bttf.queosk.dto.tokendto.TokenDto;
+import com.bttf.queosk.dto.kakaodto.KaKaoLoginForm;
 import com.bttf.queosk.dto.userdto.UserSignInDto;
 import com.bttf.queosk.entity.KakaoAuth;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
+import com.bttf.queosk.mapper.usermapper.TokenDtoMapper;
 import com.bttf.queosk.mapper.usermapper.UserSignInMapper;
 import com.bttf.queosk.repository.KakaoAuthRepository;
 import com.bttf.queosk.repository.UserRepository;
@@ -89,10 +90,7 @@ public class KakaoLoginService {
         kakaoAuthRepository.deleteById(email);
     }
 
-    public UserSignInDto getKakaoInfo(String code) {
-        if (code == null) {
-            throw new CustomException(KAKAO_LOGIN_FAILED);
-        }
+    public UserSignInDto getKakaoInfo(KaKaoLoginForm kaKaoLoginForm) {
         String accessToken = "";
         String refreshToken = "";
         try {
@@ -103,7 +101,7 @@ public class KakaoLoginService {
             params.add(GRANT_TYPE, "authorization_code");
             params.add(CLIENT_ID, KAKAO_CLIENT_ID);
             params.add(CLIENT_SECRET, KAKAO_CLIENT_SECRET);
-            params.add(CODE, code);
+            params.add(CODE, kaKaoLoginForm.getCode());
             params.add(REDIRECT_URI, KAKAO_REDIRECT_URL);
 
             RestTemplate restTemplate = new RestTemplate();
@@ -189,13 +187,8 @@ public class KakaoLoginService {
         User user = userRepository.findByEmail(email).get();
 
         // Queosk 엑세스 토큰 생성
-        String userAccessToken = jwtTokenProvider.generateAccessToken(
-                TokenDto.builder()
-                        .id(user.getId())
-                        .email(user.getEmail())
-                        .userRole(ROLE_USER)
-                        .build()
-        );
+        String userAccessToken =
+                jwtTokenProvider.generateAccessToken(TokenDtoMapper.INSTANCE.userToTokenDto(user));
 
         // Queosk 리프레시 토큰 생성
         String userRefreshToken = jwtTokenProvider.generateRefreshToken();
