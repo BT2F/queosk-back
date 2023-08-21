@@ -5,6 +5,7 @@ import com.bttf.queosk.dto.menudto.MenuCreationForm;
 import com.bttf.queosk.dto.menudto.MenuDto;
 import com.bttf.queosk.dto.menudto.MenuStatusForm;
 import com.bttf.queosk.dto.menudto.MenuUpdateForm;
+import com.bttf.queosk.service.imageservice.ImageService;
 import com.bttf.queosk.service.menuservice.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,9 +14,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Api(tags = "Menu API", description = "메뉴 관련 API")
@@ -24,6 +28,7 @@ import java.util.List;
 public class MenuController {
 
     private final MenuService menuService;
+    private final ImageService imageService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/menus")
@@ -73,6 +78,54 @@ public class MenuController {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
         menuService.updateMenuStatus(restaurantId,menuId,menuStatusForm);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/menus/image")
+    @ApiOperation(value = "메뉴 이미지 등록", notes = "메뉴 이미지를 업로드하고 경로를 반환합니다.")
+    public ResponseEntity<?> uploadImage(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody MultipartFile imageFile) throws IOException {
+
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
+        String url = imageService.saveFile(
+                imageFile,
+                "/restaurant/"+restaurantId+"/menu/" + UUID.randomUUID().toString().substring(0,7)
+        );
+
+        return ResponseEntity.status(HttpStatus.OK).body(url);
+    }
+
+    @PostMapping("/menus/{menuId}/image")
+    @ApiOperation(value = "메뉴 이미지 변경", notes = "메뉴 이미지를 변경합니다.")
+    public ResponseEntity<?> updateImage(
+            @PathVariable Long menuId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody MultipartFile imageFile) throws IOException {
+
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
+        String url = imageService.saveFile(
+                imageFile,
+                "/restaurant/"+restaurantId+"/menu/" + UUID.randomUUID().toString().substring(0,7)
+        );
+
+        menuService.updateImage(restaurantId,menuId,url);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping("/menus/{menuId}")
+    @ApiOperation(value = "메뉴 삭제", notes = "점주 본인 매장의 메뉴를 삭제합니다.")
+    public ResponseEntity<?> deleteMenu(
+            @PathVariable Long menuId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
+        menuService.deleteMenu(restaurantId,menuId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

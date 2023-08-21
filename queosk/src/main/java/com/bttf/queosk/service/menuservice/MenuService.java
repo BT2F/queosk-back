@@ -6,7 +6,6 @@ import com.bttf.queosk.dto.menudto.MenuStatusForm;
 import com.bttf.queosk.dto.menudto.MenuUpdateForm;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.mapper.menumapper.MenuDtoMapper;
 import com.bttf.queosk.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +37,7 @@ public class MenuService {
 
     public List<MenuDto> getMenu(Long restaurantId) {
         List<Menu> menus = menuRepository.findByRestaurantId(restaurantId);
-        if(menus.isEmpty()){
+        if (menus.isEmpty()) {
             throw new CustomException(MENU_NOT_FOUND);
         }
         List<MenuDto> menuDtos = new ArrayList<>();
@@ -51,11 +50,8 @@ public class MenuService {
 
     @Transactional
     public void updateMenuInfo(Long restaurantId, Long menuId, MenuUpdateForm menuUpdateForm) {
-        Menu menu = menuRepository.findById(menuId)
-                .orElseThrow(()->new CustomException(MENU_NOT_FOUND));
-        if(!menu.getRestaurantId().equals(restaurantId)){
-            throw new CustomException(ErrorCode.UNAUTHORIZED_SERVICE);
-        }
+        Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
+                .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
 
         menu.setName(menuUpdateForm.getName());
         menu.setPrice(menuUpdateForm.getPrice());
@@ -63,15 +59,32 @@ public class MenuService {
         menuRepository.save(menu);
     }
 
+    @Transactional
     public void updateMenuStatus(Long restaurantId, Long menuId, MenuStatusForm menuStatusForm) {
-        Menu menu = menuRepository.findById(menuId)
-                .orElseThrow(()->new CustomException(MENU_NOT_FOUND));
-        if(!menu.getRestaurantId().equals(restaurantId)){
-            throw new CustomException(ErrorCode.UNAUTHORIZED_SERVICE);
-        }
+        Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
+                .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
 
         menu.setStatus(menuStatusForm.getStatus());
 
         menuRepository.save(menu);
+    }
+
+    @Transactional
+    public void updateImage(Long restaurantId, Long menuId, String url) {
+
+        Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
+                .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
+
+        menu.setImageUrl(url);
+
+        menuRepository.save(menu);
+    }
+
+    @Transactional
+    public void deleteMenu(Long restaurantId, Long menuId) {
+        Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
+                .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
+
+        menuRepository.delete(menu);
     }
 }
