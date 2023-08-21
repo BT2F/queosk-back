@@ -3,6 +3,7 @@ package com.bttf.queosk.controller;
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.menudto.MenuCreationForm;
 import com.bttf.queosk.dto.menudto.MenuDto;
+import com.bttf.queosk.dto.menudto.MenuStatusForm;
 import com.bttf.queosk.dto.menudto.MenuUpdateForm;
 import com.bttf.queosk.service.menuservice.MenuService;
 import io.swagger.annotations.Api;
@@ -58,6 +59,20 @@ public class MenuController {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
         menuService.updateMenuInfo(restaurantId,menuId,menuUpdateForm);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PutMapping("/menus/{menuId}/status")
+    @ApiOperation(value = "식당 메뉴 주문가능여부 수정", notes = "점주가 본인 식당의 메뉴상태를 수정합니다.")
+    public ResponseEntity<?> updateMenuStatus(
+            @PathVariable Long menuId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody MenuStatusForm menuStatusForm){
+
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
+        menuService.updateMenuStatus(restaurantId,menuId,menuStatusForm);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

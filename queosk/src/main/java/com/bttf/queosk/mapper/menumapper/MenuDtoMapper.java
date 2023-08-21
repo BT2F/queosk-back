@@ -15,5 +15,6 @@ public interface MenuDtoMapper {
     @Mapping(source = "menu.price", target = "price")
     @Mapping(source = "menu.restaurantId", target = "restaurantId")
     @Mapping(source = "menu.id", target = "id")
-    MenuDto CreateMenuToMenu(Menu menu);
+    @Mapping(source = "menu.status", target = "status")
+    MenuDto MenuToMenuDto(Menu menu);
 }

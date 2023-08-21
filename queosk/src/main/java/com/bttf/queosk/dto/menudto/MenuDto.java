@@ -1,5 +1,6 @@
 package com.bttf.queosk.dto.menudto;
 
+import com.bttf.queosk.enumerate.MenuStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,4 +16,5 @@ public class MenuDto {
     private String name;
     private String imageUrl;
     private Long price;
+    private MenuStatus status;
 }
