@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.UUID;
 
 import static com.bttf.queosk.enumerate.LoginType.KAKAO;
 
@@ -132,7 +133,7 @@ public class UserController {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
 
-        String url = imageService.saveFile(imageFile, "user/" + userId);
+        String url = imageService.saveFile(imageFile, "user/" + UUID.randomUUID().toString().substring(0, 6));
 
         userInfoService.updateImageUrl(userId, url);
 
