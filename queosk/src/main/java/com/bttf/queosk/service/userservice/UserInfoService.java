@@ -121,18 +121,16 @@ public class UserInfoService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
-        String root = "static/verification-";
-
         if (user.getStatus().equals(DELETED)) {
-            return root + "fail-deleted.html";
+            return "탈퇴한 회원입니다.";
         } else if (user.getStatus().equals(VERIFIED)) {
-            return root + "already-done.html";
+            return "이미 인증이 완료된 회원입니다.";
         }
 
         user.setUserStatus(VERIFIED);
 
         userRepository.save(user);
 
-        return root + "success.html";
+        return "인증이 완료되었습니다.";
     }
 }
