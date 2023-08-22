@@ -3,7 +3,6 @@ package com.bttf.queosk.controller;
 import com.bttf.queosk.dto.restaurantdto.GetCoordRestaurantInfoForm;
 import com.bttf.queosk.dto.restaurantdto.*;
 
-import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.service.refreshtokenservice.RefreshTokenService;
 import com.bttf.queosk.service.restaurantservice.RestaurantService;
 import io.swagger.annotations.Api;
@@ -17,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.awt.print.Pageable;
 import java.io.IOException;
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -108,5 +105,13 @@ public class RestaurantController {
     public ResponseEntity<?> getCoordRestaurantInfo(@RequestBody GetCoordRestaurantInfoForm getCoordRestaurantInfoForm) {
         Page<RestaurantDto> restaurantPage = restaurantService.getCoordRestaurantInfoForm(getCoordRestaurantInfoForm);
         return ResponseEntity.ok().body(restaurantPage);
+    }
+
+    @GetMapping("/{restaurantId}")
+    @ApiOperation(value = "매장 상세 보기", notes = "해당하는 매장의 정보와 메뉴를 제공합니댜.")
+    public ResponseEntity<?> getRestaurantInfoAndMenu(@PathVariable(name = "restaurantId") Long restaurantId) {
+        GetRestaurantInfoMenuDto restaurantInfoMenu = restaurantService.getRestaurantInfoAndMenu(restaurantId);
+
+        return ResponseEntity.ok().body(restaurantInfoMenu);
     }
 }
