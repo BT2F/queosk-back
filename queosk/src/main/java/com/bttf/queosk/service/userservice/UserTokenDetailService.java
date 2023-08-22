@@ -1,8 +1,10 @@
 package com.bttf.queosk.service.userservice;
 
 
+import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
+import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +22,7 @@ import java.util.List;
 public class UserTokenDetailService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final RestaurantRepository restaurantRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -31,6 +34,19 @@ public class UserTokenDetailService implements UserDetailsService {
         return User.builder()
                 .username(userEntity.getEmail())
                 .password(userEntity.getPassword())
+                .authorities(authorities)
+                .build();
+    }
+
+    public UserDetails loadRestaurantByUsername(String email) throws UsernameNotFoundException {
+        Restaurant restaurant = restaurantRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
+
+        List<GrantedAuthority> authorities = new ArrayList<>(restaurant.getUserRole().getAuthorities());
+
+        return User.builder()
+                .username(restaurant.getEmail())
+                .password(restaurant.getPassword())
                 .authorities(authorities)
                 .build();
     }

@@ -2,6 +2,7 @@ package com.bttf.queosk.config.springsecurity;
 
 import com.bttf.queosk.dto.tokendto.TokenDto;
 import com.bttf.queosk.enumerate.UserRole;
+import com.bttf.queosk.service.userservice.UserTokenDetailService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +22,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.bttf.queosk.enumerate.UserRole.ROLE_USER;
+import static com.bttf.queosk.enumerate.UserRole.valueOf;
+
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
 
-    private final UserDetailsService userDetailsService;
+    private final UserTokenDetailService userDetailsService;
 
     @Value("${jwt.tokenIssuer}")
     private String issuer;
@@ -54,7 +57,7 @@ public class JwtTokenProvider {
 
     public String generateRefreshToken() {
         return Jwts.builder()
-                .claim("userRole", UserRole.ROLE_USER.getRoleName())
+                .claim("userRole", ROLE_USER.getRoleName())
                 .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 //유효기간 15일 (24시간 *15 )
@@ -111,9 +114,13 @@ public class JwtTokenProvider {
                 .getBody();
 
         String email = claims.get("email", String.class);
-        UserRole userRole = UserRole.valueOf(claims.get("userRole", String.class));
+        UserRole userRole = valueOf(claims.get("userRole", String.class));
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        // ROLE에 따라 다른 메서드 호출
+        UserDetails userDetails =
+                userRole.getRoleName().equals(ROLE_USER.toString()) ?
+                        userDetailsService.loadUserByUsername(email) :
+                        userDetailsService.loadRestaurantByUsername(email);
 
         List<GrantedAuthority> authorities = new ArrayList<>(userDetails.getAuthorities());
         authorities.addAll(userRole.getAuthorities()); // 추가된 역할 권한
