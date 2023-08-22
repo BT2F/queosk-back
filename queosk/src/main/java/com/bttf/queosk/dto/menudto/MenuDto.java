@@ -6,17 +6,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
-
 @Getter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class CreateMenuForm {
-    @NotEmpty(message = "이름은 비워둘 수 없습니다.")
+@NoArgsConstructor
+@Builder
+public class MenuDto {
+    private Long id;
+    private Long restaurantId;
     private String name;
     private String imageUrl;
-    @NotEmpty(message = "가격은 비워둘 수 없습니다.")
     private Long price;
     private MenuStatus status;
 }

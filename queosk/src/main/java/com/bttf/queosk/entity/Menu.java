@@ -21,9 +21,7 @@ public class Menu extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;
+    private Long restaurantId;
 
     private String name;
 
@@ -33,4 +31,20 @@ public class Menu extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private MenuStatus status;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public void setStatus(MenuStatus status) {
+        this.status = status;
+    }
 }
