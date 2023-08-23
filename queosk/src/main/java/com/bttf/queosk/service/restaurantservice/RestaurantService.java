@@ -112,6 +112,9 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository
                 .findById(restaurantId)
                 .orElseThrow(() -> new CustomException(INVALID_USER_ID));
+        if (restaurant.getImageUrl() != null) {
+            imageService.deleteFile(restaurant.getImageUrl());
+        }
         restaurant.updateImage(imageService.saveFile(image, "restaurant/" + restaurantId));
         restaurantRepository.save(restaurant);
     }
