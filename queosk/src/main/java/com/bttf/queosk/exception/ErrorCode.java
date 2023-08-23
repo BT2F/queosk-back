@@ -29,6 +29,9 @@ public enum ErrorCode {
     // Table 관련 Exception
     INVALID_TABLE(HttpStatus.NOT_FOUND, "존재하지 않는 테이블입니다."),
 
+    // Wating 관련 Exception
+    INVALID_WATING(HttpStatus.NOT_FOUND, "존재하지 않는 웨이팅입니다."),
+
     // Restaurant 관련 Exception
     INVALID_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 상점입니다."),
     OWNER_NAME_NOT_MATCH(HttpStatus.BAD_REQUEST, "매장 계정 사용자 이름이 일치 하지 않습니다."),

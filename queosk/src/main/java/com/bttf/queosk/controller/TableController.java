@@ -1,6 +1,6 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.tableDto.TableForm;
+import com.bttf.queosk.dto.tabledto.TableForm;
 import com.bttf.queosk.dto.userdto.UserDto;
 import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.service.tableservice.TableService;

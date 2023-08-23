@@ -2,8 +2,8 @@ package com.bttf.queosk.service.tableservice;
 
 
 import com.bttf.queosk.enumerate.TableStatus;
-import com.bttf.queosk.dto.tableDto.TableDto;
-import com.bttf.queosk.dto.tableDto.TableForm;
+import com.bttf.queosk.dto.tabledto.TableDto;
+import com.bttf.queosk.dto.tabledto.TableForm;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.mapper.tablemapper.TableMapper;
@@ -75,13 +75,13 @@ public class TableService {
 
     public List<TableForm> getTableList(Long restaurantId) {
 
-        List<TableDto> tableDtos = tableRepository.findByRestaurantId(restaurantId)
+        List<TableDto> tableDto = tableRepository.findByRestaurantId(restaurantId)
                 .stream()
                 .map(TableDto::of)
                 .collect(Collectors.toList());
 
         List<TableForm> tableForms = new ArrayList<>();
-        for (TableDto dto : tableDtos) {
+        for (TableDto dto : tableDto) {
             TableForm tableForm = TableMapper.INSTANCE.tableDtoToTableForm(dto);
             tableForms.add(tableForm);
         }

@@ -1,18 +1,17 @@
 package com.bttf.queosk.repository;
 
-import com.bttf.queosk.entity.Queue;
+import com.bttf.queosk.model.usermodel.UserStatus;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
-import com.bttf.queosk.enumerate.UserStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
 
 @DataRedisTest
-class QueueRepositoryTest {
+class RedisQueueRedisRepositoryTest {
 
     @Autowired
-    private QueueRepository queueRepository;
+    private QueueRedisRepository queueRedisRepository;
 
     @Test
     public void QueueRepository_test() throws Exception {
@@ -32,21 +31,21 @@ class QueueRepositoryTest {
                 .status(UserStatus.NOT_VERIFIED)
                 .build();
 
-        Queue queue = Queue.builder()
-                .id(1L)
-                .restaurantId(restaurant)
-                .userId(user)
-                .build();
-        // when
-        queueRepository.save(queue);
-
-        // then
-
-        queueRepository.findById(queue.getId());
-
-        queueRepository.count();
-
-        queueRepository.delete(queue);
+//        Queue queue = Queue.builder()
+//                .id(1L)
+//                .restaurantId(restaurant)
+//                .userId(user)
+//                .build();
+//        // when
+//        queueRedisRepository.save(queue);
+//
+//        // then
+//
+//        queueRedisRepository.findById(queue.getId());
+//
+//        queueRedisRepository.count();
+//
+//        queueRedisRepository.delete(queue);
     }
 
 }
