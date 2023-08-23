@@ -1,5 +1,8 @@
 package com.bttf.queosk.service.restaurantservice;
 
+import com.bttf.queosk.dto.menudto.MenuDto;
+import com.bttf.queosk.entity.Menu;
+import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.service.emailsender.EmailSender;
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
 import com.bttf.queosk.enumerate.OperationStatus;
@@ -14,6 +17,7 @@ import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.service.imageservice.ImageService;
 import com.bttf.queosk.service.kakaoservice.KakaoGeoAddressService;
+import com.bttf.queosk.service.menuservice.MenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.UUID;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
@@ -42,6 +47,7 @@ public class RestaurantService {
     private final KakaoGeoAddressService kakaoGeoAddressService;
     private final ImageService imageService;
     private final EmailSender emailSender;
+    private final MenuRepository menuRepository;
 
     @Transactional
     public void signUp(RestaurantSignUpForm restaurantSignUpForm) throws Exception {
@@ -204,5 +210,12 @@ public class RestaurantService {
         double y = getCoordRestaurantInfoForm.getY();
 
         return restaurantRepository.getRestaurantListByDistance(kakaoGeoAddressService.coordinateToZone(x, y), x, y, pageable).map(RestaurantDto::of);
+    }
+
+    public GetRestaurantInfoMenuDto getRestaurantInfoAndMenu(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+        List<Menu> menu = menuRepository.findByRestaurantId(restaurantId);
+
+        return GetRestaurantInfoMenuDto.of(restaurant, menu);
     }
 }
