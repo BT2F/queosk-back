@@ -112,7 +112,12 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository
                 .findById(restaurantId)
                 .orElseThrow(() -> new CustomException(INVALID_USER_ID));
+
+        if (restaurant.getImageUrl() != null) {
+            imageService.deleteFile(restaurant.getImageUrl());
+        }
         restaurant.updateImage(imageService.saveFile(image, "restaurant/" + UUID.randomUUID().toString().substring(0, 6)));
+      
         restaurantRepository.save(restaurant);
     }
 
