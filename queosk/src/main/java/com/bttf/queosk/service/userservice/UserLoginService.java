@@ -14,6 +14,7 @@ import com.bttf.queosk.mapper.usermapper.UserSignInMapper;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
 import com.bttf.queosk.service.emailsender.EmailSender;
+import com.bttf.queosk.service.queueservice.FcmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class UserLoginService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final EmailSender emailSender;
+    private final FcmService fcmService;
 
     @Transactional
     public void createUser(UserSignUpForm userSignUpForm) {
@@ -93,6 +95,9 @@ public class UserLoginService {
         String accessToken = jwtTokenProvider.generateAccessToken(
                 TokenDtoMapper.INSTANCE.userToTokenDto(user)
         );
+
+        // 알림 발송용 redis 토큰 및 이메일 저장
+        fcmService.saveToken(userSignInForm.getEmail(), accessToken);
 
         //리프레시 토큰 발행
         String refreshToken = jwtTokenProvider.generateRefreshToken();
