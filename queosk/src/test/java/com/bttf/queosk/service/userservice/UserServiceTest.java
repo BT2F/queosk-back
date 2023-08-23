@@ -3,14 +3,14 @@ package com.bttf.queosk.service.userservice;
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.tokendto.TokenDto;
 import com.bttf.queosk.dto.userdto.*;
-import com.bttf.queosk.repository.KakaoAuthRepository;
-import com.bttf.queosk.service.emailsender.EmailSender;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
+import com.bttf.queosk.repository.KakaoAuthRepository;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
+import com.bttf.queosk.service.emailsender.EmailSender;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
+import static com.bttf.queosk.enumerate.LoginType.NORMAL;
 import static com.bttf.queosk.enumerate.UserStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -270,7 +271,8 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(CustomException.class, () -> userInfoService.editUserInformation(userId, userEditForm));
+        assertThrows(CustomException.class, () ->
+                userInfoService.editUserInformation(userId, userEditForm));
         verify(userRepository, times(1)).findById(userId);
         verify(userRepository, never()).save(any(User.class));
     }
@@ -283,7 +285,11 @@ class UserServiceTest {
         String existingPassword = "oldPassword";
         String newPassword = "newPassword";
 
-        User user = User.builder().id(userId).password("encodedOldPassword").build();
+        User user = User.builder()
+                .id(userId)
+                .loginType(NORMAL)
+                .password("encodedOldPassword")
+                .build();
 
         UserPasswordChangeForm userPasswordChangeForm =
                 UserPasswordChangeForm.builder()
@@ -314,7 +320,11 @@ class UserServiceTest {
         String existingPassword = "invalidOldPassword";
         String newPassword = "newPassword";
 
-        User user = User.builder().id(userId).password("encodedOldPassword").build();
+        User user = User.builder()
+                .id(userId)
+                .loginType(NORMAL)
+                .password("encodedOldPassword")
+                .build();
 
         UserPasswordChangeForm userPasswordChangeForm =
                 UserPasswordChangeForm.builder()
@@ -364,7 +374,12 @@ class UserServiceTest {
     @DisplayName("회원비밀번호 초기화 테스트 - 성공")
     public void testResetUserPassword_Success() {
         // Given
-        User user = User.builder().email("user@example.com").nickName("testuser").build();
+        User user = User.builder()
+                .email("user@example.com")
+                .nickName("testuser")
+                .loginType(NORMAL)
+                .build();
+
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
@@ -396,11 +411,13 @@ class UserServiceTest {
         User user = User.builder()
                 .email("user@example.com")
                 .nickName("testuser")
+                .loginType(NORMAL)
                 .build();
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
         // When, Then
-        assertThatThrownBy(() -> userInfoService.resetUserPassword("user@example.com", "wrongnick"))
+        assertThatThrownBy(() ->
+                userInfoService.resetUserPassword("user@example.com", "wrongnick"))
                 .isInstanceOf(CustomException.class);
         verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
         verify(userRepository, never()).save(any());
@@ -436,11 +453,11 @@ class UserServiceTest {
     @DisplayName("회원탈퇴 테스트 - 성공")
     public void testWithdrawUser_Success() {
         // Given
-        User user =
-                User.builder()
-                        .id(1L)
-                        .password(passwordEncoder.encode("correctPassword"))
-                        .build();
+        User user = User.builder()
+                .id(1L)
+                .loginType(NORMAL)
+                .password(passwordEncoder.encode("correctPassword"))
+                .build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("correctPassword", user.getPassword()))
                 .thenReturn(true);
@@ -490,7 +507,7 @@ class UserServiceTest {
 
         // Then
         verify(userRepository).save(user);
-        assertThat(result).isEqualTo("static/verification-success.html");
+        assertThat(result).isEqualTo("인증이 완료되었습니다.");
     }
 
     @Test
@@ -517,7 +534,7 @@ class UserServiceTest {
 
         // Then
         verify(userRepository, never()).save(any());
-        assertThat(result).isEqualTo("static/verification-fail-deleted.html");
+        assertThat(result).isEqualTo("탈퇴한 회원입니다.");
     }
 
     @Test
@@ -532,6 +549,6 @@ class UserServiceTest {
 
         // Then
         verify(userRepository, never()).save(any());
-        assertThat(result).isEqualTo("static/verification-already-done.html");
+        assertThat(result).isEqualTo("이미 인증이 완료된 회원입니다.");
     }
 }

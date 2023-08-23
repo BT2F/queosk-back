@@ -1,6 +1,7 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
+import com.bttf.queosk.dto.UserImageUrlDto;
 import com.bttf.queosk.dto.userdto.*;
 import com.bttf.queosk.service.imageservice.ImageService;
 import com.bttf.queosk.service.kakaoservice.KakaoLoginService;
@@ -10,11 +11,8 @@ import com.bttf.queosk.service.userservice.UserLoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -116,7 +114,7 @@ public class UserController {
 
         UserDto userDto = userLoginService.getUserFromToken(token);
 
-        if(userDto.getLoginType().equals(KAKAO.toString())){
+        if (userDto.getLoginType().equals(KAKAO.toString())) {
             kakaoLoginService.getKakaoLogout(userDto.getEmail());
         }
 
@@ -125,11 +123,25 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @PostMapping("/signup/image")
+    @ApiOperation(value = "프로필 업로드 및 경로 가져오기(회원가입 이전)",
+            notes = "사용자의 새로운 프로필 사진을 이미지서버에 업로드 하고 imageUrl을 가져옵니다.")
+    public ResponseEntity<?> uploadImageAndGetUrl(
+            @RequestBody MultipartFile image) throws IOException {
+
+        String url = imageService.saveFile(image, "user/" + UUID.randomUUID()
+                .toString().substring(0, 6));
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(UserImageUrlDto.builder().imagePath(url));
+    }
+
     @PutMapping("/image")
-    @ApiOperation(value = "프로필 이미지 업로드", notes = "사용자의 프로필 사진을 이미지서버에 업로드 하고 URL을 사용자정보에 저장합니다.")
+    @ApiOperation(value = "프로필 이미지 수정",
+            notes = "사용자의 새로운 프로필 사진을 이미지서버에 업로드 하고 사용자 imageUrl을 교체합니다.")
     public ResponseEntity<?> uploadImage(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody MultipartFile imageFile) throws IOException {
+            @RequestBody MultipartFile image) throws IOException {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
 
@@ -149,17 +161,5 @@ public class UserController {
         userInfoService.withdrawUser(userId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    //사용자가 이메일 내 링크로 호출하므로 GET 메서드가 호출됨. 따라서 GetMapping 으로 표기.
-    @GetMapping("/{id}/verification")
-    @ApiOperation(value = "사용자 회원인증", notes = "사용자 상태를 '인증' 상태로 변경합니다.")
-    public ResponseEntity<Resource> verifyUser(@PathVariable Long id) {
-
-        Resource resource = new ClassPathResource(userInfoService.verifyUser(id));
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.TEXT_HTML)
-                .body(resource);
     }
 }
