@@ -28,10 +28,12 @@ public enum ErrorCode {
 
     // Table 관련 Exception
     INVALID_TABLE(HttpStatus.NOT_FOUND, "존재하지 않는 테이블입니다."),
+    TABLE_IS_USING(HttpStatus.BAD_REQUEST, "테이블에 이미 선점 되었습니다."),
 
     // Restaurant 관련 Exception
     INVALID_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 상점입니다."),
     OWNER_NAME_NOT_MATCH(HttpStatus.BAD_REQUEST, "매장 계정 사용자 이름이 일치 하지 않습니다."),
+    RESTAURANT_CLOSED(HttpStatus.BAD_REQUEST, "현재 매장이 운영 전입니다."),
 
     // Cart 관련 Exception
     CART_IS_EMPTY(HttpStatus.NOT_FOUND, "장바구니가 비어있습니다."),
@@ -41,8 +43,12 @@ public enum ErrorCode {
 
     // Menu 관련 Exception
     MENU_NOT_FOUND(HttpStatus.NOT_FOUND,"아직 해당 식당에 대한 메뉴가 등록되지 않습니다."),
-    UNAUTHORIZED_SERVICE(HttpStatus.BAD_REQUEST, "본인매장의 메뉴만 수정할 수 있습니다.");
+    UNAUTHORIZED_SERVICE(HttpStatus.BAD_REQUEST, "본인매장의 메뉴만 수정할 수 있습니다."),
+    MENU_SOLD_OUT(HttpStatus.BAD_REQUEST, "해당 매뉴가 매진되었습니다."),
 
+    // Order 관련 Exception
+    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 주문이 등록되지 않았습니다."),
+    ORDER_RESTAURANT_NOT_MATCH(HttpStatus.BAD_REQUEST, "해당 주문은 해당 매장 에서만 열람 및 수정할 수 있습니다.");
 
     private final HttpStatus status;
     private final String message;
