@@ -43,14 +43,14 @@ class SettlementRepositoryTest {
         Table table = Table.builder()
                 .id(1L)
                 .status(OPEN)
-//                .restaurant(restaurant)
+                .restaurantId(1L)
                 .build();
 
         Menu menu = Menu.builder()
                 .id(1L)
                 .name("test Menu")
                 .price(20000L)
-                .restaurant(restaurant)
+                .restaurantId(1L)
                 .build();
 
         Order order = Order.builder()

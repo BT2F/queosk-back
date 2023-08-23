@@ -1,5 +1,8 @@
 package com.bttf.queosk.service.restaurantservice;
 
+import com.bttf.queosk.dto.menudto.MenuDto;
+import com.bttf.queosk.entity.Menu;
+import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.service.emailsender.EmailSender;
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
 import com.bttf.queosk.enumerate.OperationStatus;
@@ -7,16 +10,19 @@ import com.bttf.queosk.dto.restaurantdto.*;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.mapper.RestaurantDtoMapper;
 import com.bttf.queosk.mapper.RestaurantSignInMapper;
 import com.bttf.queosk.mapper.usermapper.TokenDtoMapper;
-import com.bttf.queosk.model.usermodel.UserRole;
+import com.bttf.queosk.enumerate.UserRole;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.service.imageservice.ImageService;
 import com.bttf.queosk.service.kakaoservice.KakaoGeoAddressService;
+import com.bttf.queosk.service.menuservice.MenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.UUID;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
@@ -40,12 +47,17 @@ public class RestaurantService {
     private final KakaoGeoAddressService kakaoGeoAddressService;
     private final ImageService imageService;
     private final EmailSender emailSender;
+    private final MenuRepository menuRepository;
 
     @Transactional
     public void signUp(RestaurantSignUpForm restaurantSignUpForm) throws Exception {
         if (restaurantRepository.existsByEmail(restaurantSignUpForm.getEmail())) {
             throw new CustomException(EXISTING_USER);
         }
+
+        double x = kakaoGeoAddressService.addressToCoordinate(restaurantSignUpForm.getAddress(), "x");
+        double y = kakaoGeoAddressService.addressToCoordinate(restaurantSignUpForm.getAddress(), "y");
+
         Restaurant restaurant =
                 Restaurant.builder()
                         .ownerId(restaurantSignUpForm.getOwnerId())
@@ -60,11 +72,12 @@ public class RestaurantService {
                                 new SimpleDateFormat("yyyyMMdd")
                                         .parse(restaurantSignUpForm.getBusinessStartDate()))
                         .address(restaurantSignUpForm.getAddress())
-                        .latitude(kakaoGeoAddressService.addressToCoordinate(restaurantSignUpForm.getAddress(), "y"))
-                        .longitude(kakaoGeoAddressService.addressToCoordinate(restaurantSignUpForm.getAddress(), "x"))
+                        .latitude(y)
+                        .longitude(x)
+                        .region(kakaoGeoAddressService.coordinateToZone(x, y))
                         .operationStatus(OperationStatus.CLOSED)
                         .isDeleted(false)
-                        .userRole(UserRole.ROLE_ADMIN)
+                        .userRole(UserRole.ROLE_RESTAURANT)
                         .build();
 
 
@@ -88,8 +101,8 @@ public class RestaurantService {
 
         refreshTokenRepository.save(
                 RefreshToken.builder()
-                        .user_email(restaurant.getEmail())
-                        .refresh_token(refreshToken)
+                        .email(restaurant.getEmail())
+                        .token(refreshToken)
                         .build()
         );
 
@@ -105,7 +118,12 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository
                 .findById(restaurantId)
                 .orElseThrow(() -> new CustomException(INVALID_USER_ID));
-        restaurant.updateImage(imageService.saveFile(image, "restaurant/" + restaurantId));
+
+        if (restaurant.getImageUrl() != null) {
+            imageService.deleteFile(restaurant.getImageUrl());
+        }
+        restaurant.updateImage(imageService.saveFile(image, "restaurant/" + UUID.randomUUID().toString().substring(0, 6)));
+      
         restaurantRepository.save(restaurant);
     }
 
@@ -114,7 +132,7 @@ public class RestaurantService {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
-        return RestaurantDtoMapper.MAPPER.toDto(restaurant);
+        return RestaurantDto.of(restaurant);
     }
 
     @Transactional
@@ -155,19 +173,49 @@ public class RestaurantService {
     }
 
     @Transactional
-    public RestaurantDto updateRestaurantInfo(String token, UpdateRestorantInfoForm updateRestorantInfoForm) {
+    public void deleteRestaurant(String token) {
+        Restaurant restaurant = restaurantRepository
+                .findById(jwtTokenProvider.getIdFromToken(token))
+                .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+        restaurant.delete();
+        restaurantRepository.save(restaurant);
+
+    }
+
+    @Transactional
+    public RestaurantDto updateRestaurantInfo(String token, UpdateRestaurantInfoForm updateRestaurantInfoForm) {
         Restaurant restaurant = restaurantRepository
                 .findById(jwtTokenProvider.getIdFromToken(token))
                 .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
 
-        restaurant.updateRestaurantInfo(updateRestorantInfoForm);
+        restaurant.updateRestaurantInfo(updateRestaurantInfoForm);
 
         restaurant.setGeoPoint(
                 kakaoGeoAddressService.addressToCoordinate(restaurant.getAddress(), "x"),
                 kakaoGeoAddressService.addressToCoordinate(restaurant.getAddress(), "y"));
 
+        double x = kakaoGeoAddressService.addressToCoordinate(updateRestaurantInfoForm.getAddress(), "x");
+        double y = kakaoGeoAddressService.addressToCoordinate(updateRestaurantInfoForm.getAddress(), "y");
+
+        restaurant.setRegion(kakaoGeoAddressService.coordinateToZone(x, y));
+
         restaurantRepository.save(restaurant);
 
         return RestaurantDto.of(restaurant);
+    }
+
+    public Page<RestaurantDto> getCoordRestaurantInfoForm(GetCoordRestaurantInfoForm getCoordRestaurantInfoForm) {
+        Pageable pageable = PageRequest.of(getCoordRestaurantInfoForm.getPage(), getCoordRestaurantInfoForm.getSize());
+        double x = getCoordRestaurantInfoForm.getX();
+        double y = getCoordRestaurantInfoForm.getY();
+
+        return restaurantRepository.getRestaurantListByDistance(kakaoGeoAddressService.coordinateToZone(x, y), x, y, pageable).map(RestaurantDto::of);
+    }
+
+    public GetRestaurantInfoMenuDto getRestaurantInfoAndMenu(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+        List<Menu> menu = menuRepository.findByRestaurantId(restaurantId);
+
+        return GetRestaurantInfoMenuDto.of(restaurant, menu);
     }
 }

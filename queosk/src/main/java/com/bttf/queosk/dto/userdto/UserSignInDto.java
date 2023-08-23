@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserSignInDto {
+    private Long id;
     private String accessToken;
     private String refreshToken;
     private String email;
     private String nickname;
     private String imageUrl;
+    private String loginType;
 }

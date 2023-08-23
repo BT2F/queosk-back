@@ -1,6 +1,5 @@
 package com.bttf.queosk.service.userservice;
 
-import com.bttf.queosk.service.emailsender.EmailSender;
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
 import com.bttf.queosk.dto.tokendto.TokenDto;
 import com.bttf.queosk.dto.userdto.*;
@@ -8,10 +7,13 @@ import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
+import com.bttf.queosk.repository.KakaoAuthRepository;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
+import com.bttf.queosk.service.emailsender.EmailSender;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -19,7 +21,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
-import static com.bttf.queosk.model.usermodel.UserStatus.*;
+import static com.bttf.queosk.enumerate.LoginType.NORMAL;
+import static com.bttf.queosk.enumerate.UserStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -37,19 +40,26 @@ class UserServiceTest {
     private JwtTokenProvider jwtTokenProvider;
     @Mock
     private EmailSender emailSender;
+    @Mock
+    private KakaoAuthRepository kakaoAuthRepository;
 
-    private UserService userService;
+    private UserLoginService userLoginService;
+    private UserInfoService userInfoService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        userService = new UserServiceImpl(
+        userLoginService = new UserLoginService(
                 userRepository, refreshTokenRepository,
                 passwordEncoder, jwtTokenProvider, emailSender);
+        userInfoService = new UserInfoService(
+                userRepository,passwordEncoder,emailSender,
+                refreshTokenRepository,kakaoAuthRepository);
     }
 
     @Test
-    void testCreateUser() {
+    @DisplayName("회원 생성 테스트 - 성공")
+    void testCreateUser_Success() {
         // Given
         UserSignUpForm userSignUpForm = UserSignUpForm.builder()
                 .email("test@example.com")
@@ -64,7 +74,7 @@ class UserServiceTest {
                 .thenReturn(true);
 
         // When
-        userService.createUser(userSignUpForm);
+        userLoginService.createUser(userSignUpForm);
 
         // Then
         verify(userRepository, times(1)).findByEmail(eq("test@example.com"));
@@ -72,7 +82,8 @@ class UserServiceTest {
     }
 
     @Test
-    void testCreateUserWithExistingEmail() {
+    @DisplayName("회원 생성 테스트 - 실패(기존 회원)")
+    void testCreateUser_ExistingEmail() {
         // Given
         UserSignUpForm userSignUpForm =
                 UserSignUpForm.builder()
@@ -83,7 +94,7 @@ class UserServiceTest {
                 .thenReturn(Optional.of(new User()));
 
         // When and Then
-        assertThatThrownBy(() -> userService.createUser(userSignUpForm))
+        assertThatThrownBy(() -> userLoginService.createUser(userSignUpForm))
                 .isInstanceOf(CustomException.class)
                 .hasMessageContaining("이미 가입된 회원입니다.");
 
@@ -92,6 +103,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("회원 로그인 테스트 - 성공")
     void signInUser_Success() {
         // Arrange
         String email = "user@example.com";
@@ -111,7 +123,7 @@ class UserServiceTest {
         when(jwtTokenProvider.generateRefreshToken()).thenReturn(refreshToken);
 
         // Act
-        UserSignInDto result = userService.signInUser(new UserSignInForm(email, password));
+        UserSignInDto result = userLoginService.signInUser(new UserSignInForm(email, password));
 
         // Assert
         assertNotNull(result);
@@ -122,6 +134,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("회원 로그인 테스트 - 실패(잘못된 아이디)")
     void signInUser_InvalidEmail() {
         // Arrange
         String invalidEmail = "invalid@example.com";
@@ -130,11 +143,12 @@ class UserServiceTest {
 
         // Act & Assert
         assertThrows(CustomException.class, () -> {
-            userService.signInUser(new UserSignInForm(invalidEmail, password));
+            userLoginService.signInUser(new UserSignInForm(invalidEmail, password));
         });
     }
 
     @Test
+    @DisplayName("회원 로그인 테스트 - 실패(잘못된 비밀번호)")
     void signInUser_InvalidPassword() {
         // Arrange
         String email = "user@example.com";
@@ -149,18 +163,19 @@ class UserServiceTest {
 
         // Act & Assert
         assertThrows(CustomException.class, () -> {
-            userService.signInUser(new UserSignInForm(email, invalidPassword));
+            userLoginService.signInUser(new UserSignInForm(email, invalidPassword));
         });
     }
 
     @Test
-    public void testCheckDuplication() {
+    @DisplayName("이메일 중복 확인 테스트 - 성공")
+    public void testCheckDuplication_Success() {
         // Given
         String email = "test@example.com";
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
         // When
-        boolean result = userService.checkDuplication(email);
+        boolean result = userLoginService.checkDuplication(email);
 
         // Then
         assertThat(result).isTrue();
@@ -168,7 +183,8 @@ class UserServiceTest {
     }
 
     @Test
-    public void testGetUserFromToken() {
+    @DisplayName("토큰 회원추출 테스트 - 성공")
+    public void testGetUserFromToken_success() {
         // Given
         String token = "testToken";
         Long userId = 1L;
@@ -177,7 +193,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // When
-        UserDto userDto = userService.getUserFromToken(token);
+        UserDto userDto = userLoginService.getUserFromToken(token);
 
         // Then
         assertThat(userDto.getId()).isEqualTo(userId);
@@ -186,7 +202,8 @@ class UserServiceTest {
     }
 
     @Test
-    public void testGetUserFromTokenThrowsExceptionWhenUserNotExists() {
+    @DisplayName("토큰 회원추출 테스트 - 실패(유저 정보 없음)")
+    public void testGetUserFromToken_UserNotExist() {
         // Given
         String token = "testToken";
         Long userId = 1L;
@@ -194,12 +211,13 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(CustomException.class, () -> userService.getUserFromToken(token));
+        assertThrows(CustomException.class, () -> userLoginService.getUserFromToken(token));
         verify(jwtTokenProvider, times(1)).getIdFromToken(token);
         verify(userRepository, times(1)).findById(userId);
     }
 
     @Test
+    @DisplayName("ID로 회원찾기 테스트 - 성공")
     public void testGetUserFromId() {
         // Given
         Long userId = 1L;
@@ -207,7 +225,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // When
-        UserDto userDto = userService.getUserFromId(userId);
+        UserDto userDto = userLoginService.getUserFromId(userId);
 
         // Then
         assertThat(userDto.getId()).isEqualTo(userId);
@@ -215,18 +233,20 @@ class UserServiceTest {
     }
 
     @Test
-    public void testGetUserFromIdThrowsExceptionWhenUserNotExists() {
+    @DisplayName("ID로 회원찾기 테스트 - 실패(유저 정보 없음)")
+    public void testGetUserFromId_UserNotExist() {
         // Given
         Long userId = 1L;
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(CustomException.class, () -> userService.getUserFromId(userId));
+        assertThrows(CustomException.class, () -> userLoginService.getUserFromId(userId));
         verify(userRepository, times(1)).findById(userId);
     }
 
     @Test
-    public void testEditUserInformation() {
+    @DisplayName("회원정보 수정 테스트 - 성공")
+    public void testEditUserInformation_Success() {
         // Given
         Long userId = 1L;
         UserEditForm userEditForm = new UserEditForm();
@@ -234,7 +254,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // When
-        UserDto userDto = userService.editUserInformation(userId, userEditForm);
+        UserDto userDto = userInfoService.editUserInformation(userId, userEditForm);
 
         // Then
         assertThat(userDto.getId()).isEqualTo(userId);
@@ -243,26 +263,33 @@ class UserServiceTest {
     }
 
     @Test
-    public void testEditUserInformationThrowsExceptionWhenUserNotExists() {
+    @DisplayName("회원정보 수정 테스트 - 실패(존재하지 않는 유저)")
+    public void testEditUserInformation_UserNotExist() {
         // Given
         Long userId = 1L;
         UserEditForm userEditForm = new UserEditForm();
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(CustomException.class, () -> userService.editUserInformation(userId, userEditForm));
+        assertThrows(CustomException.class, () ->
+                userInfoService.editUserInformation(userId, userEditForm));
         verify(userRepository, times(1)).findById(userId);
         verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
-    public void testChangeUserPassword() {
+    @DisplayName("회원비밀번호 변경 테스트 - 성공")
+    public void testChangeUserPassword_Success() {
         // Given
         Long userId = 1L;
         String existingPassword = "oldPassword";
         String newPassword = "newPassword";
 
-        User user = User.builder().id(userId).password("encodedOldPassword").build();
+        User user = User.builder()
+                .id(userId)
+                .loginType(NORMAL)
+                .password("encodedOldPassword")
+                .build();
 
         UserPasswordChangeForm userPasswordChangeForm =
                 UserPasswordChangeForm.builder()
@@ -275,7 +302,7 @@ class UserServiceTest {
         when(passwordEncoder.encode(newPassword)).thenReturn("encodedNewPassword");
 
         // When
-        userService.changeUserPassword(userId, userPasswordChangeForm);
+        userInfoService.changeUserPassword(userId, userPasswordChangeForm);
 
         // Then
         verify(userRepository).findById(userId);
@@ -286,13 +313,18 @@ class UserServiceTest {
     }
 
     @Test
-    public void testChangeUserPasswordInvalidExistingPassword() {
+    @DisplayName("회원비밀번호 변경 테스트 - 실패(기존비밀번호오류)")
+    public void testChangeUserPassword_ExistingPassword() {
         // Given
         Long userId = 1L;
         String existingPassword = "invalidOldPassword";
         String newPassword = "newPassword";
 
-        User user = User.builder().id(userId).password("encodedOldPassword").build();
+        User user = User.builder()
+                .id(userId)
+                .loginType(NORMAL)
+                .password("encodedOldPassword")
+                .build();
 
         UserPasswordChangeForm userPasswordChangeForm =
                 UserPasswordChangeForm.builder()
@@ -305,7 +337,7 @@ class UserServiceTest {
         when(passwordEncoder.matches(existingPassword, user.getPassword())).thenReturn(false);
 
         // When & Then
-        assertThatThrownBy(() -> userService.changeUserPassword(userId, userPasswordChangeForm))
+        assertThatThrownBy(() -> userInfoService.changeUserPassword(userId, userPasswordChangeForm))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.PASSWORD_NOT_MATCH.getMessage());
 
@@ -315,7 +347,8 @@ class UserServiceTest {
     }
 
     @Test
-    public void testChangeUserPasswordUserNotFound() {
+    @DisplayName("회원비밀번호 변경 테스트 - 실패(회원정보없음)")
+    public void testChangeUserPassword_UserNotFound() {
         // Given
         Long userId = 1L;
 
@@ -329,7 +362,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When & Then
-        assertThatThrownBy(() -> userService.changeUserPassword(userId, userPasswordChangeForm))
+        assertThatThrownBy(() -> userInfoService.changeUserPassword(userId, userPasswordChangeForm))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.USER_NOT_EXISTS.getMessage());
 
@@ -338,14 +371,20 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("회원비밀번호 초기화 테스트 - 성공")
     public void testResetUserPassword_Success() {
         // Given
-        User user = User.builder().email("user@example.com").nickName("testuser").build();
+        User user = User.builder()
+                .email("user@example.com")
+                .nickName("testuser")
+                .loginType(NORMAL)
+                .build();
+
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
         // When
-        userService.resetUserPassword("user@example.com", "testuser");
+        userInfoService.resetUserPassword("user@example.com", "testuser");
 
         // Then
         verify(emailSender).sendEmail(eq("user@example.com"), anyString(), anyString());
@@ -353,97 +392,97 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("회원비밀번호 초기화 테스트 - 실패(회원정보없음)")
     public void testResetUserPassword_UserNotExists() {
         // Given
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
         // When, Then
-        Assertions.assertThatThrownBy(() -> userService.resetUserPassword("user@example.com", "testuser"))
+        Assertions.assertThatThrownBy(() -> userInfoService.resetUserPassword("user@example.com", "testuser"))
                 .isInstanceOf(CustomException.class);
         verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
         verify(userRepository, never()).save(any());
     }
 
     @Test
+    @DisplayName("회원비밀번호 초기화 테스트 - 실패(닉네임불일치)")
     public void testResetUserPassword_NickNameNotMatch() {
         // Given
         User user = User.builder()
                 .email("user@example.com")
                 .nickName("testuser")
+                .loginType(NORMAL)
                 .build();
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
         // When, Then
-        assertThatThrownBy(() -> userService.resetUserPassword("user@example.com", "wrongnick"))
+        assertThatThrownBy(() ->
+                userInfoService.resetUserPassword("user@example.com", "wrongnick"))
                 .isInstanceOf(CustomException.class);
         verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
         verify(userRepository, never()).save(any());
     }
 
     @Test
+    @DisplayName("회원이미지 업로드 테스트 - 성공")
     public void testUpdateImageUrl_Success() {
         // Given
         User user = User.builder().id(1L).build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
         // When
-        userService.updateImageUrl(1L, "newImageUrl");
+        userInfoService.updateImageUrl(1L, "newImageUrl");
 
         // Then
         verify(userRepository).save(user);
     }
 
     @Test
+    @DisplayName("회원이미지 업로드 테스트 - 성공")
     public void testUpdateImageUrl_UserNotExists() {
         // Given
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // When, Then
-        assertThatThrownBy(() -> userService.updateImageUrl(1L, "newImageUrl"))
+        assertThatThrownBy(() -> userInfoService.updateImageUrl(1L, "newImageUrl"))
                 .isInstanceOf(CustomException.class);
         verify(userRepository, never()).save(any());
     }
 
     @Test
+    @DisplayName("회원탈퇴 테스트 - 성공")
     public void testWithdrawUser_Success() {
         // Given
-        User user =
-                User.builder()
-                        .id(1L)
-                        .password(passwordEncoder.encode("correctPassword"))
-                        .build();
+        User user = User.builder()
+                .id(1L)
+                .loginType(NORMAL)
+                .password(passwordEncoder.encode("correctPassword"))
+                .build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("correctPassword", user.getPassword()))
                 .thenReturn(true);
 
-        UserWithdrawalForm withdrawalForm =
-                UserWithdrawalForm.builder()
-                        .password("correctPassword")
-                        .build();
         // When
-        userService.withdrawUser(1L, withdrawalForm);
+        userInfoService.withdrawUser(1L);
 
         // Then
         verify(userRepository).save(user);
     }
 
     @Test
+    @DisplayName("회원탈퇴 테스트 - 실패(회원정보없음)")
     public void testWithdrawUser_UserNotExists() {
         // Given
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        UserWithdrawalForm withdrawalForm =
-                UserWithdrawalForm.builder()
-                        .password("correctPassword")
-                        .build();
-
         // When, Then
-        assertThatThrownBy(() -> userService.withdrawUser(1L, withdrawalForm))
+        assertThatThrownBy(() -> userInfoService.withdrawUser(1L))
                 .isInstanceOf(CustomException.class);
         verify(userRepository, never()).save(any());
     }
 
     @Test
+    @DisplayName("회원탈퇴 테스트 - 실패(비밀번호오류)")
     public void testWithdrawUser_IncorrectPassword() {
         // Given
         User user = User.builder()
@@ -451,70 +490,65 @@ class UserServiceTest {
                 .password(passwordEncoder.encode("correctPassword"))
                 .build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
         // When, Then
-        UserWithdrawalForm withdrawalForm =
-                UserWithdrawalForm.builder()
-                        .password("correctPassword")
-                        .build();
-
-        assertThatThrownBy(() -> userService.withdrawUser(1L, withdrawalForm))
-                .isInstanceOf(CustomException.class);
-
         verify(userRepository, never()).save(any());
     }
 
     @Test
+    @DisplayName("회원이메일인증 - 성공")
     public void testVerifyUser_Success() {
         // Given
         User user = User.builder().id(1L).status(NOT_VERIFIED).build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
         // When
-        String result = userService.verifyUser(1L);
+        String result = userInfoService.verifyUser(1L);
 
         // Then
         verify(userRepository).save(user);
-        assertThat(result).isEqualTo("static/verification-success.html");
+        assertThat(result).isEqualTo("인증이 완료되었습니다.");
     }
 
     @Test
+    @DisplayName("회원이메일인증 - 실패(회원정보없음)")
     public void testVerifyUser_UserNotExists() {
         // Given
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // When, Then
-        assertThatThrownBy(() -> userService.verifyUser(1L))
+        assertThatThrownBy(() -> userInfoService.verifyUser(1L))
                 .isInstanceOf(CustomException.class);
         verify(userRepository, never()).save(any());
     }
 
     @Test
+    @DisplayName("회원이메일인증 - 실패(탈퇴된회원)")
     public void testVerifyUser_UserDeleted() {
         // Given
         User user = User.builder().id(1L).status(DELETED).build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
         // When
-        String result = userService.verifyUser(1L);
+        String result = userInfoService.verifyUser(1L);
 
         // Then
         verify(userRepository, never()).save(any());
-        assertThat(result).isEqualTo("static/verification-fail-deleted.html");
+        assertThat(result).isEqualTo("탈퇴한 회원입니다.");
     }
 
     @Test
+    @DisplayName("회원이메일인증 - 실패(이미인증된회원)")
     public void testVerifyUser_UserAlreadyVerified() {
         // Given
         User user = User.builder().id(1L).status(VERIFIED).build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
         // When
-        String result = userService.verifyUser(1L);
+        String result = userInfoService.verifyUser(1L);
 
         // Then
         verify(userRepository, never()).save(any());
-        assertThat(result).isEqualTo("static/verification-already-done.html");
+        assertThat(result).isEqualTo("이미 인증이 완료된 회원입니다.");
     }
 }

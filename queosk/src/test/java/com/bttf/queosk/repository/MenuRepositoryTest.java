@@ -38,7 +38,7 @@ class MenuRepositoryTest {
                 .id(1L)
                 .name("test Menu")
                 .price(20000L)
-                .restaurant(savedRestaurant)
+                .restaurantId(1L)
                 .build();
         // when
 
@@ -65,7 +65,7 @@ class MenuRepositoryTest {
                 .id(1L)
                 .name("test Menu")
                 .price(20000L)
-                .restaurant(savedRestaurant)
+                .restaurantId(1L)
                 .build();
 
         menuRepository.save(menu);

@@ -1,13 +1,16 @@
 package com.bttf.queosk.service;
 
+import com.bttf.queosk.dto.menudto.MenuCreationForm;
+import com.bttf.queosk.dto.menudto.MenuDto;
+import com.bttf.queosk.dto.menudto.MenuStatusForm;
+import com.bttf.queosk.dto.restaurantdto.*;
+import com.bttf.queosk.entity.Menu;
+import com.bttf.queosk.enumerate.MenuStatus;
+import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.service.emailsender.EmailSender;
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
 import com.bttf.queosk.enumerate.RestaurantCategory;
-import com.bttf.queosk.dto.restaurantdto.RestaurantSignInDto;
-import com.bttf.queosk.dto.restaurantdto.RestaurantSignInForm;
-import com.bttf.queosk.dto.restaurantdto.RestaurantSignUpForm;
-import com.bttf.queosk.dto.restaurantdto.RestaurantUpdatePasswordForm;
 import com.bttf.queosk.dto.tokendto.TokenDto;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
@@ -17,6 +20,7 @@ import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.service.kakaoservice.KakaoGeoAddressService;
 import com.bttf.queosk.service.imageservice.ImageService;
+import com.bttf.queosk.service.menuservice.MenuService;
 import com.bttf.queosk.service.restaurantservice.RestaurantService;
 import com.google.gson.Gson;
 import org.assertj.core.api.Assertions;
@@ -38,13 +42,18 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
+import static com.bttf.queosk.enumerate.MenuStatus.ON_SALE;
+import static com.bttf.queosk.enumerate.MenuStatus.SOLD_OUT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @Transactional
@@ -70,14 +79,16 @@ class RestaurantServiceTest {
     private ImageService imageService;
     @Mock
     private EmailSender emailSender;
-
+    @Mock
+    private MenuRepository menuRepository;
+    
     private MockMvc mockMvc;
 
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(restaurantController).build();
         restaurantService = new RestaurantService(restaurantRepository, refreshTokenRepository,
-                passwordEncoder, jwtTokenProvider, kakaoGeoAddressService, imageService, emailSender);
+                passwordEncoder, jwtTokenProvider, kakaoGeoAddressService, imageService, emailSender, menuRepository);
     }
 
     @DisplayName("매장 생성 테스트")
@@ -282,5 +293,69 @@ class RestaurantServiceTest {
                 .isInstanceOf(CustomException.class);
         verify(emailSender, never()).sendEmail(anyString(), anyString(), anyString());
         verify(restaurantRepository, never()).save(any());
+    }
+
+    @Test
+    public void testDeleteRestaurant() throws Exception {
+        // Given
+        String accessToken = "accessToken";
+        String refreshToken = "refreshToken";
+        Restaurant restaurant = Restaurant.builder()
+                .email("user@example.com")
+                .ownerName("testuser")
+                .build();
+        when(jwtTokenProvider.getIdFromToken(accessToken)).thenReturn(restaurant.getId());
+        when(restaurantRepository.findById(restaurant.getId())).thenReturn(Optional.of(restaurant));
+        // when
+        restaurantService.deleteRestaurant(accessToken);
+
+        // then
+        assertThat(restaurant.getIsDeleted()).isTrue();
+    }
+    
+    @Test
+    public void testGetRestaurantInfoAndMenu_success() throws Exception {
+
+        Long restaurantId = 1L;
+        Restaurant restaurant = Restaurant.builder()
+                .id(1L)
+                .build();
+
+        Menu menu1 =
+                Menu.builder()
+                        .name("왕만두")
+                        .price(3000L)
+                        .status(ON_SALE)
+                        .restaurantId(restaurantId)
+                        .build();
+        Menu menu2 =
+                Menu.builder()
+                        .name("물만두")
+                        .price(2000L)
+                        .status(SOLD_OUT)
+                        .restaurantId(restaurantId)
+                        .build();
+        List<Menu> menus = List.of(menu1, menu2);
+
+        given(restaurantRepository.findById(restaurantId)).willReturn(Optional.of(restaurant));
+
+        when(menuRepository.findByRestaurantId(restaurantId)).thenReturn(menus);
+
+        // when
+
+        GetRestaurantInfoMenuDto getRestaurantInfoMenuDto = restaurantService.getRestaurantInfoAndMenu(1L);
+
+        // then
+
+        verify(restaurantRepository, times(1)).findById(1L);
+        verify(menuRepository, times(1)).findByRestaurantId(1L);
+
+        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(0).getName()).isEqualTo("왕만두");
+        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(1).getName()).isEqualTo("물만두");
+        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(0).getPrice()).isEqualTo(3000L);
+        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(1).getPrice()).isEqualTo(2000L);
+        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(0).getStatus()).isEqualTo(MenuStatus.ON_SALE);
+        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(1).getStatus()).isEqualTo(MenuStatus.SOLD_OUT);
+        assertThat(getRestaurantInfoMenuDto.getRestaurantDto().getId()).isEqualTo(1L);
     }
 }

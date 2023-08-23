@@ -2,9 +2,9 @@ package com.bttf.queosk.controller;
 
 import com.bttf.queosk.dto.tabledto.TableForm;
 import com.bttf.queosk.dto.userdto.UserDto;
-import com.bttf.queosk.service.tableservice.TableService;
-import com.bttf.queosk.service.userservice.UserService;
 import com.bttf.queosk.enumerate.TableStatus;
+import com.bttf.queosk.service.tableservice.TableService;
+import com.bttf.queosk.service.userservice.UserLoginService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -19,12 +19,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TableController {
     private final TableService tableService;
-    private final UserService userService;
+    private final UserLoginService userLoginService;
 
     @PostMapping("/table")
     @ApiOperation(value = "가게 테이블 생성", notes = "가게의 테이블을 추가합니다.")
     public ResponseEntity<?> tableCreate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        UserDto userFromToken = userService.getUserFromToken(token);
+        UserDto userFromToken = userLoginService.getUserFromToken(token);
 
         tableService.createTable(userFromToken.getId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -36,7 +36,7 @@ public class TableController {
                                          @RequestParam TableStatus tableStatus,
                                          @PathVariable Long tableId) {
 
-        UserDto userFromToken = userService.getUserFromToken(token);
+        UserDto userFromToken = userLoginService.getUserFromToken(token);
         tableService.updateTable(tableId, tableStatus, userFromToken.getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -46,7 +46,7 @@ public class TableController {
     public ResponseEntity<?> tableDelete(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                          @PathVariable Long tableId) {
 
-        UserDto userFromToken = userService.getUserFromToken(token);
+        UserDto userFromToken = userLoginService.getUserFromToken(token);
         tableService.deleteTable(tableId, userFromToken.getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -56,7 +56,7 @@ public class TableController {
     public ResponseEntity<TableForm> tableGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                               @PathVariable Long tableId) {
 
-        UserDto userDto = userService.getUserFromToken(token);
+        UserDto userDto = userLoginService.getUserFromToken(token);
         return ResponseEntity.status(HttpStatus.OK).body(tableService.getTable(tableId, userDto.getId()));
     }
 
@@ -64,7 +64,7 @@ public class TableController {
     @ApiOperation(value = "테이블 조회", notes = "테이블을 조회 합니다.")
     public ResponseEntity<List<TableForm>> tableListGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
-        UserDto userDto = userService.getUserFromToken(token);
+        UserDto userDto = userLoginService.getUserFromToken(token);
         return ResponseEntity.status(HttpStatus.OK).body(tableService.getTableList(userDto.getId()));
     }
 }

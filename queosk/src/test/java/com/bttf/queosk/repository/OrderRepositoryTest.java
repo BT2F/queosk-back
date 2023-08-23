@@ -49,7 +49,7 @@ class OrderRepositoryTest {
                 .id(1L)
                 .name("test Menu")
                 .price(20000L)
-                .restaurant(restaurant)
+                .restaurantId(1L)
                 .build();
 
         tableRepository.save(table);

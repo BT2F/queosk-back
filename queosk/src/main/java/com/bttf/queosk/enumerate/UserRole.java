@@ -1,4 +1,4 @@
-package com.bttf.queosk.model.usermodel;
+package com.bttf.queosk.enumerate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ public enum UserRole {
     ROLE_USER("ROLE_USER",
             Collections.singletonList(new SimpleGrantedAuthority("USER"))),
 
-    ROLE_ADMIN("ROLE_RESTAURANT",
+    ROLE_RESTAURANT("ROLE_RESTAURANT",
             Collections.singletonList(new SimpleGrantedAuthority("RESTAURANT")));
 
     private final String roleName;

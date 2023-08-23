@@ -16,7 +16,7 @@ public interface UserDtoMapper {
     @Mapping(source = "user.phone", target = "phone")
     @Mapping(source = "user.status", target = "status")
     @Mapping(source = "user.imageUrl", target = "imageUrl")
-    @Mapping(source = "user.loginApi", target = "loginApi")
+    @Mapping(source = "user.loginType", target = "loginType")
     @Mapping(source = "user.createdAt", target = "createdAt")
     @Mapping(source = "user.updatedAt", target = "updatedAt")
     UserDto userToUserDto(User user);

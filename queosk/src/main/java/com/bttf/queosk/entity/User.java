@@ -1,9 +1,9 @@
 package com.bttf.queosk.entity;
 
 import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
-import com.bttf.queosk.dto.userdto.UserEditForm;
-import com.bttf.queosk.model.usermodel.UserRole;
-import com.bttf.queosk.model.usermodel.UserStatus;
+import com.bttf.queosk.enumerate.LoginType;
+import com.bttf.queosk.enumerate.UserRole;
+import com.bttf.queosk.enumerate.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
-
-import static com.bttf.queosk.model.usermodel.UserStatus.*;
 
 @Entity(name = "user")
 @AuditOverride(forClass = BaseTimeEntity.class)
@@ -39,27 +37,29 @@ public class User extends BaseTimeEntity {
 
     private String imageUrl;
 
-    private String loginApi;
+    @Enumerated(EnumType.STRING)
+    private LoginType loginType;
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public void editInformation(UserEditForm userEditForm) {
-        this.nickName =
-                userEditForm.getNickName() == null ? this.nickName : userEditForm.getNickName();
-
-        this.phone =
-                userEditForm.getPhone() == null ? this.nickName : userEditForm.getPhone();
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
-    public void changePassword(String newPassword) {
+    public void setPhone(String phone) {
+        this.nickName = phone;
+    }
+
+    public void setPassword(String newPassword) {
         this.password = newPassword;
     }
 
-    public void updateImageUrl(String url) { this.imageUrl = url; }
+    public void setImageUrl(String url) {
+        this.imageUrl = url;
+    }
 
-    public void withdrawUser() { this.status = DELETED; }
-
-    public void verifyUser() { this.status = VERIFIED; }
-
+    public void setUserStatus(UserStatus userStatus) {
+        this.status = userStatus;
+    }
 }

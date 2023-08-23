@@ -1,14 +1,13 @@
 package com.bttf.queosk.config.springsecurity;
 
-import com.bttf.queosk.service.refreshtokenservice.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -18,41 +17,42 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final RefreshTokenService refreshTokenService;
 
+    private static final String[] ALL_WHITELIST = {
+            "/**/signup",                // 로그인전이므로 AccessToken 체크 패스
+            "/**/signin",                // 로그인전이므로 AccessToken 체크 패스
+            "/**/verification",          // 로그인전이므로 AccessToken 체크 패스
+            "/**/reissue",		         // 토큰갱신이므로 AccessToken 체크 패스
+            "/**/callback"               // 외부 api 콜백이므로 AccessToken 체크 패스
+    };
+
+    //화이트리스트(필터링 대상인지 아닌지 판별)
+    private boolean isFilterCheck(String requestURI){
+        return !PatternMatchUtils.simpleMatch(ALL_WHITELIST, requestURI);
+    }
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain chain) throws ServletException, IOException {
+                                   HttpServletResponse response,
+                                   FilterChain chain) throws IOException {
 
         String token = getTokenFromRequest(request);
 
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-
-            SecurityContextHolder
-                    .getContext()
-                    .setAuthentication(jwtTokenProvider.getAuthentication(token));
-
-        } else if (token != null) {
-            //만약 AccessToken이 유효하지 않을 경우 사용자의 이메일로 RefreshToken 조회
-            String email = jwtTokenProvider.getEmailFromToken(token);
-            String refreshToken = refreshTokenService.getRefreshToken(email);
-
-            //리프레시 토큰이 유효할 경우 , 헤더에 리프레시 토큰 담기
-            if (jwtTokenProvider.validateToken(refreshToken)) {
-                String newAccessToken = refreshTokenService.issueNewAccessToken(email);
-                response.setHeader(HttpHeaders.AUTHORIZATION, newAccessToken);
-                response.setStatus(HttpServletResponse.SC_OK); // 200 Ok
-                response.getWriter().write("토큰이 갱신되었습니다.");
-            } else {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-                response.getWriter().write("토큰이 만료되었습니다. 다시 로그인 하세요.");
-                response.getWriter().flush();
+        try {
+            // 화이트리스트에 있는 경우에는 필터링을 건너뛰어서 다음 필터로 진행
+            if (isFilterCheck(request.getRequestURI())) {
+                // 화이트리스트에 없는 경우에만 검증 처리
+                if (token != null) {
+                    SecurityContextHolder
+                            .getContext()
+                            .setAuthentication(jwtTokenProvider.getAuthentication(token));
+                }
             }
+            chain.doFilter(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
         }
-        chain.doFilter(request, response);
     }
-
     private String getTokenFromRequest(HttpServletRequest request) {
 
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
