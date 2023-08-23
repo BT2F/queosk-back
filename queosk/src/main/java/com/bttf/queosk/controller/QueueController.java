@@ -3,7 +3,7 @@ package com.bttf.queosk.controller;
 import com.bttf.queosk.dto.queuedto.QueueForm;
 import com.bttf.queosk.dto.userdto.UserDto;
 import com.bttf.queosk.service.queueservice.QueueService;
-import com.bttf.queosk.service.userservice.UserService;
+import com.bttf.queosk.service.userservice.UserLoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 public class QueueController {
     private final QueueService queueService;
-    private final UserService userService;
+    private final UserLoginService userService;
 
     @PostMapping
     @ApiOperation(value = "가게 웨이팅 등록", notes = "유저가 가게의 웨이팅을 등록할 수 있습니다.")
