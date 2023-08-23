@@ -36,5 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
+queosk-daae3-firebase-adminsdk-yaw1u-5693c5e293.json
 application-secret.properties
 /src/main/resources/application.yml

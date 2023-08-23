@@ -34,6 +34,11 @@ dependencies {
 
 	// WebSocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.webjars:webjars-locator-core'
+	implementation 'org.webjars:sockjs-client:1.0.2'
+	implementation 'org.webjars:stomp-websocket:2.3.3'
+	implementation 'org.webjars:bootstrap:3.3.7'
+	implementation 'org.webjars:jquery:3.1.1-1'
 
 	// JavaMailSender
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
@@ -43,12 +48,19 @@ dependencies {
 
 	// Swagger
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
 	// JSON
 	implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
 
 	// Validation
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
+
+	// firebase sdk
+	implementation 'com.google.firebase:firebase-admin:7.1.1'
+
+
+
 
 	// BaseEntity
 	implementation group: 'org.springframework.data', name: 'spring-data-envers'
@@ -75,6 +87,7 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
 	// AWS 관련 라이브러리
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 

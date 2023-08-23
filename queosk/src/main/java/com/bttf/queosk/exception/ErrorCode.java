@@ -21,6 +21,9 @@ public enum ErrorCode {
 
     // Table 관련 Exception
     INVALID_TABLE(HttpStatus.NOT_FOUND, "존재하지 않는 테이블입니다."),
+
+    // Wating 관련 Exception
+    INVALID_WATING(HttpStatus.NOT_FOUND, "존재하지 않는 웨이팅입니다."),
     // Restaurant 관련 Exception
     INVALID_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 상점입니다."),
     WITHDRAWN_USER(HttpStatus.BAD_REQUEST,"이미 탈퇴한 회원입니다." ),
