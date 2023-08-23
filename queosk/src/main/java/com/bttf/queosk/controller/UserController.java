@@ -145,7 +145,7 @@ public class UserController {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
 
-        String url = imageService.saveFile(image, "user/" + userId);
+        String url = imageService.saveFile(imageFile, "user/" + UUID.randomUUID().toString().substring(0, 6));
 
         userInfoService.updateImageUrl(userId, url);
 
