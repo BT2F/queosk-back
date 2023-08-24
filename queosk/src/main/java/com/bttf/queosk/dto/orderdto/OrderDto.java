@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class OrderDto {
     private Table table;
     private Menu menu;
-    private Long count;
+    private int count;
     private User user;
     private OrderStatus orderStatus;
 

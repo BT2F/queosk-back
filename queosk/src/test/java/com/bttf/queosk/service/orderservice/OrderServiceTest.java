@@ -79,7 +79,7 @@ class OrderServiceTest {
                 .menuId(menuId)
                 .tableId(tableId)
                 .restaurantId(restaurantId)
-                .count(1L)
+                .count(1)
                 .build();
 
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
@@ -130,7 +130,7 @@ class OrderServiceTest {
         Order order = Order.builder()
                 .user(user)
                 .menu(menu1)
-                .count(1L)
+                .count(1)
                 .restaurant(restaurant)
                 .status(OrderStatus.IN_PROGRESS)
                 .build();

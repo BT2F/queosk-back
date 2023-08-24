@@ -58,7 +58,7 @@ class SettlementRepositoryTest {
                 .table(table)
                 .restaurant(restaurant)
                 .menu(menu)
-                .count(3L)
+                .count(3)
                 .build();
 
         tableRepository.save(table);
