@@ -35,7 +35,7 @@ public class OrderService {
         User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
         Restaurant restaurant = restaurantRepository.findById(createOrderForm.getRestaurantId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
         Table table = tableRepository.findById(createOrderForm.getTableId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_TABLE));
-        Menu menu = menuRepository.findById(createOrderForm.getMenuId()).orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+        Menu menu = menuRepository.findByIdAndRestaurantId(createOrderForm.getMenuId(), restaurant.getId()).orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
         validOrder(restaurant, table, menu);
 
@@ -68,7 +68,7 @@ public class OrderService {
         LocalDateTime startTime = LocalDateTime.now().toLocalDate().atStartOfDay();
         LocalDateTime endTime = LocalDateTime.now().toLocalDate().atTime(23, 59, 59);
         List<Order> orderList =
-                orderRepository.findAllByRestaurantAndCreatedAtBetween(restaurant, startTime, endTime);
+                orderRepository.findByRestaurantAndCreatedAtBetween(restaurant, startTime, endTime);
         return orderToOrderDto(orderList);
     }
 
