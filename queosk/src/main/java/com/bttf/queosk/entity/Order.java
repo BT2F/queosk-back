@@ -37,7 +37,7 @@ public class Order extends BaseTimeEntity {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    private int count;
+    private Integer count;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;

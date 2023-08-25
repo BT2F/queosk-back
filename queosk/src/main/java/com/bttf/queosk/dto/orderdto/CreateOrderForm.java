@@ -13,5 +13,5 @@ public class CreateOrderForm {
     private Long tableId;
     private Long restaurantId;
     private Long menuId;
-    private int count;
+    private Integer count;
 }
