@@ -26,6 +26,10 @@ public class Order extends BaseTimeEntity {
     private Table table;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
@@ -33,8 +37,12 @@ public class Order extends BaseTimeEntity {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    private Long count;
+    private Integer count;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    public void setStatus(OrderStatus orderStatus) {
+        this.status = orderStatus;
+    }
 }
