@@ -22,7 +22,7 @@ public class JwtFilter extends OncePerRequestFilter {
             "/**/signup",                // 로그인전이므로 AccessToken 체크 패스
             "/**/signin",                // 로그인전이므로 AccessToken 체크 패스
             "/**/verification",          // 로그인전이므로 AccessToken 체크 패스
-            "/**/reissue",		         // 토큰갱신이므로 AccessToken 체크 패스
+            "/**/refresh",		         // 토큰갱신이므로 AccessToken 체크 패스
             "/**/callback"               // 외부 api 콜백이므로 AccessToken 체크 패스
     };
 

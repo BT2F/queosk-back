@@ -129,4 +129,18 @@ public class JwtTokenProvider {
                 userDetails, "", authorities
         );
     }
+
+    public String getRoleFromToken(String token) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return valueOf(claims.get("userRole", String.class)).getRoleName();
+    }
 }
