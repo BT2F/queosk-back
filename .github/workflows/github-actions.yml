@@ -81,5 +81,5 @@ jobs:
           script: |
             sudo docker ps
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/queosk
-            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/queosk
+            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/queosk /bin/bash
             sudo docker image prune -f
