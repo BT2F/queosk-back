@@ -50,7 +50,7 @@ jobs:
         if: |
           contains(github.ref, 'main')
         run: |
-          mkdir -p ./src/main/resources/firebase # firebase 폴더 생성
+          mkdir ./src/main/resources/firebase # firebase 폴더 생성
           cd ./src/main/resources/firebase # firebase 폴더로 이동
           touch ./queosk-daae3-firebase-adminsdk-yaw1u-5693c5e293.json # queosk-daae3-firebase-adminsdk-yaw1u-5693c5e293.json 생성
           echo "${{ secrets.FIREBASE_KEY }}" > 
