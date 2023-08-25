@@ -1,0 +1,4 @@
+[submodule "project/queosk-config"]
+	path = queost/queosk-config
+	url = https://github.com/peppone-choi/queosk-config
+	branch = dev
