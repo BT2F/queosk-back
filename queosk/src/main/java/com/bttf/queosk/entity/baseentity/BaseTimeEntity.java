@@ -1,4 +1,4 @@
-package com.bttf.queosk.config;
+package com.bttf.queosk.entity.baseentity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +18,5 @@ public abstract class BaseTimeEntity {
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
-    private LocalDateTime modifiedAt;
+    private LocalDateTime updatedAt;
 }

@@ -22,44 +22,84 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	// Redis DB
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	// 외부 로그인용 OAuth2
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	// 스프링 시큐리티
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	// WebSocket 사용
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// OAuth2
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// WebSocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	// JavaMailSender 사용
+	implementation 'org.webjars:webjars-locator-core'
+	implementation 'org.webjars:sockjs-client:1.0.2'
+	implementation 'org.webjars:stomp-websocket:2.3.3'
+	implementation 'org.webjars:bootstrap:3.3.7'
+	implementation 'org.webjars:jquery:3.1.1-1'
+
+	// JavaMailSender
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	// DB 서버 : MariaDB
+
+	// MariaDB
 	implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.1.4'
-	// Swagger2
-	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
-	// JSON 및 JWT 복호화
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+
+	// Swagger
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
+	// JSON
 	implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+
 	// Validation
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
+
+	// firebase sdk
+	implementation 'com.google.firebase:firebase-admin:7.1.1'
+
+
+
+
 	// BaseEntity
 	implementation group: 'org.springframework.data', name: 'spring-data-envers'
-	compileOnly 'org.projectlombok:lombok'
-	// Test 용 H2DB
-	runtimeOnly 'com.h2database:h2'
-	annotationProcessor 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+	testImplementation 'org.projectlombok:lombok:1.18.28'
 
-	// mapstruct
+	// Mockito
+	testImplementation 'org.mockito:mockito-core:4.8.0'
+
+	// H2
+	runtimeOnly 'com.h2database:h2'
+
+	// Mapstruct
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	// AssertJ를 통한 테스트
+	// AssertJ
 	testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.24.2'
 	testImplementation group: 'org.mariadb', name: 'r2dbc-mariadb', version: '1.1.4'
+
+	// Webflux
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.7.14'
+
+	// Jwt
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+	// AWS 관련 라이브러리
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// Thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+	compileOnly 'org.projectlombok:lombok'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
