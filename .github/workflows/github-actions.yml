@@ -72,9 +72,7 @@ jobs:
 
       ## deploy to production
       - name: Deploy to prod
-        uses: appleboy/ssh-action@v0.1.4
-        id: deploy-prod
-        if: contains(github.ref, 'main')
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_PROD }} # EC2 퍼블릭 IPv4 DNS
           username: ubuntu
