@@ -58,7 +58,9 @@ jobs:
 
       # gradle build
       - name: Build with Gradle
-        run: ./gradlew build
+        run: |
+          gradle init
+          ./gradlew build
 
       # docker build & push to production
       - name: Docker build & push to prod
