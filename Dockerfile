@@ -4,7 +4,7 @@
 FROM openjdk:8-jre-alpine
 
 # jar 파일 위치를 변수로 설정
-ARG JAR_FILE=/build/libs/*.jar
+ARG JAR_FILE=/build/libs/*-SNAPSHOT.jar
 
 # 환경변수 설정
 ENV CUSTOM_NAME default
