@@ -1,7 +1,5 @@
-#!/bin/bash
+FROM adoptopenjdk/openjdk11
 
-# base 이미지 설정
-FROM openjdk:8-jre-alpine
-ARG JAR_FILE=*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java", "-Dspring.profiles.active=docker", "-jar", "app.jar"]
+COPY ./build/libs/queosk-0.0.1-SNAPSHOT-SNAPSHOT.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
