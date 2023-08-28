@@ -5,6 +5,7 @@ import com.bttf.queosk.dto.queuedto.QueueDto;
 import com.bttf.queosk.dto.queuedto.QueueForm;
 import com.bttf.queosk.entity.Queue;
 import com.bttf.queosk.exception.CustomException;
+import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.mapper.queuemapper.QueueMapper;
 import com.bttf.queosk.repository.QueueRedisRepository;
 import com.bttf.queosk.repository.QueueRepository;
@@ -18,8 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.bttf.queosk.exception.ErrorCode.INVALID_RESTAURANT;
-import static com.bttf.queosk.exception.ErrorCode.INVALID_USER_ID;
+import static com.bttf.queosk.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +65,10 @@ public class QueueService {
 
         List<String> all = queueRedisRepository.findAll(String.valueOf(restaurantId));
 
+        if (all.isEmpty()) {
+            throw new CustomException(ErrorCode.QUEUE_IS_EMPTY);
+        }
+
         List<Queue> queueList = new ArrayList<>();
 
         all.forEach(element -> {
@@ -88,11 +92,15 @@ public class QueueService {
     // 본인(유저)의 순서를 알 수 있다.
     @Transactional(readOnly = true)
     public Long getUserQueueNumber(Long restaurantId, Long userId) {
-
-        return queueRedisRepository.getUserWaitingCount(
+        Long userWaitingCount = queueRedisRepository.getUserWaitingCount(
                 String.valueOf(restaurantId),
-                String.valueOf(userId)
-        );
+                String.valueOf(userId));
+
+        if (userWaitingCount == -1) {
+            throw new CustomException(ErrorCode.FAILED_TO_FETCH_QUEUE);
+        }
+
+        return userWaitingCount;
     }
 
     // 웨이팅 수를 앞에서 1개 당김.

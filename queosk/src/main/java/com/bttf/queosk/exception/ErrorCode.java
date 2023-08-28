@@ -55,6 +55,7 @@ public enum ErrorCode {
 
     // Queue 관련 Exception
     FAILED_TO_FETCH_QUEUE(HttpStatus.BAD_REQUEST, "대기열 정보를 불러오는데에 실패했습니다."),
+    QUEUE_IS_EMPTY(HttpStatus.NOT_FOUND, "대기열이 비어있습니다."),
 
     // 미정의 Exception
     UNDEFINED_EXCEPTION(HttpStatus.BAD_REQUEST, "정의되지 않은 예외가 발생했습니다. 메세지를 참고해주세요.");
