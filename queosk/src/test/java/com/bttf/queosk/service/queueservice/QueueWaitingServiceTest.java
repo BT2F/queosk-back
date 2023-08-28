@@ -2,6 +2,7 @@ package com.bttf.queosk.service.queueservice;
 
 import com.bttf.queosk.repository.QueueRedisRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -33,6 +34,7 @@ public class QueueWaitingServiceTest {
     }
 
     @Test
+    @DisplayName("웹소켓 전체대기번호 - 성공")
     public void testUpdateWaitingCount_success() {
         // given
         List<String> mockQueueList = Collections.nCopies(5, "1");
@@ -52,6 +54,7 @@ public class QueueWaitingServiceTest {
     }
 
     @Test
+    @DisplayName("웹소켓 고객대기번호 - 성공")
     public void testUpdateUserIndexes_success() {
         // given
         List<String> mockQueueList = Collections.nCopies(1, "1");
@@ -70,6 +73,7 @@ public class QueueWaitingServiceTest {
         assertThat(messageCaptor.getValue()).isEqualTo("{\"waitingCount\":1}");
     }
     @Test
+    @DisplayName("웹소켓 전체대기번호 - 실패(빈큐)")
     public void testUpdateWaitingCount_WithEmptyQueue() {
         // given
         List<String> mockQueueList = Collections.emptyList();
