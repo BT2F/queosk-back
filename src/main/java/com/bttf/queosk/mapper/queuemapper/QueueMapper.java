@@ -9,7 +9,5 @@ import org.mapstruct.factory.Mappers;
 public interface QueueMapper {
     QueueMapper INSTANCE = Mappers.getMapper(QueueMapper.class);
 
-    QueueDto QueueFormRequestToQueueDto(QueueForm.Request queueFormRequest);
-
     QueueForm.Response QueueDtoToQueueFormResponse(QueueDto queueDto);
 }

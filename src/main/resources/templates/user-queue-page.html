@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting App</title>
+
+</head>
+<body>
+<h1>Queue 고객의 대기번호 와 고객 이전의 잔여 대기자 수 </h1>
+<p>남은 대기인원: <span id="remainingCount">-1</span></p>
+<p>고객 대기번호: <span id="waitingCount">0</span></p>
+<script src="/webjars/sockjs-client/1.0.2/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
+<script>
+    var stompClient = null;
+    var restaurantId = [[${restaurantId}]];
+    var queueId = [[${queueId}]];
+    var defaultCount = [[${defaultCount}]];
+
+    // 페이지 로드시 디폴트 값으로 초기화
+    window.addEventListener('load', function () {
+        document.getElementById('remainingCount').textContent = defaultCount - 1;
+        document.getElementById('waitingCount').textContent = defaultCount;
+    });
+    function connect(restaurantId) {
+        var socket = new SockJS('/queue/user');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+
+            var topic = '/topic/restaurant/' + restaurantId + '/queue/' + queueId; // 매장 식별자를 포함한 토픽
+            stompClient.subscribe(topic, function (message) {
+                console.log('Received message:', message.body);
+                updateWaitingCount(message.body);
+            });
+        });
+    }
+
+    function updateWaitingCount(messageBody) {
+        var currentCountJson = JSON.parse(messageBody);
+        var currentCount = currentCountJson.waitingCount;
+        var remainingCount = currentCount - 1; // 현재 번호 - 1
+
+        if (currentCount != null) {
+            document.getElementById('waitingCount').textContent = currentCount;
+            document.getElementById('remainingCount').textContent = remainingCount; // 남은 대기인원 업데이트
+            console.log("Received count:", currentCount);
+            console.log("Type of count:", typeof currentCount);
+        }
+    }
+
+    // 페이지 로드시 초기 데이터 설정
+    window.addEventListener('load', function () {
+        connect(restaurantId);
+    });
+</script>
+</body>
+</html>

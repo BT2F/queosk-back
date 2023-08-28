@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting App</title>
+    <style>
+        /* 스타일 수정 시작 */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid black;
+        }
+
+        th {
+            background-color: lightgray;
+        }
+        /* 스타일 수정 끝 */
+    </style>
+</head>
+<body>
+<h1>Queue 웹소켓통신 샘플</h1>
+<p>Waiting Count: <span id="waitingCount">0</span></p>
+<script src="/webjars/sockjs-client/1.0.2/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
+<script>
+    var stompClient = null;
+    var restaurantId = [[${restaurantId}]];
+    var defaultCount = [[${defaultCount}]];
+
+    // 페이지 로드시 디폴트 값으로 초기화
+    window.addEventListener('load', function () {
+        document.getElementById('waitingCount').textContent = defaultCount;
+    });
+
+    function connect(restaurantId) {
+        var socket = new SockJS('/queue/restaurant');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+
+            var topic = '/topic/restaurant/' + restaurantId;
+            stompClient.subscribe(topic, function (message) {
+                console.log('Received message:', message.body);
+                updateWaitingCount(message.body);
+            });
+        });
+    }
+
+    function updateWaitingCount(messageBody) {
+        var currentCountJson = JSON.parse(messageBody);
+        var currentCount = currentCountJson.waitingCount;
+
+        if (currentCount != null) {
+            document.getElementById('waitingCount').textContent = currentCount;
+            console.log("Received count:", currentCount);
+            console.log("Type of count:", typeof currentCount);
+        }
+    }
+
+    window.addEventListener('load', function () {
+        connect(restaurantId);
+    });
+</script>
+<h1>Queue List</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Number of People</th>
+        <th>User ID</th>
+        <th>Restaurant ID</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="queue : ${queueList}">
+        <td th:text="${queue.id}"></td>
+        <td th:text="${queue.numberPeople}"></td>
+        <td th:text="${queue.userId}"></td>
+        <td th:text="${queue.restaurantId}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

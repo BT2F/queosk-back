@@ -10,12 +10,20 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-
+    @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/api/restaurants/{restaurantId}/queue/list")
+        // 점주가 웨이팅 현황을 확인하는 페이지 엔드포인트
+        registry.addEndpoint("/queue/restaurant")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
+
+        // 점주가 웨이팅 현황을 확인하는 페이지 엔드포인트
+        registry.addEndpoint("/queue/user")
+                .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
 
+    @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
         registry.enableSimpleBroker("/topic");
