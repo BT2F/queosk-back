@@ -1,10 +1,7 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
-import com.bttf.queosk.dto.KakaoPaymentApproveDto;
-import com.bttf.queosk.dto.KakaoPaymentApproveForm;
-import com.bttf.queosk.dto.KakaoPaymentReadyDto;
-import com.bttf.queosk.dto.KakaoPaymentReadyForm;
+import com.bttf.queosk.dto.*;
 import com.bttf.queosk.service.kakaoservice.KakaoPaymentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,5 +37,13 @@ public class KakaoPayController {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         KakaoPaymentApproveDto paymentApprove = kakaoPaymentService.kakaoPaymentApprove(userId, pgToken, kakaoPaymentApproveForm);
         return ResponseEntity.ok().body(paymentApprove);
+    }
+
+    @PostMapping("/cancel")
+    @ApiOperation(value = "결제 취소 API", notes = "결제를 승인받는 API를 작성 합니다.")
+    public ResponseEntity<Object> paymentCancel(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Valid @RequestBody KakaoPaymentCancelForm kakaoPaymentCancelForm) {
+        Long userId = jwtTokenProvider.getIdFromToken(token);
+        KakaoPaymentCancelDto paymentCancel = kakaoPaymentService.kakaoPaymentCancel(userId, kakaoPaymentCancelForm);
+        return ResponseEntity.ok().body(paymentCancel);
     }
 }

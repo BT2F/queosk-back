@@ -1,5 +1,6 @@
 package com.bttf.queosk.service.kakaoservice;
 
+import com.bttf.queosk.dto.KakaoPaymentCancelDto;
 import com.bttf.queosk.dto.*;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -100,6 +101,40 @@ public class KakaoPaymentService {
                 .build();
     }
 
+    public KakaoPaymentCancelDto kakaoPaymentCancel(Long userId, KakaoPaymentCancelForm kakaoPaymentCancelForm) {
+        MultiValueMap<String, String> parameter = new LinkedMultiValueMap<>();
+        parameter.add("cid", CID);
+        parameter.add("tid", kakaoPaymentCancelForm.getTid());
+        parameter.add("cancel_amount", kakaoPaymentCancelForm.getCancelAmount().toString());
+        parameter.add("cancel_tax_free_amount", kakaoPaymentCancelForm.getCancelTaxFreeAmount().toString());
+
+        String postString = restApiPost(parameter, "https://kapi.kakao.com/v1/payment/cancel");
+
+        JsonObject jsonObject = JsonParser.parseString(postString).getAsJsonObject();
+        Integer amount = getCanceledAmount(jsonObject, "amount");
+        Integer approvedCancelAmount = getCanceledAmount(jsonObject, "approved_cancel_amount");
+        Integer totalCanceledAmount = getCanceledAmount(jsonObject, "canceled_amount");
+        Integer cancelAvailableAmount = getCanceledAmount(jsonObject, "cancel_available_amount");
+
+        return KakaoPaymentCancelDto.builder()
+                .aid(jsonObject.get("aid").getAsString())
+                .tid(jsonObject.get("tid").getAsString())
+                .cid(CID)
+                .status(jsonObject.get("status").getAsString())
+                .paymentMethodType(jsonObject.get("payment_method_type").getAsString())
+                .item_name(jsonObject.get("item_name").getAsString())
+                .item_code(jsonObject.get("item_code").getAsString())
+                .quantity(jsonObject.get("quantity").getAsInt())
+                .amount(amount)
+                .approvedCancelAmount(approvedCancelAmount)
+                .totalCancelAmount(totalCanceledAmount)
+                .cancelAvailableAmount(cancelAvailableAmount)
+                .createdAt(LocalDateTime.parse(jsonObject.get("created_at").getAsString()))
+                .approvedAt(LocalDateTime.parse(jsonObject.get("approved_at").getAsString()))
+                .canceledAt(LocalDateTime.parse(jsonObject.get("canceled_at").getAsString()))
+                .build();
+    }
+
     private String restApiPost(MultiValueMap<String, String> parameter, String url) {
         HttpEntity<MultiValueMap<String, String>> requestEntity =
                 new HttpEntity<>(parameter, this.getHeaders());
@@ -118,4 +153,10 @@ public class KakaoPaymentService {
 
         return httpHeaders;
     }
+
+    private int getCanceledAmount(JsonObject jsonObject, String value) {
+        return jsonObject.get(value).getAsJsonObject().get("total").getAsInt();
+    }
+
+
 }

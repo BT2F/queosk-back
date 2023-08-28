@@ -1,0 +1,1032 @@
+POST http://localhost:8080/api/payment/cancel
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
+Content-Length: 87
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=686037A8C57953F3C2127BAD81C9FD0E
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec77792a59101206d7",
+  "cancelAmount": 2000,
+  "cancelTaxFreeAmount": 0
+}
+
+<> 2023-08-28T193330.200.json
+
+###
+
+POST http://localhost:8080/api/payment/cancel
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
+Content-Length: 87
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=686037A8C57953F3C2127BAD81C9FD0E
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec77792a59101206d7",
+  "cancelAmount": 4000,
+  "cancelTaxFreeAmount": 0
+}
+
+<> 2023-08-28T193319.200.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=791664fc795d7aad106e
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=686037A8C57953F3C2127BAD81C9FD0E
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec77792a59101206d7",
+  "partnerOrderId": "f2792ed569fc498182b1302e95663a71",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T193305.200.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=7131ba826410078c4eb0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=686037A8C57953F3C2127BAD81C9FD0E
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec77792a59101206d7",
+  "partnerOrderId": "f2792ed569fc498182b1302e95663a71",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T193248.401.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=7131ba826410078c4eb0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=686037A8C57953F3C2127BAD81C9FD0E
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec77792a59101206d7",
+  "partnerOrderId": "f2792ed569fc498182b1302e95663a71",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T193217.401.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=686037A8C57953F3C2127BAD81C9FD0E
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T193122.200.json
+
+###
+
+POST http://localhost:8080/api/payment/cancel
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
+Content-Length: 87
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec746e2a59101206c0",
+  "cancelAmount": 4000,
+  "cancelTaxFreeAmount": 0
+}
+
+<> 2023-08-28T193106.401.json
+
+###
+
+POST http://localhost:8080/api/users/signin
+Content-Type: application/json
+Content-Length: 58
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "bzhs1992@icloud.com",
+  "password": "1111"
+}
+
+<> 2023-08-28T193050.200.json
+
+###
+
+POST http://localhost:8080/api/payment/cancel
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
+Content-Length: 87
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec746e2a59101206c0",
+  "cancelAmount": 4000,
+  "cancelTaxFreeAmount": 0
+}
+
+<> 2023-08-28T193045.401.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=7131ba826410078c4eb0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec76d960ea2963dcf4",
+  "partnerOrderId": "e27de7dfb747457db599f89f62c7a1f7",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T192935.200.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T192842.200.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=189ff713d873ad4d50d0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec76462a59101206ce",
+  "partnerOrderId": "15653f7428834176827518cd2b724756",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T192828.401.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=189ff713d873ad4d50d0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec76462a59101206ce",
+  "partnerOrderId": "54f3048c22f34cf0bad6a57eaa91647c",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T192759.401.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T192730.200.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=189ff713d873ad4d50d0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec76462a59101206ce",
+  "partnerOrderId": "54f3048c22f34cf0bad6a57eaa91647c",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T192727.401.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=189ff713d873ad4d50d0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec76462a59101206ce",
+  "partnerOrderId": "54f3048c22f34cf0bad6a57eaa91647c",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T192719.401.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=189ff713d873ad4d50d0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec76462a59101206ce",
+  "partnerOrderId": "54f3048c22f34cf0bad6a57eaa91647c",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T192704.401.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T192615.200.json
+
+###
+
+POST http://localhost:8080/api/payment/cancel
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
+Content-Length: 87
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec746e2a59101206c0",
+  "cancelAmount": 4000,
+  "cancelTaxFreeAmount": 0
+}
+
+<> 2023-08-28T192605.401.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T191822.200.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T191816.401.json
+
+###
+
+POST http://localhost:8080/api/payment/cancel
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
+Content-Length: 87
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=25E86F9FF0641DFCF04FEF6064DF3F50
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec736c2a59101206b5",
+  "cancelAmount": 4000,
+  "cancelTaxFreeAmount": 0
+}
+
+<> 2023-08-28T191733.401.json
+
+###
+
+POST http://localhost:8080/api/users/signin
+Content-Type: application/json
+Content-Length: 58
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=25E86F9FF0641DFCF04FEF6064DF3F50
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "bzhs1992@icloud.com",
+  "password": "1111"
+}
+
+<> 2023-08-28T191718.200.json
+
+###
+
+POST http://localhost:8080/api/payment/cancel
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
+Content-Length: 87
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=25E86F9FF0641DFCF04FEF6064DF3F50
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec736c2a59101206b5",
+  "cancelAmount": 4000,
+  "cancelTaxFreeAmount": 0
+}
+
+<> 2023-08-28T191710.401.json
+
+###
+
+POST http://localhost:8080/api/payment/cancel
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
+Content-Length: 87
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=25E86F9FF0641DFCF04FEF6064DF3F50
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec736c2a59101206b5",
+  "cancelAmount": 4000,
+  "cancelTaxFreeAmount": 0
+}
+
+<> 2023-08-28T191545.401.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=9af154f8a03cc25a7cd3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=25E86F9FF0641DFCF04FEF6064DF3F50
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec736c2a59101206b5",
+  "partnerOrderId": "54f3048c22f34cf0bad6a57eaa91647c",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T191523.200.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=25E86F9FF0641DFCF04FEF6064DF3F50
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T191405.200.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=8729cca3a9a742555665
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=055B6FF261779200F5D20631DFD0B196
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec6aaf2a5910120669",
+  "partnerOrderId": "cb5d32cd1ef24367a546c41b42204d1c",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T191352.401.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=8707DF21B493168041EE07DCB81E3ECA
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T183649.200.json
+
+###
+
+POST http://localhost:8080/api/users/signin
+Content-Type: application/json
+Content-Length: 58
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=8707DF21B493168041EE07DCB81E3ECA
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "bzhs1992@icloud.com",
+  "password": "1111"
+}
+
+<> 2023-08-28T183631.200.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=8729cca3a9a742555665
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQ4NzIsImV4cCI6MTY5MzI5MTI3Mn0.68yWrb0DsxjGEZs8hDJFJpRMdqoOQLKn--jTMD8TMB4
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=8707DF21B493168041EE07DCB81E3ECA
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec419660ea2963da48",
+  "partnerOrderId": "b4f82aff99d948849227c96de02f0ad2",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T154238.200.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQ4NzIsImV4cCI6MTY5MzI5MTI3Mn0.68yWrb0DsxjGEZs8hDJFJpRMdqoOQLKn--jTMD8TMB4
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=1E24A4C416A94319B9D4584CC5A7BAC8
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T154127.200.json
+
+###
+
+POST http://localhost:8080/api/users/signin
+Content-Type: application/json
+Content-Length: 58
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=1E24A4C416A94319B9D4584CC5A7BAC8
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "bzhs1992@icloud.com",
+  "password": "1111"
+}
+
+<> 2023-08-28T154112.200.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQ3MTIsImV4cCI6MTY5MzI5MTExMn0.ebhqF341-d5-Z5OLWul4dq3tBKfxRzdO4z08rOZt-iY
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=0AF5789B1A9811834FD5F27CC6795BF8
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T153850.401.json
+
+###
+
+POST http://localhost:8080/api/users/signin
+Content-Type: application/json
+Content-Length: 58
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=0AF5789B1A9811834FD5F27CC6795BF8
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "bzhs1992@icloud.com",
+  "password": "1111"
+}
+
+<> 2023-08-28T153832.200.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=5a51041dacc180d7bd1e
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQ0NTUsImV4cCI6MTY5MzI5MDg1NX0.gM4mmA6JhAlucYaiTCBx-e6u_qOUgA7Vsg7FGfgUeuQ
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=0AF5789B1A9811834FD5F27CC6795BF8
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec3ff360ea2963da2e",
+  "partnerOrderId": "ee6ac31e80ee4b809dfa36ac18b3eb8b",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T153552.401.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=5a51041dacc180d7bd1e
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQxMTUsImV4cCI6MTY5MzI5MDUxNX0.j3UmtQi8OfIInYvwS5MZkKm6GcSJAYLYRltAAlYjUFU
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=0AF5789B1A9811834FD5F27CC6795BF8
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec3ff360ea2963da2e",
+  "partnerOrderId": "ee6ac31e80ee4b809dfa36ac18b3eb8b",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T153535.401.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQ0NTUsImV4cCI6MTY5MzI5MDg1NX0.gM4mmA6JhAlucYaiTCBx-e6u_qOUgA7Vsg7FGfgUeuQ
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=6655761BA7A1DED17ECA0D1A8239F3E6
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T153428.200.json
+
+###
+
+POST http://localhost:8080/api/users/signin
+Content-Type: application/json
+Content-Length: 58
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=6655761BA7A1DED17ECA0D1A8239F3E6
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "bzhs1992@icloud.com",
+  "password": "1111"
+}
+
+<> 2023-08-28T153415.200.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQzOTUsImV4cCI6MTY5MzI5MDc5NX0.E9R4fMIyGIoRcv40344zSTx7ZpNGh4yaBHs_sKbD-Fo
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=6655761BA7A1DED17ECA0D1A8239F3E6
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T153337.401.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQzOTUsImV4cCI6MTY5MzI5MDc5NX0.E9R4fMIyGIoRcv40344zSTx7ZpNGh4yaBHs_sKbD-Fo
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=01B9962EA9ECA580FAF10136B106D274
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T153331.401.json
+
+###
+
+POST http://localhost:8080/api/users/signin
+Content-Type: application/json
+Content-Length: 58
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=01B9962EA9ECA580FAF10136B106D274
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "bzhs1992@icloud.com",
+  "password": "1111"
+}
+
+<> 2023-08-28T153315.200.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=68bea5c24642f6674bb6
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQxMTUsImV4cCI6MTY5MzI5MDUxNX0.j3UmtQi8OfIInYvwS5MZkKm6GcSJAYLYRltAAlYjUFU
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=01B9962EA9ECA580FAF10136B106D274
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec3f1e2a59101203ed",
+  "partnerOrderId": "11412e975aa743ec9266b617d0af045f",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T153148.401.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQxMTUsImV4cCI6MTY5MzI5MDUxNX0.j3UmtQi8OfIInYvwS5MZkKm6GcSJAYLYRltAAlYjUFU
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=01B9962EA9ECA580FAF10136B106D274
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T153054.200.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=6d4a2310898d99e777be
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQxMTUsImV4cCI6MTY5MzI5MDUxNX0.j3UmtQi8OfIInYvwS5MZkKm6GcSJAYLYRltAAlYjUFU
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=01B9962EA9ECA580FAF10136B106D274
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec3d692a59101203d6",
+  "partnerOrderId": "11412e975aa743ec9266b617d0af045f",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T153043.401.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=6d4a2310898d99e777be
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDM4MDQsImV4cCI6MTY5MzI5MDIwNH0.Mtw8umYmQDJ3xsDrIKugKpOTKK0-fXPZWBTEwg5161Y
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=01B9962EA9ECA580FAF10136B106D274
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec3d692a59101203d6",
+  "partnerOrderId": "11412e975aa743ec9266b617d0af045f",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T153034.401.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQxMTUsImV4cCI6MTY5MzI5MDUxNX0.j3UmtQi8OfIInYvwS5MZkKm6GcSJAYLYRltAAlYjUFU
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=01B9962EA9ECA580FAF10136B106D274
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T152937.200.json
+
+###
+
+POST http://localhost:8080/api/payment/ready
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQxMTUsImV4cCI6MTY5MzI5MDUxNX0.j3UmtQi8OfIInYvwS5MZkKm6GcSJAYLYRltAAlYjUFU
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=67CCDF692D3355253DB801D1FCA60045
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "itemName": "초코파이",
+  "itemCode": "0111",
+  "quantity": 3,
+  "totalAmount": 9000,
+  "taxFreeAmount": 0,
+  "vatAmount": 0,
+  "greenDeposit" : 0,
+  "installMonth" : 0
+}
+
+<> 2023-08-28T152850.401.json
+
+###
+
+POST http://localhost:8080/api/users/signin
+Content-Type: application/json
+Content-Length: 58
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=67CCDF692D3355253DB801D1FCA60045
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "bzhs1992@icloud.com",
+  "password": "1111"
+}
+
+<> 2023-08-28T152836.200.json
+
+###
+
+POST http://localhost:8080/api/payment/approve?pg_token=e8667a0d08f1c5172928
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDM4MDQsImV4cCI6MTY5MzI5MDIwNH0.Mtw8umYmQDJ3xsDrIKugKpOTKK0-fXPZWBTEwg5161Y
+Content-Length: 142
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=67CCDF692D3355253DB801D1FCA60045
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "tid": "T4ec3d692a59101203d6",
+  "partnerOrderId": "11412e975aa743ec9266b617d0af045f",
+  "payload": "테스트",
+  "totalAmount": "9000"
+}
+
+<> 2023-08-28T152554.200.json
+
+###
+
