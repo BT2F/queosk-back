@@ -20,7 +20,7 @@ public class FcmService implements MessageService {
         String token = getToken(email);
         Message message = Message.builder()
                 .putData("title", "대기 순서 알림")
-                .putData("content", "웨이팅 세 팀이 남았습니다. 빨리 오세요")
+                .putData("content", "곧 입장하실 차례입니다. 메뉴를 주문 해주세요.")
                 .setToken(token)
                 .build();
 
