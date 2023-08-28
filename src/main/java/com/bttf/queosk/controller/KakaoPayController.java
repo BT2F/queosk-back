@@ -40,7 +40,7 @@ public class KakaoPayController {
     }
 
     @PostMapping("/cancel")
-    @ApiOperation(value = "결제 취소 API", notes = "결제를 승인받는 API를 작성 합니다.")
+    @ApiOperation(value = "결제 취소 API", notes = "결제를 취소하는 API를 작성 합니다.")
     public ResponseEntity<Object> paymentCancel(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Valid @RequestBody KakaoPaymentCancelForm kakaoPaymentCancelForm) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         KakaoPaymentCancelDto paymentCancel = kakaoPaymentService.kakaoPaymentCancel(userId, kakaoPaymentCancelForm);
