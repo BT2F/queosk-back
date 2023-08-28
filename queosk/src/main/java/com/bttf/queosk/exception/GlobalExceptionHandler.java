@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.bttf.queosk.exception.ErrorCode.UNDEFINED_EXCEPTION;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -34,4 +36,16 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
     }
 
+    //별도로 정의되지 않았으나 발생한 예외 처리
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> Exception(Exception exception) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(exception.getMessage())
+                .errorCode(UNDEFINED_EXCEPTION)
+                .build();
+
+        return ResponseEntity
+                .status(errorResponse.getErrorCode().getStatus())
+                .body(errorResponse);
+    }
 }

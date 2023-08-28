@@ -17,14 +17,14 @@ public enum ErrorCode {
     EXISTING_USER(HttpStatus.BAD_REQUEST, "이미 가입된 회원입니다."),
     PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     USER_NOT_EXISTS(HttpStatus.NOT_FOUND, "해당 회원을 찾을 수 없습니다."),
-    NICKNAME_NOT_MATCH(HttpStatus.BAD_REQUEST,"닉네임 정보가 일치가하지 않습니다." ),
-    WITHDRAWN_USER(HttpStatus.BAD_REQUEST,"이미 탈퇴한 회원입니다." ),
-    NOT_VERIFIED_USER(HttpStatus.BAD_REQUEST,"이메일 검증 진행 후 로그인이 가능합니다." ),
-    KAKAO_LOGIN_FAILED(HttpStatus.BAD_REQUEST,"카카오 소셜 로그인 도중 예외가 발생했습니다."),
-    KAKAO_USER_UNSUPPORTED_SERVICE(HttpStatus.BAD_REQUEST,"카카오 소셜 로그인 회원이게는 지원되지 않는 기능입니다." ),
+    NICKNAME_NOT_MATCH(HttpStatus.BAD_REQUEST, "닉네임 정보가 일치가하지 않습니다."),
+    WITHDRAWN_USER(HttpStatus.BAD_REQUEST, "이미 탈퇴한 회원입니다."),
+    NOT_VERIFIED_USER(HttpStatus.BAD_REQUEST, "이메일 검증 진행 후 로그인이 가능합니다."),
+    KAKAO_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "카카오 소셜 로그인 도중 예외가 발생했습니다."),
+    KAKAO_USER_UNSUPPORTED_SERVICE(HttpStatus.BAD_REQUEST, "카카오 소셜 로그인 회원이게는 지원되지 않는 기능입니다."),
 
     // Token 관련 Exception
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED,"만료되거나 유효하지 않은 토큰입니다." ),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "만료되거나 유효하지 않은 토큰입니다."),
 
     // Table 관련 Exception
     INVALID_TABLE(HttpStatus.NOT_FOUND, "존재하지 않는 테이블입니다."),
@@ -45,13 +45,19 @@ public enum ErrorCode {
     CART_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 기존 장바구니가 존재합니다."),
 
     // Menu 관련 Exception
-    MENU_NOT_FOUND(HttpStatus.NOT_FOUND,"아직 해당 식당에 대한 메뉴가 등록되지 않습니다."),
+    MENU_NOT_FOUND(HttpStatus.NOT_FOUND, "아직 해당 식당에 대한 메뉴가 등록되지 않습니다."),
     UNAUTHORIZED_SERVICE(HttpStatus.BAD_REQUEST, "본인매장의 메뉴만 수정할 수 있습니다."),
     MENU_SOLD_OUT(HttpStatus.BAD_REQUEST, "해당 매뉴가 매진되었습니다."),
 
     // Order 관련 Exception
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 주문이 등록되지 않았습니다."),
-    ORDER_RESTAURANT_NOT_MATCH(HttpStatus.BAD_REQUEST, "해당 주문은 해당 매장 에서만 열람 및 수정할 수 있습니다.");
+    ORDER_RESTAURANT_NOT_MATCH(HttpStatus.BAD_REQUEST, "해당 주문은 해당 매장 에서만 열람 및 수정할 수 있습니다."),
+
+    // Queue 관련 Exception
+    FAILED_TO_FETCH_QUEUE(HttpStatus.BAD_REQUEST, "대기열 정보를 불러오는데에 실패했습니다."),
+
+    // 미정의 Exception
+    UNDEFINED_EXCEPTION(HttpStatus.BAD_REQUEST, "정의되지 않은 예외가 발생했습니다. 메세지를 참고해주세요.");
 
     private final HttpStatus status;
     private final String message;
