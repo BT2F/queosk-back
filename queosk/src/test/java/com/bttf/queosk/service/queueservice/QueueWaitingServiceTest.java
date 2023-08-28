@@ -33,7 +33,7 @@ public class QueueWaitingServiceTest {
     }
 
     @Test
-    public void testUpdateWaitingCount() {
+    public void testUpdateWaitingCount_success() {
         // given
         List<String> mockQueueList = Collections.nCopies(5, "1");
         when(queueRedisRepository.findAll(anyString())).thenReturn(mockQueueList);
@@ -52,7 +52,7 @@ public class QueueWaitingServiceTest {
     }
 
     @Test
-    public void testUpdateUserIndexes() {
+    public void testUpdateUserIndexes_success() {
         // given
         List<String> mockQueueList = Collections.nCopies(1, "1");
         when(queueRedisRepository.findAll("1")).thenReturn(mockQueueList);
@@ -68,5 +68,23 @@ public class QueueWaitingServiceTest {
 
         assertThat(topicCaptor.getValue()).isEqualTo("/topic/restaurant/1/queue/1");
         assertThat(messageCaptor.getValue()).isEqualTo("{\"waitingCount\":1}");
+    }
+    @Test
+    public void testUpdateWaitingCount_WithEmptyQueue() {
+        // given
+        List<String> mockQueueList = Collections.emptyList();
+        when(queueRedisRepository.findAll(anyString())).thenReturn(mockQueueList);
+
+        // when
+        queueWaitingService.updateWaitingCount(1L);
+
+        // then
+        ArgumentCaptor<String> topicCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> messageCaptor = ArgumentCaptor.forClass(String.class);
+
+        verify(messagingTemplate).convertAndSend(topicCaptor.capture(), messageCaptor.capture());
+
+        assertThat(topicCaptor.getValue()).isEqualTo("/topic/restaurant/1");
+        assertThat(messageCaptor.getValue()).isEqualTo("{\"waitingCount\":0}");
     }
 }
