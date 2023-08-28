@@ -1,9 +1,12 @@
 package com.bttf.queosk.repository;
 
-import com.bttf.queosk.entity.Settlement;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.bttf.queosk.dto.settlementdto.SettlementDto;
 
-@Repository
-public interface SettlementRepository extends JpaRepository<Settlement, Long> {
+import java.time.LocalDateTime;
+import java.util.List;
+
+public interface SettlementRepository {
+    List<SettlementDto.OrderdMenu> getTodaySales(Long restaurantId);
+
+    List<SettlementDto.OrderdMenu> getPeriodSales(Long restaurantId, LocalDateTime to, LocalDateTime from);
 }
