@@ -5,16 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class KakaoPaymentReadyDto {
+public class KakaoPaymentApproveForm {
+    private String cid;
     private String tid;
-    private String nextRedirectMobileUrl;
-    private String nextRedirectPcUrl;
-    private String OrderId;
-    private LocalDateTime createdAt;
+    private String partnerOrderId;
+    private String payload;
+    private Integer totalAmount;
 }

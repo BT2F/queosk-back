@@ -1,6 +1,8 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
+import com.bttf.queosk.dto.KakaoPaymentApproveDto;
+import com.bttf.queosk.dto.KakaoPaymentApproveForm;
 import com.bttf.queosk.dto.KakaoPaymentReadyDto;
 import com.bttf.queosk.dto.KakaoPaymentReadyForm;
 import com.bttf.queosk.service.kakaoservice.KakaoPaymentService;
@@ -23,9 +25,20 @@ public class KakaoPayController {
 
     @PostMapping("/ready")
     @ApiOperation(value = "결제 준비 API", notes = "결제를 준비하는 API를 작성 합니다.")
-    public ResponseEntity<Object> paymentReady(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Valid @RequestBody KakaoPaymentReadyForm kakaoPaymentReadyForm) {
+    public ResponseEntity<Object> paymentReady(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                               @Valid @RequestBody KakaoPaymentReadyForm kakaoPaymentReadyForm) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         KakaoPaymentReadyDto paymentReady = kakaoPaymentService.kakaoPaymentReady(userId, kakaoPaymentReadyForm);
         return ResponseEntity.ok().body(paymentReady);
+    }
+
+    @PostMapping("/approve")
+    @ApiOperation(value = "결제 승인 API", notes = "결제를 승인받는 API를 작성 합니다.")
+    public ResponseEntity<Object> paymentApprove(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                 @RequestParam("pg_token") String pgToken,
+                                                 @Valid @RequestBody KakaoPaymentApproveForm kakaoPaymentApproveForm) {
+        Long userId = jwtTokenProvider.getIdFromToken(token);
+        KakaoPaymentApproveDto paymentApprove = kakaoPaymentService.kakaoPaymentApprove(userId, pgToken, kakaoPaymentApproveForm);
+        return ResponseEntity.ok().body(paymentApprove);
     }
 }
