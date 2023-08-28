@@ -1,44 +1,34 @@
-package com.bttf.queosk.service.tableservice;
+package com.bttf.queosk.service;
 
 
-import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.dto.tabledto.TableDto;
-import com.bttf.queosk.dto.tabledto.TableForm;
 import com.bttf.queosk.entity.Table;
+import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.mapper.tablemapper.TableMapper;
-import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.TableRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.bttf.queosk.exception.ErrorCode.*;
+import static com.bttf.queosk.exception.ErrorCode.INVALID_TABLE;
+import static com.bttf.queosk.exception.ErrorCode.NOT_PERMITTED;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class TableService {
 
     private final TableRepository tableRepository;
 
-    private final RestaurantRepository restaurantRepository;
-
+    @Transactional
     public void createTable(Long restaurantId) {
 
-        tableRepository.save(TableMapper.INSTANCE.restaurantToTable(
-                        restaurantRepository.findById(restaurantId).orElseThrow(
-                                () -> new CustomException(INVALID_RESTAURANT)
-                        )
-                )
-        );
+        tableRepository.save(Table.createTableByRestaurantId(restaurantId));
     }
 
+    @Transactional
     public void updateTable(Long tableId, TableStatus tableStatus, Long restaurantId) {
 
         Table table = getTableFromRepository(tableId);
@@ -61,7 +51,8 @@ public class TableService {
         tableRepository.delete(table);
     }
 
-    public TableForm getTable(Long tableId, Long restaurantId) {
+    @Transactional(readOnly = true)
+    public TableDto getTable(Long tableId, Long restaurantId) {
 
         Table table = getTableFromRepository(tableId);
 
@@ -69,24 +60,16 @@ public class TableService {
             throw new CustomException(NOT_PERMITTED);
         }
 
-        return TableMapper.INSTANCE.tableDtoToTableForm(
-                TableDto.of(table));
+        return TableDto.of(table);
     }
 
-    public List<TableForm> getTableList(Long restaurantId) {
+    @Transactional(readOnly = true)
+    public List<TableDto> getTableList(Long restaurantId) {
 
-        List<TableDto> tableDto = tableRepository.findByRestaurantId(restaurantId)
+        return tableRepository.findByRestaurantId(restaurantId)
                 .stream()
                 .map(TableDto::of)
                 .collect(Collectors.toList());
-
-        List<TableForm> tableForms = new ArrayList<>();
-        for (TableDto dto : tableDto) {
-            TableForm tableForm = TableMapper.INSTANCE.tableDtoToTableForm(dto);
-            tableForms.add(tableForm);
-        }
-
-        return tableForms;
     }
 
     private Table getTableFromRepository(Long tableId) {

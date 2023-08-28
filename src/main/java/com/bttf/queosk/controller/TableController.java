@@ -1,10 +1,11 @@
 package com.bttf.queosk.controller;
 
+import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
+import com.bttf.queosk.dto.tabledto.TableDto;
 import com.bttf.queosk.dto.tabledto.TableForm;
-import com.bttf.queosk.dto.userdto.UserDto;
 import com.bttf.queosk.enumerate.TableStatus;
-import com.bttf.queosk.service.tableservice.TableService;
-import com.bttf.queosk.service.userservice.UserLoginService;
+import com.bttf.queosk.mapper.TableMapper;
+import com.bttf.queosk.service.TableService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,14 +21,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TableController {
     private final TableService tableService;
-    private final UserLoginService userLoginService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/table")
     @ApiOperation(value = "가게 테이블 생성", notes = "가게의 테이블을 추가합니다.")
     public ResponseEntity<?> tableCreate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        UserDto userFromToken = userLoginService.getUserFromToken(token);
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        tableService.createTable(userFromToken.getId());
+        tableService.createTable(restaurantId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -36,8 +38,8 @@ public class TableController {
                                          @RequestParam TableStatus tableStatus,
                                          @PathVariable Long tableId) {
 
-        UserDto userFromToken = userLoginService.getUserFromToken(token);
-        tableService.updateTable(tableId, tableStatus, userFromToken.getId());
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+        tableService.updateTable(tableId, tableStatus, restaurantId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -46,25 +48,38 @@ public class TableController {
     public ResponseEntity<?> tableDelete(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                          @PathVariable Long tableId) {
 
-        UserDto userFromToken = userLoginService.getUserFromToken(token);
-        tableService.deleteTable(tableId, userFromToken.getId());
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
+        tableService.deleteTable(tableId, restaurantId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/table/{tableId}")
     @ApiOperation(value = "테이블 조회", notes = "테이블을 조회 합니다.")
-    public ResponseEntity<TableForm> tableGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                              @PathVariable Long tableId) {
+    public ResponseEntity<?> tableGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                      @PathVariable Long tableId) {
 
-        UserDto userDto = userLoginService.getUserFromToken(token);
-        return ResponseEntity.status(HttpStatus.OK).body(tableService.getTable(tableId, userDto.getId()));
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
+        TableDto tableDto = tableService.getTable(tableId, restaurantId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(TableMapper.INSTANCE.tableDtoToTableForm(tableDto));
     }
 
     @GetMapping("/tables")
     @ApiOperation(value = "테이블 조회", notes = "테이블을 조회 합니다.")
-    public ResponseEntity<List<TableForm>> tableListGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<?> tableListGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
-        UserDto userDto = userLoginService.getUserFromToken(token);
-        return ResponseEntity.status(HttpStatus.OK).body(tableService.getTableList(userDto.getId()));
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
+        List<TableDto> tableList = tableService.getTableList(restaurantId);
+
+        List<TableForm> tableFormList = new ArrayList<>();
+
+        for (TableDto dto : tableList) {
+            tableFormList.add(TableMapper.INSTANCE.tableDtoToTableForm(dto));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(tableFormList);
     }
 }
