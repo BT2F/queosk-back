@@ -9,5 +9,5 @@ import org.mapstruct.factory.Mappers;
 public interface SettlementMapper {
     SettlementMapper INSTANCE = Mappers.getMapper(SettlementMapper.class);
 
-    SettlementResponse SettlementDtoToSettlementResponse(SettlementDto settlementDto);
+    SettlementResponse settlementDtoToSettlementResponse(SettlementDto settlementDto);
 }

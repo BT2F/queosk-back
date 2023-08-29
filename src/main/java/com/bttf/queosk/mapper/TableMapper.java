@@ -1,9 +1,7 @@
-package com.bttf.queosk.mapper.tablemapper;
+package com.bttf.queosk.mapper;
 
 import com.bttf.queosk.dto.tabledto.TableDto;
 import com.bttf.queosk.dto.tabledto.TableForm;
-import com.bttf.queosk.entity.Restaurant;
-import com.bttf.queosk.entity.Table;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -12,6 +10,4 @@ public interface TableMapper {
     TableMapper INSTANCE = Mappers.getMapper(TableMapper.class);
 
     TableForm tableDtoToTableForm(TableDto tableDto);
-
-    Table restaurantToTable(Restaurant restaurant);
 }
