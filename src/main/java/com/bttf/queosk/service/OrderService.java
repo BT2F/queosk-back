@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bttf.queosk.enumerate.MenuStatus.*;
-import static com.bttf.queosk.enumerate.OperationStatus.*;
-import static com.bttf.queosk.enumerate.OrderStatus.*;
-import static com.bttf.queosk.enumerate.TableStatus.*;
+import static com.bttf.queosk.enumerate.MenuStatus.SOLD_OUT;
+import static com.bttf.queosk.enumerate.OperationStatus.CLOSED;
+import static com.bttf.queosk.enumerate.OrderStatus.IN_PROGRESS;
+import static com.bttf.queosk.enumerate.TableStatus.USING;
 import static com.bttf.queosk.exception.ErrorCode.*;
 
 @Service
@@ -79,7 +79,7 @@ public class OrderService {
         return orderToOrderDto(orderList);
     }
 
-    private List<OrderDto> orderToOrderDto(List<Order> orderList){
+    private List<OrderDto> orderToOrderDto(List<Order> orderList) {
         List<OrderDto> orderDtoList = new ArrayList<>();
 
         orderList.forEach(order -> {

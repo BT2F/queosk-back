@@ -1,7 +1,10 @@
 package com.bttf.queosk.dto.restaurantdto;
 
 import com.bttf.queosk.enumerate.RestaurantCategory;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor

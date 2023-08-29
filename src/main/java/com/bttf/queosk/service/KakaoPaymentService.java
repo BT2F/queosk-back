@@ -1,6 +1,5 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.KakaoPaymentCancelDto;
 import com.bttf.queosk.dto.*;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -22,19 +21,14 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 @Service
 public class KakaoPaymentService {
 
-    private static String CID = "TC0ONETIME";
-
+    private static final String READY_URL = "https://kapi.kakao.com/v1/payment/ready";
+    private static final String APPROVE_URL = "https://kapi.kakao.com/v1/payment/approve";
+    private static final String CANCEL_URL = "https://kapi.kakao.com/v1/payment/cancel";
+    private static final String CID = "TC0ONETIME";
     @Value("${kakao.adminKey}")
     private String ADMIN_KEY;
-
     @Value("${url}")
     private String MAIN_URL;
-
-    private static final String READY_URL = "https://kapi.kakao.com/v1/payment/ready";
-
-    private static final String APPROVE_URL = "https://kapi.kakao.com/v1/payment/approve";
-
-    private static final String CANCEL_URL = "https://kapi.kakao.com/v1/payment/cancel";
 
     public KakaoPaymentReadyDto kakaoPaymentReady(Long userId, KakaoPaymentReadyForm kakaoPaymentReadyForm) {
 
