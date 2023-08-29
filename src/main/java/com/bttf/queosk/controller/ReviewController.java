@@ -56,5 +56,10 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping("restaurant/{restaurantId}")
+    @ApiOperation(value = "매장 리뷰 리스트 열람", notes = "해당 매장에 쓰인 리뷰를 열람합니다.")
+    public ResponseEntity<Object> getReviewList(@PathVariable("restaurantId") Long restaurantId) {
+        return ResponseEntity.ok().body(reviewService.getReviewList(restaurantId));
+    }
 
 }

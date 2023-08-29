@@ -59,8 +59,8 @@ public enum ErrorCode {
 
     // Review 관련 Exception
     INVALID_REVIEW(HttpStatus.NOT_FOUND, "해당 리뷰가 존재하지 않습니다."),
-    REVIEW_WRITER_NOTMATCH(HttpStatus.BAD_REQUEST, "해당 리뷰의 작성자가 아닙니다."),
-
+    REVIEW_WRITER_NOT_MATCH(HttpStatus.BAD_REQUEST, "해당 리뷰의 작성자가 아닙니다."),
+    REVIEW_IS_DELETED(HttpStatus.BAD_REQUEST, "해당 리뷰는 삭제되었습니다."),
     // 미정의 Exception
     UNDEFINED_EXCEPTION(HttpStatus.BAD_REQUEST, "정의되지 않은 예외가 발생했습니다. 메세지를 참고해주세요.");
 

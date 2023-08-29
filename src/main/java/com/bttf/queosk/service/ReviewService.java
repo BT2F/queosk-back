@@ -14,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
 
@@ -32,9 +34,7 @@ public class ReviewService {
                 () -> new CustomException(USER_NOT_EXISTS)
         );
 
-        Restaurant restaurant = restaurantRepository.findById(createReviewForm.getRestaurantId()).orElseThrow(
-                () -> new CustomException(INVALID_RESTAURANT)
-        );
+        Restaurant restaurant = getRestaurant(createReviewForm.getRestaurantId());
 
         Review review = Review.builder()
                 .restaurant(restaurant)
@@ -66,17 +66,34 @@ public class ReviewService {
         review.delete();
     }
 
+    public List<ReviewDto> getReviewList(Long restaurantId) {
+        List<Review> reviewList = reviewRepository.findByRestaurantAndIsDeletedFalse(getRestaurant(restaurantId));
+        List<ReviewDto> reviewDtoList = reviewList.stream().map(ReviewDto::of).collect(Collectors.toList());
+        return reviewDtoList;
+    }
+
+    private Restaurant getRestaurant(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
+                () -> new CustomException(INVALID_RESTAURANT)
+        );
+        return restaurant;
+    }
 
     private Review findReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
                 () -> new CustomException(INVALID_REVIEW)
         );
+
+        if (review.getIsDeleted()) {
+            throw new CustomException(REVIEW_IS_DELETED);
+        }
+
         return review;
     }
 
     private static void validReviewUser(Long userId, Review review) {
         if (!Objects.equals(review.getId(), userId)) {
-            throw new CustomException(REVIEW_WRITER_NOTMATCH);
+            throw new CustomException(REVIEW_WRITER_NOT_MATCH);
         }
     }
 }
