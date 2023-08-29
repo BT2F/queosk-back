@@ -33,4 +33,11 @@ public class Review extends BaseTimeEntity {
     private String content;
 
     private Double rate;
+
+    public void setReview(String subject, String content, Double rate) {
+        this.subject = subject;
+        this.content = content;
+        this.rate = rate;
+    }
+
 }
