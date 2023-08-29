@@ -28,6 +28,12 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
 
+    private static void validReviewUser(Long userId, Review review) {
+        if (!Objects.equals(review.getId(), userId)) {
+            throw new CustomException(REVIEW_WRITER_NOT_MATCH);
+        }
+    }
+
     @Transactional
     public void createReview(Long userId, CreateReviewForm createReviewForm) {
         User user = userRepository.findById(userId).orElseThrow(
@@ -68,8 +74,20 @@ public class ReviewService {
 
     public List<ReviewDto> getReviewList(Long restaurantId) {
         List<Review> reviewList = reviewRepository.findByRestaurantAndIsDeletedFalse(getRestaurant(restaurantId));
-        List<ReviewDto> reviewDtoList = reviewList.stream().map(ReviewDto::of).collect(Collectors.toList());
-        return reviewDtoList;
+        return reviewList.stream().map(ReviewDto::of).collect(Collectors.toList());
+    }
+
+    public List<ReviewDto> getRestaurantUserReviewList(Long userId, Long restaurantId) {
+        List<Review> reviewList = reviewRepository.findByRestaurantAndUserAndIsDeletedFalse(
+                getRestaurant(restaurantId), getUser(userId));
+        return reviewList.stream().map(ReviewDto::of).collect(Collectors.toList());
+    }
+
+    private User getUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new CustomException(USER_NOT_EXISTS)
+        );
+        return user;
     }
 
     private Restaurant getRestaurant(Long restaurantId) {
@@ -91,9 +109,4 @@ public class ReviewService {
         return review;
     }
 
-    private static void validReviewUser(Long userId, Review review) {
-        if (!Objects.equals(review.getId(), userId)) {
-            throw new CustomException(REVIEW_WRITER_NOT_MATCH);
-        }
-    }
 }

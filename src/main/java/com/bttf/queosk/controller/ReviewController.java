@@ -62,4 +62,12 @@ public class ReviewController {
         return ResponseEntity.ok().body(reviewService.getReviewList(restaurantId));
     }
 
+    @GetMapping("restaurant/{restaurantId}/user")
+    @ApiOperation(value = "각 사용자 별 매장 리뷰 열람")
+    public ResponseEntity<Object> getRestaurantUserReviewList(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                              @PathVariable("restaurantId") Long restaurantId) {
+        Long userId = jwtTokenProvider.getIdFromToken(token);
+        return ResponseEntity.ok().body(reviewService.getRestaurantUserReviewList(userId, restaurantId));
+    }
+
 }
