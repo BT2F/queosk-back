@@ -28,17 +28,10 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
 
-    private static void validReviewUser(Long userId, Review review) {
-        if (!Objects.equals(review.getId(), userId)) {
-            throw new CustomException(REVIEW_WRITER_NOT_MATCH);
-        }
-    }
 
     @Transactional
     public void createReview(Long userId, CreateReviewForm createReviewForm) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(USER_NOT_EXISTS)
-        );
+        User user = getUser(userId);
 
         Restaurant restaurant = getRestaurant(createReviewForm.getRestaurantId());
 
@@ -84,29 +77,30 @@ public class ReviewService {
     }
 
     private User getUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(USER_NOT_EXISTS)
-        );
-        return user;
+        return userRepository.findById(userId).orElseThrow(
+                () -> new CustomException(USER_NOT_EXISTS));
     }
 
     private Restaurant getRestaurant(Long restaurantId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
-                () -> new CustomException(INVALID_RESTAURANT)
-        );
-        return restaurant;
+        return restaurantRepository.findById(restaurantId).orElseThrow(
+                () -> new CustomException(INVALID_RESTAURANT));
     }
 
     private Review findReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
-                () -> new CustomException(INVALID_REVIEW)
-        );
+                () -> new CustomException(INVALID_REVIEW));
 
         if (review.getIsDeleted()) {
             throw new CustomException(REVIEW_IS_DELETED);
         }
 
         return review;
+    }
+
+    private void validReviewUser(Long userId, Review review) {
+        if (!Objects.equals(review.getId(), userId)) {
+            throw new CustomException(REVIEW_WRITER_NOT_MATCH);
+        }
     }
 
 }
