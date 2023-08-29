@@ -1,11 +1,11 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
+import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.queuedto.QueueCreateForm;
 import com.bttf.queosk.dto.queuedto.QueueDto;
 import com.bttf.queosk.dto.queuedto.QueueForm;
-import com.bttf.queosk.service.queueservice.QueueService;
-import com.bttf.queosk.service.queueservice.QueueWaitingService;
+import com.bttf.queosk.service.QueueService;
+import com.bttf.queosk.service.QueueWaitingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

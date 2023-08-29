@@ -3,7 +3,7 @@ package com.bttf.queosk.dto.restaurantdto;
 import com.bttf.queosk.dto.menudto.MenuDto;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.Restaurant;
-import com.bttf.queosk.mapper.menumapper.MenuDtoMapper;
+import com.bttf.queosk.mapper.MenuDtoMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

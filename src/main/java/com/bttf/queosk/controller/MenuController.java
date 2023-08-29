@@ -1,12 +1,12 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
+import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.menudto.MenuCreationForm;
 import com.bttf.queosk.dto.menudto.MenuDto;
 import com.bttf.queosk.dto.menudto.MenuStatusForm;
 import com.bttf.queosk.dto.menudto.MenuUpdateForm;
-import com.bttf.queosk.service.imageservice.ImageService;
-import com.bttf.queosk.service.menuservice.MenuService;
+import com.bttf.queosk.service.ImageService;
+import com.bttf.queosk.service.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package com.bttf.queosk.controller;
 
 import com.bttf.queosk.dto.tokendto.NewAccessTokenDto;
 import com.bttf.queosk.dto.tokendto.RefreshTokenForm;
-import com.bttf.queosk.service.refreshtokenservice.RefreshTokenService;
+import com.bttf.queosk.service.RefreshTokenService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

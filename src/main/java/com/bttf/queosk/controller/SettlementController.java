@@ -1,8 +1,8 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
-import com.bttf.queosk.mapper.settlementmapper.SettlementMapper;
-import com.bttf.queosk.service.settlementservice.SettlementService;
+import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.mapper.SettlementMapper;
+import com.bttf.queosk.service.SettlementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
