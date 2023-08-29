@@ -11,6 +11,8 @@ public class UpdateRestaurantInfoForm {
 
     private String ownerId;
 
+    private String cid;
+
     private String ownerName;
 
     private String email;
