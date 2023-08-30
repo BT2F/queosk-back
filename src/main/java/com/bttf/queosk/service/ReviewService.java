@@ -87,14 +87,7 @@ public class ReviewService {
     }
 
     private Review findReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
-                () -> new CustomException(INVALID_REVIEW));
-
-        if (review.getIsDeleted()) {
-            throw new CustomException(REVIEW_IS_DELETED);
-        }
-
-        return review;
+        return reviewRepository.findByIdAndAndIsDeletedFalse(reviewId);
     }
 
     private void validReviewUser(Long userId, Review review) {
