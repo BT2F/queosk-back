@@ -87,7 +87,7 @@ public class ReviewService {
     }
 
     private Review findReview(Long reviewId) {
-        return reviewRepository.findByIdAndAndIsDeletedFalse(reviewId);
+        return reviewRepository.findByIdAndIsDeletedFalse(reviewId);
     }
 
     private void validReviewUser(Long userId, Review review) {
