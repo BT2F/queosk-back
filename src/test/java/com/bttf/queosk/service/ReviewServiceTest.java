@@ -172,17 +172,20 @@ class ReviewServiceTest {
         Review review2 = Review.builder()
                 .id(2L)
                 .restaurant(restaurant)
-                .isDeleted(false)
+                .isDeleted(true)
                 .subject("test1")
                 .content("doit! now!!")
                 .build();
 
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(restaurant));
-        when(reviewRepository.findByRestaurantAndIsDeletedFalse(restaurant)).thenReturn(List.of(review, review2));
+
+        when(reviewRepository.findByRestaurantAndIsDeletedFalse(restaurant)).thenReturn(List.of(review));
 
         List<ReviewDto> reviewList = reviewService.getReviewList(1L);
 
-        assertThat(reviewList.size()).isEqualTo(2);
+        assertThat(reviewList.size()).isEqualTo(1);
+
+
         assertThat(reviewList.get(0).getRestaurant()).isEqualTo(restaurant);
 
     }

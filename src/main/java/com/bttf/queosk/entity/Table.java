@@ -33,6 +33,7 @@ public class Table extends BaseTimeEntity {
 
     public void updateStatus(TableStatus status) {
         this.status = status;
+
     }
 
     public static Table createTableByRestaurantId(Long restaurantId) {
