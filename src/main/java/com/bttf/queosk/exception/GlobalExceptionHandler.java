@@ -12,7 +12,6 @@ import java.util.List;
 import static com.bttf.queosk.exception.ErrorCode.UNDEFINED_EXCEPTION;
 
 @Slf4j
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
