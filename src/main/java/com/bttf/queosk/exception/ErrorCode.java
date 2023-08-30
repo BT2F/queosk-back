@@ -30,9 +30,6 @@ public enum ErrorCode {
     INVALID_TABLE(HttpStatus.NOT_FOUND, "존재하지 않는 테이블입니다."),
     TABLE_IS_USING(HttpStatus.BAD_REQUEST, "테이블에 이미 선점 되었습니다."),
 
-    // Wating 관련 Exception
-    INVALID_WATING(HttpStatus.NOT_FOUND, "존재하지 않는 웨이팅입니다."),
-
     // Restaurant 관련 Exception
     INVALID_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 상점입니다."),
     OWNER_NAME_NOT_MATCH(HttpStatus.BAD_REQUEST, "매장 계정 사용자 이름이 일치 하지 않습니다."),
@@ -56,6 +53,9 @@ public enum ErrorCode {
     // Queue 관련 Exception
     FAILED_TO_FETCH_QUEUE(HttpStatus.BAD_REQUEST, "대기열 정보를 불러오는데에 실패했습니다."),
     QUEUE_IS_EMPTY(HttpStatus.NOT_FOUND, "대기열이 비어있습니다."),
+    INVALID_WAITING(HttpStatus.NOT_FOUND, "존재하지 않는 웨이팅입니다."),
+    QUEUE_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,"이미 해당 식당에 웨이팅 신청을 해 놓은 상태입니다." ),
+    QUEUE_DOESNT_EXIST(HttpStatus.NOT_FOUND,"존재하지 않는 웨이팅입니다." ),
 
     // 미정의 Exception
     UNDEFINED_EXCEPTION(HttpStatus.BAD_REQUEST, "정의되지 않은 예외가 발생했습니다. 메세지를 참고해주세요.");
