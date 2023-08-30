@@ -20,7 +20,7 @@ public class QueueDto {
         return QueueDto.builder()
                 .id(queue.getId())
                 .userId(queue.getUserId())
-                .numberPeople(queue.getNumberPeople())
+                .numberPeople(queue.getNumberOfParty())
                 .restaurantId(queue.getRestaurantId())
                 .build();
     }
