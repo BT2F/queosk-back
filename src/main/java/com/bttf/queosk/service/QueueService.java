@@ -56,7 +56,7 @@ public class QueueService {
                 .build();
     }
 
-    //웨이팅중인 팀들의 예약정보 가져오기
+    //웨이팅 중인 팀들의 예약정보 가져오기
     @Transactional(readOnly = true)
     public QueueResponseForRestaurant getQueueList(Long restaurantId) {
 
@@ -79,7 +79,7 @@ public class QueueService {
                 .build();
     }
 
-    // 본인(유저)의 순서를 알 수 있다.
+    // 본인(사용자)의 순서 조회
     @Transactional(readOnly = true)
     public QueueResponseForUser getUserQueueNumber(Long restaurantId, Long userId) {
 
@@ -92,7 +92,7 @@ public class QueueService {
                         String.valueOf(queues.isEmpty() ? 0 : queues.get(0).getId())
                 );
 
-        // 고객의 인덱스가 존재하지 않을 경우 (Queue 등록하지 않은상태) 예외 반환
+        // 사용자의 인덱스가 존재하지 않을 경우 (Queue 등록하지 않은상태) 예외 반환
         if (userWaitingCount == null || userWaitingCount == -1) {
             throw new CustomException(QUEUE_DOESNT_EXIST);
         }
@@ -137,6 +137,7 @@ public class QueueService {
         });
     }
 
+    // 사용자가 본인의 웨이팅을 삭제(취소)
     @Transactional
     public void deleteUserQueue(Long restaurantId, Long userId) {
 
