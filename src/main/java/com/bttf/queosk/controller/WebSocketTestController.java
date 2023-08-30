@@ -1,7 +1,7 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.dto.queuedto.QueueForm;
-import com.bttf.queosk.service.queueservice.QueueService;
+import com.bttf.queosk.service.QueueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -3,8 +3,8 @@ package com.bttf.queosk.controller;
 import com.bttf.queosk.dto.restaurantdto.GetCoordRestaurantInfoForm;
 import com.bttf.queosk.dto.restaurantdto.*;
 
-import com.bttf.queosk.service.refreshtokenservice.RefreshTokenService;
-import com.bttf.queosk.service.restaurantservice.RestaurantService;
+import com.bttf.queosk.service.RefreshTokenService;
+import com.bttf.queosk.service.RestaurantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class RestaurantController {
     private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/signup")
-    @ApiOperation(value = "사업자 회원가입", notes = "주어진 정보로 사업자 회원가입을 진행합니다.")
+    @ApiOperation(value = "매장 회원가입", notes = "주어진 정보로 매장 회원가입을 진행합니다.")
     public ResponseEntity<?> signUp(@Valid @RequestBody RestaurantSignUpForm restaurantSignUpForm) throws Exception {
         restaurantService.signUp(restaurantSignUpForm);
 
@@ -39,13 +39,13 @@ public class RestaurantController {
     }
 
     @PostMapping("/signin")
-    @ApiOperation(value = "사업자 로그인", notes = "주어진 정보로 사업자 로그인을 진행합니다.")
+    @ApiOperation(value = "매장 로그인", notes = "주어진 정보로 매장 로그인을 진행합니다.")
     public ResponseEntity<?> signIn(@Valid @RequestBody RestaurantSignInForm restaurantSignInForm) {
         return ResponseEntity.ok().body(restaurantService.signIn(restaurantSignInForm));
     }
 
     @PostMapping("/image")
-    @ApiOperation(value = "이미지 추가", notes = "업장의 이미지를 추가합니다.")
+    @ApiOperation(value = "매장 이미지 추가", notes = "매장의 이미지를 추가합니다.")
     public ResponseEntity<?> restaurantImageUpload(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody MultipartFile image) throws IOException {
@@ -55,7 +55,7 @@ public class RestaurantController {
     }
 
     @GetMapping
-    @ApiOperation(value = "매장 정보 확인", notes = "업장의 정보를 확인합니다.")
+    @ApiOperation(value = "매장 정보 확인", notes = "매장의 정보를 확인합니다.")
     public ResponseEntity<?> restaurantGetInfo(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         RestaurantDto restaurant = restaurantService.getRestaurantInfoFromToken(token);
@@ -78,7 +78,7 @@ public class RestaurantController {
     }
 
     @PostMapping("/signout")
-    @ApiOperation(value = "매장 로그 아웃", notes = "업장 계정을 로그아웃 합니다.")
+    @ApiOperation(value = "매장 로그 아웃", notes = "매장 계정을 로그아웃 합니다.")
     public ResponseEntity<?> restaurantSignOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         RestaurantDto restaurant = restaurantService.getRestaurantInfoFromToken(token);
         refreshTokenService.deleteRefreshToken(restaurant.getEmail());
@@ -86,14 +86,14 @@ public class RestaurantController {
     }
 
     @DeleteMapping
-    @ApiOperation(value = "사업자 탈퇴", notes = "업장 계정을 삭제합니다.")
+    @ApiOperation(value = "사업자 탈퇴", notes = "매장 계정을 삭제합니다.")
     public ResponseEntity<?> deleteRestaurant(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         restaurantService.deleteRestaurant(token);
         return ResponseEntity.status(NO_CONTENT).build();
     }
 
     @PostMapping
-    @ApiOperation(value = "매장 수정", notes = "업장 계정의 정보를 수정합니다.")
+    @ApiOperation(value = "매장 수정", notes = "매장 계정의 정보를 수정합니다.")
     public ResponseEntity<?> updateRestaurantInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                   UpdateRestaurantInfoForm updateRestaurantInfoForm) {
         RestaurantDto restaurant = restaurantService.updateRestaurantInfo(token, updateRestaurantInfoForm);

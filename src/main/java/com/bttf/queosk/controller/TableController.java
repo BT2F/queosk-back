@@ -1,6 +1,6 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
+import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.tabledto.TableDto;
 import com.bttf.queosk.dto.tabledto.TableForm;
 import com.bttf.queosk.enumerate.TableStatus;

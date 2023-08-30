@@ -1,14 +1,10 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.menudto.MenuCreationForm;
-import com.bttf.queosk.dto.menudto.MenuDto;
-import com.bttf.queosk.dto.menudto.MenuStatusForm;
 import com.bttf.queosk.dto.restaurantdto.*;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.enumerate.MenuStatus;
 import com.bttf.queosk.repository.MenuRepository;
-import com.bttf.queosk.service.emailsender.EmailSender;
-import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
+import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
 import com.bttf.queosk.enumerate.RestaurantCategory;
 import com.bttf.queosk.dto.tokendto.TokenDto;
@@ -18,10 +14,6 @@ import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
-import com.bttf.queosk.service.kakaoservice.KakaoGeoAddressService;
-import com.bttf.queosk.service.imageservice.ImageService;
-import com.bttf.queosk.service.menuservice.MenuService;
-import com.bttf.queosk.service.restaurantservice.RestaurantService;
 import com.google.gson.Gson;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +45,6 @@ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @Transactional
