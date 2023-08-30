@@ -74,6 +74,7 @@ public class KakaoPaymentService {
         parameter.add("payload", kakaoPaymentApproveForm.getPayload());
         parameter.add("total_amount", kakaoPaymentApproveForm.getTotalAmount().toString());
 
+
         String postString = restApiPost(parameter, KAKAOPAY_URL + "approve");
 
         JsonObject jsonObject = JsonParser.parseString(postString).getAsJsonObject();
@@ -109,7 +110,7 @@ public class KakaoPaymentService {
         parameter.add("tid", kakaoPaymentCancelForm.getTid());
         parameter.add("cancel_amount", kakaoPaymentCancelForm.getCancelAmount().toString());
         parameter.add("cancel_tax_free_amount", kakaoPaymentCancelForm.getCancelTaxFreeAmount().toString());
-      
+
         String postString = restApiPost(parameter, KAKAOPAY_URL + "cancel");
 
         JsonObject jsonObject = JsonParser.parseString(postString).getAsJsonObject();

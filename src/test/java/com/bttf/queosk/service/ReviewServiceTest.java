@@ -178,11 +178,14 @@ class ReviewServiceTest {
                 .build();
 
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(restaurant));
+
         when(reviewRepository.findByRestaurantAndIsDeletedFalse(restaurant)).thenReturn(List.of(review));
 
         List<ReviewDto> reviewList = reviewService.getReviewList(1L);
 
         assertThat(reviewList.size()).isEqualTo(1);
+
+
         assertThat(reviewList.get(0).getRestaurant()).isEqualTo(restaurant);
 
     }
