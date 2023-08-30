@@ -1,8 +1,8 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.kakaodto.KaKaoLoginForm;
+import com.bttf.queosk.dto.KaKaoLoginForm;
 import com.bttf.queosk.dto.userdto.UserSignInDto;
-import com.bttf.queosk.service.kakaoservice.KakaoLoginService;
+import com.bttf.queosk.service.KakaoLoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

@@ -10,6 +10,8 @@ import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
 
+import static com.bttf.queosk.enumerate.TableStatus.OPEN;
+
 @Entity(name = "table")
 @AuditOverride(forClass = BaseTimeEntity.class)
 @Builder
@@ -29,6 +31,13 @@ public class Table extends BaseTimeEntity {
     public static Table updateStatus(Table table, TableStatus status) {
         return table.builder()
                 .status(status)
+                .build();
+    }
+
+    public static Table createTableByRestaurantId(Long restaurantId) {
+        return Table.builder()
+                .restaurantId(restaurantId)
+                .status(OPEN)
                 .build();
     }
 }

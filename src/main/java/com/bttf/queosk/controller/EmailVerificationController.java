@@ -1,6 +1,6 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.service.userservice.UserInfoService;
+import com.bttf.queosk.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
