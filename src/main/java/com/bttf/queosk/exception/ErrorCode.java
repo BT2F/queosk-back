@@ -57,8 +57,20 @@ public enum ErrorCode {
     QUEUE_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,"이미 해당 식당에 웨이팅 신청을 해 놓은 상태입니다." ),
     QUEUE_DOESNT_EXIST(HttpStatus.NOT_FOUND,"존재하지 않는 웨이팅입니다." ),
 
+    // Review 관련 Exception
+    INVALID_REVIEW(HttpStatus.NOT_FOUND, "해당 리뷰가 존재하지 않습니다."),
+    REVIEW_WRITER_NOT_MATCH(HttpStatus.BAD_REQUEST, "해당 리뷰의 작성자가 아닙니다."),
+    REVIEW_IS_DELETED(HttpStatus.BAD_REQUEST, "해당 리뷰는 삭제되었습니다."),
+
+    // Comment 관련 Exception
+    INVALID_COMMENT(HttpStatus.NOT_FOUND,"해당 코멘트를 찾을 수 없습니다."),
+    REVIEW_RESTAURANT_NOT_MATCH(HttpStatus.BAD_REQUEST, "리뷰 대상 매장의 점주가 아닙니다."),
+    COMMENT_RESTAURANT_NOT_MATCH(HttpStatus.BAD_REQUEST, "해당 코멘트의 작성자가 아닙니다."),
+
     // 미정의 Exception
     UNDEFINED_EXCEPTION(HttpStatus.BAD_REQUEST, "정의되지 않은 예외가 발생했습니다. 메세지를 참고해주세요.");
+
+
 
     private final HttpStatus status;
     private final String message;

@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.bttf.queosk.exception.ErrorCode.*;
+import static com.bttf.queosk.exception.ErrorCode.INVALID_RESTAURANT;
+import static com.bttf.queosk.exception.ErrorCode.INVALID_USER_ID;
 
 @Slf4j
 @Service

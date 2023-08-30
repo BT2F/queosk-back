@@ -16,24 +16,24 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider jwtTokenProvider;
-
     private static final String[] ALL_WHITELIST = {
             "/**/signup",                // 로그인전이므로 AccessToken 체크 패스
             "/**/signin",                // 로그인전이므로 AccessToken 체크 패스
             "/**/verification",          // 로그인전이므로 AccessToken 체크 패스
-            "/**/refresh",		         // 토큰갱신이므로 AccessToken 체크 패스
+            "/**/refresh",                 // 토큰갱신이므로 AccessToken 체크 패스
             "/**/callback"               // 외부 api 콜백이므로 AccessToken 체크 패스
     };
+    private final JwtTokenProvider jwtTokenProvider;
 
     //화이트리스트(필터링 대상인지 아닌지 판별)
-    private boolean isFilterCheck(String requestURI){
+    private boolean isFilterCheck(String requestURI) {
         return !PatternMatchUtils.simpleMatch(ALL_WHITELIST, requestURI);
     }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                   HttpServletResponse response,
-                                   FilterChain chain) throws IOException {
+                                    HttpServletResponse response,
+                                    FilterChain chain) throws IOException {
 
         String token = getTokenFromRequest(request);
 
@@ -53,6 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
         }
     }
+
     private String getTokenFromRequest(HttpServletRequest request) {
 
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);

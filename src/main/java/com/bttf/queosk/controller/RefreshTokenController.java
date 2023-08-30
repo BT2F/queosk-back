@@ -32,7 +32,7 @@ public class RefreshTokenController {
 
         // 토큰 재발급 서비스 호출
         NewAccessTokenDto newAccessTokenDto =
-                        refreshTokenService.issueNewAccessToken(token, refreshToken);
+                refreshTokenService.issueNewAccessToken(token, refreshToken);
 
         return ResponseEntity.status(HttpStatus.OK).body(newAccessTokenDto);
     }

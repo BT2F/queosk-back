@@ -36,7 +36,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
                 .title("Queosk REST API")
                 .description("Spring boot를 이용한 Queosk REST API")
                 .version("0.0.1")
-                .contact(new Contact("BT2F", "https://github.com/BT2F/queosk-back",""))
+                .contact(new Contact("BT2F", "https://github.com/BT2F/queosk-back", ""))
                 .build();
     }
 

@@ -35,22 +35,18 @@ import static com.bttf.queosk.exception.ErrorCode.KAKAO_LOGIN_FAILED;
 @Service
 public class KakaoLoginService {
 
+    private final static String KAKAO_AUTH_URI = "https://kauth.kakao.com";
+    private final static String KAKAO_API_URI = "https://kapi.kakao.com";
     private final UserRepository userRepository;
     private final KakaoAuthRepository kakaoAuthRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final BCryptPasswordEncoder passwordEncoder;
-
     @Value("${kakao.clientId}")
     private String KAKAO_CLIENT_ID;
-
     @Value("${kakao.secretId}")
     private String KAKAO_CLIENT_SECRET;
-
     @Value("${kakao.redirectUrl}")
     private String KAKAO_REDIRECT_URL;
-
-    private final static String KAKAO_AUTH_URI = "https://kauth.kakao.com";
-    private final static String KAKAO_API_URI = "https://kapi.kakao.com";
 
     public String getKakaoLogin() {
         return KAKAO_AUTH_URI + "/oauth/authorize"

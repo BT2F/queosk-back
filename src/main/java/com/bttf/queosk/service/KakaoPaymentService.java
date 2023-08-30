@@ -1,6 +1,5 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.KakaoPaymentCancelDto;
 import com.bttf.queosk.dto.*;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -16,14 +15,17 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+
 @Service
 public class KakaoPaymentService {
 
-    private static String CID = "TC0ONETIME";
 
+    private static final String KAKAOPAY_URL = "https://kapi.kakao.com/v1/payment/";
+    private static final String CID = "TC0ONETIME";
     @Value("${kakao.adminKey}")
     private String ADMIN_KEY;
-
     @Value("${url}")
     private String MAIN_URL;
 
@@ -47,7 +49,7 @@ public class KakaoPaymentService {
         parameter.add("fail_url", MAIN_URL + "/payment/fail");
         parameter.add("install_month", String.valueOf(kakaoPaymentReadyForm.getInstallMonth()));
 
-        String postString = restApiPost(parameter, "https://kapi.kakao.com/v1/payment/ready");
+        String postString = restApiPost(parameter, KAKAOPAY_URL + "ready");
 
         JsonObject json = JsonParser.parseString(postString).getAsJsonObject();
         KakaoPaymentReadyDto kakaoPaymentReadyDto = KakaoPaymentReadyDto.builder()
@@ -72,7 +74,8 @@ public class KakaoPaymentService {
         parameter.add("payload", kakaoPaymentApproveForm.getPayload());
         parameter.add("total_amount", kakaoPaymentApproveForm.getTotalAmount().toString());
 
-        String postString = restApiPost(parameter, "https://kapi.kakao.com/v1/payment/approve");
+
+        String postString = restApiPost(parameter, KAKAOPAY_URL + "approve");
 
         JsonObject jsonObject = JsonParser.parseString(postString).getAsJsonObject();
         JsonObject amountJson = jsonObject.get("amount").getAsJsonObject();
@@ -108,7 +111,7 @@ public class KakaoPaymentService {
         parameter.add("cancel_amount", kakaoPaymentCancelForm.getCancelAmount().toString());
         parameter.add("cancel_tax_free_amount", kakaoPaymentCancelForm.getCancelTaxFreeAmount().toString());
 
-        String postString = restApiPost(parameter, "https://kapi.kakao.com/v1/payment/cancel");
+        String postString = restApiPost(parameter, KAKAOPAY_URL + "cancel");
 
         JsonObject jsonObject = JsonParser.parseString(postString).getAsJsonObject();
         Integer amount = getCanceledAmount(jsonObject, "amount");
@@ -148,8 +151,8 @@ public class KakaoPaymentService {
     private HttpHeaders getHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
         String auth = "KakaoAK " + ADMIN_KEY;
-        httpHeaders.set("Authorization", auth);
-        httpHeaders.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        httpHeaders.set(AUTHORIZATION, auth);
+        httpHeaders.set(CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8");
 
         return httpHeaders;
     }

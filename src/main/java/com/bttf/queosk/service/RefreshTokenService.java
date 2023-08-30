@@ -14,7 +14,7 @@ import com.bttf.queosk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.bttf.queosk.enumerate.UserRole.*;
+import static com.bttf.queosk.enumerate.UserRole.ROLE_USER;
 import static com.bttf.queosk.exception.ErrorCode.*;
 
 @RequiredArgsConstructor
