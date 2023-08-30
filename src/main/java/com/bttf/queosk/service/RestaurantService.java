@@ -1,6 +1,9 @@
 package com.bttf.queosk.service;
 
+import com.bttf.queosk.entity.Menu;
+import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.dto.restaurantdto.*;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.RefreshToken;
@@ -10,7 +13,7 @@ import com.bttf.queosk.enumerate.UserRole;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.mapper.RestaurantSignInMapper;
 import com.bttf.queosk.mapper.TokenDtoMapper;
-import com.bttf.queosk.repository.MenuRepository;
+import com.bttf.queosk.enumerate.UserRole;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
@@ -118,7 +121,7 @@ public class RestaurantService {
             imageService.deleteFile(restaurant.getImageUrl());
         }
         restaurant.updateImage(imageService.saveFile(image, "restaurant/" + UUID.randomUUID().toString().substring(0, 6)));
-
+      
         restaurantRepository.save(restaurant);
     }
 
