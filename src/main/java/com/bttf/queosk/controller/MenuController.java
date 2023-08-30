@@ -23,7 +23,7 @@ import java.util.UUID;
 
 @RestController
 @Api(tags = "Menu API", description = "메뉴 관련 API")
-@RequestMapping("/api/restaurants")
+@RequestMapping("/api/restaurant")
 @RequiredArgsConstructor
 public class MenuController {
 
