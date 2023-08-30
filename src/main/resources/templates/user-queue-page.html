@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Waiting App</title>
 
 </head>
@@ -23,6 +23,7 @@
         document.getElementById('remainingCount').textContent = defaultCount - 1;
         document.getElementById('waitingCount').textContent = defaultCount;
     });
+
     function connect(restaurantId) {
         var socket = new SockJS('/queue/user');
         stompClient = Stomp.over(socket);

@@ -27,6 +27,8 @@ public class Restaurant extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String cid;
+
     private String ownerId;
 
     private String ownerName;
@@ -83,6 +85,7 @@ public class Restaurant extends BaseTimeEntity {
 
     public void updateRestaurantInfo(UpdateRestaurantInfoForm updateRestaurantInfoForm) {
         this.ownerId = updateRestaurantInfoForm.getOwnerId();
+        this.cid = updateRestaurantInfoForm.getCid();
         this.ownerName = updateRestaurantInfoForm.getOwnerName();
         this.email = updateRestaurantInfoForm.getEmail();
         this.phone = updateRestaurantInfoForm.getPhone();
@@ -91,7 +94,6 @@ public class Restaurant extends BaseTimeEntity {
         this.category = updateRestaurantInfoForm.getCategory();
         this.address = updateRestaurantInfoForm.getAddress();
         this.maxWaiting = updateRestaurantInfoForm.getMaxWaiting();
-
     }
 
     public void setGeoPoint(double longitude, double latitude) {

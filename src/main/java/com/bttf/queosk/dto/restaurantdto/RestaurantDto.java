@@ -1,8 +1,8 @@
 package com.bttf.queosk.dto.restaurantdto;
 
+import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.RestaurantCategory;
-import com.bttf.queosk.entity.Restaurant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

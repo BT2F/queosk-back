@@ -118,7 +118,7 @@ public class RestaurantService {
             imageService.deleteFile(restaurant.getImageUrl());
         }
         restaurant.updateImage(imageService.saveFile(image, "restaurant/" + UUID.randomUUID().toString().substring(0, 6)));
-      
+
         restaurantRepository.save(restaurant);
     }
 

@@ -1,7 +1,9 @@
 package com.bttf.queosk.entity;
 
-import com.bttf.queosk.dto.queuedto.QueueDto;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.Id;
