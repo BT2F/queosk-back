@@ -7,7 +7,6 @@ import com.bttf.queosk.dto.queuedto.QueueResponseForUser;
 import com.bttf.queosk.entity.Queue;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.QueueRedisRepository;
 import com.bttf.queosk.repository.QueueRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
@@ -21,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.bttf.queosk.exception.ErrorCode.INVALID_RESTAURANT;
-import static com.bttf.queosk.exception.ErrorCode.INVALID_USER_ID;
+import static com.bttf.queosk.exception.ErrorCode.*;
 
 @Slf4j
 @Service
@@ -96,7 +94,7 @@ public class QueueService {
 
         // 고객의 인덱스가 존재하지 않을 경우 (Queue 등록하지 않은상태) 예외 반환
         if (userWaitingCount == null || userWaitingCount == -1) {
-            throw new CustomException(ErrorCode.QUEUE_DOESNT_EXIST);
+            throw new CustomException(QUEUE_DOESNT_EXIST);
         }
 
         return QueueResponseForUser.builder()
