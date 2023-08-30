@@ -21,9 +21,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 @Service
 public class KakaoPaymentService {
 
-    private static final String READY_URL = "https://kapi.kakao.com/v1/payment/ready";
-    private static final String APPROVE_URL = "https://kapi.kakao.com/v1/payment/approve";
-    private static final String CANCEL_URL = "https://kapi.kakao.com/v1/payment/cancel";
+    private static final String KAKAOPAY_URL = "https://kapi.kakao.com/v1/payment/";
     private static final String CID = "TC0ONETIME";
     @Value("${kakao.adminKey}")
     private String ADMIN_KEY;
@@ -50,7 +48,7 @@ public class KakaoPaymentService {
         parameter.add("fail_url", MAIN_URL + "/payment/fail");
         parameter.add("install_month", String.valueOf(kakaoPaymentReadyForm.getInstallMonth()));
 
-        String postString = restApiPost(parameter, READY_URL);
+        String postString = restApiPost(parameter, KAKAOPAY_URL + "ready");
 
         JsonObject json = JsonParser.parseString(postString).getAsJsonObject();
         KakaoPaymentReadyDto kakaoPaymentReadyDto = KakaoPaymentReadyDto.builder()
@@ -75,7 +73,7 @@ public class KakaoPaymentService {
         parameter.add("payload", kakaoPaymentApproveForm.getPayload());
         parameter.add("total_amount", kakaoPaymentApproveForm.getTotalAmount().toString());
 
-        String postString = restApiPost(parameter, APPROVE_URL);
+        String postString = restApiPost(parameter, KAKAOPAY_URL + "approve");
 
         JsonObject jsonObject = JsonParser.parseString(postString).getAsJsonObject();
         JsonObject amountJson = jsonObject.get("amount").getAsJsonObject();
@@ -111,7 +109,7 @@ public class KakaoPaymentService {
         parameter.add("cancel_amount", kakaoPaymentCancelForm.getCancelAmount().toString());
         parameter.add("cancel_tax_free_amount", kakaoPaymentCancelForm.getCancelTaxFreeAmount().toString());
 
-        String postString = restApiPost(parameter, CANCEL_URL);
+        String postString = restApiPost(parameter, KAKAOPAY_URL + "cancel");
 
         JsonObject jsonObject = JsonParser.parseString(postString).getAsJsonObject();
         Integer amount = getCanceledAmount(jsonObject, "amount");

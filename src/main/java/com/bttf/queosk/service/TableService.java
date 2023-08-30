@@ -37,7 +37,7 @@ public class TableService {
             throw new CustomException(NOT_PERMITTED);
         }
 
-        Table.updateStatus(table, tableStatus);
+        table.updateStatus(tableStatus);
     }
 
     public void deleteTable(Long tableId, Long restaurantId) {
