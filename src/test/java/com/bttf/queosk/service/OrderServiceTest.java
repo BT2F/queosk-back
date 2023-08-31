@@ -1,11 +1,10 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.orderdto.CreateOrderForm;
+import com.bttf.queosk.dto.OrderCreationForm;
 import com.bttf.queosk.entity.*;
 import com.bttf.queosk.enumerate.OrderStatus;
 import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.repository.*;
-import com.bttf.queosk.service.OrderService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -76,7 +75,7 @@ class OrderServiceTest {
                 .email(userEmail)
                 .build();
 
-        CreateOrderForm createOrderForm = CreateOrderForm.builder()
+        OrderCreationForm orderCreationForm = OrderCreationForm.builder()
                 .menuId(menuId)
                 .tableId(tableId)
                 .restaurantId(restaurantId)
@@ -89,7 +88,7 @@ class OrderServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         // when
 
-        orderService.createOrder(createOrderForm, 1L);
+        orderService.createOrder(orderCreationForm, 1L);
 
         // then
 

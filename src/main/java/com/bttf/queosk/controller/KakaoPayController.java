@@ -33,9 +33,9 @@ public class KakaoPayController {
     @ApiOperation(value = "결제 승인 API", notes = "결제를 승인받는 API를 작성 합니다.")
     public ResponseEntity<Object> paymentApprove(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                  @RequestParam("pg_token") String pgToken,
-                                                 @Valid @RequestBody KakaoPaymentApproveForm kakaoPaymentApproveForm) {
+                                                 @Valid @RequestBody KakaoPaymentApprovalForm kakaoPaymentApprovalForm) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
-        KakaoPaymentApproveDto paymentApprove = kakaoPaymentService.kakaoPaymentApprove(userId, pgToken, kakaoPaymentApproveForm);
+        KakaoPaymentApprovalDto paymentApprove = kakaoPaymentService.kakaoPaymentApprove(userId, pgToken, kakaoPaymentApprovalForm);
         return ResponseEntity.ok().body(paymentApprove);
     }
 

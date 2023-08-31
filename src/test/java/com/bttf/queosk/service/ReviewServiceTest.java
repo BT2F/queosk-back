@@ -1,6 +1,6 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.CreateReviewForm;
+import com.bttf.queosk.dto.ReviewCreationForm;
 import com.bttf.queosk.dto.ReviewDto;
 import com.bttf.queosk.dto.UpdateReviewForm;
 import com.bttf.queosk.entity.Restaurant;
@@ -55,7 +55,7 @@ class ReviewServiceTest {
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
 
-        CreateReviewForm createReviewForm = CreateReviewForm.builder()
+        ReviewCreationForm reviewCreationForm = ReviewCreationForm.builder()
                 .restaurantId(1L)
                 .subject("test")
                 .content("content test")
@@ -64,7 +64,7 @@ class ReviewServiceTest {
 
 
         // when
-        reviewService.createReview(1L, createReviewForm);
+        reviewService.createReview(1L, reviewCreationForm);
 
         // then
 
@@ -95,7 +95,7 @@ class ReviewServiceTest {
                 .rate(3.2)
                 .build();
 
-        given(reviewRepository.findById(1L)).willReturn(Optional.of(review));
+        given(reviewRepository.findByIdAndIsDeletedFalse(1L)).willReturn(review);
         UpdateReviewForm updateReviewForm = UpdateReviewForm.builder()
                 .subject("test1")
                 .content("testContent2")
@@ -107,9 +107,9 @@ class ReviewServiceTest {
         reviewService.updateReview(1L, 1L, updateReviewForm);
 
         // then
-        assertThat(reviewRepository.findById(1L).get().getSubject()).isEqualTo("test1");
-        assertThat(reviewRepository.findById(1L).get().getContent()).isEqualTo("testContent2");
-        assertThat(reviewRepository.findById(1L).get().getRate()).isEqualTo(4.0);
+        assertThat(reviewRepository.findByIdAndIsDeletedFalse(1L).getSubject()).isEqualTo("test1");
+        assertThat(reviewRepository.findByIdAndIsDeletedFalse(1L).getContent()).isEqualTo("testContent2");
+        assertThat(reviewRepository.findByIdAndIsDeletedFalse(1L).getRate()).isEqualTo(4.0);
 
 
     }
@@ -123,7 +123,7 @@ class ReviewServiceTest {
                 .subject("test")
                 .content("doit! now!")
                 .build();
-        when(reviewRepository.findById(1L)).thenReturn(Optional.of(review));
+        given(reviewRepository.findByIdAndIsDeletedFalse(1L)).willReturn(review);
 
         // when
 
@@ -131,7 +131,7 @@ class ReviewServiceTest {
 
         assertThat(reviewDto.getSubject()).isEqualTo("test");
         assertThat(reviewDto.getContent()).isEqualTo("doit! now!");
-        verify(reviewRepository, times(1)).findById(1L);
+        verify(reviewRepository, times(1)).findByIdAndIsDeletedFalse(1L);
     }
 
     @Test
@@ -139,21 +139,24 @@ class ReviewServiceTest {
 
         // given
 
+        User user = User.builder()
+                .id(1L)
+                .build();
         Review review = Review.builder()
                 .id(1L)
+                .user(user)
                 .isDeleted(false)
                 .subject("test")
                 .content("doit! now!")
                 .build();
-        when(reviewRepository.findById(1L)).thenReturn(Optional.of(review));
-
+        given(reviewRepository.findByIdAndIsDeletedFalse(1L)).willReturn(review);
         // when
 
         reviewService.deleteReview(1L, 1L);
 
         //then
 
-        assertThat(reviewRepository.findById(1L).get().getIsDeleted()).isTrue();
+        assertThat(reviewRepository.findByIdAndIsDeletedFalse(1L).getIsDeleted()).isTrue();
     }
 
     @Test

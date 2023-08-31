@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.menudto;
+package com.bttf.queosk.dto;
 
 import com.bttf.queosk.enumerate.MenuStatus;
 import lombok.AllArgsConstructor;

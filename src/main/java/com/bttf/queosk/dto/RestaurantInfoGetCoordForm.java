@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.menudto;
+package com.bttf.queosk.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MenuUpdateForm {
-    private String name;
-    private Long price;
+public class RestaurantInfoGetCoordForm {
+    private Double x;
+    private Double y;
+    private int page;
+    private int size;
 }

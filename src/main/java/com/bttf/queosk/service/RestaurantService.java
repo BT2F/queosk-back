@@ -1,14 +1,13 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.restaurantdto.*;
+import com.bttf.queosk.dto.*;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.UserRole;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.mapper.RestaurantSignInMapper;
 import com.bttf.queosk.mapper.TokenDtoMapper;
 import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.repository.RefreshTokenRepository;
@@ -101,9 +100,11 @@ public class RestaurantService {
                         .build()
         );
 
-        return RestaurantSignInMapper.MAPPER.toDto(restaurant, refreshToken, accessToken);
-
-
+        return RestaurantSignInDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .imageUrl(restaurant.getImageUrl())
+                .build();
     }
 
     @Transactional
@@ -199,18 +200,18 @@ public class RestaurantService {
         return RestaurantDto.of(restaurant);
     }
 
-    public Page<RestaurantDto> getCoordRestaurantInfoForm(GetCoordRestaurantInfoForm getCoordRestaurantInfoForm) {
-        Pageable pageable = PageRequest.of(getCoordRestaurantInfoForm.getPage(), getCoordRestaurantInfoForm.getSize());
-        double x = getCoordRestaurantInfoForm.getX();
-        double y = getCoordRestaurantInfoForm.getY();
+    public Page<RestaurantDto> getCoordRestaurantInfoForm(RestaurantInfoGetCoordForm restaurantInfoGetCoordForm) {
+        Pageable pageable = PageRequest.of(restaurantInfoGetCoordForm.getPage(), restaurantInfoGetCoordForm.getSize());
+        double x = restaurantInfoGetCoordForm.getX();
+        double y = restaurantInfoGetCoordForm.getY();
 
         return restaurantRepository.getRestaurantListByDistance(kakaoGeoAddressService.coordinateToZone(x, y), x, y, pageable).map(RestaurantDto::of);
     }
 
-    public GetRestaurantInfoMenuDto getRestaurantInfoAndMenu(Long restaurantId) {
+    public RestaurantInfoMenuGetDto getRestaurantInfoAndMenu(Long restaurantId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
         List<Menu> menu = menuRepository.findByRestaurantId(restaurantId);
 
-        return GetRestaurantInfoMenuDto.of(restaurant, menu);
+        return RestaurantInfoMenuGetDto.of(restaurant, menu);
     }
 }
