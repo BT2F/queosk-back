@@ -92,7 +92,7 @@ public class ReviewService {
     }
 
     private void validReviewUser(Long userId, Review review) {
-        if (!Objects.equals(review.getId(), userId)) {
+        if (!Objects.equals(review.getUser().getId(), userId)) {
             throw new CustomException(REVIEW_WRITER_NOT_MATCH);
         }
     }

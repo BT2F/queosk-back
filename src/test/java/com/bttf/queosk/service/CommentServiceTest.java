@@ -41,8 +41,8 @@ class CommentServiceTest {
     @Test
     void createComment_success() throws Exception {
         // given
-        Review review = Review.builder().id(1L).build();
         Restaurant restaurant = Restaurant.builder().id(1L).build();
+        Review review = Review.builder().id(1L).restaurant(restaurant).build();
         given(reviewRepository.findById(1L)).willReturn(Optional.of(review));
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
 
@@ -58,8 +58,8 @@ class CommentServiceTest {
     @Test
     void updateComment() {
         // given
-        Review review = Review.builder().id(1L).build();
         Restaurant restaurant = Restaurant.builder().id(1L).build();
+        Review review = Review.builder().id(1L).restaurant(restaurant).build();
         given(reviewRepository.findById(1L)).willReturn(Optional.of(review));
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
 
