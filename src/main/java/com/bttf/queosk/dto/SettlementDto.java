@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.settlementdto;
+package com.bttf.queosk.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +24,7 @@ public class SettlementDto {
     }
 
     @AllArgsConstructor
+    @Getter
     public static class OrderdMenu {
         private String menu;
         private Integer count;

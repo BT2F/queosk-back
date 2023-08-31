@@ -1,6 +1,6 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.settlementdto.SettlementDto;
+import com.bttf.queosk.dto.SettlementDto;
 import com.bttf.queosk.repository.OrderQueryRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

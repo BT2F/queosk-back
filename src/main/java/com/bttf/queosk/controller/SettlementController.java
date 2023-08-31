@@ -1,7 +1,7 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.mapper.SettlementMapper;
+import com.bttf.queosk.dto.SettlementResponse;
 import com.bttf.queosk.service.SettlementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,9 +28,7 @@ public class SettlementController {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         return ResponseEntity.ok()
-                .body(SettlementMapper.INSTANCE.settlementDtoToSettlementResponse(
-                        settlementService.todaySettlementGet(restaurantId)
-                ));
+                .body(SettlementResponse.of(settlementService.todaySettlementGet(restaurantId)));
     }
 
     @GetMapping("/period")
@@ -40,10 +38,7 @@ public class SettlementController {
                                                  @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime from) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
-
         return ResponseEntity.ok()
-                .body(SettlementMapper.INSTANCE.settlementDtoToSettlementResponse(
-                        settlementService.periodSettlementGet(restaurantId, to, from)
-                ));
+                .body(SettlementResponse.of(settlementService.todaySettlementGet(restaurantId)));
     }
 }

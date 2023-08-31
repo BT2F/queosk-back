@@ -1,6 +1,6 @@
 package com.bttf.queosk.repository;
 
-import com.bttf.queosk.dto.settlementdto.SettlementDto;
+import com.bttf.queosk.dto.SettlementDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
