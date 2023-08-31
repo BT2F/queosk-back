@@ -7,7 +7,7 @@ import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
 import com.bttf.queosk.enumerate.RestaurantCategory;
-import com.bttf.queosk.dto.tokendto.TokenDto;
+import com.bttf.queosk.dto.TokenDto;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.exception.CustomException;

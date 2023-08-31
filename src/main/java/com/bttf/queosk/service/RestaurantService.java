@@ -8,7 +8,6 @@ import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.UserRole;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.mapper.TokenDtoMapper;
 import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
@@ -87,9 +86,7 @@ public class RestaurantService {
             throw new CustomException(PASSWORD_NOT_MATCH);
         }
 
-        String accessToken = jwtTokenProvider.generateAccessToken(
-                TokenDtoMapper.INSTANCE.restaurantToTokenDto(restaurant)
-        );
+        String accessToken = jwtTokenProvider.generateAccessToken(TokenDto.of(restaurant));
 
         String refreshToken = jwtTokenProvider.generateRefreshToken();
 

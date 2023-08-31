@@ -1,16 +1,15 @@
 package com.bttf.queosk.dto;
 
-import com.bttf.queosk.dto.menudto.MenuDto;
+import com.bttf.queosk.dto.MenuDto;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.Restaurant;
-import com.bttf.queosk.mapper.MenuDtoMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
@@ -22,8 +21,16 @@ public class RestaurantInfoMenuGetDto {
     List<MenuDto> menuDtoList;
 
     public static RestaurantInfoMenuGetDto of(Restaurant restaurant, List<Menu> menuList) {
-        List<MenuDto> menuDtoList = new ArrayList<>();
-        menuList.forEach(m -> menuDtoList.add(MenuDtoMapper.INSTANCE.MenuToMenuDto(m)));
+        List<MenuDto> menuDtoList = menuList.stream()
+                .map(menu -> MenuDto.builder()
+                        .restaurantId(menu.getRestaurantId())
+                        .name(menu.getName())
+                        .imageUrl(menu.getImageUrl())
+                        .price(menu.getPrice())
+                        .status(menu.getStatus())
+                        .build())
+                .collect(Collectors.toList());
+
         return RestaurantInfoMenuGetDto.builder()
                 .restaurantDto(RestaurantDto.of(restaurant))
                 .menuDtoList(menuDtoList)
