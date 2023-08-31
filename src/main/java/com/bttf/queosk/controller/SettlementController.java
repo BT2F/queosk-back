@@ -6,6 +6,7 @@ import com.bttf.queosk.service.SettlementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +36,8 @@ public class SettlementController {
     @GetMapping("/period")
     @ApiOperation(value = "매장 기간별 매출", notes = "매장의 기간별 매출 현황을 알 수 있습니다.")
     public ResponseEntity<?> getPeriodSettlement(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                 @RequestParam LocalDateTime to,
-                                                 @RequestParam LocalDateTime from) {
+                                                 @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime to,
+                                                 @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime from) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
