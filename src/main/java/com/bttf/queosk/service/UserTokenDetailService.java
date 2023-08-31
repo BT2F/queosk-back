@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class UserTokenDetailService implements UserDetailsService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         com.bttf.queosk.entity.User userEntity = userRepository.findByEmail(email)
@@ -38,6 +40,7 @@ public class UserTokenDetailService implements UserDetailsService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public UserDetails loadRestaurantByUsername(String email) throws UsernameNotFoundException {
         Restaurant restaurant = restaurantRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));

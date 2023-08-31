@@ -111,6 +111,7 @@ public class UserLoginService {
         return !userRepository.findByEmail(email).isPresent();
     }
 
+    @Transactional(readOnly = true)
     public UserDto getUserFromToken(String token) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         User user = userRepository.findById(userId)
@@ -119,6 +120,7 @@ public class UserLoginService {
         return UserDtoMapper.INSTANCE.userToUserDto(user);
     }
 
+    @Transactional(readOnly = true)
     public UserDto getUserFromId(Long id) {
         User targetUser = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));

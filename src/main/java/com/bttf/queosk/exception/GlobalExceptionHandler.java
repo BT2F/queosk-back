@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
                 .message(exception.getMessage())
                 .build();
 
-        log.error(exception.getMessage());
+        log.error(exception.getMessage(),exception);
 
         return ResponseEntity
                 .status(errorResponse.getErrorCode().getStatus())
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
                 .errorCode(UNDEFINED_EXCEPTION)
                 .build();
 
-        log.error(exception.getMessage());
+        log.error(exception.getMessage(),exception);
 
         return ResponseEntity
                 .status(errorResponse.getErrorCode().getStatus())
