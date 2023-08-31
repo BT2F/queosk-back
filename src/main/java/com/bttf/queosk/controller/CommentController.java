@@ -58,7 +58,8 @@ public class CommentController {
 
     @GetMapping("{reviewId}/comment")
     @ApiOperation(value = "리뷰 코멘트 열람", notes = "해당 리뷰의 코멘트 리스트를 열람합니다.")
-    ResponseEntity<Object> getComment(@PathVariable(value = "reviewId") Long reviewId){
+    ResponseEntity<Object> getComment(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                      @PathVariable(value = "reviewId") Long reviewId){
         return ResponseEntity.ok().body(commentService.getComment(reviewId));
     }
 }
