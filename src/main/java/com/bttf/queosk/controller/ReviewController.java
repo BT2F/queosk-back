@@ -1,9 +1,8 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.CreateReviewForm;
+import com.bttf.queosk.dto.ReviewCreationForm;
 import com.bttf.queosk.dto.UpdateReviewForm;
-import com.bttf.queosk.entity.User;
 import com.bttf.queosk.service.ReviewService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,9 +26,9 @@ public class ReviewController {
     @PostMapping
     @ApiOperation(value = "리뷰 작성", notes = "사용자가 매장에 대해 리뷰를 남깁니다.")
     public ResponseEntity<Object> createReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                               @RequestBody @Valid CreateReviewForm createReviewForm) {
+                                               @RequestBody @Valid ReviewCreationForm reviewCreationForm) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
-        reviewService.createReview(userId, createReviewForm);
+        reviewService.createReview(userId, reviewCreationForm);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

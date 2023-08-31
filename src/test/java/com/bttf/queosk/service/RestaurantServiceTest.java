@@ -1,6 +1,6 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.restaurantdto.*;
+import com.bttf.queosk.dto.*;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.enumerate.MenuStatus;
 import com.bttf.queosk.repository.MenuRepository;
@@ -334,19 +334,19 @@ class RestaurantServiceTest {
 
         // when
 
-        GetRestaurantInfoMenuDto getRestaurantInfoMenuDto = restaurantService.getRestaurantInfoAndMenu(1L);
+        RestaurantInfoMenuGetDto restaurantInfoMenuGetDto = restaurantService.getRestaurantInfoAndMenu(1L);
 
         // then
 
         verify(restaurantRepository, times(1)).findById(1L);
         verify(menuRepository, times(1)).findByRestaurantId(1L);
 
-        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(0).getName()).isEqualTo("왕만두");
-        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(1).getName()).isEqualTo("물만두");
-        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(0).getPrice()).isEqualTo(3000L);
-        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(1).getPrice()).isEqualTo(2000L);
-        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(0).getStatus()).isEqualTo(MenuStatus.ON_SALE);
-        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(1).getStatus()).isEqualTo(MenuStatus.SOLD_OUT);
-        assertThat(getRestaurantInfoMenuDto.getRestaurantDto().getId()).isEqualTo(1L);
+        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(0).getName()).isEqualTo("왕만두");
+        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(1).getName()).isEqualTo("물만두");
+        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(0).getPrice()).isEqualTo(3000L);
+        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(1).getPrice()).isEqualTo(2000L);
+        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(0).getStatus()).isEqualTo(MenuStatus.ON_SALE);
+        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(1).getStatus()).isEqualTo(MenuStatus.SOLD_OUT);
+        assertThat(restaurantInfoMenuGetDto.getRestaurantDto().getId()).isEqualTo(1L);
     }
 }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class KakaoPaymentApproveDto {
+public class KakaoPaymentApprovalDto {
     private String aid;
     private String tid;
     private String cid;

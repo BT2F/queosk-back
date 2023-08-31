@@ -39,6 +39,7 @@ public class CommentService {
                 .review(review)
                 .restaurant(restaurant)
                 .content(commentForm.getContent())
+                .isDeleted(false)
                 .build();
 
         commentRepository.save(comment);
@@ -78,7 +79,7 @@ public class CommentService {
     }
 
     private void reviewRestaurantValid(Restaurant restaurant, Review review) {
-        if (!restaurant.getId().equals(review.getId())) {
+        if (!restaurant.getId().equals(review.getRestaurant().getId())) {
             throw new CustomException(REVIEW_RESTAURANT_NOT_MATCH);
         }
     }

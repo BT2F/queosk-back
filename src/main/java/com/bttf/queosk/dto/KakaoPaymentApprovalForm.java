@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class KakaoPaymentApproveForm {
+public class KakaoPaymentApprovalForm {
     private String cid;
     private String tid;
     private String partnerOrderId;

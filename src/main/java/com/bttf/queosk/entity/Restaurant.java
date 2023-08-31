@@ -1,7 +1,7 @@
 package com.bttf.queosk.entity;
 
 
-import com.bttf.queosk.dto.restaurantdto.UpdateRestaurantInfoForm;
+import com.bttf.queosk.dto.UpdateRestaurantInfoForm;
 import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
 import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.RestaurantCategory;
