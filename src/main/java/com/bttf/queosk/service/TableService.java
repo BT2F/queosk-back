@@ -1,7 +1,7 @@
 package com.bttf.queosk.service;
 
 
-import com.bttf.queosk.dto.tabledto.TableDto;
+import com.bttf.queosk.dto.TableDto;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.exception.CustomException;
@@ -25,7 +25,7 @@ public class TableService {
     @Transactional
     public void createTable(Long restaurantId) {
 
-        tableRepository.save(Table.createTableByRestaurantId(restaurantId));
+        tableRepository.save(Table.of(restaurantId));
     }
 
     @Transactional

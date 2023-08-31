@@ -33,10 +33,9 @@ public class Table extends BaseTimeEntity {
 
     public void updateStatus(TableStatus status) {
         this.status = status;
-
     }
 
-    public static Table createTableByRestaurantId(Long restaurantId) {
+    public static Table of(Long restaurantId) {
         return Table.builder()
                 .restaurantId(restaurantId)
                 .status(OPEN)
