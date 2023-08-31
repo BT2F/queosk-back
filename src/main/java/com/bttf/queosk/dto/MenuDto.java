@@ -21,6 +21,7 @@ public class MenuDto {
 
     public static MenuDto of(Menu menu) {
         return MenuDto.builder()
+                .id(menu.getId())
                 .restaurantId(menu.getRestaurantId())
                 .name(menu.getName())
                 .imageUrl(menu.getImageUrl())
