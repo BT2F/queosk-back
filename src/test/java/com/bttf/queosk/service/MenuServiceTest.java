@@ -1,13 +1,12 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.menudto.MenuCreationForm;
-import com.bttf.queosk.dto.menudto.MenuDto;
-import com.bttf.queosk.dto.menudto.MenuStatusForm;
-import com.bttf.queosk.dto.menudto.MenuUpdateForm;
+import com.bttf.queosk.dto.MenuCreationForm;
+import com.bttf.queosk.dto.MenuDto;
+import com.bttf.queosk.dto.MenuStatusForm;
+import com.bttf.queosk.dto.MenuUpdateForm;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.repository.MenuRepository;
-import com.bttf.queosk.service.MenuService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

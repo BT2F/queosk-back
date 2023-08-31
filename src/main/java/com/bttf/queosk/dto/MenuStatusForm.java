@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.menudto;
+package com.bttf.queosk.dto;
 
 import com.bttf.queosk.enumerate.MenuStatus;
 import lombok.AllArgsConstructor;
@@ -10,11 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MenuDto {
-    private Long id;
-    private Long restaurantId;
-    private String name;
-    private String imageUrl;
-    private Long price;
+public class MenuStatusForm {
     private MenuStatus status;
 }

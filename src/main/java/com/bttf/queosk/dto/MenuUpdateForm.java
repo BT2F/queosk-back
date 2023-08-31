@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.queuedto;
+package com.bttf.queosk.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QueueResponseForUser {
-    private Long userQueueIndex;
-    private Long queueRemaining;
+public class MenuUpdateForm {
+    private String name;
+    private Long price;
 }

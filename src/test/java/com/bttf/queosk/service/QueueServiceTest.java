@@ -1,9 +1,9 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.queuedto.QueueCreateForm;
-import com.bttf.queosk.dto.queuedto.QueueDto;
-import com.bttf.queosk.dto.queuedto.QueueResponseForRestaurant;
-import com.bttf.queosk.dto.queuedto.QueueResponseForUser;
+import com.bttf.queosk.dto.QueueCreateForm;
+import com.bttf.queosk.dto.QueueDto;
+import com.bttf.queosk.dto.QueueResponseForRestaurant;
+import com.bttf.queosk.dto.QueueResponseForUser;
 import com.bttf.queosk.entity.Queue;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
@@ -22,7 +22,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.bttf.queosk.exception.ErrorCode.INVALID_RESTAURANT;
-import static com.bttf.queosk.exception.ErrorCode.INVALID_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;

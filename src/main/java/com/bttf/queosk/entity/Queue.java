@@ -1,6 +1,6 @@
 package com.bttf.queosk.entity;
 
-import com.bttf.queosk.dto.queuedto.QueueCreateForm;
+import com.bttf.queosk.dto.QueueCreateForm;
 import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

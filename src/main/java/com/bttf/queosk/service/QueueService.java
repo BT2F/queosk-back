@@ -1,9 +1,9 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.queuedto.QueueCreateForm;
-import com.bttf.queosk.dto.queuedto.QueueDto;
-import com.bttf.queosk.dto.queuedto.QueueResponseForRestaurant;
-import com.bttf.queosk.dto.queuedto.QueueResponseForUser;
+import com.bttf.queosk.dto.QueueCreateForm;
+import com.bttf.queosk.dto.QueueDto;
+import com.bttf.queosk.dto.QueueResponseForRestaurant;
+import com.bttf.queosk.dto.QueueResponseForUser;
 import com.bttf.queosk.entity.Queue;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.exception.CustomException;
@@ -50,10 +50,7 @@ public class QueueService {
                 String.valueOf(queue.getId())
         );
 
-        return QueueResponseForUser.builder()
-                .queueRemaining(userQueueNumber)
-                .userQueueIndex(userQueueNumber + 1)
-                .build();
+        return QueueResponseForUser.of(userQueueNumber);
     }
 
     //웨이팅 중인 팀들의 예약정보 가져오기
@@ -67,10 +64,7 @@ public class QueueService {
                 .map(QueueDto::of)
                 .collect(Collectors.toList());
 
-        return QueueResponseForRestaurant.builder()
-                .totalQueue(queueDtos.size())
-                .queueDtoList(queueDtos)
-                .build();
+        return QueueResponseForRestaurant.of(queueDtos);
     }
 
     // 본인(사용자)의 순서 조회
@@ -80,21 +74,18 @@ public class QueueService {
         List<Queue> queues =
                 queueRepository.findByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId);
 
-        Long userWaitingCount = queues.isEmpty() ? null :
+        Long userQueueIndex = queues.isEmpty() ? null :
                 queueRedisRepository.getUserWaitingCount(
                         String.valueOf(restaurantId),
                         String.valueOf(queues.get(0).getId())
                 );
 
         // 사용자의 인덱스가 존재하지 않을 경우 (Queue 등록하지 않은상태) 예외 반환
-        if (userWaitingCount == null || userWaitingCount < 0) {
+        if (userQueueIndex == null || userQueueIndex < 0) {
             throw new CustomException(QUEUE_DOESNT_EXIST);
         }
 
-        return QueueResponseForUser.builder()
-                .queueRemaining(userWaitingCount)
-                .userQueueIndex(userWaitingCount + 1) // 대기번호의 경우 index + 1
-                .build();
+        return QueueResponseForUser.of(userQueueIndex);
     }
 
     // 웨이팅 수를 앞에서 1개 당김.
@@ -116,10 +107,7 @@ public class QueueService {
                 .map(QueueDto::of)
                 .collect(Collectors.toList());
 
-        return QueueResponseForRestaurant.builder()
-                .totalQueue(queueDtos.size())
-                .queueDtoList(queueDtos)
-                .build();
+        return QueueResponseForRestaurant.of(queueDtos);
     }
 
     // 사용자가 본인의 웨이팅을 삭제(취소)
