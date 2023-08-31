@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.userdto;
+package com.bttf.queosk.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,12 +12,9 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserPasswordChangeForm {
-    @Size(min = 2, max = 10, message = "닉네임은 2~10자 사이로 입력해주세요.")
-    @NotBlank(message = "비밀번호는 비워둘 수 없습니다.")
-    private String existingPassword;
+public class UserWithdrawalForm {
 
     @Size(min = 2, max = 10, message = "닉네임은 2~10자 사이로 입력해주세요.")
     @NotBlank(message = "비밀번호는 비워둘 수 없습니다.")
-    private String newPassword;
+    private String password;
 }
