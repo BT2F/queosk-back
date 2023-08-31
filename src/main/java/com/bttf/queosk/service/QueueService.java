@@ -75,6 +75,7 @@ public class QueueService {
                 queueRepository.findByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId);
 
         Long userQueueIndex = queues.isEmpty() ? null :
+
                 queueRedisRepository.getUserWaitingCount(
                         String.valueOf(restaurantId),
                         String.valueOf(queues.get(0).getId())
