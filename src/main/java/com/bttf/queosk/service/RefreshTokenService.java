@@ -1,8 +1,8 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.tokendto.NewAccessTokenDto;
-import com.bttf.queosk.dto.tokendto.TokenDto;
+import com.bttf.queosk.dto.TokenRefreshResponse;
+import com.bttf.queosk.dto.TokenDto;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
@@ -26,7 +26,7 @@ public class RefreshTokenService {
     private final JwtTokenProvider jwtTokenProvider;
 
     // 신규 AccessToken 발급
-    public NewAccessTokenDto issueNewAccessToken(String accessToken, String refreshToken) {
+    public TokenRefreshResponse issueNewAccessToken(String accessToken, String refreshToken) {
         validateRefreshToken(refreshToken);
 
         RefreshToken tokenSubject = refreshTokenRepository.findById(refreshToken)
@@ -51,13 +51,9 @@ public class RefreshTokenService {
         }
 
         String newAccessToken = jwtTokenProvider.generateAccessToken(
-                TokenDto.builder()
-                        .id(id)
-                        .userRole(userRole)
-                        .email(email)
-                        .build()
+                TokenDto.of(id,userRole,email)
         );
-        return NewAccessTokenDto.builder().accessToken(newAccessToken).build();
+        return TokenRefreshResponse.of(newAccessToken);
     }
 
     // 리프레시 토큰 삭제
@@ -74,8 +70,11 @@ public class RefreshTokenService {
 
     // AccessToken을 이용하여 User 또는 Restaurant 객체 가져오기
     private Object getObject(String accessToken, RefreshToken tokenSubject) {
-        return jwtTokenProvider.getRoleFromToken(accessToken).equals(ROLE_USER.toString()) ?
-                findUser(tokenSubject.getEmail()) : findRestaurant(tokenSubject.getEmail());
+        return jwtTokenProvider.getRoleFromToken(accessToken).equals(
+                ROLE_USER.toString()) ?
+                findUser(tokenSubject.getEmail()) :
+                findRestaurant(tokenSubject.getEmail()
+                );
     }
 
     // User 객체 찾기
