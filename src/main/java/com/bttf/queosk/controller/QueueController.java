@@ -1,9 +1,9 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.queuedto.QueueCreateForm;
-import com.bttf.queosk.dto.queuedto.QueueResponseForRestaurant;
-import com.bttf.queosk.dto.queuedto.QueueResponseForUser;
+import com.bttf.queosk.dto.QueueCreateForm;
+import com.bttf.queosk.dto.QueueResponseForRestaurant;
+import com.bttf.queosk.dto.QueueResponseForUser;
 import com.bttf.queosk.service.QueueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

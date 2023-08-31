@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.queuedto;
+package com.bttf.queosk.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
