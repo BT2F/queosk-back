@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.restaurantdto;
+package com.bttf.queosk.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetCoordRestaurantInfoForm {
+public class RestaurantInfoGetCoordForm {
     private Double x;
     private Double y;
     private int page;

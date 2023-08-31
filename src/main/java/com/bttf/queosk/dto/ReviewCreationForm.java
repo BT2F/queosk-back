@@ -11,7 +11,7 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateReviewForm {
+public class ReviewCreationForm {
     @NotNull
     private Long restaurantId;
     @NotBlank

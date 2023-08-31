@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.restaurantdto;
+package com.bttf.queosk.dto;
 
 import com.bttf.queosk.enumerate.RestaurantCategory;
 import lombok.AllArgsConstructor;

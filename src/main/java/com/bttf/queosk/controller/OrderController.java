@@ -2,8 +2,8 @@ package com.bttf.queosk.controller;
 
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.orderdto.CreateOrderForm;
-import com.bttf.queosk.dto.orderdto.OrderDto;
+import com.bttf.queosk.dto.OrderCreationForm;
+import com.bttf.queosk.dto.OrderDto;
 import com.bttf.queosk.enumerate.OrderStatus;
 import com.bttf.queosk.service.OrderService;
 import io.swagger.annotations.Api;
@@ -27,9 +27,9 @@ public class OrderController {
     @PostMapping("api/user/order")
     @ApiOperation(value = "주문 등록", notes = "매장의 주문을 생성합니다.")
     public ResponseEntity<?> createOrder(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                         @RequestBody CreateOrderForm createOrderForm) {
+                                         @RequestBody OrderCreationForm orderCreationForm) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
-        orderService.createOrder(createOrderForm, userId);
+        orderService.createOrder(orderCreationForm, userId);
         return ResponseEntity.status(CREATED).build();
     }
 
