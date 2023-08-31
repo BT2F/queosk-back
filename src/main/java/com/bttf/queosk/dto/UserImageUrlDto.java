@@ -12,4 +12,8 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class UserImageUrlDto {
     private String imagePath;
+
+    public static UserImageUrlDto of(String url) {
+        return UserImageUrlDto.builder().imagePath(url).build();
+    }
 }

@@ -1,6 +1,6 @@
 package com.bttf.queosk.config;
 
-import com.bttf.queosk.dto.tokendto.TokenDto;
+import com.bttf.queosk.dto.TokenDto;
 import com.bttf.queosk.enumerate.UserRole;
 import com.bttf.queosk.service.UserTokenDetailService;
 import io.jsonwebtoken.Claims;

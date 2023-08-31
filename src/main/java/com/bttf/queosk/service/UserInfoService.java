@@ -1,12 +1,11 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.userdto.UserDto;
-import com.bttf.queosk.dto.userdto.UserEditForm;
-import com.bttf.queosk.dto.userdto.UserPasswordChangeForm;
+import com.bttf.queosk.dto.UserDto;
+import com.bttf.queosk.dto.UserEditForm;
+import com.bttf.queosk.dto.UserPasswordChangeForm;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.enumerate.LoginType;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.mapper.UserDtoMapper;
 import com.bttf.queosk.repository.KakaoAuthRepository;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
@@ -40,7 +39,7 @@ public class UserInfoService {
 
         userRepository.save(user);
 
-        return UserDtoMapper.INSTANCE.userToUserDto(user);
+        return UserDto.of(user);
     }
 
     @Transactional
@@ -74,7 +73,8 @@ public class UserInfoService {
             throw new CustomException(NICKNAME_NOT_MATCH);
         }
 
-        String randomPassword = UUID.randomUUID().toString().substring(0, 10);
+        String randomPassword =
+                UUID.randomUUID().toString().replace("-","").substring(0, 10);
 
         String encryptedPassword = passwordEncoder.encode(randomPassword);
 

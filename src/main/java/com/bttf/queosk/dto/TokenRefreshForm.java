@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.tokendto;
+package com.bttf.queosk.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NewAccessTokenDto {
-    private String accessToken;
+public class TokenRefreshForm {
+    private String refresh_token;
 }

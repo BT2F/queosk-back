@@ -1,16 +1,10 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.userdto.UserDto;
-import com.bttf.queosk.dto.userdto.UserSignInDto;
-import com.bttf.queosk.dto.userdto.UserSignInForm;
-import com.bttf.queosk.dto.userdto.UserSignUpForm;
+import com.bttf.queosk.dto.*;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.mapper.TokenDtoMapper;
-import com.bttf.queosk.mapper.UserDtoMapper;
-import com.bttf.queosk.mapper.UserSignInMapper;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.bttf.queosk.enumerate.LoginType.NORMAL;
-import static com.bttf.queosk.enumerate.UserRole.ROLE_USER;
 import static com.bttf.queosk.enumerate.UserStatus.DELETED;
 import static com.bttf.queosk.enumerate.UserStatus.NOT_VERIFIED;
 import static com.bttf.queosk.exception.ErrorCode.*;
@@ -49,15 +41,7 @@ public class UserLoginService {
         String trimmedPhoneNumber =
                 userSignUpForm.getPhone().replaceAll("\\D", "");
 
-        User user = User.builder()
-                .email(userSignUpForm.getEmail())
-                .nickName(userSignUpForm.getNickName())
-                .password(encryptedPassword)
-                .phone(trimmedPhoneNumber)
-                .loginType(NORMAL)
-                .status(NOT_VERIFIED)
-                .userRole(ROLE_USER)
-                .build();
+        User user = User.of(userSignUpForm,encryptedPassword,trimmedPhoneNumber);
 
         userRepository.save(user);
 
@@ -90,21 +74,16 @@ public class UserLoginService {
 
         //엑세스 토큰 발행
         String accessToken = jwtTokenProvider.generateAccessToken(
-                TokenDtoMapper.INSTANCE.userToTokenDto(user)
+                TokenDto.of(user)
         );
 
         //리프레시 토큰 발행
         String refreshToken = jwtTokenProvider.generateRefreshToken();
 
         //리프테시 토큰 저장(기존에 있었다면 덮어쓰기 - 성능상 조회 후 수정보다 덮어쓰기가 더 빠르고 가벼움)
-        refreshTokenRepository.save(
-                RefreshToken.builder()
-                        .email(user.getEmail())
-                        .token(refreshToken)
-                        .build()
-        );
+        refreshTokenRepository.save(RefreshToken.of(user,refreshToken));
 
-        return UserSignInMapper.INSTANCE.userToUserSignInDto(user, refreshToken, accessToken);
+        return UserSignInDto.of(user, refreshToken, accessToken);
     }
 
     public boolean checkDuplication(String email) {
@@ -117,7 +96,7 @@ public class UserLoginService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
-        return UserDtoMapper.INSTANCE.userToUserDto(user);
+        return UserDto.of(user);
     }
 
     @Transactional(readOnly = true)
@@ -125,6 +104,6 @@ public class UserLoginService {
         User targetUser = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
-        return UserDtoMapper.INSTANCE.userToUserDto(targetUser);
+        return UserDto.of(targetUser);
     }
 }
