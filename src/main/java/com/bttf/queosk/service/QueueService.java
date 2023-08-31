@@ -16,8 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
@@ -47,12 +47,14 @@ public class QueueService {
 
         queueRepository.save(queue);
 
-        long userQueueNumber = queueRedisRepository
-                .createQueue(String.valueOf(restaurant.getId()), String.valueOf(queue.getId())) + 1;
+        long userQueueNumber = queueRedisRepository.createQueue(
+                String.valueOf(restaurant.getId()),
+                String.valueOf(queue.getId())
+        );
 
         return QueueResponseForUser.builder()
-                .queueRemaining(userQueueNumber - 1)
-                .userQueueIndex(userQueueNumber)
+                .queueRemaining(userQueueNumber)
+                .userQueueIndex(userQueueNumber + 1)
                 .build();
     }
 
@@ -60,18 +62,12 @@ public class QueueService {
     @Transactional(readOnly = true)
     public QueueResponseForRestaurant getQueueList(Long restaurantId) {
 
-        List<String> queueIds = queueRedisRepository.findAll(String.valueOf(restaurantId));
-
-        List<Queue> queues = new ArrayList<>();
-
-        queueIds.forEach(queue -> {
-            queueRepository
-                    .findById(Long.valueOf(queue))
-                    .ifPresent(queues::add);
-        });
-
-        List<QueueDto> queueDtos =
-                queues.stream().map(QueueDto::of).collect(Collectors.toList());
+        List<QueueDto> queueDtos = queueRedisRepository.findAll(String.valueOf(restaurantId))
+                .stream()
+                .map(queueId -> queueRepository.findById(Long.parseLong(queueId)).orElse(null))
+                .filter(Objects::nonNull)
+                .map(QueueDto::of)
+                .collect(Collectors.toList());
 
         return QueueResponseForRestaurant.builder()
                 .totalQueue(queueDtos.size())
@@ -86,20 +82,20 @@ public class QueueService {
         List<Queue> queues =
                 queueRepository.findByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId);
 
-        Long userWaitingCount =
+        Long userWaitingCount = queues.isEmpty() ? null :
                 queueRedisRepository.getUserWaitingCount(
                         String.valueOf(restaurantId),
-                        String.valueOf(queues.isEmpty() ? 0 : queues.get(0).getId())
+                        String.valueOf(queues.get(0).getId())
                 );
 
         // 사용자의 인덱스가 존재하지 않을 경우 (Queue 등록하지 않은상태) 예외 반환
-        if (userWaitingCount == null || userWaitingCount == -1) {
+        if (userWaitingCount == null || userWaitingCount < 0) {
             throw new CustomException(QUEUE_DOESNT_EXIST);
         }
 
         return QueueResponseForUser.builder()
                 .queueRemaining(userWaitingCount)
-                .userQueueIndex(userWaitingCount + 1)
+                .userQueueIndex(userWaitingCount + 1) // 대기번호의 경우 index + 1
                 .build();
     }
 
@@ -109,32 +105,23 @@ public class QueueService {
 
         queueRedisRepository.popTheFirstTeamOfQueue(String.valueOf(restaurantId));
 
-        List<String> queueIds = queueRedisRepository.findAll(String.valueOf(restaurantId));
-
-        List<QueueDto> queueDtos = new ArrayList<>();
-
         // 존재하는 queue 일 경우 리스트에 담음, 대기번호 2 번째 보다 작거나 같은 경우 FCM 알림 전송
-        queueIds.forEach(queueId -> {
-            queueRepository
-                    .findById(Long.parseLong(queueId))
-                    .ifPresent(queue -> {
-                        if (queue.getId() <= 2) {
-                            sendNotificationToWaitingUser(queue.getUserId());
-                        }
-                        queueDtos.add(QueueDto.of(queue));
-                    });
-        });
+        List<QueueDto> queueDtos = queueRedisRepository.findAll(String.valueOf(restaurantId))
+                .stream()
+                .map(queueId -> queueRepository.findById(Long.parseLong(queueId)).orElse(null))
+                .filter(Objects::nonNull)
+                .peek(queue -> {
+                    if (queue.getId() <= 2) {
+                        sendNotificationToWaitingUser(queue.getUserId());
+                    }
+                })
+                .map(QueueDto::of)
+                .collect(Collectors.toList());
+
         return QueueResponseForRestaurant.builder()
                 .totalQueue(queueDtos.size())
                 .queueDtoList(queueDtos)
                 .build();
-    }
-
-    //FCM 메세지 전송
-    private void sendNotificationToWaitingUser(Long userId) {
-        userRepository.findById(userId).ifPresent(user -> {
-            fcmService.sendMessageToWaitingUser(user.getEmail());
-        });
     }
 
     // 사용자가 본인의 웨이팅을 삭제(취소)
@@ -154,18 +141,26 @@ public class QueueService {
         );
     }
 
+    // 유저가 이미 해당 식당에 웨이팅 등록을 했는지 확인
     private void checkIfUserAlreadyInQueue(Long userId, Long restaurantId) {
         List<Queue> queues =
                 queueRepository.findByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId);
 
-        Long userWaitingCount =
+        Long userWaitingCount = queues.isEmpty() ? null :
                 queueRedisRepository.getUserWaitingCount(
                         String.valueOf(restaurantId),
-                        String.valueOf(queues.isEmpty() ? 0 : queues.get(0).getId())
+                        String.valueOf(queues.get(0).getId())
                 );
 
         if (userWaitingCount != null && userWaitingCount != -1) {
             throw new CustomException(QUEUE_ALREADY_EXISTS);
         }
+    }
+
+    //FCM 메세지 전송
+    private void sendNotificationToWaitingUser(Long userId) {
+        userRepository.findById(userId).ifPresent(user -> {
+            fcmService.sendMessageToWaitingUser(user.getEmail());
+        });
     }
 }
