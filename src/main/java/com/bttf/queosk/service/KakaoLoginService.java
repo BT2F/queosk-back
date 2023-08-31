@@ -2,12 +2,11 @@ package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.KaKaoLoginForm;
-import com.bttf.queosk.dto.userdto.UserSignInDto;
+import com.bttf.queosk.dto.TokenDto;
+import com.bttf.queosk.dto.UserSignInDto;
 import com.bttf.queosk.entity.KakaoAuth;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.mapper.TokenDtoMapper;
-import com.bttf.queosk.mapper.UserSignInMapper;
 import com.bttf.queosk.repository.KakaoAuthRepository;
 import com.bttf.queosk.repository.UserRepository;
 import com.google.gson.JsonObject;
@@ -162,35 +161,25 @@ public class KakaoLoginService {
                     .replace("-", "")
                     .substring(0, 10);
 
-            userRepository.save(User.builder()
-                    .email(email)
-                    .password(passwordEncoder.encode(password))
-                    .nickName(nickName)
-                    .loginType(KAKAO)
-                    .userRole(ROLE_USER)
-                    .status(VERIFIED)
-                    .build());
+            String encodedPassword = passwordEncoder.encode(password);
+
+            userRepository.save(User.of(email,nickName,encodedPassword));
         }
 
         // 레디스에 카카오 토큰 저장
-        kakaoAuthRepository.save(KakaoAuth.builder()
-                .email(email)
-                .kakaoId(kakaoId)
-                .refresh(refreshToken)
-                .access(accessToken)
-                .build());
+        kakaoAuthRepository.save(KakaoAuth.of(email,kakaoId,refreshToken,accessToken));
 
         User user = userRepository.findByEmail(email).get();
 
         // Queosk 엑세스 토큰 생성
         String userAccessToken =
-                jwtTokenProvider.generateAccessToken(TokenDtoMapper.INSTANCE.userToTokenDto(user));
+                jwtTokenProvider.generateAccessToken(TokenDto.of(user));
 
         // Queosk 리프레시 토큰 생성
         String userRefreshToken = jwtTokenProvider.generateRefreshToken();
 
         log.info("카카오톡 소셜로그인 성공");
 
-        return UserSignInMapper.INSTANCE.userToUserSignInDto(user, userRefreshToken, userAccessToken);
+        return UserSignInDto.of(user, userRefreshToken, userAccessToken);
     }
 }

@@ -25,6 +25,7 @@ public class UserDto {
 
     public static UserDto of(User user) {
         return UserDto.builder()
+                .id(user.getId())
                 .nickName(user.getNickName())
                 .email(user.getEmail())
                 .phone(user.getPhone())
