@@ -1,12 +1,11 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.menudto.MenuCreationForm;
-import com.bttf.queosk.dto.menudto.MenuDto;
-import com.bttf.queosk.dto.menudto.MenuStatusForm;
-import com.bttf.queosk.dto.menudto.MenuUpdateForm;
+import com.bttf.queosk.dto.MenuCreationForm;
+import com.bttf.queosk.dto.MenuDto;
+import com.bttf.queosk.dto.MenuStatusForm;
+import com.bttf.queosk.dto.MenuUpdateForm;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.mapper.MenuDtoMapper;
 import com.bttf.queosk.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,15 +24,7 @@ public class MenuService {
 
     @Transactional
     public void createMenu(Long restaurantId, MenuCreationForm menuCreationForm) {
-        menuRepository.save(
-                Menu.builder()
-                        .name(menuCreationForm.getName())
-                        .price(menuCreationForm.getPrice())
-                        .status(ON_SALE)
-                        .imageUrl(menuCreationForm.getImageUrl())
-                        .restaurantId(restaurantId)
-                        .build()
-        );
+        menuRepository.save(Menu.of(restaurantId, menuCreationForm));
     }
 
     @Transactional(readOnly = true)
@@ -44,7 +35,7 @@ public class MenuService {
         }
         List<MenuDto> menuDtos = new ArrayList<>();
         menus.forEach(menu -> {
-            menuDtos.add(MenuDtoMapper.INSTANCE.MenuToMenuDto(menu));
+            menuDtos.add(MenuDto.of(menu));
         });
 
         return menuDtos;
