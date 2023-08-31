@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.annotation.Rollback;
 
 import java.util.Optional;
 
@@ -232,7 +231,6 @@ class UserServiceTest {
     }
 
     @Test
-    @Rollback
     @DisplayName("ID로 사용자 찾기 테스트 - 성공")
     public void testGetUserFromId() {
         // Given
