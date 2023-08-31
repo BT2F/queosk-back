@@ -1,7 +1,7 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.orderdto.CreateOrderForm;
-import com.bttf.queosk.dto.orderdto.OrderDto;
+import com.bttf.queosk.dto.OrderCreationForm;
+import com.bttf.queosk.dto.OrderDto;
 import com.bttf.queosk.entity.*;
 import com.bttf.queosk.enumerate.OrderStatus;
 import com.bttf.queosk.exception.CustomException;
@@ -31,15 +31,15 @@ public class OrderService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createOrder(CreateOrderForm createOrderForm, Long userId) {
+    public void createOrder(OrderCreationForm orderCreationForm, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
-        Restaurant restaurant = restaurantRepository.findById(createOrderForm.getRestaurantId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
-        Table table = tableRepository.findById(createOrderForm.getTableId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_TABLE));
-        Menu menu = menuRepository.findByIdAndRestaurantId(createOrderForm.getMenuId(), restaurant.getId()).orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+        Restaurant restaurant = restaurantRepository.findById(orderCreationForm.getRestaurantId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
+        Table table = tableRepository.findById(orderCreationForm.getTableId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_TABLE));
+        Menu menu = menuRepository.findByIdAndRestaurantId(orderCreationForm.getMenuId(), restaurant.getId()).orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
         validOrder(restaurant, table, menu);
 
-        Order order = Order.builder().restaurant(restaurant).table(table).menu(menu).user(user).count(createOrderForm.getCount()).status(IN_PROGRESS).build();
+        Order order = Order.builder().restaurant(restaurant).table(table).menu(menu).user(user).count(orderCreationForm.getCount()).status(IN_PROGRESS).build();
 
         orderRepository.save(order);
     }

@@ -1,6 +1,6 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.CreateReviewForm;
+import com.bttf.queosk.dto.ReviewCreationForm;
 import com.bttf.queosk.dto.ReviewDto;
 import com.bttf.queosk.dto.UpdateReviewForm;
 import com.bttf.queosk.entity.Restaurant;
@@ -55,7 +55,7 @@ class ReviewServiceTest {
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
 
-        CreateReviewForm createReviewForm = CreateReviewForm.builder()
+        ReviewCreationForm reviewCreationForm = ReviewCreationForm.builder()
                 .restaurantId(1L)
                 .subject("test")
                 .content("content test")
@@ -64,7 +64,7 @@ class ReviewServiceTest {
 
 
         // when
-        reviewService.createReview(1L, createReviewForm);
+        reviewService.createReview(1L, reviewCreationForm);
 
         // then
 

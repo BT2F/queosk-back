@@ -1,6 +1,6 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.CreateReviewForm;
+import com.bttf.queosk.dto.ReviewCreationForm;
 import com.bttf.queosk.dto.ReviewDto;
 import com.bttf.queosk.dto.UpdateReviewForm;
 import com.bttf.queosk.entity.Restaurant;
@@ -30,17 +30,17 @@ public class ReviewService {
 
 
     @Transactional
-    public void createReview(Long userId, CreateReviewForm createReviewForm) {
+    public void createReview(Long userId, ReviewCreationForm reviewCreationForm) {
         User user = getUser(userId);
 
-        Restaurant restaurant = getRestaurant(createReviewForm.getRestaurantId());
+        Restaurant restaurant = getRestaurant(reviewCreationForm.getRestaurantId());
 
         Review review = Review.builder()
                 .restaurant(restaurant)
                 .user(user)
-                .subject(createReviewForm.getSubject())
-                .content(createReviewForm.getContent())
-                .rate(createReviewForm.getRate())
+                .subject(reviewCreationForm.getSubject())
+                .content(reviewCreationForm.getContent())
+                .rate(reviewCreationForm.getRate())
                 .build();
 
         reviewRepository.save(review);

@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.restaurantdto;
+package com.bttf.queosk.dto;
 
 import com.bttf.queosk.dto.menudto.MenuDto;
 import com.bttf.queosk.entity.Menu;
@@ -16,15 +16,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetRestaurantInfoMenuDto {
+public class RestaurantInfoMenuGetDto {
     RestaurantDto restaurantDto;
 
     List<MenuDto> menuDtoList;
 
-    public static GetRestaurantInfoMenuDto of(Restaurant restaurant, List<Menu> menuList) {
+    public static RestaurantInfoMenuGetDto of(Restaurant restaurant, List<Menu> menuList) {
         List<MenuDto> menuDtoList = new ArrayList<>();
         menuList.forEach(m -> menuDtoList.add(MenuDtoMapper.INSTANCE.MenuToMenuDto(m)));
-        return GetRestaurantInfoMenuDto.builder()
+        return RestaurantInfoMenuGetDto.builder()
                 .restaurantDto(RestaurantDto.of(restaurant))
                 .menuDtoList(menuDtoList)
                 .build();

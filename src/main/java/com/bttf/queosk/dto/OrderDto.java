@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.orderdto;
+package com.bttf.queosk.dto;
 
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.Order;

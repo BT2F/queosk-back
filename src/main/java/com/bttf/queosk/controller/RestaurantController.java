@@ -1,6 +1,6 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.restaurantdto.*;
+import com.bttf.queosk.dto.*;
 import com.bttf.queosk.service.RefreshTokenService;
 import com.bttf.queosk.service.RestaurantService;
 
@@ -101,15 +101,15 @@ public class RestaurantController {
 
     @GetMapping("s/coord")
     @ApiOperation(value = "동네 매장 검색 (좌표)", notes = "해당 좌표가 위치한 동네의 매장 리스트를 제공합니다.")
-    public ResponseEntity<?> getCoordRestaurantInfo(@RequestBody GetCoordRestaurantInfoForm getCoordRestaurantInfoForm) {
-        Page<RestaurantDto> restaurantPage = restaurantService.getCoordRestaurantInfoForm(getCoordRestaurantInfoForm);
+    public ResponseEntity<?> getCoordRestaurantInfo(@RequestBody RestaurantInfoGetCoordForm restaurantInfoGetCoordForm) {
+        Page<RestaurantDto> restaurantPage = restaurantService.getCoordRestaurantInfoForm(restaurantInfoGetCoordForm);
         return ResponseEntity.ok().body(restaurantPage);
     }
 
     @GetMapping("/{restaurantId}")
     @ApiOperation(value = "매장 상세 보기", notes = "해당하는 매장의 정보와 메뉴를 제공합니댜.")
     public ResponseEntity<?> getRestaurantInfoAndMenu(@PathVariable(name = "restaurantId") Long restaurantId) {
-        GetRestaurantInfoMenuDto restaurantInfoMenu = restaurantService.getRestaurantInfoAndMenu(restaurantId);
+        RestaurantInfoMenuGetDto restaurantInfoMenu = restaurantService.getRestaurantInfoAndMenu(restaurantId);
 
         return ResponseEntity.ok().body(restaurantInfoMenu);
     }

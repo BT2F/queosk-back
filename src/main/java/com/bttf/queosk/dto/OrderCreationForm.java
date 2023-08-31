@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.orderdto;
+package com.bttf.queosk.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateOrderForm {
+public class OrderCreationForm {
     private Long tableId;
     private Long restaurantId;
     private Long menuId;

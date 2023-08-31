@@ -1,6 +1,6 @@
 package com.bttf.queosk.mapper;
 
-import com.bttf.queosk.dto.restaurantdto.RestaurantDto;
+import com.bttf.queosk.dto.RestaurantDto;
 import com.bttf.queosk.entity.Restaurant;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
