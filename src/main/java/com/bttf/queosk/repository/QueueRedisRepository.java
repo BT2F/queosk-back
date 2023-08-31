@@ -27,4 +27,8 @@ public class QueueRedisRepository {
     public void popTheFirstTeamOfQueue(String restaurantId) {
         redisTemplate.opsForList().leftPop(restaurantId);
     }
+
+    public void deleteQueue(String restaurantId, String queueId) {
+        redisTemplate.opsForList().remove(restaurantId,0,queueId);
+    }
 }

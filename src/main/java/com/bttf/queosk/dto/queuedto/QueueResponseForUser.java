@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QueueRemaining {
-    private Integer waitingCount;
+public class QueueResponseForUser {
+    private Long userQueueIndex;
+    private Long queueRemaining;
 }

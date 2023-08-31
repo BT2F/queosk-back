@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface QueueRepository extends JpaRepository<Queue, Long> {
-    List<Queue> findByRestaurantId(Long restaurantId);
+    List<Queue> findByUserIdAndRestaurantIdOrderByCreatedAtDesc(Long userId, Long restaurantId);
 }

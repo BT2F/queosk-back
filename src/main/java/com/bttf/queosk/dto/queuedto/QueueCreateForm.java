@@ -15,6 +15,6 @@ import javax.validation.constraints.Min;
 public class QueueCreateForm {
     @Min(value = 1, message = "식사인원은 1명 이상이어야 합니다.")
     @Max(value = 100, message = "식사인원은 6명 이하이어야 합니다.")
-    private Long numberPeople;
+    private Long numberOfParty;
 }
 

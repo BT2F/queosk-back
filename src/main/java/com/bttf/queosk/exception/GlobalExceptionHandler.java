@@ -1,5 +1,6 @@
 package com.bttf.queosk.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import static com.bttf.queosk.exception.ErrorCode.UNDEFINED_EXCEPTION;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -31,6 +33,8 @@ public class GlobalExceptionHandler {
                 .message(exception.getMessage())
                 .build();
 
+        log.error(exception.getMessage());
+
         return ResponseEntity
                 .status(errorResponse.getErrorCode().getStatus())
                 .body(errorResponse);
@@ -43,6 +47,8 @@ public class GlobalExceptionHandler {
                 .message(exception.getMessage())
                 .errorCode(UNDEFINED_EXCEPTION)
                 .build();
+
+        log.error(exception.getMessage());
 
         return ResponseEntity
                 .status(errorResponse.getErrorCode().getStatus())
