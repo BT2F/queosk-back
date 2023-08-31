@@ -8,7 +8,6 @@ import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.UserRole;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.mapper.RestaurantSignInMapper;
 import com.bttf.queosk.mapper.TokenDtoMapper;
 import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.repository.RefreshTokenRepository;
@@ -101,9 +100,11 @@ public class RestaurantService {
                         .build()
         );
 
-        return RestaurantSignInMapper.MAPPER.toDto(restaurant, refreshToken, accessToken);
-
-
+        return RestaurantSignInDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .imageUrl(restaurant.getImageUrl())
+                .build();
     }
 
     @Transactional
