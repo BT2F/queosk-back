@@ -60,7 +60,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원 생성 테스트 - 성공")
+    @DisplayName("사용자 생성 테스트 - 성공")
     void testCreateUser_Success() {
         // Given
         UserSignUpForm userSignUpForm = UserSignUpForm.builder()
@@ -84,7 +84,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원 생성 테스트 - 실패(기존 회원)")
+    @DisplayName("사용자 생성 테스트 - 실패(기존 사용자)")
     void testCreateUser_ExistingEmail() {
         // Given
         UserSignUpForm userSignUpForm =
@@ -105,7 +105,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원 로그인 테스트 - 성공")
+    @DisplayName("사용자 로그인 테스트 - 성공")
     void signInUser_Success() {
         // Arrange
         String email = "user@example.com";
@@ -136,7 +136,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원 로그인 테스트 - 실패(잘못된 아이디)")
+    @DisplayName("사용자 로그인 테스트 - 실패(잘못된 아이디)")
     void signInUser_InvalidEmail() {
         // Arrange
         String invalidEmail = "invalid@example.com";
@@ -150,7 +150,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원 로그인 테스트 - 실패(잘못된 비밀번호)")
+    @DisplayName("사용자 로그인 테스트 - 실패(잘못된 비밀번호)")
     void signInUser_InvalidPassword() {
         // Arrange
         String email = "user@example.com";
@@ -185,7 +185,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("토큰 회원추출 테스트 - 성공")
+    @DisplayName("토큰 사용자 추출 테스트 - 성공")
     public void testGetUserFromToken_success() {
         // Given
         String token = "testToken";
@@ -204,7 +204,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("토큰 회원추출 테스트 - 실패(유저 정보 없음)")
+    @DisplayName("토큰 사용자 추출 테스트 - 실패(사용자 정보 없음)")
     public void testGetUserFromToken_UserNotExist() {
         // Given
         String token = "testToken";
@@ -219,7 +219,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("ID로 회원찾기 테스트 - 성공")
+    @DisplayName("ID로 사용자 찾기 테스트 - 성공")
     public void testGetUserFromId() {
         // Given
         Long userId = 1L;
@@ -235,7 +235,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("ID로 회원찾기 테스트 - 실패(유저 정보 없음)")
+    @DisplayName("ID로 사용자 찾기 테스트 - 실패(사용자 정보 없음)")
     public void testGetUserFromId_UserNotExist() {
         // Given
         Long userId = 1L;
@@ -247,7 +247,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원정보 수정 테스트 - 성공")
+    @DisplayName("사용자정보 수정 테스트 - 성공")
     public void testEditUserInformation_Success() {
         // Given
         Long userId = 1L;
@@ -265,7 +265,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원정보 수정 테스트 - 실패(존재하지 않는 유저)")
+    @DisplayName("사용자정보 수정 테스트 - 실패(존재하지 않는 사용자)")
     public void testEditUserInformation_UserNotExist() {
         // Given
         Long userId = 1L;
@@ -280,7 +280,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원비밀번호 변경 테스트 - 성공")
+    @DisplayName("사용자 비밀번호 변경 테스트 - 성공")
     public void testChangeUserPassword_Success() {
         // Given
         Long userId = 1L;
@@ -315,7 +315,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원비밀번호 변경 테스트 - 실패(기존비밀번호오류)")
+    @DisplayName("사용자 비밀번호 변경 테스트 - 실패(기존비밀번호오류)")
     public void testChangeUserPassword_ExistingPassword() {
         // Given
         Long userId = 1L;
@@ -349,7 +349,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원비밀번호 변경 테스트 - 실패(회원정보없음)")
+    @DisplayName("사용자 비밀번호 변경 테스트 - 실패(회원정보없음)")
     public void testChangeUserPassword_UserNotFound() {
         // Given
         Long userId = 1L;
@@ -373,7 +373,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원비밀번호 초기화 테스트 - 성공")
+    @DisplayName("사용자 비밀번호 초기화 테스트 - 성공")
     public void testResetUserPassword_Success() {
         // Given
         User user = User.builder()
@@ -394,7 +394,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원비밀번호 초기화 테스트 - 실패(회원정보없음)")
+    @DisplayName("사용자 비밀번호 초기화 테스트 - 실패(사용자정보없음)")
     public void testResetUserPassword_UserNotExists() {
         // Given
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
@@ -407,7 +407,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원비밀번호 초기화 테스트 - 실패(닉네임불일치)")
+    @DisplayName("사용자 비밀번호 초기화 테스트 - 실패(닉네임불일치)")
     public void testResetUserPassword_NickNameNotMatch() {
         // Given
         User user = User.builder()
@@ -426,7 +426,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원이미지 업로드 테스트 - 성공")
+    @DisplayName("사용자 이미지 업로드 테스트 - 성공")
     public void testUpdateImageUrl_Success() {
         // Given
         User user = User.builder().id(1L).build();
@@ -440,7 +440,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원이미지 업로드 테스트 - 성공")
+    @DisplayName("사용자 이미지 업로드 테스트 - 성공")
     public void testUpdateImageUrl_UserNotExists() {
         // Given
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -452,7 +452,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원탈퇴 테스트 - 성공")
+    @DisplayName("사용자 탈퇴 테스트 - 성공")
     public void testWithdrawUser_Success() {
         // Given
         User user = User.builder()
@@ -472,7 +472,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원탈퇴 테스트 - 실패(회원정보없음)")
+    @DisplayName("사용자 탈퇴 테스트 - 실패(사용자 정보없음)")
     public void testWithdrawUser_UserNotExists() {
         // Given
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -484,7 +484,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원탈퇴 테스트 - 실패(비밀번호오류)")
+    @DisplayName("사용자 탈퇴 테스트 - 실패(비밀번호오류)")
     public void testWithdrawUser_IncorrectPassword() {
         // Given
         User user = User.builder()
@@ -498,7 +498,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원이메일인증 - 성공")
+    @DisplayName("사용자 이메일인증 - 성공")
     public void testVerifyUser_Success() {
         // Given
         User user = User.builder().id(1L).status(NOT_VERIFIED).build();
@@ -513,7 +513,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원이메일인증 - 실패(회원정보없음)")
+    @DisplayName("사용자 이메일인증 - 실패(사용자정보없음)")
     public void testVerifyUser_UserNotExists() {
         // Given
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -525,7 +525,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원이메일인증 - 실패(탈퇴된회원)")
+    @DisplayName("사용자 이메일인증 - 실패(탈퇴된사용자)")
     public void testVerifyUser_UserDeleted() {
         // Given
         User user = User.builder().id(1L).status(DELETED).build();
@@ -540,7 +540,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원이메일인증 - 실패(이미인증된회원)")
+    @DisplayName("사용자 이메일인증 - 실패(이미인증된사용자)")
     public void testVerifyUser_UserAlreadyVerified() {
         // Given
         User user = User.builder().id(1L).status(VERIFIED).build();

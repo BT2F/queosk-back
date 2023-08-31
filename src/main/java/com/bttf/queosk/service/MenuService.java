@@ -36,6 +36,7 @@ public class MenuService {
         );
     }
 
+    @Transactional(readOnly = true)
     public List<MenuDto> getMenu(Long restaurantId) {
         List<Menu> menus = menuRepository.findByRestaurantId(restaurantId);
         if (menus.isEmpty()) {
