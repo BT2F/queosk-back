@@ -1,54 +1,8 @@
-GET http://localhost:8080/api/review/4/comment
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=63CEE7526EF943EEC7D643621AC31958
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-08-31T160955.200.json
-
-###
-
-DELETE http://localhost:8080/api/review/comment/2
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNDY1NzA4LCJleHAiOjE2OTM1NTIxMDh9.Wc1_zxURfAvYavSn4tRoPRDEncpPKIKi7_Pm8OW4hSc
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=63CEE7526EF943EEC7D643621AC31958
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-###
-
-DELETE http://localhost:8080/api/review/comment/1
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNDY1NzA4LCJleHAiOjE2OTM1NTIxMDh9.Wc1_zxURfAvYavSn4tRoPRDEncpPKIKi7_Pm8OW4hSc
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=63CEE7526EF943EEC7D643621AC31958
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-###
-
-PUT http://localhost:8080/api/review/comment/2
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNDY1NzA4LCJleHAiOjE2OTM1NTIxMDh9.Wc1_zxURfAvYavSn4tRoPRDEncpPKIKi7_Pm8OW4hSc
-Content-Length: 50
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=FEDA6CBEC1EE59B04296D80C6063138A
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "content": "제가 무슨 말을 한거죠?"
-}
-
-###
-
-POST http://localhost:8080/api/restaurant/signin
+POST http://3.34.105.64:8080/api/restaurant/signin
 Content-Type: application/json
 Content-Length: 46
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=FEDA6CBEC1EE59B04296D80C6063138A
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
@@ -56,100 +10,15 @@ Accept-Encoding: br,deflate,gzip,x-gzip
   "password": "1234"
 }
 
-<> 2023-08-31T160828.200.json
+<> 2023-09-01T201514.400.json
 
 ###
 
-PUT http://localhost:8080/api/review/comment/2
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNDY1NDc0LCJleHAiOjE2OTM1NTE4NzR9.I8unBoHiW2cl5519-GB1dUtE6RBsnM4W50DXD6cNGd4
-Content-Length: 50
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=FEDA6CBEC1EE59B04296D80C6063138A
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "content": "제가 무슨 말을 한거죠?"
-}
-
-<> 2023-08-31T160820.401.json
-
-###
-
-PUT http://localhost:8080/api/review/comment/2
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNDY1NDc0LCJleHAiOjE2OTM1NTE4NzR9.I8unBoHiW2cl5519-GB1dUtE6RBsnM4W50DXD6cNGd4
-Content-Length: 50
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=FEDA6CBEC1EE59B04296D80C6063138A
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "content": "제가 무슨 말을 한거죠?"
-}
-
-<> 2023-08-31T160758.401.json
-
-###
-
-GET http://localhost:8080/api/review/4/comment
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=FEDA6CBEC1EE59B04296D80C6063138A
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-08-31T160654.200.json
-
-###
-
-GET http://localhost:8080/api/review/4/comment
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=FEDA6CBEC1EE59B04296D80C6063138A
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-08-31T160544.400.json
-
-###
-
-POST http://localhost:8080/api/review/4/comment
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNDY1NDc0LCJleHAiOjE2OTM1NTE4NzR9.I8unBoHiW2cl5519-GB1dUtE6RBsnM4W50DXD6cNGd4
-Content-Length: 32
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=FEDA6CBEC1EE59B04296D80C6063138A
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "content": "안죄송해!"
-}
-
-###
-
-POST http://localhost:8080/api/review/4/comment
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNDY1NDc0LCJleHAiOjE2OTM1NTE4NzR9.I8unBoHiW2cl5519-GB1dUtE6RBsnM4W50DXD6cNGd4
-Content-Length: 34
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=DE35211488511E8F1B0695CE1A271119
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "content": "죄송합니다"
-}
-
-###
-
-POST http://localhost:8080/api/restaurant/signin
+POST http://3.34.105.64:8080/api/restaurant/signin
 Content-Type: application/json
 Content-Length: 46
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=DE35211488511E8F1B0695CE1A271119
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
@@ -157,7 +26,7 @@ Accept-Encoding: br,deflate,gzip,x-gzip
   "password": "1234"
 }
 
-<> 2023-08-31T160434.200.json
+<> 2023-09-01T200701.200.json
 
 ###
 
@@ -166,7 +35,7 @@ Content-Type: application/json
 Content-Length: 58
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=DE35211488511E8F1B0695CE1A271119
+Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
@@ -174,33 +43,15 @@ Accept-Encoding: br,deflate,gzip,x-gzip
   "password": "1111"
 }
 
-<> 2023-08-31T160407.200.json
+<> 2023-09-01T200653.400.json
 
 ###
 
-POST http://localhost:8080/api/review/4/comment
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNDY1MjkxLCJleHAiOjE2OTM1NTE2OTF9.Z3Q4XgJBDDbSmRo_tzdG0Oth17BGDoobl9SdVb8UOR8
-Content-Length: 34
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=280D45BB0CB540AACFC6CD20B7D54811
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "content": "죄송합니다"
-}
-
-<> 2023-08-31T160235.400.json
-
-###
-
-POST http://localhost:8080/api/restaurant/signin
+POST http://3.34.105.64:8080/api/restaurant/signin
 Content-Type: application/json
 Content-Length: 46
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=280D45BB0CB540AACFC6CD20B7D54811
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
@@ -208,7 +59,39 @@ Accept-Encoding: br,deflate,gzip,x-gzip
   "password": "1234"
 }
 
-<> 2023-08-31T160131.200.json
+<> 2023-09-01T200630.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T200628.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T200626.200.json
 
 ###
 
@@ -217,7 +100,7 @@ Content-Type: application/json
 Content-Length: 58
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=280D45BB0CB540AACFC6CD20B7D54811
+Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
@@ -225,148 +108,7 @@ Accept-Encoding: br,deflate,gzip,x-gzip
   "password": "1111"
 }
 
-<> 2023-08-31T160023.200.json
-
-###
-
-POST http://localhost:8080/api/payment/cancel
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
-Content-Length: 87
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=686037A8C57953F3C2127BAD81C9FD0E
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec77792a59101206d7",
-  "cancelAmount": 2000,
-  "cancelTaxFreeAmount": 0
-}
-
-<> 2023-08-28T193330.200.json
-
-###
-
-POST http://localhost:8080/api/payment/cancel
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
-Content-Length: 87
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=686037A8C57953F3C2127BAD81C9FD0E
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec77792a59101206d7",
-  "cancelAmount": 4000,
-  "cancelTaxFreeAmount": 0
-}
-
-<> 2023-08-28T193319.200.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=791664fc795d7aad106e
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=686037A8C57953F3C2127BAD81C9FD0E
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec77792a59101206d7",
-  "partnerOrderId": "f2792ed569fc498182b1302e95663a71",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T193305.200.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=7131ba826410078c4eb0
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=686037A8C57953F3C2127BAD81C9FD0E
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec77792a59101206d7",
-  "partnerOrderId": "f2792ed569fc498182b1302e95663a71",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T193248.401.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=7131ba826410078c4eb0
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=686037A8C57953F3C2127BAD81C9FD0E
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec77792a59101206d7",
-  "partnerOrderId": "f2792ed569fc498182b1302e95663a71",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T193217.401.json
-
-###
-
-POST http://localhost:8080/api/payment/ready
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
-Content-Length: 178
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=686037A8C57953F3C2127BAD81C9FD0E
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "itemName": "초코파이",
-  "itemCode": "0111",
-  "quantity": 3,
-  "totalAmount": 9000,
-  "taxFreeAmount": 0,
-  "vatAmount": 0,
-  "greenDeposit" : 0,
-  "installMonth" : 0
-}
-
-<> 2023-08-28T193122.200.json
-
-###
-
-POST http://localhost:8080/api/payment/cancel
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTg2NDksImV4cCI6MTY5MzMwNTA0OX0.i7Ko9hbux8EWqthtDsu2c3C_xNM71dxudZHx12xjgw0
-Content-Length: 87
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec746e2a59101206c0",
-  "cancelAmount": 4000,
-  "cancelTaxFreeAmount": 0
-}
-
-<> 2023-08-28T193106.401.json
+<> 2023-09-01T195631.400.json
 
 ###
 
@@ -375,7 +117,7 @@ Content-Type: application/json
 Content-Length: 58
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
+Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
@@ -383,304 +125,7 @@ Accept-Encoding: br,deflate,gzip,x-gzip
   "password": "1111"
 }
 
-<> 2023-08-28T193050.200.json
-
-###
-
-POST http://localhost:8080/api/payment/cancel
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 87
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec746e2a59101206c0",
-  "cancelAmount": 4000,
-  "cancelTaxFreeAmount": 0
-}
-
-<> 2023-08-28T193045.401.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=7131ba826410078c4eb0
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec76d960ea2963dcf4",
-  "partnerOrderId": "e27de7dfb747457db599f89f62c7a1f7",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T192935.200.json
-
-###
-
-POST http://localhost:8080/api/payment/ready
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 178
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "itemName": "초코파이",
-  "itemCode": "0111",
-  "quantity": 3,
-  "totalAmount": 9000,
-  "taxFreeAmount": 0,
-  "vatAmount": 0,
-  "greenDeposit" : 0,
-  "installMonth" : 0
-}
-
-<> 2023-08-28T192842.200.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=189ff713d873ad4d50d0
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec76462a59101206ce",
-  "partnerOrderId": "15653f7428834176827518cd2b724756",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T192828.401.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=189ff713d873ad4d50d0
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec76462a59101206ce",
-  "partnerOrderId": "54f3048c22f34cf0bad6a57eaa91647c",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T192759.401.json
-
-###
-
-POST http://localhost:8080/api/payment/ready
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 178
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "itemName": "초코파이",
-  "itemCode": "0111",
-  "quantity": 3,
-  "totalAmount": 9000,
-  "taxFreeAmount": 0,
-  "vatAmount": 0,
-  "greenDeposit" : 0,
-  "installMonth" : 0
-}
-
-<> 2023-08-28T192730.200.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=189ff713d873ad4d50d0
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec76462a59101206ce",
-  "partnerOrderId": "54f3048c22f34cf0bad6a57eaa91647c",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T192727.401.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=189ff713d873ad4d50d0
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec76462a59101206ce",
-  "partnerOrderId": "54f3048c22f34cf0bad6a57eaa91647c",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T192719.401.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=189ff713d873ad4d50d0
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec76462a59101206ce",
-  "partnerOrderId": "54f3048c22f34cf0bad6a57eaa91647c",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T192704.401.json
-
-###
-
-POST http://localhost:8080/api/payment/ready
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 178
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "itemName": "초코파이",
-  "itemCode": "0111",
-  "quantity": 3,
-  "totalAmount": 9000,
-  "taxFreeAmount": 0,
-  "vatAmount": 0,
-  "greenDeposit" : 0,
-  "installMonth" : 0
-}
-
-<> 2023-08-28T192615.200.json
-
-###
-
-POST http://localhost:8080/api/payment/cancel
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 87
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec746e2a59101206c0",
-  "cancelAmount": 4000,
-  "cancelTaxFreeAmount": 0
-}
-
-<> 2023-08-28T192605.401.json
-
-###
-
-POST http://localhost:8080/api/payment/ready
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 178
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "itemName": "초코파이",
-  "itemCode": "0111",
-  "quantity": 3,
-  "totalAmount": 9000,
-  "taxFreeAmount": 0,
-  "vatAmount": 0,
-  "greenDeposit" : 0,
-  "installMonth" : 0
-}
-
-<> 2023-08-28T191822.200.json
-
-###
-
-POST http://localhost:8080/api/payment/ready
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
-Content-Length: 178
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "itemName": "초코파이",
-  "itemCode": "0111",
-  "quantity": 3,
-  "totalAmount": 9000,
-  "taxFreeAmount": 0,
-  "vatAmount": 0,
-  "greenDeposit" : 0,
-  "installMonth" : 0
-}
-
-<> 2023-08-28T191816.401.json
-
-###
-
-POST http://localhost:8080/api/payment/cancel
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 87
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=25E86F9FF0641DFCF04FEF6064DF3F50
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec736c2a59101206b5",
-  "cancelAmount": 4000,
-  "cancelTaxFreeAmount": 0
-}
-
-<> 2023-08-28T191733.401.json
+<> 2023-09-01T194635.400.json
 
 ###
 
@@ -689,7 +134,7 @@ Content-Type: application/json
 Content-Length: 58
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=25E86F9FF0641DFCF04FEF6064DF3F50
+Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
@@ -697,133 +142,7 @@ Accept-Encoding: br,deflate,gzip,x-gzip
   "password": "1111"
 }
 
-<> 2023-08-28T191718.200.json
-
-###
-
-POST http://localhost:8080/api/payment/cancel
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
-Content-Length: 87
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=25E86F9FF0641DFCF04FEF6064DF3F50
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec736c2a59101206b5",
-  "cancelAmount": 4000,
-  "cancelTaxFreeAmount": 0
-}
-
-<> 2023-08-28T191710.401.json
-
-###
-
-POST http://localhost:8080/api/payment/cancel
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
-Content-Length: 87
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=25E86F9FF0641DFCF04FEF6064DF3F50
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec736c2a59101206b5",
-  "cancelAmount": 4000,
-  "cancelTaxFreeAmount": 0
-}
-
-<> 2023-08-28T191545.401.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=9af154f8a03cc25a7cd3
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=25E86F9FF0641DFCF04FEF6064DF3F50
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec736c2a59101206b5",
-  "partnerOrderId": "54f3048c22f34cf0bad6a57eaa91647c",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T191523.200.json
-
-###
-
-POST http://localhost:8080/api/payment/ready
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
-Content-Length: 178
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=25E86F9FF0641DFCF04FEF6064DF3F50
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "itemName": "초코파이",
-  "itemCode": "0111",
-  "quantity": 3,
-  "totalAmount": 9000,
-  "taxFreeAmount": 0,
-  "vatAmount": 0,
-  "greenDeposit" : 0,
-  "installMonth" : 0
-}
-
-<> 2023-08-28T191405.200.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=8729cca3a9a742555665
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=055B6FF261779200F5D20631DFD0B196
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec6aaf2a5910120669",
-  "partnerOrderId": "cb5d32cd1ef24367a546c41b42204d1c",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T191352.401.json
-
-###
-
-POST http://localhost:8080/api/payment/ready
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTUzOTEsImV4cCI6MTY5MzMwMTc5MX0.-HcCs-CFPVMnaB4vQSkg5cuOkpc23SeKzOZfaDvyR4M
-Content-Length: 178
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=8707DF21B493168041EE07DCB81E3ECA
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "itemName": "초코파이",
-  "itemCode": "0111",
-  "quantity": 3,
-  "totalAmount": 9000,
-  "taxFreeAmount": 0,
-  "vatAmount": 0,
-  "greenDeposit" : 0,
-  "installMonth" : 0
-}
-
-<> 2023-08-28T183649.200.json
+<> 2023-09-01T194313.400.json
 
 ###
 
@@ -832,7 +151,7 @@ Content-Type: application/json
 Content-Length: 58
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=8707DF21B493168041EE07DCB81E3ECA
+Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
@@ -840,51 +159,7 @@ Accept-Encoding: br,deflate,gzip,x-gzip
   "password": "1111"
 }
 
-<> 2023-08-28T183631.200.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=8729cca3a9a742555665
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQ4NzIsImV4cCI6MTY5MzI5MTI3Mn0.68yWrb0DsxjGEZs8hDJFJpRMdqoOQLKn--jTMD8TMB4
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=8707DF21B493168041EE07DCB81E3ECA
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec419660ea2963da48",
-  "partnerOrderId": "b4f82aff99d948849227c96de02f0ad2",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T154238.200.json
-
-###
-
-POST http://localhost:8080/api/payment/ready
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQ4NzIsImV4cCI6MTY5MzI5MTI3Mn0.68yWrb0DsxjGEZs8hDJFJpRMdqoOQLKn--jTMD8TMB4
-Content-Length: 178
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=1E24A4C416A94319B9D4584CC5A7BAC8
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "itemName": "초코파이",
-  "itemCode": "0111",
-  "quantity": 3,
-  "totalAmount": 9000,
-  "taxFreeAmount": 0,
-  "vatAmount": 0,
-  "greenDeposit" : 0,
-  "installMonth" : 0
-}
-
-<> 2023-08-28T154127.200.json
+<> 2023-09-01T191857.400.json
 
 ###
 
@@ -893,7 +168,7 @@ Content-Type: application/json
 Content-Length: 58
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=1E24A4C416A94319B9D4584CC5A7BAC8
+Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
@@ -901,31 +176,605 @@ Accept-Encoding: br,deflate,gzip,x-gzip
   "password": "1111"
 }
 
-<> 2023-08-28T154112.200.json
+<> 2023-09-01T191121.400.json
 
 ###
 
-POST http://localhost:8080/api/payment/ready
+POST http://3.34.105.64:8080/api/restaurant/signin
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMDQ3MTIsImV4cCI6MTY5MzI5MTExMn0.ebhqF341-d5-Z5OLWul4dq3tBKfxRzdO4z08rOZt-iY
-Content-Length: 178
+Content-Length: 46
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=0AF5789B1A9811834FD5F27CC6795BF8
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
-  "itemName": "초코파이",
-  "itemCode": "0111",
-  "quantity": 3,
-  "totalAmount": 9000,
-  "taxFreeAmount": 0,
-  "vatAmount": 0,
-  "greenDeposit" : 0,
-  "installMonth" : 0
+  "ownerId": "test2",
+  "password": "1234"
 }
 
-<> 2023-08-28T153850.401.json
+<> 2023-09-01T191003.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T191000.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T190959.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T190958.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T190956.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T185315.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T185315.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T185314.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T185313.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T185312.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T185311.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T185310.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T185309.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T185308.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T183144.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T183143.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T183142.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T183141.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T183140.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T182357.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T182356.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T182355.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T182354.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T182353.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T182351.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T180528.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T180523.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T175547.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T175536.200.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T175533.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T175529.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T175517.400.json
+
+###
+
+POST http://3.34.105.64:8080/api/restaurant/signin
+Content-Type: application/json
+Content-Length: 46
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "test2",
+  "password": "1234"
+}
+
+<> 2023-09-01T174617.400.json
+
+###
+
+PUT http://43.200.191.137:8080/api/review/comment/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNTQzMzM0LCJleHAiOjE2OTM2Mjk3MzR9.IasRCFlNpkFuYhLmv00nXKRvMX3O4GlPbk0VhD_rLHc
+Content-Length: 50
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "content": "제가 무슨 말을 한거죠?"
+}
+
+<> 2023-09-01T134621.401.json
+
+###
+
+GET http://43.200.191.137:8080/api/review/4/comment
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-09-01T134608.200.json
+
+###
+
+GET http://localhost:8080/api/review/4/comment
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-09-01T134328.200.json
+
+###
+
+DELETE http://localhost:8080/api/review/comment/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNTQzMzM0LCJleHAiOjE2OTM2Mjk3MzR9.IasRCFlNpkFuYhLmv00nXKRvMX3O4GlPbk0VhD_rLHc
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:8080/api/review/4/comment
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-09-01T134311.200.json
+
+###
+
+PUT http://localhost:8080/api/review/comment/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNTQzMzM0LCJleHAiOjE2OTM2Mjk3MzR9.IasRCFlNpkFuYhLmv00nXKRvMX3O4GlPbk0VhD_rLHc
+Content-Length: 50
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "content": "제가 무슨 말을 한거죠?"
+}
 
 ###
 

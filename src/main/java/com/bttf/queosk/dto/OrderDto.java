@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class OrderDto {
+    private Long id;
     private Table table;
     private Menu menu;
     private Integer count;
@@ -23,6 +24,7 @@ public class OrderDto {
 
     public static OrderDto of(Order order) {
         return OrderDto.builder()
+                .id(order.getId())
                 .table(order.getTable())
                 .menu(order.getMenu())
                 .count(order.getCount())
