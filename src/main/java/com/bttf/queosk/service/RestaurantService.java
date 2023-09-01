@@ -98,6 +98,7 @@ public class RestaurantService {
         );
 
         return RestaurantSignInDto.builder()
+                .id(restaurant.getId())
                 .ownerId(restaurant.getOwnerId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)

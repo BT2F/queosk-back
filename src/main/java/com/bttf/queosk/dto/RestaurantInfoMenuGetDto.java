@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Builder
 public class RestaurantInfoMenuGetDto {
+    private Long id;
+
     RestaurantDto restaurantDto;
 
     List<MenuDto> menuDtoList;
@@ -32,6 +34,7 @@ public class RestaurantInfoMenuGetDto {
                 .collect(Collectors.toList());
 
         return RestaurantInfoMenuGetDto.builder()
+                .id(restaurant.getId())
                 .restaurantDto(RestaurantDto.of(restaurant))
                 .menuDtoList(menuDtoList)
                 .build();
