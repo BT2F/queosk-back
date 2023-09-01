@@ -21,6 +21,7 @@ public class UserSignInDto {
 
     public static UserSignInDto of(User user, String userRefreshToken, String userAccessToken) {
         return UserSignInDto.builder()
+                .id(user.getId())
                 .accessToken(userAccessToken)
                 .refreshToken(userRefreshToken)
                 .email(user.getEmail())
