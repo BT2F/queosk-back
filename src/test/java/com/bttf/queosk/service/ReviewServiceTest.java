@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -182,7 +183,7 @@ class ReviewServiceTest {
 
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(restaurant));
 
-        when(reviewRepository.findByRestaurantAndIsDeletedFalse(restaurant)).thenReturn(List.of(review));
+        when(reviewRepository.findByRestaurantAndIsDeletedFalse(restaurant)).thenReturn(Arrays.asList(review));
 
         List<ReviewDto> reviewList = reviewService.getReviewList(1L);
 
@@ -220,7 +221,7 @@ class ReviewServiceTest {
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(restaurant));
-        when(reviewRepository.findByRestaurantAndUserAndIsDeletedFalse(restaurant, user)).thenReturn(List.of(review, review2));
+        when(reviewRepository.findByRestaurantAndUserAndIsDeletedFalse(restaurant, user)).thenReturn(Arrays.asList(review, review2));
 
         List<ReviewDto> reviewList = reviewService.getRestaurantUserReviewList(1L, 1L);
         assertThat(reviewList.size()).isEqualTo(2);

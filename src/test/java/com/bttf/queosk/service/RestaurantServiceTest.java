@@ -34,6 +34,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -326,7 +327,7 @@ class RestaurantServiceTest {
                         .status(SOLD_OUT)
                         .restaurantId(restaurantId)
                         .build();
-        List<Menu> menus = List.of(menu1, menu2);
+        List<Menu> menus = Arrays.asList(menu1, menu2);
 
         given(restaurantRepository.findById(restaurantId)).willReturn(Optional.of(restaurant));
 
