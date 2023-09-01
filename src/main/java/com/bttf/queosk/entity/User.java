@@ -1,5 +1,6 @@
 package com.bttf.queosk.entity;
 
+import com.bttf.queosk.dto.UserSignUpForm;
 import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
 import com.bttf.queosk.enumerate.LoginType;
 import com.bttf.queosk.enumerate.UserRole;
@@ -11,6 +12,12 @@ import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
+
+import static com.bttf.queosk.enumerate.LoginType.KAKAO;
+import static com.bttf.queosk.enumerate.LoginType.NORMAL;
+import static com.bttf.queosk.enumerate.UserRole.ROLE_USER;
+import static com.bttf.queosk.enumerate.UserStatus.NOT_VERIFIED;
+import static com.bttf.queosk.enumerate.UserStatus.VERIFIED;
 
 @Entity(name = "user")
 @AuditOverride(forClass = BaseTimeEntity.class)
@@ -43,13 +50,35 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public static User of(UserSignUpForm userSignUpForm,
+                          String encryptedPassword,
+                          String trimmedPhoneNumber) {
+
+        return User.builder()
+                .email(userSignUpForm.getEmail())
+                .nickName(userSignUpForm.getNickName())
+                .password(encryptedPassword)
+                .phone(trimmedPhoneNumber)
+                .loginType(NORMAL)
+                .status(NOT_VERIFIED)
+                .userRole(ROLE_USER)
+                .build();
     }
 
-    public void setPhone(String phone) {
-        this.nickName = phone;
+    public static User of(String email, String nickName, String encodedPassword) {
+        return User.builder()
+                .email(email)
+                .password(encodedPassword)
+                .nickName(nickName)
+                .loginType(KAKAO)
+                .userRole(ROLE_USER)
+                .status(VERIFIED)
+                .build();
     }
+
+    public void setNickName(String nickName) {this.nickName = nickName;}
+
+    public void setPhone(String phone) {this.phone = phone;}
 
     public void setPassword(String newPassword) {
         this.password = newPassword;

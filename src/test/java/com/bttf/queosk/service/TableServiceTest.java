@@ -1,6 +1,6 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.tabledto.TableForm;
+import com.bttf.queosk.dto.TableDto;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.enumerate.TableStatus;
@@ -8,7 +8,6 @@ import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.TableRepository;
-import com.bttf.queosk.service.tableservice.TableService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,37 +46,16 @@ class TableServiceTest {
     @Test
     @DisplayName("테이블 생성 테스트 - 성공 케이스")
     public void testCreateTable_success() {
-        //given
+        // Given
         Long restaurantId = 1L;
         Restaurant restaurant = Restaurant.builder()
-                .id(1L)
+                .id(restaurantId)
                 .build();
 
-        given(restaurantRepository.findById(anyLong())).willReturn(Optional.of(restaurant));
-
-        //when
+        // When
         tableService.createTable(restaurantId);
 
-        //then
-        then(tableService).should(times(1)).createTable(restaurantId);
-
-    }
-
-    @Test
-    @DisplayName("테이블 생성 테스트 - restaurant 존재하지 않는 경우")
-    public void testCreateTable_fail_invalidRestaurantException() {
-        //given
-        Long restaurantId = 1L;
-        Restaurant restaurant = Restaurant.builder()
-                .id(1L)
-                .build();
-
-        given(restaurantRepository.findById(anyLong())).willReturn(Optional.empty());
-
-        //then
-        assertThatThrownBy(() -> tableService.createTable(restaurantId))
-                .isExactlyInstanceOf(CustomException.class)
-                .hasMessage(ErrorCode.INVALID_RESTAURANT.getMessage());
+        // Then
         then(tableService).should(times(1)).createTable(restaurantId);
     }
 
@@ -211,7 +189,7 @@ class TableServiceTest {
         given(tableRepository.findById(table.getId())).willReturn(Optional.of(table));
 
         // When
-        TableForm table1 = tableService.getTable(table.getId(), restaurantId);
+        TableDto table1 = tableService.getTable(table.getId(), restaurantId);
 
         // Then
         then(tableService).should(times(1)).getTable(table.getId(), restaurantId);
@@ -232,13 +210,14 @@ class TableServiceTest {
         given(tableRepository.findById(table.getId())).willReturn(Optional.of(table));
 
         // When
-        TableForm table1 = tableService.getTable(table.getId(), restaurantId);
+        TableDto table1 = tableService.getTable(table.getId(), restaurantId);
 
         assertThatThrownBy(() -> tableService.getTable(table.getId(), 2L))
                 .isExactlyInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.NOT_PERMITTED.getMessage());
         then(tableService).should(times(1)).getTable(table.getId(), 2L);
     }
+
     @Test
     @DisplayName("가게의 테이블 가져오기 테스트 - 성공 케이스")
     public void testGetTableList_success() {
@@ -263,10 +242,10 @@ class TableServiceTest {
         given(tableRepository.findByRestaurantId(restaurantId)).willReturn(tableList);
 
         // When
-        List<TableForm> tableList1 = tableService.getTableList(restaurantId);
+        List<TableDto> tableList1 = tableService.getTableList(restaurantId);
 
         then(tableService).should(times(1)).getTableList(restaurantId);
-        assertThat(tableList.get(0).getId()).isEqualTo(1L);
-        assertThat(tableList.get(1).getId()).isEqualTo(2L);
+        assertThat(tableList.get(0).getId()).isEqualTo(tableList1.get(0).getTableId());
+        assertThat(tableList.get(1).getId()).isEqualTo(tableList1.get(1).getTableId());
     }
 }

@@ -1,13 +1,8 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
-import com.bttf.queosk.dto.UserImageUrlDto;
-import com.bttf.queosk.dto.userdto.*;
-import com.bttf.queosk.service.imageservice.ImageService;
-import com.bttf.queosk.service.kakaoservice.KakaoLoginService;
-import com.bttf.queosk.service.refreshtokenservice.RefreshTokenService;
-import com.bttf.queosk.service.userservice.UserInfoService;
-import com.bttf.queosk.service.userservice.UserLoginService;
+import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.dto.*;
+import com.bttf.queosk.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -133,7 +128,7 @@ public class UserController {
                 .toString().substring(0, 6));
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(UserImageUrlDto.builder().imagePath(url));
+                .body(UserImageUrlDto.of(url));
     }
 
     @PutMapping("/image")

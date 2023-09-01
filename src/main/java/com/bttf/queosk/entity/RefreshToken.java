@@ -16,4 +16,11 @@ public class RefreshToken {
     @Id
     private String token;
     private String email;
+
+    public static RefreshToken of(User user, String refreshToken) {
+        return RefreshToken.builder()
+                .email(user.getEmail())
+                .token(refreshToken)
+                .build();
+    }
 }

@@ -30,4 +30,14 @@ public class Comment extends BaseTimeEntity {
 
     private String content;
 
+    private Boolean isDeleted;
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
+
 }

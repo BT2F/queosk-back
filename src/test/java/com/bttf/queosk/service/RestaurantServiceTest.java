@@ -1,27 +1,19 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.menudto.MenuCreationForm;
-import com.bttf.queosk.dto.menudto.MenuDto;
-import com.bttf.queosk.dto.menudto.MenuStatusForm;
-import com.bttf.queosk.dto.restaurantdto.*;
+import com.bttf.queosk.dto.*;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.enumerate.MenuStatus;
 import com.bttf.queosk.repository.MenuRepository;
-import com.bttf.queosk.service.emailsender.EmailSender;
-import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
+import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
 import com.bttf.queosk.enumerate.RestaurantCategory;
-import com.bttf.queosk.dto.tokendto.TokenDto;
+import com.bttf.queosk.dto.TokenDto;
 import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
-import com.bttf.queosk.service.kakaoservice.KakaoGeoAddressService;
-import com.bttf.queosk.service.imageservice.ImageService;
-import com.bttf.queosk.service.menuservice.MenuService;
-import com.bttf.queosk.service.restaurantservice.RestaurantService;
 import com.google.gson.Gson;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +34,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +46,6 @@ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @Transactional
@@ -335,7 +327,7 @@ class RestaurantServiceTest {
                         .status(SOLD_OUT)
                         .restaurantId(restaurantId)
                         .build();
-        List<Menu> menus = List.of(menu1, menu2);
+        List<Menu> menus = Arrays.asList(menu1, menu2);
 
         given(restaurantRepository.findById(restaurantId)).willReturn(Optional.of(restaurant));
 
@@ -343,19 +335,19 @@ class RestaurantServiceTest {
 
         // when
 
-        GetRestaurantInfoMenuDto getRestaurantInfoMenuDto = restaurantService.getRestaurantInfoAndMenu(1L);
+        RestaurantInfoMenuGetDto restaurantInfoMenuGetDto = restaurantService.getRestaurantInfoAndMenu(1L);
 
         // then
 
         verify(restaurantRepository, times(1)).findById(1L);
         verify(menuRepository, times(1)).findByRestaurantId(1L);
 
-        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(0).getName()).isEqualTo("왕만두");
-        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(1).getName()).isEqualTo("물만두");
-        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(0).getPrice()).isEqualTo(3000L);
-        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(1).getPrice()).isEqualTo(2000L);
-        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(0).getStatus()).isEqualTo(MenuStatus.ON_SALE);
-        assertThat(getRestaurantInfoMenuDto.getMenuDtoList().get(1).getStatus()).isEqualTo(MenuStatus.SOLD_OUT);
-        assertThat(getRestaurantInfoMenuDto.getRestaurantDto().getId()).isEqualTo(1L);
+        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(0).getName()).isEqualTo("왕만두");
+        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(1).getName()).isEqualTo("물만두");
+        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(0).getPrice()).isEqualTo(3000L);
+        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(1).getPrice()).isEqualTo(2000L);
+        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(0).getStatus()).isEqualTo(MenuStatus.ON_SALE);
+        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(1).getStatus()).isEqualTo(MenuStatus.SOLD_OUT);
+        assertThat(restaurantInfoMenuGetDto.getRestaurantDto().getId()).isEqualTo(1L);
     }
 }

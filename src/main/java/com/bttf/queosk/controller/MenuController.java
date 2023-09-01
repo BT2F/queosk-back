@@ -1,12 +1,12 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
-import com.bttf.queosk.dto.menudto.MenuCreationForm;
-import com.bttf.queosk.dto.menudto.MenuDto;
-import com.bttf.queosk.dto.menudto.MenuStatusForm;
-import com.bttf.queosk.dto.menudto.MenuUpdateForm;
-import com.bttf.queosk.service.imageservice.ImageService;
-import com.bttf.queosk.service.menuservice.MenuService;
+import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.dto.MenuCreationForm;
+import com.bttf.queosk.dto.MenuDto;
+import com.bttf.queosk.dto.MenuStatusForm;
+import com.bttf.queosk.dto.MenuUpdateForm;
+import com.bttf.queosk.service.ImageService;
+import com.bttf.queosk.service.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.UUID;
 
 @RestController
 @Api(tags = "Menu API", description = "메뉴 관련 API")
-@RequestMapping("/api/restaurants")
+@RequestMapping("/api/restaurant")
 @RequiredArgsConstructor
 public class MenuController {
 
@@ -39,15 +39,16 @@ public class MenuController {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        menuService.createMenu(restaurantId,menuCreationForm);
+        menuService.createMenu(restaurantId, menuCreationForm);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
     @GetMapping("/{restaurantId}/menus")
     @ApiOperation(value = "식당 메뉴 목록 조회", notes = "점주 또는 고객이 대상 식당의 메뉴목록을 조회합니다.")
     public ResponseEntity<?> getMenu(
             @PathVariable Long restaurantId,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         List<MenuDto> menuList = menuService.getMenu(restaurantId);
 
@@ -59,11 +60,11 @@ public class MenuController {
     public ResponseEntity<?> updateMenuInfo(
             @PathVariable Long menuId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody MenuUpdateForm menuUpdateForm){
+            @RequestBody MenuUpdateForm menuUpdateForm) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        menuService.updateMenuInfo(restaurantId,menuId,menuUpdateForm);
+        menuService.updateMenuInfo(restaurantId, menuId, menuUpdateForm);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -73,11 +74,11 @@ public class MenuController {
     public ResponseEntity<?> updateMenuStatus(
             @PathVariable Long menuId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody MenuStatusForm menuStatusForm){
+            @RequestBody MenuStatusForm menuStatusForm) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        menuService.updateMenuStatus(restaurantId,menuId,menuStatusForm);
+        menuService.updateMenuStatus(restaurantId, menuId, menuStatusForm);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -92,7 +93,7 @@ public class MenuController {
 
         String url = imageService.saveFile(
                 imageFile,
-                "/restaurant/"+restaurantId+"/menu/" + UUID.randomUUID().toString().substring(0,7)
+                "/restaurant/" + restaurantId + "/menu/" + UUID.randomUUID().toString().substring(0, 7)
         );
 
         return ResponseEntity.status(HttpStatus.OK).body(url);
@@ -109,10 +110,10 @@ public class MenuController {
 
         String url = imageService.saveFile(
                 imageFile,
-                "/restaurant/"+restaurantId+"/menu/" + UUID.randomUUID().toString().substring(0,7)
+                "/restaurant/" + restaurantId + "/menu/" + UUID.randomUUID().toString().substring(0, 7)
         );
 
-        menuService.updateImage(restaurantId,menuId,url);
+        menuService.updateImage(restaurantId, menuId, url);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -121,11 +122,11 @@ public class MenuController {
     @ApiOperation(value = "메뉴 삭제", notes = "점주 본인 매장의 메뉴를 삭제합니다.")
     public ResponseEntity<?> deleteMenu(
             @PathVariable Long menuId,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        menuService.deleteMenu(restaurantId,menuId);
+        menuService.deleteMenu(restaurantId, menuId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

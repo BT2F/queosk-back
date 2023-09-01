@@ -1,11 +1,11 @@
 package com.bttf.queosk.controller;
 
 
-import com.bttf.queosk.config.springsecurity.JwtTokenProvider;
-import com.bttf.queosk.dto.orderdto.CreateOrderForm;
-import com.bttf.queosk.dto.orderdto.OrderDto;
+import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.dto.OrderCreationForm;
+import com.bttf.queosk.dto.OrderDto;
 import com.bttf.queosk.enumerate.OrderStatus;
-import com.bttf.queosk.service.orderservice.OrderService;
+import com.bttf.queosk.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +25,11 @@ public class OrderController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("api/user/order")
-    @ApiOperation(value = "주문 등록", notes = "가게의 주문을 생성합니다.")
+    @ApiOperation(value = "주문 등록", notes = "매장의 주문을 생성합니다.")
     public ResponseEntity<?> createOrder(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                         @RequestBody CreateOrderForm createOrderForm) {
+                                         @RequestBody OrderCreationForm orderCreationForm) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
-        orderService.createOrder(createOrderForm, userId);
+        orderService.createOrder(orderCreationForm, userId);
         return ResponseEntity.status(CREATED).build();
     }
 
@@ -44,7 +44,7 @@ public class OrderController {
     }
 
     @GetMapping("api/restaurant/order/{orderId}")
-    @ApiOperation(value = "상점 단일 주문 확인", notes = "상점에서 단일한 주문의 내용을 확인합니다")
+    @ApiOperation(value = "매장 단일 주문 확인", notes = "매장에서 단일한 주문의 내용을 확인합니다")
     public ResponseEntity<?> readOrder(@PathVariable(name = "orderId") Long orderId,
                                        @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
@@ -52,7 +52,7 @@ public class OrderController {
     }
 
     @GetMapping("api/restaurant/orders/today")
-    @ApiOperation(value = "상점 금일 주문 리스트 확인", notes = "상점에서 오늘 주문한 리스트를 확인합니다")
+    @ApiOperation(value = "매장 금일 주문 리스트 확인", notes = "매장에서 오늘 주문한 리스트를 확인합니다")
     public ResponseEntity<?> readTodayOrderList(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         List<OrderDto> orderDtoList = orderService.readTodayOrderList(restaurantId);
@@ -60,7 +60,7 @@ public class OrderController {
     }
 
     @GetMapping("api/restaurant/orders/in-progress")
-    @ApiOperation(value = "상점 주문처리중 리스트 확인", notes = "상점에서 현재 주문처리중인 주문의 리스트를 확인합니다")
+    @ApiOperation(value = "매장 주문처리중 리스트 확인", notes = "매장에서 현재 주문처리중인 주문의 리스트를 확인합니다")
     public ResponseEntity<?> readInProgressOrderList(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         List<OrderDto> inProgressOrderDtoList = orderService.readInProgressOrderList(restaurantId);
