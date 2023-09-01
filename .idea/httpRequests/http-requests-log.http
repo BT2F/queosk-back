@@ -1,3 +1,28 @@
+PUT http://43.200.191.137:8080/api/review/comment/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNTQzMzM0LCJleHAiOjE2OTM2Mjk3MzR9.IasRCFlNpkFuYhLmv00nXKRvMX3O4GlPbk0VhD_rLHc
+Content-Length: 50
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "content": "제가 무슨 말을 한거죠?"
+}
+
+<> 2023-09-01T134621.401.json
+
+###
+
+GET http://43.200.191.137:8080/api/review/4/comment
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-09-01T134608.200.json
+
+###
+
 GET http://localhost:8080/api/review/4/comment
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
@@ -698,50 +723,6 @@ Accept-Encoding: br,deflate,gzip,x-gzip
 }
 
 <> 2023-08-28T192935.200.json
-
-###
-
-POST http://localhost:8080/api/payment/ready
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 178
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "itemName": "초코파이",
-  "itemCode": "0111",
-  "quantity": 3,
-  "totalAmount": 9000,
-  "taxFreeAmount": 0,
-  "vatAmount": 0,
-  "greenDeposit" : 0,
-  "installMonth" : 0
-}
-
-<> 2023-08-28T192842.200.json
-
-###
-
-POST http://localhost:8080/api/payment/approve?pg_token=189ff713d873ad4d50d0
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJiemhzMTk5MkBpY2xvdWQuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTMyMTc4MzgsImV4cCI6MTY5MzMwNDIzOH0.ovpEjXHQ2GmrH9uDoQxsyhRZfSxEBFBaFjG9xYMlo94
-Content-Length: 142
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=665B659C239C038D48C2D675939487C4
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "tid": "T4ec76462a59101206ce",
-  "partnerOrderId": "15653f7428834176827518cd2b724756",
-  "payload": "테스트",
-  "totalAmount": "9000"
-}
-
-<> 2023-08-28T192828.401.json
 
 ###
 
