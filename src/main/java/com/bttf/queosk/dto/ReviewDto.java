@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ReviewDto {
+    private Long id;
     private Restaurant restaurant;
     private User user;
     private String subject;
@@ -21,6 +22,7 @@ public class ReviewDto {
 
     public static ReviewDto of(Review review) {
         return ReviewDto.builder()
+                .id(review.getId())
                 .restaurant(review.getRestaurant())
                 .user(review.getUser())
                 .subject(review.getSubject())
