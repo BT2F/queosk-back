@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.bttf.queosk.enumerate.MenuStatus.ON_SALE;
@@ -75,7 +76,7 @@ class MenuServiceTest {
                         .status(ON_SALE)
                         .restaurantId(restaurantId)
                         .build();
-        List<Menu> menus = List.of(menu1, menu2);
+        List<Menu> menus = Arrays.asList(menu1, menu2);
 
         when(menuRepository.findByRestaurantId(restaurantId)).thenReturn(menus);
 
