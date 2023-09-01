@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Api(tags = "Review Comment API", description = "매장 리뷰 코멘트 API")
-@RequestMapping("api/reviews/")
+@RequestMapping("/api/reviews/")
 @RequiredArgsConstructor
 public class CommentController {
 
