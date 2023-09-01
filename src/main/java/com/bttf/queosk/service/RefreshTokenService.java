@@ -1,13 +1,14 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.TokenRefreshResponse;
 import com.bttf.queosk.dto.TokenDto;
-import com.bttf.queosk.entity.RefreshToken;
+import com.bttf.queosk.dto.TokenRefreshResponse;
+import com.bttf.queosk.dto.RefreshTokenDto;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.enumerate.UserRole;
 import com.bttf.queosk.exception.CustomException;
+import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.UserRepository;
@@ -29,8 +30,15 @@ public class RefreshTokenService {
     public TokenRefreshResponse issueNewAccessToken(String accessToken, String refreshToken) {
         validateRefreshToken(refreshToken);
 
-        RefreshToken tokenSubject = refreshTokenRepository.findById(refreshToken)
-                .orElseThrow(() -> new CustomException(INVALID_TOKEN));
+        Long userId = jwtTokenProvider.getIdFromToken(refreshToken);
+        User targetUser = userRepository.findById(userId)
+                .orElseThrow(()->new CustomException(ErrorCode.REFRESH_CODE_EXPIRED));
+
+        RefreshTokenDto tokenSubject = refreshTokenRepository.findByEmail(targetUser.getEmail());
+
+        if(tokenSubject==null) {
+            throw new CustomException(INVALID_TOKEN);
+        }
 
         Object tokenHolder = getObject(accessToken, tokenSubject);
 
@@ -58,10 +66,10 @@ public class RefreshTokenService {
 
     // 리프레시 토큰 삭제
     public void deleteRefreshToken(String email) {
-        refreshTokenRepository.deleteById(email);
+        refreshTokenRepository.deleteByEmail(email);
     }
 
-    // RefreshToken 유효성 검사
+    // RefreshTokenDto 유효성 검사
     private void validateRefreshToken(String refreshToken) {
         if (!jwtTokenProvider.validateToken(refreshToken)) {
             throw new CustomException(INVALID_TOKEN);
@@ -69,7 +77,7 @@ public class RefreshTokenService {
     }
 
     // AccessToken을 이용하여 User 또는 Restaurant 객체 가져오기
-    private Object getObject(String accessToken, RefreshToken tokenSubject) {
+    private Object getObject(String accessToken, RefreshTokenDto tokenSubject) {
         return jwtTokenProvider.getRoleFromToken(accessToken).equals(
                 ROLE_USER.toString()) ?
                 findUser(tokenSubject.getEmail()) :
@@ -78,14 +86,14 @@ public class RefreshTokenService {
     }
 
     // User 객체 찾기
-    private User findUser(String email) {
-        return userRepository.findByEmail(email)
+    private User findUser(String userEmail) {
+        return userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
     }
 
     // Restaurant 객체 찾기
-    private Restaurant findRestaurant(String email) {
-        return restaurantRepository.findByEmail(email)
+    private Restaurant findRestaurant(String restaurantEmail) {
+        return restaurantRepository.findByEmail(restaurantEmail)
                 .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
     }
 }

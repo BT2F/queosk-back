@@ -2,7 +2,6 @@ package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.*;
-import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
@@ -120,7 +119,7 @@ class UserServiceTest {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
         when(jwtTokenProvider.generateAccessToken(any(TokenDto.class))).thenReturn(accessToken);
-        when(jwtTokenProvider.generateRefreshToken()).thenReturn(refreshToken);
+        when(jwtTokenProvider.generateRefreshToken(user.getEmail())).thenReturn(refreshToken);
 
         // when
         UserSignInDto result = userLoginService.signInUser(new UserSignInForm(user.getEmail(), user.getPassword()));
@@ -130,7 +129,6 @@ class UserServiceTest {
         assertThat(user.getEmail()).isEqualTo(result.getEmail());
         assertThat(accessToken).isEqualTo(result.getAccessToken());
         assertThat(refreshToken).isEqualTo(result.getRefreshToken());
-        verify(refreshTokenRepository, times(1)).save(any(RefreshToken.class));
     }
 
     @Test

@@ -104,7 +104,7 @@ public class UserInfoService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
-        refreshTokenRepository.deleteById(user.getEmail());
+        refreshTokenRepository.deleteByEmail(user.getEmail());
 
         if (user.getLoginType().equals(LoginType.KAKAO)) {
             kakaoAuthRepository.deleteById(user.getEmail());

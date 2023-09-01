@@ -3,7 +3,6 @@ package com.bttf.queosk.service;
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.*;
 import com.bttf.queosk.entity.Menu;
-import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.UserRole;
@@ -88,14 +87,9 @@ public class RestaurantService {
 
         String accessToken = jwtTokenProvider.generateAccessToken(TokenDto.of(restaurant));
 
-        String refreshToken = jwtTokenProvider.generateRefreshToken();
+        String refreshToken = jwtTokenProvider.generateRefreshToken(restaurant.getEmail());
 
-        refreshTokenRepository.save(
-                RefreshToken.builder()
-                        .email(restaurant.getEmail())
-                        .token(refreshToken)
-                        .build()
-        );
+        refreshTokenRepository.save(restaurant.getEmail(), refreshToken);
 
         return RestaurantSignInDto.builder()
                 .ownerId(restaurant.getOwnerId())
@@ -172,6 +166,7 @@ public class RestaurantService {
                 .findById(jwtTokenProvider.getIdFromToken(token))
                 .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
         restaurant.delete();
+        refreshTokenRepository.deleteByEmail(restaurant.getEmail());
         restaurantRepository.save(restaurant);
 
     }
