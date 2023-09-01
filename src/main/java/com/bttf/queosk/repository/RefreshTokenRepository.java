@@ -17,11 +17,11 @@ public class RefreshTokenRepository {
         redisTemplate.expire(email, 14 * 24 * 60 * 60, TimeUnit.SECONDS);
     }
 
-    public RefreshTokenDto findById(String email) {
+    public RefreshTokenDto findByEmail(String email) {
         return RefreshTokenDto.of(email, redisTemplate.opsForValue().get(String.valueOf(email)));
     }
 
-    public void deleteById(String email){
+    public void deleteByEmail(String email){
         redisTemplate.delete(email);
     }
 }

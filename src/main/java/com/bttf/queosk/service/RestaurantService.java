@@ -166,7 +166,7 @@ public class RestaurantService {
                 .findById(jwtTokenProvider.getIdFromToken(token))
                 .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
         restaurant.delete();
-        refreshTokenRepository.deleteById(restaurant.getEmail());
+        refreshTokenRepository.deleteByEmail(restaurant.getEmail());
         restaurantRepository.save(restaurant);
 
     }

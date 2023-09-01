@@ -34,7 +34,7 @@ public class RefreshTokenService {
         User targetUser = userRepository.findById(userId)
                 .orElseThrow(()->new CustomException(ErrorCode.REFRESH_CODE_EXPIRED));
 
-        RefreshTokenDto tokenSubject = refreshTokenRepository.findById(targetUser.getEmail());
+        RefreshTokenDto tokenSubject = refreshTokenRepository.findByEmail(targetUser.getEmail());
 
         if(tokenSubject==null) {
             throw new CustomException(INVALID_TOKEN);
@@ -66,7 +66,7 @@ public class RefreshTokenService {
 
     // 리프레시 토큰 삭제
     public void deleteRefreshToken(String email) {
-        refreshTokenRepository.deleteById(email);
+        refreshTokenRepository.deleteByEmail(email);
     }
 
     // RefreshTokenDto 유효성 검사
