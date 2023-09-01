@@ -24,9 +24,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.UUID;
 
 import static com.bttf.queosk.enumerate.KaKaoParams.*;
-import static com.bttf.queosk.enumerate.LoginType.KAKAO;
-import static com.bttf.queosk.enumerate.UserRole.ROLE_USER;
-import static com.bttf.queosk.enumerate.UserStatus.VERIFIED;
 import static com.bttf.queosk.exception.ErrorCode.KAKAO_LOGIN_FAILED;
 
 @Slf4j
@@ -176,7 +173,7 @@ public class KakaoLoginService {
                 jwtTokenProvider.generateAccessToken(TokenDto.of(user));
 
         // Queosk 리프레시 토큰 생성
-        String userRefreshToken = jwtTokenProvider.generateRefreshToken();
+        String userRefreshToken = jwtTokenProvider.generateRefreshToken(user.getEmail());
 
         log.info("카카오톡 소셜로그인 성공");
 

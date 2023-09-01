@@ -11,7 +11,7 @@ import org.springframework.data.redis.core.RedisHash;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@RedisHash(value = "refresh_token")
+@RedisHash(value = "refresh_token", timeToLive = 1209600)
 public class KakaoAuth {
     @Id
     private String email;
