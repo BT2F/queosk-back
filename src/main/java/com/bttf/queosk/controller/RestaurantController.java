@@ -22,7 +22,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @Api(tags = "Restaurant API", description = "매장 API")
-@RequestMapping("/api/restaurant")
+@RequestMapping("/api/restaurants")
 @RequiredArgsConstructor
 public class RestaurantController {
 
@@ -99,7 +99,7 @@ public class RestaurantController {
         return ResponseEntity.status(201).body(restaurant);
     }
 
-    @GetMapping("s/coord")
+    @GetMapping("/coord")
     @ApiOperation(value = "동네 매장 검색 (좌표)", notes = "해당 좌표가 위치한 동네의 매장 리스트를 제공합니다.")
     public ResponseEntity<?> getCoordRestaurantInfo(@RequestBody RestaurantInfoGetCoordForm restaurantInfoGetCoordForm) {
         Page<RestaurantDto> restaurantPage = restaurantService.getCoordRestaurantInfoForm(restaurantInfoGetCoordForm);
