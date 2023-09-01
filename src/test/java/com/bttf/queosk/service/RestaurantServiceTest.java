@@ -8,7 +8,6 @@ import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
 import com.bttf.queosk.enumerate.RestaurantCategory;
 import com.bttf.queosk.dto.TokenDto;
-import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
@@ -148,7 +147,7 @@ class RestaurantServiceTest {
         when(restaurantRepository.findByOwnerId(anyString())).thenReturn(Optional.of(restaurant));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
         when(jwtTokenProvider.generateAccessToken(any(TokenDto.class))).thenReturn(accessToken);
-        when(jwtTokenProvider.generateRefreshToken()).thenReturn(refreshToken);
+        when(jwtTokenProvider.generateRefreshToken(restaurant.getEmail())).thenReturn(refreshToken);
 
         RestaurantSignInDto result = restaurantService.signIn(restaurantSignInForm);
 
@@ -159,7 +158,6 @@ class RestaurantServiceTest {
         assertThat(id).isEqualTo(result.getOwnerId());
         assertThat(accessToken).isEqualTo(result.getAccessToken());
         assertThat(refreshToken).isEqualTo(result.getRefreshToken());
-        verify(refreshTokenRepository, times(1)).save(any(RefreshToken.class));
     }
 
     @Test
@@ -328,6 +326,7 @@ class RestaurantServiceTest {
                         .restaurantId(restaurantId)
                         .build();
         List<Menu> menus = Arrays.asList(menu1, menu2);
+
 
         given(restaurantRepository.findById(restaurantId)).willReturn(Optional.of(restaurant));
 
