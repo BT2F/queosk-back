@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Api(tags = "Review Comment API", description = "매장 리뷰 코멘트 API")
-@RequestMapping("api/review/")
+@RequestMapping("api/reviews/")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("{reviewId}/comment")
+    @PostMapping("{reviewId}/comments")
     @ApiOperation(value = "리뷰 코멘트 작성", notes = "리뷰의 코멘트를 작성합니다.")
     public ResponseEntity<Object> createComment(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                 @PathVariable(value = "reviewId") Long reviewId,
@@ -32,7 +32,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("comment/{commentId}")
+    @PutMapping("comments/{commentId}")
     @ApiOperation(value = "리뷰 코멘트 수정", notes = "리뷰의 코멘트를 수정합니다.")
     ResponseEntity<Object> updateComment(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                          @PathVariable(value = "commentId") Long commentId,
@@ -45,7 +45,7 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("comment/{commentId}")
+    @DeleteMapping("comments/{commentId}")
     @ApiOperation(value = "리뷰 코멘트 삭제", notes = "리뷰의 코멘트를 삭제합니다.")
     ResponseEntity<Object> deleteComment(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                          @PathVariable(value = "commentId") Long commentId) {
@@ -56,7 +56,7 @@ public class CommentController {
         return ResponseEntity.status(204).build();
     }
 
-    @GetMapping("{reviewId}/comment")
+    @GetMapping("{reviewId}/comments")
     @ApiOperation(value = "리뷰 코멘트 열람", notes = "해당 리뷰의 코멘트 리스트를 열람합니다.")
     ResponseEntity<Object> getComment(@PathVariable(value = "reviewId") Long reviewId){
         return ResponseEntity.ok().body(commentService.getComment(reviewId));
