@@ -1,4 +1,4 @@
-package com.bttf.queosk.dto.tabledto;
+package com.bttf.queosk.dto;
 
 
 import com.bttf.queosk.entity.Table;

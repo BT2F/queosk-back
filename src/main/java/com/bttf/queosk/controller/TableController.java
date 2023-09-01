@@ -1,10 +1,9 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.tabledto.TableDto;
-import com.bttf.queosk.dto.tabledto.TableForm;
+import com.bttf.queosk.dto.TableDto;
+import com.bttf.queosk.dto.TableForm;
 import com.bttf.queosk.enumerate.TableStatus;
-import com.bttf.queosk.mapper.TableMapper;
 import com.bttf.queosk.service.TableService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class TableController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/table")
-    @ApiOperation(value = "가게 테이블 생성", notes = "가게의 테이블을 추가합니다.")
+    @ApiOperation(value = "매장 테이블 생성", notes = "매장의 테이블을 추가합니다.")
     public ResponseEntity<?> tableCreate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
@@ -33,7 +32,7 @@ public class TableController {
     }
 
     @PutMapping("/table/{tableId}")
-    @ApiOperation(value = "테이블 상태 변경", notes = "테이블의 상태를 변경 합니다.")
+    @ApiOperation(value = "매장 테이블 상태 변경", notes = "매장 테이블의 상태를 변경 합니다.")
     public ResponseEntity<?> tableUpdate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                          @RequestParam TableStatus tableStatus,
                                          @PathVariable Long tableId) {
@@ -44,7 +43,7 @@ public class TableController {
     }
 
     @DeleteMapping("/table/{tableId}")
-    @ApiOperation(value = "테이블 삭제", notes = "테이블을 삭제 합니다.")
+    @ApiOperation(value = "매장 테이블 삭제", notes = "매장 테이블을 삭제 합니다.")
     public ResponseEntity<?> tableDelete(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                          @PathVariable Long tableId) {
 
@@ -55,7 +54,7 @@ public class TableController {
     }
 
     @GetMapping("/table/{tableId}")
-    @ApiOperation(value = "테이블 조회", notes = "테이블을 조회 합니다.")
+    @ApiOperation(value = "매장 특정테이블 조회", notes = "매장의 특정 테이블을 조회 합니다.")
     public ResponseEntity<?> tableGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                       @PathVariable Long tableId) {
 
@@ -63,12 +62,11 @@ public class TableController {
 
         TableDto tableDto = tableService.getTable(tableId, restaurantId);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(TableMapper.INSTANCE.tableDtoToTableForm(tableDto));
+        return ResponseEntity.status(HttpStatus.OK).body(TableForm.of(tableDto));
     }
 
     @GetMapping("/tables")
-    @ApiOperation(value = "테이블 조회", notes = "테이블을 조회 합니다.")
+    @ApiOperation(value = "매장 테이블 조회", notes = "매장 테이블을 조회 합니다.")
     public ResponseEntity<?> tableListGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
@@ -78,7 +76,7 @@ public class TableController {
         List<TableForm> tableFormList = new ArrayList<>();
 
         for (TableDto dto : tableList) {
-            tableFormList.add(TableMapper.INSTANCE.tableDtoToTableForm(dto));
+            tableFormList.add(TableForm.of(dto));
         }
         return ResponseEntity.status(HttpStatus.OK).body(tableFormList);
     }
