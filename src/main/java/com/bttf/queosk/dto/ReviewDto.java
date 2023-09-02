@@ -13,16 +13,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ReviewDto {
-    private Restaurant restaurant;
-    private User user;
+    private Long id;
+    private RestaurantDto restaurant;
+    private UserDto user;
     private String subject;
     private String content;
     private Double rate;
 
     public static ReviewDto of(Review review) {
         return ReviewDto.builder()
-                .restaurant(review.getRestaurant())
-                .user(review.getUser())
+                .id(review.getId())
+                .restaurant(RestaurantDto.of(review.getRestaurant()))
+                .user(UserDto.of(review.getUser()))
                 .subject(review.getSubject())
                 .content(review.getContent())
                 .rate(review.getRate())

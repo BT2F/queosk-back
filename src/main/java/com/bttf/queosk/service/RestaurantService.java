@@ -92,6 +92,7 @@ public class RestaurantService {
         refreshTokenRepository.save(restaurant.getEmail(), refreshToken);
 
         return RestaurantSignInDto.builder()
+                .id(restaurant.getId())
                 .ownerId(restaurant.getOwnerId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
