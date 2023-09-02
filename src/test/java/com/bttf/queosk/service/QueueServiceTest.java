@@ -2,8 +2,8 @@ package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.QueueCreateForm;
 import com.bttf.queosk.dto.QueueDto;
-import com.bttf.queosk.dto.QueueResponseForRestaurant;
-import com.bttf.queosk.dto.QueueResponseForUser;
+import com.bttf.queosk.dto.QueueListDto;
+import com.bttf.queosk.dto.QueueIndexDto;
 import com.bttf.queosk.entity.Queue;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class QueueServiceTest {
     @Mock
@@ -62,26 +63,36 @@ class QueueServiceTest {
     @DisplayName("큐등록 테스트 - 성공")
     public void testCreateQueue_success() {
         // given
-        User mockUser = new User();
-        Restaurant mockRestaurant = new Restaurant();
-        Queue mockQueue = new Queue();
-        List<Queue> queues = new ArrayList<>();
-        queues.add(new Queue(1L, 1L, 1L, 1L));
+        User mockUser = User.builder().id(1L).build();
+        Restaurant mockRestaurant = Restaurant.builder().id(1L).build();
+        QueueCreateForm.Request queueCreationRequest = QueueCreateForm.Request.builder().numberOfParty(1L).build();
+        Queue mockQueue = Queue.builder()
+                .id(1L)
+                .numberOfParty(queueCreationRequest.getNumberOfParty())
+                .restaurantId(mockRestaurant.getId())
+                .userId(mockUser.getId())
+                .build();
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(mockUser));
-        when(restaurantRepository.findById(1L)).thenReturn(java.util.Optional.of(mockRestaurant));
-        when(queueRepository.save(any(Queue.class))).thenReturn(mockQueue);
-        when(queueRepository.findByUserIdAndRestaurantIdOrderByCreatedAtDesc(1L, 1L))
-                .thenReturn(queues);
-        when(queueRedisRepository.getUserWaitingCount("1", "1"))
-                .thenReturn(null);
+        when(restaurantRepository.findById(mockRestaurant.getId()))
+                .thenReturn(Optional.of(mockRestaurant));
+
+        when(queueRepository.save(any())).thenReturn(mockQueue);
+
+        when(queueRepository
+                .findFirstByUserIdAndRestaurantIdOrderByCreatedAtDesc(mockUser.getId(), mockRestaurant.getId()))
+                .thenReturn(Optional.of(mockQueue));
+
+        when(queueRedisRepository
+                .getUserWaitingCount(
+                        String.valueOf(mockRestaurant.getId()),
+                        String.valueOf(mockQueue.getId())))
+                .thenReturn(-1L);
 
         // when
-        QueueResponseForUser queueResponseForUser =
-                queueService.createQueue(new QueueCreateForm(), 1L, 1L);
+        queueService.createQueue(queueCreationRequest, mockUser.getId(), mockRestaurant.getId());
 
         // then
-        assertThat(queueResponseForUser.getUserQueueIndex()).isEqualTo(1L);
+        verify(queueRedisRepository, times(1)).createQueue(eq("1"), eq("1"));
     }
 
     @Test
@@ -93,7 +104,8 @@ class QueueServiceTest {
         // when and then
         CustomException exception = assertThrows(
                 CustomException.class,
-                () -> queueService.createQueue(new QueueCreateForm(), 1L, 1L)
+                () -> queueService.createQueue(
+                        QueueCreateForm.Request.builder().numberOfParty(1L).build(), 1L, 1L)
         );
         assertThat(exception.getErrorCode()).isEqualTo(INVALID_RESTAURANT);
     }
@@ -125,17 +137,17 @@ class QueueServiceTest {
         });
 
         // when
-        QueueResponseForRestaurant queueResponseForRestaurant = queueService.getQueueList(Long.parseLong(restaurantId));
+        QueueListDto queueListDto = queueService.getQueueList(Long.parseLong(restaurantId));
 
         // then
         assertThat(mockQueueDtos.size())
-                .isEqualTo(queueResponseForRestaurant.getQueueDtoList().size());
+                .isEqualTo(queueListDto.getQueueDtoList().size());
 
         assertThat(
                 mockQueueDtos
                         .get(0)
                         .getId()
-                        .equals(queueResponseForRestaurant.getQueueDtoList().get(0).getId()))
+                        .equals(queueListDto.getQueueDtoList().get(0).getId()))
                 .isTrue();
     }
 
@@ -160,21 +172,20 @@ class QueueServiceTest {
         Long restaurantId = 1L;
         Long userId = 123L;
         Long expectedUserQueueNumber = 3L;
-        List<Queue> queues = new ArrayList<>();
-        queues.add(Queue.builder().id(5L).build());
+        Queue queue = Queue.builder().id(5L).build();
 
         when(queueRedisRepository.getUserWaitingCount(
                 String.valueOf(restaurantId),
                 String.valueOf(userId)
         )).thenReturn(expectedUserQueueNumber);
-        when(queueRepository.findByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId))
-                .thenReturn(queues);
-        when(queueRedisRepository.getUserWaitingCount(String.valueOf(restaurantId),"5"))
+        when(queueRepository.findFirstByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId))
+                .thenReturn(Optional.of(queue));
+        when(queueRedisRepository.getUserWaitingCount(String.valueOf(restaurantId), "5"))
                 .thenReturn(2L);
 
 
         // when
-        QueueResponseForUser userQueueNumber =
+        QueueIndexDto userQueueNumber =
                 queueService.getUserQueueNumber(restaurantId, userId);
 
         // then
@@ -187,15 +198,10 @@ class QueueServiceTest {
         // given
         Long restaurantId = 9L;
         Long userId = 123L;
-        List<Queue> queues = new ArrayList<>();
 
         when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.empty());
-        when(queueRedisRepository.getUserWaitingCount(
-                String.valueOf(restaurantId),
-                "0"
-        )).thenReturn(null);
-        when(queueRepository.findByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId))
-                .thenReturn(queues);
+        when(queueRepository.findFirstByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId))
+                .thenReturn(Optional.empty());
 
         // when and then
         assertThatThrownBy(() -> queueService.getUserQueueNumber(restaurantId, userId))
@@ -219,11 +225,11 @@ class QueueServiceTest {
         when(queueRepository.findById(3L)).thenReturn(java.util.Optional.of(queue3));
 
         // when
-        QueueResponseForRestaurant queueResponseForRestaurant =
-                queueService.popTheFirstTeamOfQueue(restaurantId);
+        queueService.popTheFirstTeamOfQueue(restaurantId);
 
         // then
-        assertThat(queueResponseForRestaurant.getQueueDtoList().size()).isEqualTo(2);
+        verify(queueRedisRepository, times(1))
+                .popTheFirstTeamOfQueue("1");
     }
 
     @Test
@@ -235,10 +241,10 @@ class QueueServiceTest {
                 .thenReturn(Collections.emptyList());
 
         // when
-        QueueResponseForRestaurant queueResponseForRestaurant =
-                queueService.popTheFirstTeamOfQueue(restaurantId);
+        queueService.popTheFirstTeamOfQueue(restaurantId);
 
         // then
-        assertThat(queueResponseForRestaurant.getQueueDtoList().isEmpty()).isTrue();
+        verify(queueRedisRepository, times(1))
+                .popTheFirstTeamOfQueue("1");
     }
 }
