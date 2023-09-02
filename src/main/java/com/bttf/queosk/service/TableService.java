@@ -37,9 +37,10 @@ public class TableService {
             throw new CustomException(NOT_PERMITTED);
         }
 
-        table.updateStatus(tableStatus);
+        table.setStatus(tableStatus);
     }
 
+    @Transactional
     public void deleteTable(Long tableId, Long restaurantId) {
 
         Table table = getTableFromRepository(tableId);
