@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class OrderCreationForm {
-    private Long tableId;
-    private Long restaurantId;
-    private Long menuId;
-    private Integer count;
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class Request {
+        private Long tableId;
+        private Long restaurantId;
+        private Long menuId;
+        private Integer count;
+    }
 }

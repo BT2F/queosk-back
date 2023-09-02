@@ -9,29 +9,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-
-public class UpdateRestaurantInfoForm {
-    @Getter
+public class RestaurantGetInfoForm {
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    @Builder
-    public static class Request {
-        private String ownerId;
-        private String cid;
-        private String ownerName;
-        private String email;
-        private String phone;
-        private String restaurantName;
-        private String restaurantPhone;
-        private RestaurantCategory category;
-        private String address;
-        private Long maxWaiting;
-    }
-
     @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
     public static class Response {
         private long id;
         private String ownerId;
@@ -50,8 +32,8 @@ public class UpdateRestaurantInfoForm {
         private Long maxWaiting;
         private String region;
 
-        public static UpdateRestaurantInfoForm.Response of(RestaurantDto restaurantDto) {
-            return UpdateRestaurantInfoForm.Response.builder()
+        public static RestaurantGetInfoForm.Response of(RestaurantDto restaurantDto) {
+            return RestaurantGetInfoForm.Response.builder()
                     .id(restaurantDto.getId())
                     .ownerId(restaurantDto.getOwnerId())
                     .ownerName(restaurantDto.getOwnerName())

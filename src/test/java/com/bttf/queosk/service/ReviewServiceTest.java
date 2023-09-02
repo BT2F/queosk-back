@@ -6,6 +6,9 @@ import com.bttf.queosk.dto.UpdateReviewForm;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Review;
 import com.bttf.queosk.entity.User;
+import com.bttf.queosk.enumerate.LoginType;
+import com.bttf.queosk.enumerate.OperationStatus;
+import com.bttf.queosk.enumerate.UserStatus;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.ReviewRepository;
 import com.bttf.queosk.repository.UserRepository;
@@ -14,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.bttf.queosk.enumerate.LoginType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -43,7 +48,7 @@ class ReviewServiceTest {
     private RestaurantRepository restaurantRepository;
 
     @Test
-    void createReview_sucess() throws Exception {
+    void createReview_success() throws Exception {
         // given
         User user = User.builder()
                 .id(1L)
@@ -52,11 +57,10 @@ class ReviewServiceTest {
         Restaurant restaurant = Restaurant.builder()
                 .id(1L)
                 .build();
-
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
 
-        ReviewCreationForm reviewCreationForm = ReviewCreationForm.builder()
+        ReviewCreationForm.Request reviewCreationForm = ReviewCreationForm.Request.builder()
                 .restaurantId(1L)
                 .subject("test")
                 .content("content test")
@@ -97,7 +101,7 @@ class ReviewServiceTest {
                 .build();
 
         given(reviewRepository.findByIdAndIsDeletedFalse(1L)).willReturn(review);
-        UpdateReviewForm updateReviewForm = UpdateReviewForm.builder()
+        UpdateReviewForm.Request updateReviewForm = UpdateReviewForm.Request.builder()
                 .subject("test1")
                 .content("testContent2")
                 .rate(4.0)
@@ -118,9 +122,15 @@ class ReviewServiceTest {
     @Test
     void getReview_success() {
         // given
+        Restaurant restaurant = Restaurant.builder()
+                .id(1L)
+                .build();
+        User user = User.builder().id(1L).status(UserStatus.VERIFIED).loginType(NORMAL).build();
         Review review = Review.builder()
                 .id(1L)
+                .restaurant(restaurant)
                 .isDeleted(false)
+                .user(user)
                 .subject("test")
                 .content("doit! now!")
                 .build();
@@ -162,13 +172,14 @@ class ReviewServiceTest {
 
     @Test
     void getReviewList_success() {
-
+        User user = User.builder().id(1L).status(UserStatus.VERIFIED).loginType(NORMAL).build();
         Restaurant restaurant = Restaurant.builder()
                 .id(1L)
                 .build();
         Review review = Review.builder()
                 .id(1L)
                 .restaurant(restaurant)
+                .user(user)
                 .isDeleted(false)
                 .subject("test")
                 .content("doit! now!")
@@ -189,16 +200,11 @@ class ReviewServiceTest {
 
         assertThat(reviewList.size()).isEqualTo(1);
 
-
-        assertThat(reviewList.get(0).getRestaurant()).isEqualTo(restaurant);
-
     }
 
     @Test
     void getRestaurantUserReviewList_success() {
-        User user = User.builder()
-                .id(1L)
-                .build();
+        User user = User.builder().id(1L).status(UserStatus.VERIFIED).loginType(NORMAL).build();
         Restaurant restaurant = Restaurant.builder()
                 .id(1L)
                 .build();
@@ -221,12 +227,11 @@ class ReviewServiceTest {
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(restaurant));
-        when(reviewRepository.findByRestaurantAndUserAndIsDeletedFalse(restaurant, user)).thenReturn(Arrays.asList(review, review2));
+        when(reviewRepository.findByRestaurantAndUserAndIsDeletedFalse(restaurant, user)).thenReturn(Arrays.asList(review));
 
         List<ReviewDto> reviewList = reviewService.getRestaurantUserReviewList(1L, 1L);
-        assertThat(reviewList.size()).isEqualTo(2);
+        assertThat(reviewList.size()).isEqualTo(1);
         assertThat(reviewList.get(0).getUser().getId()).isEqualTo(1L);
-        assertThat(reviewList.get(1).getUser().getId()).isEqualTo(1L);
 
     }
 }

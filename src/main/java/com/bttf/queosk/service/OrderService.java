@@ -31,15 +31,15 @@ public class OrderService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createOrder(OrderCreationForm orderCreationForm, Long userId) {
+    public void createOrder(OrderCreationForm.Request orderCreationRequest, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
-        Restaurant restaurant = restaurantRepository.findById(orderCreationForm.getRestaurantId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
-        Table table = tableRepository.findById(orderCreationForm.getTableId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_TABLE));
-        Menu menu = menuRepository.findByIdAndRestaurantId(orderCreationForm.getMenuId(), restaurant.getId()).orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+        Restaurant restaurant = restaurantRepository.findById(orderCreationRequest.getRestaurantId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
+        Table table = tableRepository.findById(orderCreationRequest.getTableId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_TABLE));
+        Menu menu = menuRepository.findByIdAndRestaurantId(orderCreationRequest.getMenuId(), restaurant.getId()).orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
         validOrder(restaurant, table, menu);
 
-        Order order = Order.builder().restaurant(restaurant).table(table).menu(menu).user(user).count(orderCreationForm.getCount()).status(IN_PROGRESS).build();
+        Order order = Order.builder().restaurant(restaurant).table(table).menu(menu).user(user).count(orderCreationRequest.getCount()).status(IN_PROGRESS).build();
 
         orderRepository.save(order);
     }

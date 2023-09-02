@@ -1,11 +1,19 @@
 package com.bttf.queosk.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
+
 public class RestaurantUpdatePasswordForm {
-    private String oldPassword;
-    private String newPassword;
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Request {
+        private String oldPassword;
+        private String newPassword;
+    }
+
 }
