@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
 
@@ -79,8 +78,7 @@ public class RestaurantService {
 
 
     public RestaurantSignInDto signIn(RestaurantSignInForm.Request restaurantSignInRequest) {
-        Restaurant restaurant = restaurantRepository.findByOwnerId(restaurantSignInRequest.getOwnerId())
-                .orElseThrow(() -> new CustomException(INVALID_USER_ID));
+        Restaurant restaurant = getRestaurantByOwnerId(restaurantSignInRequest.getOwnerId());
 
         if (!passwordEncoder.matches(restaurantSignInRequest.getPassword(), restaurant.getPassword())) {
             throw new CustomException(PASSWORD_NOT_MATCH);
@@ -105,9 +103,7 @@ public class RestaurantService {
     public void imageUpload(String token, MultipartFile image) throws IOException {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        Restaurant restaurant = restaurantRepository
-                .findById(restaurantId)
-                .orElseThrow(() -> new CustomException(INVALID_USER_ID));
+        Restaurant restaurant = getRestaurantById(restaurantId);
 
         if (restaurant.getImageUrl() != null) {
             imageService.deleteFile(restaurant.getImageUrl());
@@ -119,18 +115,15 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
     }
 
-
     public RestaurantDto getRestaurantInfoFromToken(String token) {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
+        Restaurant restaurant = getRestaurantById(restaurantId);
         return RestaurantDto.of(restaurant);
     }
 
     @Transactional
     public void resetRestaurantPassword(String email, String ownerName) {
-        Restaurant restaurant = restaurantRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+        Restaurant restaurant = getRestaurantByEmail(email);
         if (!restaurant.getOwnerName().equals(ownerName)) {
             throw new CustomException(OWNER_NAME_NOT_MATCH);
         }
@@ -151,8 +144,7 @@ public class RestaurantService {
 
     @Transactional
     public void updateRestaurantPassword(Long id, RestaurantUpdatePasswordForm.Request updatePasswordRequest) {
-        Restaurant restaurant = restaurantRepository.findById(id)
-                .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+        Restaurant restaurant = getRestaurantById(id);
 
         if (!passwordEncoder.matches(updatePasswordRequest.getOldPassword(), restaurant.getPassword())) {
             throw new CustomException(PASSWORD_NOT_MATCH);
@@ -165,9 +157,7 @@ public class RestaurantService {
 
     @Transactional
     public void deleteRestaurant(String token) {
-        Restaurant restaurant = restaurantRepository
-                .findById(jwtTokenProvider.getIdFromToken(token))
-                .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+        Restaurant restaurant = getRestaurantByToken(token);
         restaurant.delete();
         refreshTokenRepository.deleteByEmail(restaurant.getEmail());
         restaurantRepository.save(restaurant);
@@ -176,9 +166,7 @@ public class RestaurantService {
 
     @Transactional
     public RestaurantDto updateRestaurantInfo(String token, UpdateRestaurantInfoForm.Request updateRestaurantInfoRequest) {
-        Restaurant restaurant = restaurantRepository
-                .findById(jwtTokenProvider.getIdFromToken(token))
-                .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+        Restaurant restaurant = getRestaurantByToken(token);
 
         restaurant.updateRestaurantInfo(updateRestaurantInfoRequest);
 
@@ -207,9 +195,29 @@ public class RestaurantService {
     }
 
     public RestaurantInfoMenuGetDto getRestaurantInfoAndMenu(Long restaurantId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+        Restaurant restaurant = getRestaurantById(restaurantId);
         List<Menu> menu = menuRepository.findByRestaurantId(restaurantId);
 
         return RestaurantInfoMenuGetDto.of(restaurant, menu);
+    }
+
+    private Restaurant getRestaurantByOwnerId(String restaurantOwnerId) {
+        return restaurantRepository.findByOwnerId(restaurantOwnerId)
+                .orElseThrow(() -> new CustomException(INVALID_USER_ID));
+    }
+
+    private Restaurant getRestaurantById(Long restaurantId) {
+        return restaurantRepository
+                .findById(restaurantId)
+                .orElseThrow(() -> new CustomException(INVALID_USER_ID));
+    }
+
+    private Restaurant getRestaurantByEmail(String email) {
+        return restaurantRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
+    }
+
+    private Restaurant getRestaurantByToken(String token) {
+        return getRestaurantById(jwtTokenProvider.getIdFromToken(token));
     }
 }
