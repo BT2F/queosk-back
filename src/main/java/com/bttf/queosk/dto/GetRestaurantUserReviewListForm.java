@@ -1,5 +1,6 @@
 package com.bttf.queosk.dto;
 
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +11,7 @@ public class GetRestaurantUserReviewListForm {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    @ApiModel(value = "유저 리뷰 리스트 Response")
     public static class Response {
         private Long id;
         private RestaurantDto restaurant;
