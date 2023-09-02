@@ -74,7 +74,7 @@ public class RestaurantController {
         return ResponseEntity.status(CREATED).build();
     }
 
-    @PutMapping("/password/update")
+    @PutMapping("/password/change")
     @ApiOperation(value = "매장 비밀번호 변경", notes = "매장의 비밀번호를 변경합니다.")
     ResponseEntity<Void> updateRestaurantPassword(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody RestaurantUpdatePasswordForm.Request updatePasswordRequest) {
         Long id = jwtTokenProvider.getIdFromToken(token);
