@@ -1,19 +1,32 @@
 package com.bttf.queosk.dto;
 
 import com.bttf.queosk.enumerate.TableStatus;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
+
 public class TableForm {
-    private Long tableId;
-    private TableStatus status;
 
-    public static TableForm of(TableDto tableDto) {
-        return TableForm.builder()
-                .tableId(tableDto.getTableId())
-                .status(tableDto.getStatus())
-                .build();
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Response {
+        private Long tableId;
+        private TableStatus status;
+
+        public static TableForm.Response of(TableDto tableDto) {
+            return TableForm.Response.builder()
+                    .tableId(tableDto.getTableId())
+                    .status(tableDto.getStatus())
+                    .build();
+        }
     }
+
+
+
+
+
 }
