@@ -30,12 +30,12 @@ public class UserInfoService {
     private final KakaoAuthRepository kakaoAuthRepository;
 
     @Transactional
-    public UserDto editUserInformation(Long userId, UserEditForm userEditForm) {
+    public UserDto editUserInformation(Long userId, UserEditForm.Request userEditRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
-        user.setNickName(userEditForm.getNickName());
-        user.setPhone(userEditForm.getPhone());
+        user.setNickName(userEditRequest.getNickName());
+        user.setPhone(userEditRequest.getPhone());
 
         userRepository.save(user);
 
@@ -43,7 +43,8 @@ public class UserInfoService {
     }
 
     @Transactional
-    public void changeUserPassword(Long userId, UserPasswordChangeForm userPasswordChangeForm) {
+    public void changeUserPassword(Long userId,
+                                   UserPasswordChangeForm.Request userPasswordChangeRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
@@ -51,11 +52,11 @@ public class UserInfoService {
             throw new CustomException(KAKAO_USER_UNSUPPORTED_SERVICE);
         }
 
-        if (!passwordEncoder.matches(userPasswordChangeForm.getExistingPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(userPasswordChangeRequest.getExistingPassword(), user.getPassword())) {
             throw new CustomException(PASSWORD_NOT_MATCH);
         }
 
-        user.setPassword(passwordEncoder.encode(userPasswordChangeForm.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(userPasswordChangeRequest.getNewPassword()));
 
         userRepository.save(user);
     }
@@ -131,5 +132,12 @@ public class UserInfoService {
         userRepository.save(user);
 
         return "인증이 완료되었습니다.";
+    }
+
+    public UserDto getUserDetails(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
+
+        return UserDto.of(user);
     }
 }

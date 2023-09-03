@@ -44,8 +44,8 @@ class MenuServiceTest {
         // given
         Long restaurantId = 1L;
 
-        MenuCreationForm menuCreationForm =
-                MenuCreationForm.builder()
+        MenuCreationForm.Request menuCreationForm =
+                MenuCreationForm.Request.builder()
                         .name("menu")
                         .price(1000L)
                         .imageUrl(null)
@@ -109,8 +109,8 @@ class MenuServiceTest {
         // Given
         Long restaurantId = 1L;
         Long menuId = 1L;
-        MenuUpdateForm menuUpdateForm =
-                MenuUpdateForm.builder()
+        MenuUpdateForm.Request menuUpdateForm =
+                MenuUpdateForm.Request.builder()
                         .name("updatedMenu")
                         .price(1500L)
                         .build();
@@ -140,8 +140,8 @@ class MenuServiceTest {
         // Given
         Long restaurantId = 1L;
         Long menuId = 1L;
-        MenuUpdateForm menuUpdateForm =
-                MenuUpdateForm.builder()
+        MenuUpdateForm.Request menuUpdateForm =
+                MenuUpdateForm.Request.builder()
                         .name("updatedMenu")
                         .price(1500L)
                         .build();
@@ -158,8 +158,8 @@ class MenuServiceTest {
         // Given
         Long restaurantId = 1L;
         Long menuId = 1L;
-        MenuStatusForm menuStatusForm =
-                MenuStatusForm.builder()
+        MenuStatusForm.Request menuStatusForm =
+                MenuStatusForm.Request.builder()
                         .status(SOLD_OUT)
                         .build();
         Menu existingMenu =
@@ -187,8 +187,8 @@ class MenuServiceTest {
         // Given
         Long restaurantId = 1L;
         Long menuId = 1L;
-        MenuStatusForm menuStatusForm =
-                MenuStatusForm.builder()
+        MenuStatusForm.Request menuStatusForm =
+                MenuStatusForm.Request.builder()
                         .status(SOLD_OUT)
                         .build();
         when(menuRepository.findByIdAndRestaurantId(menuId, restaurantId)).thenReturn(java.util.Optional.empty());
@@ -197,6 +197,7 @@ class MenuServiceTest {
         assertThatThrownBy(() -> menuService.updateMenuStatus(restaurantId, menuId, menuStatusForm))
                 .isInstanceOf(CustomException.class);
     }
+
     @Test
     @DisplayName("이미지 업데이트 테스트 - 성공")
     void testUpdateImage_Success() {

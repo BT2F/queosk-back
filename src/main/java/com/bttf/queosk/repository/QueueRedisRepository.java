@@ -11,9 +11,8 @@ import java.util.List;
 public class QueueRedisRepository {
     private final RedisTemplate<String, String> redisTemplate;
 
-    public Long createQueue(String restaurantId, String queueId) {
+    public void createQueue(String restaurantId, String queueId) {
         redisTemplate.opsForList().rightPush(restaurantId, queueId);
-        return redisTemplate.opsForList().indexOf(restaurantId, queueId);
     }
 
     public List<String> findAll(String restaurantId) {

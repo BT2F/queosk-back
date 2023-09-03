@@ -57,7 +57,7 @@ class UserServiceTest {
     @DisplayName("사용자 생성 테스트 - 성공")
     void testCreateUser_Success() {
         // Given
-        UserSignUpForm userSignUpForm = UserSignUpForm.builder()
+        UserSignUpForm.Request userSignUpForm = UserSignUpForm.Request.builder()
                 .email("test@example.com")
                 .nickName("testUser")
                 .password("password")
@@ -81,8 +81,8 @@ class UserServiceTest {
     @DisplayName("사용자 생성 테스트 - 실패(기존 사용자)")
     void testCreateUser_ExistingEmail() {
         // Given
-        UserSignUpForm userSignUpForm =
-                UserSignUpForm.builder()
+        UserSignUpForm.Request userSignUpForm =
+                UserSignUpForm.Request.builder()
                         .email("existing@example.com")
                         .build();
 
@@ -122,7 +122,12 @@ class UserServiceTest {
         when(jwtTokenProvider.generateRefreshToken(user.getEmail())).thenReturn(refreshToken);
 
         // when
-        UserSignInDto result = userLoginService.signInUser(new UserSignInForm(user.getEmail(), user.getPassword()));
+        UserSignInDto result = userLoginService.signInUser(
+                UserSignInForm.Request.builder()
+                        .email(user.getEmail())
+                        .password(user.getPassword())
+                        .build()
+                );
 
         // then
         assertNotNull(result);
@@ -141,7 +146,11 @@ class UserServiceTest {
 
         // when & then
         assertThatThrownBy(
-                () -> userLoginService.signInUser(new UserSignInForm(invalidEmail, password)))
+                () -> userLoginService.signInUser(
+                                UserSignInForm.Request.builder()
+                                        .email(invalidEmail)
+                                        .password(password)
+                                        .build()))
                 .isInstanceOf(CustomException.class)
                 .hasMessage("존재하지 않는 아이디입니다.");
     }
@@ -162,7 +171,12 @@ class UserServiceTest {
 
         // when & then
         assertThatThrownBy(
-                () -> userLoginService.signInUser(new UserSignInForm(email, invalidPassword)))
+                () -> userLoginService.signInUser(
+                        UserSignInForm.Request.builder()
+                                .email(email)
+                                .password(invalidPassword)
+                                .build())
+                        )
                 .isInstanceOf(CustomException.class)
                 .hasMessage("비밀번호가 일치하지 않습니다.");
     }
@@ -274,7 +288,7 @@ class UserServiceTest {
     public void testEditUserInformation_Success() {
         // Given
         Long userId = 1L;
-        UserEditForm userEditForm = new UserEditForm();
+        UserEditForm.Request userEditForm = new UserEditForm.Request();
         User user = User.builder()
                 .id(1L)
                 .userRole(ROLE_USER)
@@ -302,7 +316,7 @@ class UserServiceTest {
     public void testEditUserInformation_UserNotExist() {
         // Given
         Long userId = 1L;
-        UserEditForm userEditForm = new UserEditForm();
+        UserEditForm.Request userEditForm = new UserEditForm.Request();
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When, Then
@@ -327,8 +341,8 @@ class UserServiceTest {
                 .password("encodedOldPassword")
                 .build();
 
-        UserPasswordChangeForm userPasswordChangeForm =
-                UserPasswordChangeForm.builder()
+        UserPasswordChangeForm.Request userPasswordChangeForm =
+                UserPasswordChangeForm.Request.builder()
                         .existingPassword("oldPassword")
                         .newPassword(newPassword)
                         .build();
@@ -362,8 +376,8 @@ class UserServiceTest {
                 .password("encodedOldPassword")
                 .build();
 
-        UserPasswordChangeForm userPasswordChangeForm =
-                UserPasswordChangeForm.builder()
+        UserPasswordChangeForm.Request userPasswordChangeForm =
+                UserPasswordChangeForm.Request.builder()
                         .existingPassword("invalidOldPassword")
                         .newPassword(newPassword)
                         .build();
@@ -388,8 +402,8 @@ class UserServiceTest {
         // Given
         Long userId = 1L;
 
-        UserPasswordChangeForm userPasswordChangeForm =
-                UserPasswordChangeForm.builder()
+        UserPasswordChangeForm.Request userPasswordChangeForm =
+                UserPasswordChangeForm.Request.builder()
                         .existingPassword("oldPassword")
                         .newPassword("newPassword")
                         .build();

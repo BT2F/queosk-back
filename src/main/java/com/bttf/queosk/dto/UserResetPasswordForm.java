@@ -1,15 +1,19 @@
 package com.bttf.queosk.dto;
 
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class UserResetPasswordForm {
-    private String email;
-    private String nickName;
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    @ApiModel(value = "비밀번호초기화 Request")
+    public static class Request {
+        private String email;
+        private String nickName;
+    }
 }

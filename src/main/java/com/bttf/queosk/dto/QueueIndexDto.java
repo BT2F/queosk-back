@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QueueResponseForUser {
+public class QueueIndexDto {
     private Long userQueueIndex;
     private Long queueRemaining;
 
-    public static QueueResponseForUser of(Long userQueueIndex){
-        return QueueResponseForUser.builder()
+    public static QueueIndexDto of(Long userQueueIndex){
+        return QueueIndexDto.builder()
                 .queueRemaining(userQueueIndex)
                 .userQueueIndex(userQueueIndex + 1) // 대기번호의 경우 index + 1
                 .build();

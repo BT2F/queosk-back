@@ -2,7 +2,7 @@ package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.TokenDto;
-import com.bttf.queosk.dto.TokenRefreshResponse;
+import com.bttf.queosk.dto.TokenRefreshDto;
 import com.bttf.queosk.dto.RefreshTokenDto;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
@@ -27,7 +27,7 @@ public class RefreshTokenService {
     private final JwtTokenProvider jwtTokenProvider;
 
     // 신규 AccessToken 발급
-    public TokenRefreshResponse issueNewAccessToken(String accessToken, String refreshToken) {
+    public TokenRefreshDto issueNewAccessToken(String accessToken, String refreshToken) {
         validateRefreshToken(refreshToken);
 
         Long userId = jwtTokenProvider.getIdFromToken(refreshToken);
@@ -61,7 +61,7 @@ public class RefreshTokenService {
         String newAccessToken = jwtTokenProvider.generateAccessToken(
                 TokenDto.of(id,userRole,email)
         );
-        return TokenRefreshResponse.of(newAccessToken);
+        return TokenRefreshDto.of(newAccessToken);
     }
 
     // 리프레시 토큰 삭제
