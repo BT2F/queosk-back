@@ -108,7 +108,7 @@ public class UserInfoService {
         refreshTokenRepository.deleteByEmail(user.getEmail());
 
         if (user.getLoginType().equals(LoginType.KAKAO)) {
-            kakaoAuthRepository.deleteById(user.getEmail());
+            kakaoAuthRepository.deleteByEmail(user.getEmail());
         }
 
         user.setUserStatus(DELETED);

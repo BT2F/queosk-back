@@ -11,18 +11,21 @@ import java.util.concurrent.TimeUnit;
 @Repository
 public class RefreshTokenRepository {
     private final RedisTemplate<String, String> redisTemplate;
+    private static final String QUEOSK = "queosk_auth: ";
 
     public void save(String email, String refreshToken) {
-        redisTemplate.opsForValue().set(email, refreshToken);
-        redisTemplate.expire(email, 14 * 24 * 60 * 60, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(QUEOSK + email, refreshToken);
+        redisTemplate.expire(QUEOSK + email, 14 * 24 * 60 * 60, TimeUnit.SECONDS);
     }
 
     public RefreshTokenDto findByEmail(String email) {
-        return RefreshTokenDto.of(email, redisTemplate.opsForValue().get(String.valueOf(email)));
+        return RefreshTokenDto.of(
+                QUEOSK + email, redisTemplate.opsForValue().get(QUEOSK + email)
+        );
     }
 
-    public void deleteByEmail(String email){
-        redisTemplate.delete(email);
+    public void deleteByEmail(String email) {
+        redisTemplate.delete(QUEOSK + email);
     }
 }
 
