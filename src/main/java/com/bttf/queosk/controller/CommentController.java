@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 @RestController
 @Api(tags = "Review Comment API", description = "매장 리뷰 코멘트 API")
 @RequestMapping("/api/reviews/")
@@ -32,7 +34,7 @@ public class CommentController {
 
         commentService.createComment(reviewId, restaurantId, commentRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(CREATED).build();
     }
 
     @PutMapping("comments/{commentId}")

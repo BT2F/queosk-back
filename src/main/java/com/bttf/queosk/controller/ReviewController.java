@@ -66,8 +66,7 @@ public class ReviewController {
     @ApiOperation(value = "매장 리뷰 리스트 열람", notes = "해당 매장에 쓰인 리뷰를 열람합니다.")
     public ResponseEntity<List<GetReviewListForm.Response>> getReviewList(@PathVariable("restaurantId") Long restaurantId) {
         List<ReviewDto> reviewDtoList = reviewService.getReviewList(restaurantId);
-        return ResponseEntity.ok().body(
-                reviewDtoList.stream()
+        return ResponseEntity.ok(reviewDtoList.stream()
                 .map(GetReviewListForm.Response::of)
                 .collect(Collectors.toList()));
     }
@@ -78,8 +77,7 @@ public class ReviewController {
                                                               @PathVariable("restaurantId") Long restaurantId) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         List<ReviewDto> reviewDtoList = reviewService.getRestaurantUserReviewList(userId, restaurantId);
-        return ResponseEntity.ok().body(
-                reviewDtoList.stream()
+        return ResponseEntity.ok(reviewDtoList.stream()
                 .map(GetRestaurantUserReviewListForm.Response::of)
                 .collect(Collectors.toList()));
     }
