@@ -1,5 +1,6 @@
 package com.bttf.queosk.config;
 
+import com.bttf.queosk.entity.KakaoAuth;
 import com.bttf.queosk.entity.RedisQueue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -58,11 +59,20 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisQueue.class));
+
+        // RedisQueue 클래스의 직렬화 설정
+        Jackson2JsonRedisSerializer<RedisQueue> queueSerializer =
+                new Jackson2JsonRedisSerializer<>(RedisQueue.class);
+        redisTemplate.setValueSerializer(queueSerializer);
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(queueSerializer);
+
+        // KakaoAuth 클래스의 직렬화 설정
+        Jackson2JsonRedisSerializer<KakaoAuth> kakaoAuthSerializer =
+                new Jackson2JsonRedisSerializer<>(KakaoAuth.class);
+        redisTemplate.setValueSerializer(kakaoAuthSerializer);
+        redisTemplate.setHashValueSerializer(kakaoAuthSerializer);
+
         return redisTemplate;
     }
-
-
 }
