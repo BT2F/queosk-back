@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TokenRefreshResponse {
+public class TokenRefreshDto {
     private String accessToken;
 
-    public static TokenRefreshResponse of(String newAccessToken) {
-        return TokenRefreshResponse.builder().accessToken(newAccessToken).build();
+    public static TokenRefreshDto of(String newAccessToken) {
+        return TokenRefreshDto.builder().accessToken(newAccessToken).build();
     }
 }

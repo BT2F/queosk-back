@@ -2,7 +2,6 @@ package com.bttf.queosk.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.validation.Errors;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -20,15 +19,12 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
     @Bean
     public Docket api() {
 
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.bttf.queosk"))
                 .paths(PathSelectors.any())
                 .build()
-                .apiInfo(apiInfo())
-                .ignoredParameterTypes(Errors.class);
-
-        return docket;
+                .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
