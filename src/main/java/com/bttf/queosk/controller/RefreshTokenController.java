@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import static org.springframework.http.HttpStatus.OK;
+
 @RequiredArgsConstructor
 @Api(tags = "Refresh Token API", description = "Refresh Token을 이용해 Access Token을 발급받는 Api")
 @RestController
@@ -33,6 +35,6 @@ public class RefreshTokenController {
         TokenRefreshDto tokenRefreshDto =
                 refreshTokenService.issueNewAccessToken(token, refreshToken);
 
-        return ResponseEntity.ok(TokenRefreshForm.Response.of(tokenRefreshDto));
+        return ResponseEntity.status(OK).body(TokenRefreshForm.Response.of(tokenRefreshDto));
     }
 }
