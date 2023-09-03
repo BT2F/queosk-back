@@ -21,8 +21,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @Api(tags = "Restaurant API", description = "매장 API")
@@ -45,7 +44,7 @@ public class RestaurantController {
     @PostMapping("/signin")
     @ApiOperation(value = "매장 로그인", notes = "주어진 정보로 매장 로그인을 진행합니다.")
     public ResponseEntity<RestaurantSignInForm.Response> signIn(@Valid @RequestBody RestaurantSignInForm.Request restaurantSignInRequest) {
-        return ResponseEntity.ok(RestaurantSignInForm.Response.of(restaurantService.signIn(restaurantSignInRequest)));
+        return ResponseEntity.status(OK).body(RestaurantSignInForm.Response.of(restaurantService.signIn(restaurantSignInRequest)));
     }
 
     @PostMapping("/image")
@@ -63,7 +62,7 @@ public class RestaurantController {
     public ResponseEntity<RestaurantGetInfoForm.Response> restaurantGetInfo(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         RestaurantDto restaurant = restaurantService.getRestaurantInfoFromToken(token);
-        return ResponseEntity.ok(RestaurantGetInfoForm.Response.of(restaurant));
+        return ResponseEntity.status(OK).body(RestaurantGetInfoForm.Response.of(restaurant));
     }
 
     @PutMapping("/password/reset")
@@ -87,14 +86,14 @@ public class RestaurantController {
     public ResponseEntity<Void> restaurantSignOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         RestaurantDto restaurant = restaurantService.getRestaurantInfoFromToken(token);
         refreshTokenService.deleteRefreshToken(restaurant.getEmail());
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(NO_CONTENT).build();
     }
 
     @DeleteMapping
     @ApiOperation(value = "사업자 탈퇴", notes = "매장 계정을 삭제합니다.")
     public ResponseEntity<Void> deleteRestaurant(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         restaurantService.deleteRestaurant(token);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(NO_CONTENT).build();
     }
 
     @PostMapping
@@ -110,13 +109,13 @@ public class RestaurantController {
     public ResponseEntity<Page<RestaurantInfoGetCoordForm.Response>> getCoordRestaurantInfo(@RequestBody RestaurantInfoGetCoordForm.Request restaurantInfoGetCoordForm) {
         Page<RestaurantDto> restaurantDtoPage = restaurantService.getCoordRestaurantInfoForm(restaurantInfoGetCoordForm);
         Page<RestaurantInfoGetCoordForm.Response> responsePage = restaurantDtoPage.map(RestaurantInfoGetCoordForm.Response::of);
-        return ResponseEntity.ok(responsePage);
+        return ResponseEntity.status(OK).body(responsePage);
     }
 
     @GetMapping("/{restaurantId}")
     @ApiOperation(value = "매장 상세 보기", notes = "해당하는 매장의 정보와 메뉴를 제공합니댜.")
     public ResponseEntity<RestaurantInfoMenuGetForm.Response> getRestaurantInfoAndMenu(@PathVariable(name = "restaurantId") Long restaurantId) {
         RestaurantInfoMenuGetDto restaurantInfoMenu = restaurantService.getRestaurantInfoAndMenu(restaurantId);
-        return ResponseEntity.ok(RestaurantInfoMenuGetForm.Response.of(restaurantInfoMenu));
+        return ResponseEntity.status(OK).body(RestaurantInfoMenuGetForm.Response.of(restaurantInfoMenu));
     }
 }

@@ -40,7 +40,7 @@ public class ReviewController {
     @ApiOperation(value = "리뷰 열람", notes = "단건의 리뷰를 열람합니다.")
     public ResponseEntity<GetReviewForm.Response> getReview(@PathVariable("reviewId") Long reviewId) {
         ReviewDto reviewDto = reviewService.getReview(reviewId);
-        return ResponseEntity.ok().body(GetReviewForm.Response.of(reviewDto));
+        return ResponseEntity.status(OK).body(GetReviewForm.Response.of(reviewDto));
     }
 
     @PutMapping("{reviewId}")
@@ -59,16 +59,17 @@ public class ReviewController {
                                                @PathVariable("reviewId") Long reviewId) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         reviewService.deleteReview(userId, reviewId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(NO_CONTENT).build();
     }
 
     @GetMapping("restaurants/{restaurantId}")
     @ApiOperation(value = "매장 리뷰 리스트 열람", notes = "해당 매장에 쓰인 리뷰를 열람합니다.")
     public ResponseEntity<List<GetReviewListForm.Response>> getReviewList(@PathVariable("restaurantId") Long restaurantId) {
         List<ReviewDto> reviewDtoList = reviewService.getReviewList(restaurantId);
-        return ResponseEntity.ok(reviewDtoList.stream()
+        List<GetReviewListForm.Response> responseList = reviewDtoList.stream()
                 .map(GetReviewListForm.Response::of)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        return ResponseEntity.status(OK).body(responseList);
     }
 
     @GetMapping("restaurants/{restaurantId}/user")
@@ -77,8 +78,9 @@ public class ReviewController {
                                                               @PathVariable("restaurantId") Long restaurantId) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         List<ReviewDto> reviewDtoList = reviewService.getRestaurantUserReviewList(userId, restaurantId);
-        return ResponseEntity.ok(reviewDtoList.stream()
+        List<GetRestaurantUserReviewListForm.Response> responseList = reviewDtoList.stream()
                 .map(GetRestaurantUserReviewListForm.Response::of)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        return ResponseEntity.status(OK).body(responseList);
     }
 }

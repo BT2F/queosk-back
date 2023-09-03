@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @Api(tags = "Order API", description = "주문 관련 API")
@@ -50,7 +51,7 @@ public class OrderController {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         ReadOrderForm.Response response = ReadOrderForm.Response
                 .of(orderService.readOrder(orderId, restaurantId));
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(OK).body(response);
     }
 
     @GetMapping("api/restaurant/orders/today")
@@ -63,7 +64,7 @@ public class OrderController {
                 .stream()
                 .map(ReadTodayOrderListForm.Response::of)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.status(OK).body(responses);
     }
 
     @GetMapping("api/restaurant/orders/in-progress")
@@ -75,6 +76,6 @@ public class OrderController {
         List<ReadInProgressOrderListForm.Response> responses = inProgressOrderDtoList
                 .stream().map(ReadInProgressOrderListForm.Response::of)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok().body(responses);
+        return ResponseEntity.status(OK).body(responses);
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @Api(tags = "Review Comment API", description = "매장 리뷰 코멘트 API")
@@ -47,7 +47,7 @@ public class CommentController {
 
         commentService.updateComment(commentId, restaurantId, commentRequest);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(OK).build();
     }
 
     @DeleteMapping("comments/{commentId}")
@@ -58,7 +58,7 @@ public class CommentController {
 
         commentService.deleteComment(commentId, restaurantId);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(NO_CONTENT).build();
     }
 
     @GetMapping("{reviewId}/comments")
@@ -71,6 +71,6 @@ public class CommentController {
                 .map(CommentForm.Response::of)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(responseList);
+        return ResponseEntity.status(OK).body(responseList);
     }
 }
