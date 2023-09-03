@@ -1,17 +1,20 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.SettlementResponse;
+import com.bttf.queosk.dto.SettlementForm;
 import com.bttf.queosk.service.SettlementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RequestMapping("/api/restaurants/settlement")
 @Api(tags = "Settlement API", description = "정산 관련 API")
@@ -27,8 +30,8 @@ public class SettlementController {
     public ResponseEntity<?> getTodaySettlement(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
-        return ResponseEntity.ok()
-                .body(SettlementResponse.of(settlementService.todaySettlementGet(restaurantId)));
+        return ResponseEntity.status(OK)
+                .body(SettlementForm.Response.of(settlementService.todaySettlementGet(restaurantId)));
     }
 
     @GetMapping("/period")
@@ -38,7 +41,7 @@ public class SettlementController {
                                                  @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime from) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
-        return ResponseEntity.ok()
-                .body(SettlementResponse.of(settlementService.todaySettlementGet(restaurantId)));
+        return ResponseEntity.status(OK)
+                .body(SettlementForm.Response.of(settlementService.todaySettlementGet(restaurantId)));
     }
 }

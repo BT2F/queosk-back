@@ -1,7 +1,7 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.SettlementDto;
-import com.bttf.queosk.repository.OrderQueryRepository;
+import com.bttf.queosk.repository.OrderQueryQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SettlementService {
 
-    private final OrderQueryRepository queryRepository;
+    private final OrderQueryQueryRepository queryRepository;
 
     public SettlementDto todaySettlementGet(Long restaurantId) {
 

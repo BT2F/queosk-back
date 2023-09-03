@@ -1,7 +1,7 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.SettlementDto;
-import com.bttf.queosk.repository.OrderQueryRepository;
+import com.bttf.queosk.repository.OrderQueryQueryRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.times;
 class SettlementServiceTest {
 
     @Mock
-    private OrderQueryRepository queryRepository;
+    private OrderQueryQueryRepository queryRepository;
 
     @Spy
     @InjectMocks

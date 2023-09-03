@@ -91,6 +91,9 @@ dependencies {
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
+    // Spring Batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch:2.5.1'
+
     // AWS 관련 라이브러리
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
