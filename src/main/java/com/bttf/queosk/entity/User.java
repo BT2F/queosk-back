@@ -50,13 +50,13 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public static User of(UserSignUpForm userSignUpForm,
+    public static User of(UserSignUpForm.Request userSignUpRequest,
                           String encryptedPassword,
                           String trimmedPhoneNumber) {
 
         return User.builder()
-                .email(userSignUpForm.getEmail())
-                .nickName(userSignUpForm.getNickName())
+                .email(userSignUpRequest.getEmail())
+                .nickName(userSignUpRequest.getNickName())
                 .password(encryptedPassword)
                 .phone(trimmedPhoneNumber)
                 .loginType(NORMAL)

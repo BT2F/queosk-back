@@ -11,12 +11,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QueueResponseForRestaurant {
+public class QueueListDto {
     private Integer totalQueue;
     private List<QueueDto> queueDtoList;
 
-    public static QueueResponseForRestaurant of(List<QueueDto> queueDtos) {
-        return QueueResponseForRestaurant.builder()
+    public static QueueListDto of(List<QueueDto> queueDtos) {
+        return QueueListDto.builder()
                 .totalQueue(queueDtos.size())
                 .queueDtoList(queueDtos)
                 .build();

@@ -23,8 +23,8 @@ public class MenuService {
     private final MenuRepository menuRepository;
 
     @Transactional
-    public void createMenu(Long restaurantId, MenuCreationForm menuCreationForm) {
-        menuRepository.save(Menu.of(restaurantId, menuCreationForm));
+    public void createMenu(Long restaurantId, MenuCreationForm.Request menuCreationRequest) {
+        menuRepository.save(Menu.of(restaurantId, menuCreationRequest));
     }
 
     @Transactional(readOnly = true)
@@ -42,22 +42,27 @@ public class MenuService {
     }
 
     @Transactional
-    public void updateMenuInfo(Long restaurantId, Long menuId, MenuUpdateForm menuUpdateForm) {
+    public void updateMenuInfo(Long restaurantId,
+                               Long menuId,
+                               MenuUpdateForm.Request menuUpdateRequest) {
         Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
                 .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
 
-        menu.setName(menuUpdateForm.getName());
-        menu.setPrice(menuUpdateForm.getPrice());
+        menu.setName(menuUpdateRequest.getName());
+        menu.setPrice(menuUpdateRequest.getPrice());
 
         menuRepository.save(menu);
     }
 
     @Transactional
-    public void updateMenuStatus(Long restaurantId, Long menuId, MenuStatusForm menuStatusForm) {
+    public void updateMenuStatus(Long restaurantId,
+                                 Long menuId,
+                                 MenuStatusForm.Request menuStatusRequest) {
+
         Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
                 .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
 
-        menu.setStatus(menuStatusForm.getStatus());
+        menu.setStatus(menuStatusRequest.getStatus());
 
         menuRepository.save(menu);
     }

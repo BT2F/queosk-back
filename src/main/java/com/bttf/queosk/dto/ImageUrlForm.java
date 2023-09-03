@@ -6,18 +6,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
-
-public class MenuCreationForm {
+public class ImageUrlForm {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    @ApiModel(value = "메뉴 등록 Response")
-    public static class Request {
-        @NotEmpty(message = "이름은 비워둘 수 없습니다.")
-        private String name;
+    @ApiModel(value = "이미지 경로 Response")
+    public static class Response {
         private String imageUrl;
-        private Long price;
+
+        public static Response of(String url) {
+            return Response.builder()
+                    .imageUrl(url)
+                    .build();
+        }
     }
 }
