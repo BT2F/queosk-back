@@ -26,7 +26,7 @@ public class KakaoPayController {
                                                @Valid @RequestBody KakaoPaymentReadyForm kakaoPaymentReadyForm) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         KakaoPaymentReadyDto paymentReady = kakaoPaymentService.kakaoPaymentReady(userId, kakaoPaymentReadyForm);
-        return ResponseEntity.ok().body(paymentReady);
+        return ResponseEntity.ok(paymentReady);
     }
 
     @PostMapping("/approve")
@@ -36,7 +36,7 @@ public class KakaoPayController {
                                                  @Valid @RequestBody KakaoPaymentApprovalForm kakaoPaymentApprovalForm) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         KakaoPaymentApprovalDto paymentApprove = kakaoPaymentService.kakaoPaymentApprove(userId, pgToken, kakaoPaymentApprovalForm);
-        return ResponseEntity.ok().body(paymentApprove);
+        return ResponseEntity.ok(paymentApprove);
     }
 
     @PostMapping("/cancel")
@@ -44,6 +44,6 @@ public class KakaoPayController {
     public ResponseEntity<Object> paymentCancel(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Valid @RequestBody KakaoPaymentCancelForm kakaoPaymentCancelForm) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         KakaoPaymentCancelDto paymentCancel = kakaoPaymentService.kakaoPaymentCancel(userId, kakaoPaymentCancelForm);
-        return ResponseEntity.ok().body(paymentCancel);
+        return ResponseEntity.ok(paymentCancel);
     }
 }

@@ -1,19 +1,17 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.*;
-import com.bttf.queosk.entity.Menu;
-import com.bttf.queosk.enumerate.MenuStatus;
-import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.controller.RestaurantController;
-import com.bttf.queosk.enumerate.RestaurantCategory;
-import com.bttf.queosk.dto.TokenDto;
+import com.bttf.queosk.dto.*;
+import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.Restaurant;
+import com.bttf.queosk.enumerate.MenuStatus;
+import com.bttf.queosk.enumerate.RestaurantCategory;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
+import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
-import com.google.gson.Gson;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,14 +20,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,7 +65,7 @@ class RestaurantServiceTest {
     private EmailSender emailSender;
     @Mock
     private MenuRepository menuRepository;
-    
+
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -87,8 +80,8 @@ class RestaurantServiceTest {
     public void 매장_생성() throws Exception {
         // given
 
-        RestaurantSignUpForm restaurantSignUpForm =
-                RestaurantSignUpForm.builder()
+        RestaurantSignUpForm.Request restaurantSignUpForm =
+                RestaurantSignUpForm.Request.builder()
                         .ownerId("test")
                         .ownerName("test")
                         .password("1234")
@@ -104,21 +97,10 @@ class RestaurantServiceTest {
 
 
         // when
-        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.post(
-                        "/api/restaurant/signup")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new Gson().toJson(restaurantSignUpForm))
-        );
+        restaurantService.signUp(restaurantSignUpForm);
 
         // then
-
-        MvcResult mvcResult =
-                actions.andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-                        .andReturn();
-
-        String id = mvcResult.getResponse().getContentAsString();
-
-        assertThat(id).isNotNull();
+        verify(restaurantRepository, times(1)).save(any(Restaurant.class));
     }
 
     @Test
@@ -131,7 +113,7 @@ class RestaurantServiceTest {
         String accessToken = "accessToken";
         String refreshToken = "refreshToken";
 
-        RestaurantSignInForm restaurantSignInForm = RestaurantSignInForm
+        RestaurantSignInForm.Request restaurantSignInForm = RestaurantSignInForm.Request
                 .builder()
                 .ownerId(id)
                 .password(password)
@@ -169,8 +151,8 @@ class RestaurantServiceTest {
 
         Restaurant restaurant = Restaurant.builder().id(restaurantId).password("encodedOldPassword").build();
 
-        RestaurantUpdatePasswordForm restaurantUpdatePasswordForm =
-                RestaurantUpdatePasswordForm.builder()
+        RestaurantUpdatePasswordForm.Request restaurantUpdatePasswordForm =
+                RestaurantUpdatePasswordForm.Request.builder()
                         .oldPassword("oldPassword")
                         .newPassword(newPassword)
                         .build();
@@ -199,8 +181,8 @@ class RestaurantServiceTest {
 
         Restaurant restaurant = Restaurant.builder().id(restaurantId).password("encodedOldPassword").build();
 
-        RestaurantUpdatePasswordForm restaurantUpdatePasswordForm =
-                RestaurantUpdatePasswordForm.builder()
+        RestaurantUpdatePasswordForm.Request restaurantUpdatePasswordForm =
+                RestaurantUpdatePasswordForm.Request.builder()
                         .oldPassword("invalidOldPassword")
                         .newPassword(newPassword)
                         .build();
@@ -224,8 +206,8 @@ class RestaurantServiceTest {
         // Given
         Long restaurant = 1L;
 
-        RestaurantUpdatePasswordForm restaurantUpdatePasswordForm =
-                RestaurantUpdatePasswordForm.builder()
+        RestaurantUpdatePasswordForm.Request restaurantUpdatePasswordForm =
+                RestaurantUpdatePasswordForm.Request.builder()
                         .oldPassword("oldPassword")
                         .newPassword("newPassword")
                         .build();
@@ -302,7 +284,7 @@ class RestaurantServiceTest {
         // then
         assertThat(restaurant.getIsDeleted()).isTrue();
     }
-    
+
     @Test
     public void testGetRestaurantInfoAndMenu_success() throws Exception {
 

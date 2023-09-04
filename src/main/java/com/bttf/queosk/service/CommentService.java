@@ -28,7 +28,7 @@ public class CommentService {
     private final ReviewRepository reviewRepository;
 
     @Transactional
-    public void createComment(Long reviewId, Long restaurantId, CommentForm commentForm) {
+    public void createComment(Long reviewId, Long restaurantId, CommentForm.Request commentRequest) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REVIEW));
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
@@ -38,7 +38,7 @@ public class CommentService {
         Comment comment = Comment.builder()
                 .review(review)
                 .restaurant(restaurant)
-                .content(commentForm.getContent())
+                .content(commentRequest.getContent())
                 .isDeleted(false)
                 .build();
 
@@ -46,7 +46,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void updateComment(Long commentId, Long restaurantId, CommentForm commentForm) {
+    public void updateComment(Long commentId, Long restaurantId, CommentForm.Request commentForm) {
         Comment comment = commentRepository.findByIdAndIsDeletedFalse(commentId);
         Review review = reviewRepository.findById(
                         comment.getReview().getId())

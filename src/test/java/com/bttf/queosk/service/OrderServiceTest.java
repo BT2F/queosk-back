@@ -75,7 +75,7 @@ class OrderServiceTest {
                 .email(userEmail)
                 .build();
 
-        OrderCreationForm orderCreationForm = OrderCreationForm.builder()
+        OrderCreationForm.Request orderCreationForm = OrderCreationForm.Request.builder()
                 .menuId(menuId)
                 .tableId(tableId)
                 .restaurantId(restaurantId)

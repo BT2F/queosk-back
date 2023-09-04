@@ -2,7 +2,7 @@ package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.ReviewCreationForm;
 import com.bttf.queosk.dto.ReviewDto;
-import com.bttf.queosk.dto.UpdateReviewForm;
+import com.bttf.queosk.dto.UpdateReviewForm.Request;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Review;
 import com.bttf.queosk.entity.User;
@@ -30,32 +30,31 @@ public class ReviewService {
 
 
     @Transactional
-    public void createReview(Long userId, ReviewCreationForm reviewCreationForm) {
+    public void createReview(Long userId, ReviewCreationForm.Request reviewCreationRequest) {
         User user = getUser(userId);
 
-        Restaurant restaurant = getRestaurant(reviewCreationForm.getRestaurantId());
+        Restaurant restaurant = getRestaurant(reviewCreationRequest.getRestaurantId());
 
         Review review = Review.builder()
                 .restaurant(restaurant)
                 .user(user)
-                .subject(reviewCreationForm.getSubject())
-                .content(reviewCreationForm.getContent())
-                .rate(reviewCreationForm.getRate())
+                .subject(reviewCreationRequest.getSubject())
+                .content(reviewCreationRequest.getContent())
+                .rate(reviewCreationRequest.getRate())
                 .build();
 
         reviewRepository.save(review);
     }
 
     @Transactional
-    public void updateReview(Long reviewId, Long userId, UpdateReviewForm updateReviewForm) {
+    public void updateReview(Long reviewId, Long userId, Request updateReviewRequest) {
         Review review = findReview(reviewId);
         validReviewUser(userId, review);
-        review.setReview(updateReviewForm.getSubject(), updateReviewForm.getContent(), updateReviewForm.getRate());
+        review.setReview(updateReviewRequest.getSubject(), updateReviewRequest.getContent(), updateReviewRequest.getRate());
     }
 
     public ReviewDto getReview(Long reviewId) {
-        Review review = findReview(reviewId);
-        return ReviewDto.of(review);
+        return ReviewDto.of(findReview(reviewId));
     }
 
     @Transactional
@@ -66,14 +65,16 @@ public class ReviewService {
     }
 
     public List<ReviewDto> getReviewList(Long restaurantId) {
-        List<Review> reviewList = reviewRepository.findByRestaurantAndIsDeletedFalse(getRestaurant(restaurantId));
-        return reviewList.stream().map(ReviewDto::of).collect(Collectors.toList());
+        return reviewRepository.
+                findByRestaurantAndIsDeletedFalse(getRestaurant(restaurantId)).stream()
+                .map(ReviewDto::of)
+                .collect(Collectors.toList());
     }
 
     public List<ReviewDto> getRestaurantUserReviewList(Long userId, Long restaurantId) {
-        List<Review> reviewList = reviewRepository.findByRestaurantAndUserAndIsDeletedFalse(
-                getRestaurant(restaurantId), getUser(userId));
-        return reviewList.stream().map(ReviewDto::of).collect(Collectors.toList());
+        return reviewRepository.findByRestaurantAndUserAndIsDeletedFalse(
+                getRestaurant(restaurantId), getUser(userId)).stream()
+                .map(ReviewDto::of).collect(Collectors.toList());
     }
 
     private User getUser(Long userId) {
@@ -88,7 +89,6 @@ public class ReviewService {
 
     private Review findReview(Long reviewId) {
         return reviewRepository.findByIdAndIsDeletedFalse(reviewId);
-
     }
 
     private void validReviewUser(Long userId, Review review) {
