@@ -1,8 +1,12 @@
 package com.bttf.queosk.batch;
 
 import com.bttf.queosk.entity.Settlement;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
+@Slf4j
 public class SettlementItemProcessor implements ItemProcessor<Object, Settlement> {
     // 쿼리 결과
     @Override
@@ -19,7 +23,6 @@ public class SettlementItemProcessor implements ItemProcessor<Object, Settlement
                     .restaurantId(Long.parseLong(shopName))
                     .price(totalMenuPrice.longValue())
                     .build();
-
             return settlement;
         }
         return null; // 처리할 수 없는 데이터는 null을 반환하여 스킵하도록 처리할 수 있습니다.

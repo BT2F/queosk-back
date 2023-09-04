@@ -7,12 +7,8 @@ import com.bttf.queosk.repository.SettlementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.JobScope;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.configuration.annotation.*;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.data.RepositoryItemWriter;
@@ -24,23 +20,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.Collections;
 
 import static com.bttf.queosk.enumerate.OrderStatus.DONE;
 
-@Configuration
 @RequiredArgsConstructor
+@EnableBatchProcessing
+@Configuration
 public class SettlementBatchConfig {
 
-    private OrderRepository orderRepository;
-
-    private JobBuilderFactory jobBuilderFactory;
-
-    private StepBuilderFactory stepBuilderFactory;
-
-    private SettlementRepository settlementQueryRepository;
-
-    private SettlementRepository settlementRepository;
+    private final OrderRepository orderRepository;
+    private final JobBuilderFactory jobBuilderFactory;
+    private final EntityManagerFactory entityManagerFactory;
+    private final StepBuilderFactory stepBuilderFactory;
+    private final SettlementRepository settlementRepository;
 
 
     @Bean
@@ -53,7 +47,7 @@ public class SettlementBatchConfig {
 
     @JobScope
     @Bean
-    public Step settlementStep(ItemReader orderItemReader, ItemWriter orderWriter) {
+    public Step settlementStep(ItemWriter orderWriter) {
         return stepBuilderFactory.get("settlementStep")
                 .<Order, Settlement>chunk(100)
                 .reader(orderJpaPagingItemReader())
@@ -76,13 +70,15 @@ public class SettlementBatchConfig {
     public JpaPagingItemReader<Order> orderJpaPagingItemReader() {
 
         return new JpaPagingItemReaderBuilder<Order>()
+                .entityManagerFactory(entityManagerFactory)
+                .name("orderJpaPagingItemReader")
                 .queryString("SELECT o.restaurant.id AS restaurantId, SUM(m.price) AS totalMenuPrice" +
-                        "FROM Order o" +
-                        "JOIN o.menu m" +
-                        "JOIN o.restaurant r" +
-                        "WHERE FUNCTION('DATE', CURRENT_TIMESTAMP) = FUNCTION('DATE', o.createdAt) and" +
-                        "o.status = 'DONE' " +
-                        "GROUP BY r.id")
+                        " FROM order o" +
+                        " JOIN o.menu AS m" +
+                        " JOIN o.restaurant AS r" +
+                        " WHERE FUNCTION('DATE', CURRENT_TIMESTAMP) = FUNCTION('DATE', o.createdAt) and" +
+                        " o.status = 'DONE' " +
+                        " GROUP BY r.id")
                 .build();
     }
 
@@ -94,7 +90,7 @@ public class SettlementBatchConfig {
                 .name("orderItemReader")
                 .repository(orderRepository)
                 .methodName("findByOrderStatus")
-                .pageSize(5)
+                .pageSize(100)
                 .arguments(DONE)
                 .sorts(Collections.singletonMap("id", Sort.Direction.ASC))
                 .build();

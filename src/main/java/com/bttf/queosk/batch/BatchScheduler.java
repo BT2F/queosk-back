@@ -9,27 +9,26 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class BatchScheduler {
 
-    private Job job;
+    private final Job job;
 
-    private JobLauncher jobLauncher;
+    private final JobLauncher jobLauncher;
 
-    @Scheduled(cron = "0 * * * *")
+    @Scheduled(cron = "0 0 * * * ?")
     public void JobRun() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
 
-        JobParameters jobParameters = new JobParameters(
-                Collections.singletonMap("requestTime", new JobParameter(System.currentTimeMillis()))
-        );
+        Map<String, JobParameter> jobParameterMap = new HashMap<>();
+        JobParameters parameters = new JobParameters(jobParameterMap);
 
-        jobLauncher.run(job, jobParameters);
+        jobLauncher.run(job, parameters);
     }
 }
