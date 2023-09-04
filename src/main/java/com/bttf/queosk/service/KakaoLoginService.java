@@ -173,7 +173,7 @@ public class KakaoLoginService {
 
         if (response.getStatusCode().equals(HttpStatus.OK) &&
                 jsonResponse.get("id").getAsString().equals(kakaoAuth.getKakaoId())) {
-            log.info("Kakao social login logout complete");
+            log.info("Kakao logout complete");
         }
     }
 }
