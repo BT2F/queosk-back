@@ -125,7 +125,7 @@ public class UserController {
         UserDto userDto = userLoginService.getUserFromToken(token);
 
         if (userDto.getLoginType().equals(KAKAO.toString())) {
-            kakaoLoginService.getKakaoLogout(userDto.getEmail());
+            kakaoLoginService.logoutKakaoUser(userDto.getEmail());
         }
 
         refreshTokenService.deleteRefreshToken(userDto.getEmail());
