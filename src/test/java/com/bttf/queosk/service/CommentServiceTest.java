@@ -46,7 +46,7 @@ class CommentServiceTest {
         given(reviewRepository.findById(1L)).willReturn(Optional.of(review));
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
 
-        CommentForm commentForm = CommentForm.builder().content("test").build();
+        CommentForm.Request commentForm = CommentForm.Request.builder().content("test").build();
 
         // when
         commentService.createComment(1L, 1L, commentForm);
@@ -72,7 +72,7 @@ class CommentServiceTest {
 
         given(commentRepository.findByIdAndIsDeletedFalse(1L)).willReturn(comment);
 
-        CommentForm form = CommentForm.builder().content("test2").build();
+        CommentForm.Request form = CommentForm.Request.builder().content("test2").build();
 
         // when
 
