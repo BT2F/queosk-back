@@ -13,7 +13,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class SettlementRepositoryImpl implements SettlementRepository {
+public class SettlementQueryRepositoryImpl implements SettlementQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     public List<SettlementDto.OrderdMenu> getTodaySales(Long restaurantId) {
