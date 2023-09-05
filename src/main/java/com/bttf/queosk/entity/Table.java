@@ -31,14 +31,14 @@ public class Table extends BaseTimeEntity {
 
     private Long restaurantId;
 
-    public void updateStatus(TableStatus status) {
-        this.status = status;
-    }
-
     public static Table of(Long restaurantId) {
         return Table.builder()
                 .restaurantId(restaurantId)
                 .status(OPEN)
                 .build();
+    }
+
+    public void setStatus(TableStatus status) {
+        this.status = status;
     }
 }

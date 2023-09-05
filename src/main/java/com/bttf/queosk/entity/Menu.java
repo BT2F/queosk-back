@@ -51,12 +51,12 @@ public class Menu extends BaseTimeEntity {
         this.status = status;
     }
 
-    public static Menu of(Long restaurantId, MenuCreationForm menuCreationForm) {
+    public static Menu of(Long restaurantId, MenuCreationForm.Request menuCreationRequest) {
         return Menu.builder()
-                .name(menuCreationForm.getName())
-                .price(menuCreationForm.getPrice())
+                .name(menuCreationRequest.getName())
+                .price(menuCreationRequest.getPrice())
                 .status(ON_SALE)
-                .imageUrl(menuCreationForm.getImageUrl())
+                .imageUrl(menuCreationRequest.getImageUrl())
                 .restaurantId(restaurantId)
                 .build();
     }

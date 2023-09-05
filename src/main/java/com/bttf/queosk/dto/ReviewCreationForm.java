@@ -7,17 +7,19 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class ReviewCreationForm {
-    @NotNull
-    private Long restaurantId;
-    @NotBlank
-    private String subject;
-    private String content;
-    @DecimalMin(value= "0.0")
-    @DecimalMax(value= "5.0")
-    private Double rate;
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class Request {
+        @NotNull
+        private Long restaurantId;
+        @NotBlank
+        private String subject;
+        private String content;
+        @DecimalMin(value= "0.0")
+        @DecimalMax(value= "5.0")
+        private Double rate;
+    }
 }

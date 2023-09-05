@@ -31,22 +31,29 @@ public class OrderService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createOrder(OrderCreationForm orderCreationForm, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
-        Restaurant restaurant = restaurantRepository.findById(orderCreationForm.getRestaurantId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
-        Table table = tableRepository.findById(orderCreationForm.getTableId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_TABLE));
-        Menu menu = menuRepository.findByIdAndRestaurantId(orderCreationForm.getMenuId(), restaurant.getId()).orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+    public void createOrder(OrderCreationForm.Request orderCreationRequest, Long userId) {
+        User user = getUser(userId);
+        Restaurant restaurant = getRestaurant(orderCreationRequest.getRestaurantId());
+        Table table = getTable(orderCreationRequest.getTableId());
+        Menu menu = getMenu(orderCreationRequest.getMenuId(), restaurant.getId());
 
         validOrder(restaurant, table, menu);
 
-        Order order = Order.builder().restaurant(restaurant).table(table).menu(menu).user(user).count(orderCreationForm.getCount()).status(IN_PROGRESS).build();
+        Order order = Order.builder()
+                .restaurant(restaurant)
+                .table(table)
+                .menu(menu)
+                .user(user)
+                .count(orderCreationRequest.getCount())
+                .status(IN_PROGRESS)
+                .build();
 
         orderRepository.save(order);
     }
 
     @Transactional
     public void updateOrderStatus(Long orderId, Long restaurantId, OrderStatus orderStatus) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ORDER_NOT_FOUND));
+        Order order = getOrder(orderId);
         orderRestaurantValidation(order, restaurantId);
 
         order.setStatus(orderStatus);
@@ -54,17 +61,19 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    private Order getOrder(Long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ORDER_NOT_FOUND));
+    }
+
 
     public OrderDto readOrder(Long orderId, Long restaurantId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(
-                () -> new CustomException(ORDER_NOT_FOUND));
+        Order order = getOrder(orderId);
         orderRestaurantValidation(order, restaurantId);
         return OrderDto.of(order);
     }
 
     public List<OrderDto> readTodayOrderList(Long restaurantId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
-                () -> new CustomException(INVALID_RESTAURANT));
+        Restaurant restaurant = getRestaurant(restaurantId);
         LocalDateTime startTime = LocalDateTime.now().toLocalDate().atStartOfDay();
         LocalDateTime endTime = LocalDateTime.now().toLocalDate().atTime(23, 59, 59);
         List<Order> orderList =
@@ -73,8 +82,7 @@ public class OrderService {
     }
 
     public List<OrderDto> readInProgressOrderList(Long restaurantId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
-                () -> new CustomException(INVALID_RESTAURANT));
+        Restaurant restaurant = getRestaurant(restaurantId);
         List<Order> orderList = orderRepository.findAllByRestaurantAndStatus(IN_PROGRESS, restaurant);
         return orderToOrderDto(orderList);
     }
@@ -87,6 +95,26 @@ public class OrderService {
         });
 
         return orderDtoList;
+    }
+
+    private Menu getMenu(Long menuId, Long restaurantId) {
+        return menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+    }
+
+    private Table getTable(Long tableId) {
+        return tableRepository.findById(tableId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TABLE));
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
+    }
+
+    private Restaurant getRestaurant(Long restaurantId) {
+        return restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
     }
 
     private void validOrder(Restaurant restaurant, Table table, Menu menu) {
@@ -106,6 +134,4 @@ public class OrderService {
             throw new CustomException(ORDER_RESTAURANT_NOT_MATCH);
         }
     }
-
-
 }

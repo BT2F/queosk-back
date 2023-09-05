@@ -55,9 +55,9 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String generateRefreshToken() {
+    public String generateRefreshToken(String email) {
         return Jwts.builder()
-                .claim("userRole", ROLE_USER.getRoleName())
+                .claim("email", email)
                 .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 //유효기간 15일 (24시간 *15 )

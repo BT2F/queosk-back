@@ -1,3 +1,32 @@
+GET http://localhost:8080/api/reviews/restaurants/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3IiwiZW1haWwiOiJsb2NhOTBAbmF2ZXIuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTM2Mzc2MTcsImV4cCI6MTY5MzcyNDAxN30.dpYXQGtclYt8Vv_LlYEatD02dhkXHQemSyBG7G3dll0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=E334CC45624FA0FB46354528DF58AE1A
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-09-02T155440.200.json
+
+###
+
+POST http://localhost:8080/api/users/signin
+Content-Type: application/json
+Content-Length: 55
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Cookie: JSESSIONID=E334CC45624FA0FB46354528DF58AE1A
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "loca90@naver.com",
+  "password": "test"
+}
+
+<> 2023-09-02T155337.200.json
+
+###
+
 POST http://3.34.105.64:8080/api/restaurant/signin
 Content-Type: application/json
 Content-Length: 46
@@ -750,31 +779,6 @@ Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
 Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
 Accept-Encoding: br,deflate,gzip,x-gzip
-
-###
-
-GET http://localhost:8080/api/review/4/comment
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-09-01T134311.200.json
-
-###
-
-PUT http://localhost:8080/api/review/comment/3
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNTQzMzM0LCJleHAiOjE2OTM2Mjk3MzR9.IasRCFlNpkFuYhLmv00nXKRvMX3O4GlPbk0VhD_rLHc
-Content-Length: 50
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "content": "제가 무슨 말을 한거죠?"
-}
 
 ###
 

@@ -30,9 +30,9 @@ public class Queue extends BaseTimeEntity {
 
     private Long restaurantId;
 
-    public static Queue of(QueueCreateForm queueCreateForm, Long restaurantId, Long userId) {
+    public static Queue of(QueueCreateForm.Request queueCreateRequest, Long restaurantId, Long userId) {
         return Queue.builder()
-                .numberOfParty(queueCreateForm.getNumberOfParty())
+                .numberOfParty(queueCreateRequest.getNumberOfParty())
                 .restaurantId(restaurantId)
                 .userId(userId)
                 .build();

@@ -25,6 +25,8 @@ public class SettlementDto {
 
     @AllArgsConstructor
     @Getter
+    @Builder
+    @NoArgsConstructor
     public static class OrderdMenu {
         private String menu;
         private Integer count;

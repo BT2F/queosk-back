@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReviewDto {
     private Long id;
-    private Restaurant restaurant;
-    private User user;
+    private RestaurantDto restaurant;
+    private UserDto user;
     private String subject;
     private String content;
     private Double rate;
@@ -23,8 +23,8 @@ public class ReviewDto {
     public static ReviewDto of(Review review) {
         return ReviewDto.builder()
                 .id(review.getId())
-                .restaurant(review.getRestaurant())
-                .user(review.getUser())
+                .restaurant(RestaurantDto.of(review.getRestaurant()))
+                .user(UserDto.of(review.getUser()))
                 .subject(review.getSubject())
                 .content(review.getContent())
                 .rate(review.getRate())

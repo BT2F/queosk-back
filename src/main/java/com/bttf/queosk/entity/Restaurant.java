@@ -83,17 +83,17 @@ public class Restaurant extends BaseTimeEntity {
         this.isDeleted = true;
     }
 
-    public void updateRestaurantInfo(UpdateRestaurantInfoForm updateRestaurantInfoForm) {
-        this.ownerId = updateRestaurantInfoForm.getOwnerId();
-        this.cid = updateRestaurantInfoForm.getCid();
-        this.ownerName = updateRestaurantInfoForm.getOwnerName();
-        this.email = updateRestaurantInfoForm.getEmail();
-        this.phone = updateRestaurantInfoForm.getPhone();
-        this.restaurantName = updateRestaurantInfoForm.getRestaurantName();
-        this.restaurantPhone = updateRestaurantInfoForm.getRestaurantPhone();
-        this.category = updateRestaurantInfoForm.getCategory();
-        this.address = updateRestaurantInfoForm.getAddress();
-        this.maxWaiting = updateRestaurantInfoForm.getMaxWaiting();
+    public void updateRestaurantInfo(UpdateRestaurantInfoForm.Request updateRestaurantInfoRequest) {
+        this.ownerId = updateRestaurantInfoRequest.getOwnerId();
+        this.cid = updateRestaurantInfoRequest.getCid();
+        this.ownerName = updateRestaurantInfoRequest.getOwnerName();
+        this.email = updateRestaurantInfoRequest.getEmail();
+        this.phone = updateRestaurantInfoRequest.getPhone();
+        this.restaurantName = updateRestaurantInfoRequest.getRestaurantName();
+        this.restaurantPhone = updateRestaurantInfoRequest.getRestaurantPhone();
+        this.category = updateRestaurantInfoRequest.getCategory();
+        this.address = updateRestaurantInfoRequest.getAddress();
+        this.maxWaiting = updateRestaurantInfoRequest.getMaxWaiting();
     }
 
     public void setGeoPoint(double longitude, double latitude) {

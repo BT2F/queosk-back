@@ -16,35 +16,20 @@ import java.util.Date;
 @Builder
 public class RestaurantDto {
     private long id;
-
     private String ownerId;
-
     private String ownerName;
-
     private String email;
-
     private String phone;
-
     private String restaurantName;
-
     private String restaurantPhone;
-
     private RestaurantCategory category;
-
     private String businessNumber;
-
     private Date businessStartDate;
-
     private String address;
-
     private Double ratingAverage;
-
     private String imageUrl;
-
     private OperationStatus operationStatus;
-
     private Long maxWaiting;
-
     private String region;
 
     public static RestaurantDto of(Restaurant restaurant) {

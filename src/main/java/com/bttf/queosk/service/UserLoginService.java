@@ -2,7 +2,6 @@ package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.*;
-import com.bttf.queosk.entity.RefreshToken;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.repository.RefreshTokenRepository;
@@ -26,27 +25,27 @@ public class UserLoginService {
     private final EmailSender emailSender;
 
     @Transactional
-    public void createUser(UserSignUpForm userSignUpForm) {
+    public void createUser(UserSignUpForm.Request userSignUpRequest) {
 
         //기존회원 여부 확인
-        userRepository.findByEmail(userSignUpForm.getEmail()).ifPresent(
+        userRepository.findByEmail(userSignUpRequest.getEmail()).ifPresent(
                 user -> {
                     throw new CustomException(EXISTING_USER);
                 });
 
         //비밀번호 암호화
-        String encryptedPassword = passwordEncoder.encode(userSignUpForm.getPassword());
+        String encryptedPassword = passwordEncoder.encode(userSignUpRequest.getPassword());
 
         //회원 휴대폰 번호 혹시라도 문자나 공백이 들어왔다면 처리
         String trimmedPhoneNumber =
-                userSignUpForm.getPhone().replaceAll("\\D", "");
+                userSignUpRequest.getPhone().replaceAll("\\D", "");
 
-        User user = User.of(userSignUpForm,encryptedPassword,trimmedPhoneNumber);
+        User user = User.of(userSignUpRequest,encryptedPassword,trimmedPhoneNumber);
 
         userRepository.save(user);
 
         //회원 이메일 주소로 인증이메일 전송
-        emailSender.sendEmail(userSignUpForm.getEmail(),
+        emailSender.sendEmail(userSignUpRequest.getEmail(),
                 "Queosk 이메일 인증",
                 String.format("Queosk에 가입해 주셔서 감사합니다. \n" +
                         "아래 링크를 클릭 하시어 이메일 인증을 완료해주세요.\n" +
@@ -54,14 +53,14 @@ public class UserLoginService {
     }
 
     @Transactional
-    public UserSignInDto signInUser(UserSignInForm userSignInForm) {
+    public UserSignInDto signInUser(UserSignInForm.Request userSignInRequest) {
 
         //입력된 email 로 사용자 조회
-        User user = userRepository.findByEmail(userSignInForm.getEmail())
+        User user = userRepository.findByEmail(userSignInRequest.getEmail())
                 .orElseThrow(() -> new CustomException(INVALID_USER_ID));
 
         //조회된 사용자의 비밀번호와 입력된 비밀번호 비교
-        if (!passwordEncoder.matches(userSignInForm.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(userSignInRequest.getPassword(), user.getPassword())) {
             throw new CustomException(PASSWORD_NOT_MATCH);
         }
 
@@ -73,15 +72,13 @@ public class UserLoginService {
         }
 
         //엑세스 토큰 발행
-        String accessToken = jwtTokenProvider.generateAccessToken(
-                TokenDto.of(user)
-        );
+        String accessToken = jwtTokenProvider.generateAccessToken(TokenDto.of(user));
 
         //리프레시 토큰 발행
-        String refreshToken = jwtTokenProvider.generateRefreshToken();
+        String refreshToken = jwtTokenProvider.generateRefreshToken(user.getEmail());
 
         //리프테시 토큰 저장(기존에 있었다면 덮어쓰기 - 성능상 조회 후 수정보다 덮어쓰기가 더 빠르고 가벼움)
-        refreshTokenRepository.save(RefreshToken.of(user,refreshToken));
+        refreshTokenRepository.save(user.getEmail(),refreshToken);
 
         return UserSignInDto.of(user, refreshToken, accessToken);
     }
