@@ -209,7 +209,7 @@ public class RestaurantService {
     private Restaurant getRestaurantById(Long restaurantId) {
         return restaurantRepository
                 .findById(restaurantId)
-                .orElseThrow(() -> new CustomException(INVALID_USER_ID));
+                .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
     }
 
     private Restaurant getRestaurantByEmail(String email) {
