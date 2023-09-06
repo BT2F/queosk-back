@@ -19,7 +19,7 @@ public class ImageService {
     private String bucket;
 
     public String saveFile(MultipartFile multipartFile, String dir) throws IOException {
-        String originalFileName = dir + "/" + UUID.randomUUID().toString().substring(0, 20) + ".." + multipartFile.getOriginalFilename();
+        String originalFileName = dir + "/" + UUID.randomUUID() + ".." + multipartFile.getOriginalFilename();
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
@@ -27,10 +27,10 @@ public class ImageService {
 
         amazonS3.putObject(bucket, originalFileName, multipartFile.getInputStream(), metadata);
 
-        return amazonS3.getUrl(bucket, originalFileName).toString();
+        return "https://image.queosk.kr/" + originalFileName;
     }
 
     public void deleteFile(String imagePath) throws IOException {
-        amazonS3.deleteObject(this.bucket, imagePath.replace("https://queosk-bucket.s3.ap-northeast-2.amazonaws.com/", ""));
+        amazonS3.deleteObject(this.bucket, imagePath.replace("https://image.queosk.kr/", ""));
     }
 }
