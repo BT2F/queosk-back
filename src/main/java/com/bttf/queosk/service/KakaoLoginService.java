@@ -47,13 +47,6 @@ public class KakaoLoginService {
     @Value("${kakao.redirectUrl}")
     private String KAKAO_REDIRECT_URL;
 
-    public String getKakaoLoginURL() {
-        return KAKAO_AUTH_URI + "/oauth/authorize"
-                + "?client_id=" + KAKAO_CLIENT_ID
-                + "&redirect_uri=" + KAKAO_REDIRECT_URL
-                + "&response_type=code";
-    }
-
     public void logoutKakaoUser(String email) {
         KakaoAuth kakaoAuth = kakaoAuthRepository.findById(email);
 
