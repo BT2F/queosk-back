@@ -14,9 +14,10 @@ public class MenuListForm {
     @NoArgsConstructor
     @Builder
     @ApiModel(value = "메뉴목록조회 Response")
-    public static class Response{
+    public static class Response {
         private List<MenuDto> menuList;
-        public static Response of(List<MenuDto> menuList){
+
+        public static Response of(List<MenuDto> menuList) {
             return Response.builder().menuList(menuList).build();
         }
     }

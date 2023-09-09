@@ -29,6 +29,7 @@ public class RestaurantSignInForm {
             return Response.builder()
                     .id(restaurantSignInDto.getId())
                     .accessToken(restaurantSignInDto.getAccessToken())
+                    .refreshToken(restaurantSignInDto.getRefreshToken())
                     .ownerId(restaurantSignInDto.getOwnerId())
                     .restaurantName(restaurantSignInDto.getRestaurantName())
                     .imageUrl(restaurantSignInDto.getImageUrl())

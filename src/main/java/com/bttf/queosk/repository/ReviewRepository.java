@@ -11,7 +11,9 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByRestaurantAndIsDeletedFalse(Restaurant restaurant);
+
     List<Review> findByRestaurantAndUserAndIsDeletedFalse(Restaurant restaurant, User user);
+
     Review findByIdAndIsDeletedFalse(Long id);
 
 

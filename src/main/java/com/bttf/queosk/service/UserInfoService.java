@@ -75,7 +75,7 @@ public class UserInfoService {
         }
 
         String randomPassword =
-                UUID.randomUUID().toString().replace("-","").substring(0, 10);
+                UUID.randomUUID().toString().replace("-", "").substring(0, 10);
 
         String encryptedPassword = passwordEncoder.encode(randomPassword);
 

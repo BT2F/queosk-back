@@ -9,7 +9,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +37,8 @@ public class TableController {
     @PutMapping("/table/{tableId}")
     @ApiOperation(value = "매장 테이블 상태 변경", notes = "매장 테이블의 상태를 변경 합니다.")
     public ResponseEntity<Void> tableUpdate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                         @RequestParam TableStatus tableStatus,
-                                         @PathVariable Long tableId) {
+                                            @RequestParam TableStatus tableStatus,
+                                            @PathVariable Long tableId) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         tableService.updateTable(tableId, tableStatus, restaurantId);
@@ -49,7 +48,7 @@ public class TableController {
     @DeleteMapping("/table/{tableId}")
     @ApiOperation(value = "매장 테이블 삭제", notes = "매장 테이블을 삭제 합니다.")
     public ResponseEntity<Void> tableDelete(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                         @PathVariable Long tableId) {
+                                            @PathVariable Long tableId) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
@@ -60,7 +59,7 @@ public class TableController {
     @GetMapping("/table/{tableId}")
     @ApiOperation(value = "매장 특정테이블 조회", notes = "매장의 특정 테이블을 조회 합니다.")
     public ResponseEntity<TableForm.Response> tableGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                      @PathVariable Long tableId) {
+                                                       @PathVariable Long tableId) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 

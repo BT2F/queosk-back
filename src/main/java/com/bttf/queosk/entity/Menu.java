@@ -35,6 +35,16 @@ public class Menu extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MenuStatus status;
 
+    public static Menu of(Long restaurantId, MenuCreationForm.Request menuCreationRequest) {
+        return Menu.builder()
+                .name(menuCreationRequest.getName())
+                .price(menuCreationRequest.getPrice())
+                .status(ON_SALE)
+                .imageUrl(menuCreationRequest.getImageUrl())
+                .restaurantId(restaurantId)
+                .build();
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -49,15 +59,5 @@ public class Menu extends BaseTimeEntity {
 
     public void setStatus(MenuStatus status) {
         this.status = status;
-    }
-
-    public static Menu of(Long restaurantId, MenuCreationForm.Request menuCreationRequest) {
-        return Menu.builder()
-                .name(menuCreationRequest.getName())
-                .price(menuCreationRequest.getPrice())
-                .status(ON_SALE)
-                .imageUrl(menuCreationRequest.getImageUrl())
-                .restaurantId(restaurantId)
-                .build();
     }
 }

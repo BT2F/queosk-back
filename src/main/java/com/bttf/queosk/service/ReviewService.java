@@ -73,7 +73,7 @@ public class ReviewService {
 
     public List<ReviewDto> getRestaurantUserReviewList(Long userId, Long restaurantId) {
         return reviewRepository.findByRestaurantAndUserAndIsDeletedFalse(
-                getRestaurant(restaurantId), getUser(userId)).stream()
+                        getRestaurant(restaurantId), getUser(userId)).stream()
                 .map(ReviewDto::of).collect(Collectors.toList());
     }
 
