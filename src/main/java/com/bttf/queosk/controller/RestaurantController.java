@@ -106,8 +106,11 @@ public class RestaurantController {
 
     @GetMapping("/coord")
     @ApiOperation(value = "동네 매장 검색 (좌표)", notes = "해당 좌표가 위치한 동네의 매장 리스트를 제공합니다.")
-    public ResponseEntity<Page<RestaurantInfoGetCoordForm.Response>> getCoordRestaurantInfo(@RequestBody RestaurantInfoGetCoordForm.Request restaurantInfoGetCoordForm) {
-        Page<RestaurantDto> restaurantDtoPage = restaurantService.getCoordRestaurantInfoForm(restaurantInfoGetCoordForm);
+    public ResponseEntity<Page<RestaurantInfoGetCoordForm.Response>> getCoordRestaurantInfo(@RequestParam("x") Double x,
+                                                                                            @RequestParam("y") Double y,
+                                                                                            @RequestParam("page") int page,
+                                                                                            @RequestParam("size") int size) {
+        Page<RestaurantDto> restaurantDtoPage = restaurantService.getCoordRestaurantInfoForm(x, y, page, size);
         Page<RestaurantInfoGetCoordForm.Response> responsePage = restaurantDtoPage.map(RestaurantInfoGetCoordForm.Response::of);
         return ResponseEntity.status(OK).body(responsePage);
     }

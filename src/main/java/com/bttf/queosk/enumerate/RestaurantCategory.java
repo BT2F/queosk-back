@@ -2,17 +2,9 @@ package com.bttf.queosk.enumerate;
 
 
 public enum RestaurantCategory {
-    DONKASU_SUSHI_JAPANESE,
+    JAPANESE,
     CHINESE,
-    CHICKEN,
-    RICE_PORRIDGE_NOODLES,
-    CAFE_DESSERT,
-    STREET_FOOD,
-    STEW_SOUP_HOTPOT,
-    PIZZA,
+    KOREAN,
     WESTERN,
-    BBQ,
-    JOKBAL_BOSSAM,
-    ASIAN,
-    BURGER
+    ETC
 }
