@@ -1,6 +1,5 @@
 package com.bttf.queosk.dto;
 
-import com.bttf.queosk.entity.Comment;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +19,7 @@ public class CommentForm {
         @NotBlank
         private String content;
     }
+
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor

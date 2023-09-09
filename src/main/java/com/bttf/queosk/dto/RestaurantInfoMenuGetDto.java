@@ -1,6 +1,5 @@
 package com.bttf.queosk.dto;
 
-import com.bttf.queosk.dto.MenuDto;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.Restaurant;
 import lombok.AllArgsConstructor;
@@ -16,11 +15,9 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Builder
 public class RestaurantInfoMenuGetDto {
-    private Long id;
-
     RestaurantDto restaurantDto;
-
     List<MenuDto> menuDtoList;
+    private Long id;
 
     public static RestaurantInfoMenuGetDto of(Restaurant restaurant, List<Menu> menuList) {
         List<MenuDto> menuDtoList = menuList.stream()

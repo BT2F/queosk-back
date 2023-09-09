@@ -1,6 +1,5 @@
 package com.bttf.queosk.dto;
 
-import com.bttf.queosk.entity.User;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

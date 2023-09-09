@@ -2,7 +2,6 @@ package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.*;
-import com.bttf.queosk.entity.Review;
 import com.bttf.queosk.service.ReviewService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +28,7 @@ public class ReviewController {
     @PostMapping
     @ApiOperation(value = "리뷰 작성", notes = "사용자가 매장에 대해 리뷰를 남깁니다.")
     public ResponseEntity<Void> createReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                               @RequestBody @Valid ReviewCreationForm.Request reviewCreationRequest) {
+                                             @RequestBody @Valid ReviewCreationForm.Request reviewCreationRequest) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         reviewService.createReview(userId, reviewCreationRequest);
         return ResponseEntity.status(CREATED).build();
@@ -46,8 +44,8 @@ public class ReviewController {
     @PutMapping("{reviewId}")
     @ApiOperation(value = "리뷰 수정", notes = "단건의 리뷰를 수정합니다.")
     public ResponseEntity<Void> updateReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                               @PathVariable("reviewId") Long reviewId,
-                                               @RequestBody @Valid UpdateReviewForm.Request updateReviewRequest) {
+                                             @PathVariable("reviewId") Long reviewId,
+                                             @RequestBody @Valid UpdateReviewForm.Request updateReviewRequest) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         reviewService.updateReview(reviewId, userId, updateReviewRequest);
         return ResponseEntity.status(CREATED).build();
@@ -56,7 +54,7 @@ public class ReviewController {
     @DeleteMapping("{reviewId}")
     @ApiOperation(value = "리뷰 삭제", notes = "단건의 리뷰를 삭제합니다.")
     public ResponseEntity<Void> deleteReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                               @PathVariable("reviewId") Long reviewId) {
+                                             @PathVariable("reviewId") Long reviewId) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         reviewService.deleteReview(userId, reviewId);
         return ResponseEntity.status(NO_CONTENT).build();
@@ -75,7 +73,7 @@ public class ReviewController {
     @GetMapping("restaurants/{restaurantId}/user")
     @ApiOperation(value = "각 사용자 별 매장 리뷰 열람")
     public ResponseEntity<List<GetRestaurantUserReviewListForm.Response>> getRestaurantUserReviewList(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                              @PathVariable("restaurantId") Long restaurantId) {
+                                                                                                      @PathVariable("restaurantId") Long restaurantId) {
         Long userId = jwtTokenProvider.getIdFromToken(token);
         List<ReviewDto> reviewDtoList = reviewService.getRestaurantUserReviewList(userId, restaurantId);
         List<GetRestaurantUserReviewListForm.Response> responseList = reviewDtoList.stream()

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bttf.queosk.enumerate.MenuStatus.ON_SALE;
 import static com.bttf.queosk.exception.ErrorCode.MENU_NOT_FOUND;
 
 @Service

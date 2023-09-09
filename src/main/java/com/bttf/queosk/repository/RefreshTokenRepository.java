@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Repository
 public class RefreshTokenRepository {
-    private final RedisTemplate<String, String> redisTemplate;
     private static final String QUEOSK = "queosk_auth: ";
+    private final RedisTemplate<String, String> redisTemplate;
 
     public void save(String email, String refreshToken) {
         redisTemplate.opsForValue().set(QUEOSK + email, refreshToken);

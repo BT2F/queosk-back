@@ -1,3 +1,358 @@
+POST http://back.queosk.kr:8080/api/restaurants/signin
+Content-Type: application/json
+Content-Length: 45
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm",
+  "password": "1234"
+}
+
+<> 2023-09-10T010001.200.json
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signin
+Content-Type: application/json
+Content-Length: 45
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm",
+  "password": "1234"
+}
+
+<> 2023-09-10T004749.200.json
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signin
+Content-Type: application/json
+Content-Length: 45
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm",
+  "password": "1234"
+}
+
+<> 2023-09-10T004721.200.json
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signin
+Content-Type: application/json
+Content-Length: 45
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm",
+  "password": "1234"
+}
+
+<> 2023-09-10T004419.200.json
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signin
+Content-Type: application/json
+Content-Length: 45
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm",
+  "password": "1234"
+}
+
+<> 2023-09-10T004416.200.json
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signin
+Content-Type: application/json
+Content-Length: 45
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm",
+  "password": "1234"
+}
+
+<> 2023-09-10T004314.200.json
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signup
+Content-Type: application/json
+Content-Length: 330
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm5",
+  "ownerName": "고길동",
+  "password": "1234",
+  "email": "asd@darm5.kr",
+  "phone": "0101111111",
+  "restaurantName": "한식당 담5",
+  "restaurantPhone": "0200000000",
+  "category": "KOREAN",
+  "businessNumber": "123-45-67890",
+  "businessStartDate": "20010502",
+  "address": "구미시 광평동"
+}
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signup
+Content-Type: application/json
+Content-Length: 329
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm4",
+  "ownerName": "고길동",
+  "password": "1234",
+  "email": "asd@darm4.kr",
+  "phone": "0101111111",
+  "restaurantName": "한식당 담",
+  "restaurantPhone": "0200000000",
+  "category": "KOREAN",
+  "businessNumber": "123-45-67890",
+  "businessStartDate": "20010502",
+  "address": "구미시 광평동"
+}
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signup
+Content-Type: application/json
+Content-Length: 329
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm3",
+  "ownerName": "고길동",
+  "password": "1234",
+  "email": "asd@darm3.kr",
+  "phone": "0101111111",
+  "restaurantName": "한식당 담",
+  "restaurantPhone": "0200000000",
+  "category": "KOREAN",
+  "businessNumber": "123-45-67890",
+  "businessStartDate": "20010502",
+  "address": "구미시 광평동"
+}
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signup
+Content-Type: application/json
+Content-Length: 329
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm2",
+  "ownerName": "고길동",
+  "password": "1234",
+  "email": "asd@darm2.kr",
+  "phone": "0101111111",
+  "restaurantName": "한식당 담",
+  "restaurantPhone": "0200000000",
+  "category": "KOREAN",
+  "businessNumber": "123-45-67890",
+  "businessStartDate": "20010502",
+  "address": "구미시 광평동"
+}
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signup
+Content-Type: application/json
+Content-Length: 328
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm2",
+  "ownerName": "고길동",
+  "password": "1234",
+  "email": "asd@darm.kr",
+  "phone": "0101111111",
+  "restaurantName": "한식당 담",
+  "restaurantPhone": "0200000000",
+  "category": "KOREAN",
+  "businessNumber": "123-45-67890",
+  "businessStartDate": "20010502",
+  "address": "구미시 광평동"
+}
+
+<> 2023-09-10T004022.400.json
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signup
+Content-Type: application/json
+Content-Length: 327
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm",
+  "ownerName": "고길동",
+  "password": "1234",
+  "email": "asd@darm.kr",
+  "phone": "0101111111",
+  "restaurantName": "한식당 담",
+  "restaurantPhone": "0200000000",
+  "category": "KOREAN",
+  "businessNumber": "123-45-67890",
+  "businessStartDate": "20010502",
+  "address": "구미시 광평동"
+}
+
+<> 2023-09-10T004018.400.json
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signup
+Content-Type: application/json
+Content-Length: 327
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "darm",
+  "ownerName": "고길동",
+  "password": "1234",
+  "email": "asd@darm.kr",
+  "phone": "0101111111",
+  "restaurantName": "한식당 담",
+  "restaurantPhone": "0200000000",
+  "category": "KOREAN",
+  "businessNumber": "123-45-67890",
+  "businessStartDate": "20010502",
+  "address": "구미시 광평동"
+}
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signup
+Content-Type: application/json
+Content-Length: 322
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "bbq",
+  "ownerName": "서길동",
+  "password": "1234",
+  "email": "asd@bbq.kr",
+  "phone": "0101111111",
+  "restaurantName": "바베큐",
+  "restaurantPhone": "0200000000",
+  "category": "WESTERN",
+  "businessNumber": "123-45-67890",
+  "businessStartDate": "20010502",
+  "address": "대전시 관평동"
+}
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signup
+Content-Type: application/json
+Content-Length: 329
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "gogi",
+  "ownerName": "서길동",
+  "password": "1234",
+  "email": "asd@gogi.kr",
+  "phone": "0101111111",
+  "restaurantName": "한우고깃집",
+  "restaurantPhone": "0200000000",
+  "category": "KOREAN",
+  "businessNumber": "123-45-67890",
+  "businessStartDate": "20010502",
+  "address": "대전시 관평동"
+}
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signup
+Content-Type: application/json
+Content-Length: 370
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "donkas",
+  "ownerName": "김길동",
+  "password": "1234",
+  "email": "asd@donkas.kr",
+  "phone": "0101111111",
+  "restaurantName": "돈카돈까스",
+  "restaurantPhone": "0200000000",
+  "category": "JAPANESE",
+  "businessNumber": "123-45-67890",
+  "businessStartDate": "20010502",
+  "address": "경기도 부천시 소사구 소사로160번길 99-16"
+}
+
+###
+
+POST http://back.queosk.kr:8080/api/restaurants/signup
+Content-Type: application/json
+Content-Length: 369
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "ownerId": "donkas",
+  "ownerName": "김길동",
+  "password": "1234",
+  "email": "asd@donkas.kr",
+  "phone": "0101111111",
+  "restaurantName": "돈카돈까스",
+  "restaurantPhone": "020000000",
+  "category": "JAPANESE",
+  "businessNumber": "123-45-67890",
+  "businessStartDate": "20010502",
+  "address": "경기도 부천시 소사구 소사로160번길 99-16"
+}
+
+<> 2023-09-10T003529.400.json
+
+###
+
 GET http://localhost:8080/api/reviews/restaurants/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3IiwiZW1haWwiOiJsb2NhOTBAbmF2ZXIuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpc3MiOiJxdWVvc2siLCJpYXQiOjE2OTM2Mzc2MTcsImV4cCI6MTY5MzcyNDAxN30.dpYXQGtclYt8Vv_LlYEatD02dhkXHQemSyBG7G3dll0
@@ -526,259 +881,6 @@ Accept-Encoding: br,deflate,gzip,x-gzip
 }
 
 <> 2023-09-01T182357.400.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T182356.200.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T182355.200.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T182354.200.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T182353.200.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T182351.200.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T180528.200.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T180523.400.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T175547.400.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T175536.200.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T175533.400.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T175529.400.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T175517.400.json
-
-###
-
-POST http://3.34.105.64:8080/api/restaurant/signin
-Content-Type: application/json
-Content-Length: 46
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "ownerId": "test2",
-  "password": "1234"
-}
-
-<> 2023-09-01T174617.400.json
-
-###
-
-PUT http://43.200.191.137:8080/api/review/comment/3
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNTQzMzM0LCJleHAiOjE2OTM2Mjk3MzR9.IasRCFlNpkFuYhLmv00nXKRvMX3O4GlPbk0VhD_rLHc
-Content-Length: 50
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "content": "제가 무슨 말을 한거죠?"
-}
-
-<> 2023-09-01T134621.401.json
-
-###
-
-GET http://43.200.191.137:8080/api/review/4/comment
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-09-01T134608.200.json
-
-###
-
-GET http://localhost:8080/api/review/4/comment
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-09-01T134328.200.json
-
-###
-
-DELETE http://localhost:8080/api/review/comment/3
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhNUB4LmNvbSIsInVzZXJSb2xlIjoiUk9MRV9SRVNUQVVSQU5UIiwiaXNzIjoicXVlb3NrIiwiaWF0IjoxNjkzNTQzMzM0LCJleHAiOjE2OTM2Mjk3MzR9.IasRCFlNpkFuYhLmv00nXKRvMX3O4GlPbk0VhD_rLHc
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Cookie: JSESSIONID=4E32646627485C613BD937B389EC58A3
-Accept-Encoding: br,deflate,gzip,x-gzip
 
 ###
 

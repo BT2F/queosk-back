@@ -2,24 +2,19 @@ package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.*;
-import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.service.RefreshTokenService;
 import com.bttf.queosk.service.RestaurantService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.net.URI;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -68,7 +63,7 @@ public class RestaurantController {
     @PutMapping("/password/reset")
     @ApiOperation(value = "매장 비밀번호 초기화", notes = "매장의 비밀번호를 초기화 합니다.")
     public ResponseEntity<Void> resetRestaurantPassword(@Valid @RequestBody
-                                                     RestaurantResetPasswordForm.Request restaurantResetPasswordRequest) {
+                                                        RestaurantResetPasswordForm.Request restaurantResetPasswordRequest) {
         restaurantService.resetRestaurantPassword(restaurantResetPasswordRequest.getEmail(), restaurantResetPasswordRequest.getOwnerName());
         return ResponseEntity.status(CREATED).build();
     }
@@ -99,7 +94,7 @@ public class RestaurantController {
     @PostMapping
     @ApiOperation(value = "매장 수정", notes = "매장 계정의 정보를 수정합니다.")
     public ResponseEntity<RestaurantGetInfoForm.Response> updateRestaurantInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                  UpdateRestaurantInfoForm.Request updateRestaurantInfoRequest) {
+                                                                               UpdateRestaurantInfoForm.Request updateRestaurantInfoRequest) {
         RestaurantDto restaurantDto = restaurantService.updateRestaurantInfo(token, updateRestaurantInfoRequest);
         return ResponseEntity.status(CREATED).body(RestaurantGetInfoForm.Response.of(restaurantDto));
     }

@@ -28,6 +28,6 @@ public class QueueRedisRepository {
     }
 
     public void deleteQueue(String restaurantId, String queueId) {
-        redisTemplate.opsForList().remove(restaurantId,0,queueId);
+        redisTemplate.opsForList().remove(restaurantId, 0, queueId);
     }
 }

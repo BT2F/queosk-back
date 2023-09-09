@@ -76,9 +76,13 @@ public class User extends BaseTimeEntity {
                 .build();
     }
 
-    public void setNickName(String nickName) {this.nickName = nickName;}
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
 
-    public void setPhone(String phone) {this.phone = phone;}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public void setPassword(String newPassword) {
         this.password = newPassword;

@@ -20,6 +20,15 @@ public class SettlementForm {
 
         private Long price;
 
+        public static Response of(SettlementDto settlementDto) {
+            return SettlementForm.Response.builder()
+                    .orderdMenus(Collections.singletonList(
+                            OrderdMenu.of((SettlementDto.OrderdMenu) settlementDto.getOrderdMenus())
+                    ))
+                    .price(settlementDto.getPrice())
+                    .build();
+        }
+
         @AllArgsConstructor
         @Builder
         @NoArgsConstructor
@@ -29,10 +38,6 @@ public class SettlementForm {
             private Integer count;
             private Long price;
 
-            public Long sumOfPrice() {
-                return count * price;
-            }
-
             public static OrderdMenu of(SettlementDto.OrderdMenu orderdMenu) {
                 return OrderdMenu.builder()
                         .menu(orderdMenu.getMenu())
@@ -40,15 +45,10 @@ public class SettlementForm {
                         .price(orderdMenu.getPrice())
                         .build();
             }
-        }
 
-        public static Response of (SettlementDto settlementDto){
-            return SettlementForm.Response.builder()
-                    .orderdMenus(Collections.singletonList(
-                            OrderdMenu.of((SettlementDto.OrderdMenu) settlementDto.getOrderdMenus())
-                    ))
-                    .price(settlementDto.getPrice())
-                    .build();
+            public Long sumOfPrice() {
+                return count * price;
+            }
         }
     }
 

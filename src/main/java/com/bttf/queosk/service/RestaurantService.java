@@ -95,6 +95,7 @@ public class RestaurantService {
                 .ownerId(restaurant.getOwnerId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .restaurantName(restaurant.getRestaurantName())
                 .imageUrl(restaurant.getImageUrl())
                 .build();
     }

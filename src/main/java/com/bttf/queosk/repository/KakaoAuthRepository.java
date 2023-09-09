@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Repository
 public class KakaoAuthRepository {
-    private final RedisTemplate<String, Object> redisTemplate;
     private static final String KAKAO = "kakao_auth: ";
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public void save(String email, KakaoAuth kakaoAuth) {
         redisTemplate.opsForValue().set(KAKAO + email, kakaoAuth);

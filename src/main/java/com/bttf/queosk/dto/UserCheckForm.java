@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

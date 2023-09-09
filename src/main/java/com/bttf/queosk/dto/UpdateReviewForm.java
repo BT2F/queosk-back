@@ -19,8 +19,8 @@ public class UpdateReviewForm {
         @NotBlank
         private String subject;
         private String content;
-        @DecimalMin(value= "0.0")
-        @DecimalMax(value= "5.0")
+        @DecimalMin(value = "0.0")
+        @DecimalMax(value = "5.0")
         private Double rate;
     }
 
