@@ -1,8 +1,6 @@
 package com.bttf.queosk.dto;
 
-import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Review;
-import com.bttf.queosk.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

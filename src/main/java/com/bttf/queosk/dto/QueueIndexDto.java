@@ -13,7 +13,7 @@ public class QueueIndexDto {
     private Long userQueueIndex;
     private Long queueRemaining;
 
-    public static QueueIndexDto of(Long userQueueIndex){
+    public static QueueIndexDto of(Long userQueueIndex) {
         return QueueIndexDto.builder()
                 .queueRemaining(userQueueIndex)
                 .userQueueIndex(userQueueIndex + 1) // 대기번호의 경우 index + 1

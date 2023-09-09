@@ -20,6 +20,7 @@ public class QueueCreateForm {
         @Max(value = 100, message = "식사인원은 6명 이하이어야 합니다.")
         private Long numberOfParty;
     }
+
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
@@ -28,7 +29,8 @@ public class QueueCreateForm {
     public static class Response {
         private Long userQueueIndex;
         private Long queueRemaining;
-        public static Response of(QueueIndexDto queueIndexDto){
+
+        public static Response of(QueueIndexDto queueIndexDto) {
             return Response.builder()
                     .queueRemaining(queueIndexDto.getQueueRemaining())
                     .userQueueIndex(queueIndexDto.getUserQueueIndex())

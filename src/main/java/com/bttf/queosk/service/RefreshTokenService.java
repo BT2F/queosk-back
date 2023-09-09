@@ -1,9 +1,9 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
+import com.bttf.queosk.dto.RefreshTokenDto;
 import com.bttf.queosk.dto.TokenDto;
 import com.bttf.queosk.dto.TokenRefreshDto;
-import com.bttf.queosk.dto.RefreshTokenDto;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.enumerate.UserRole;
@@ -32,11 +32,11 @@ public class RefreshTokenService {
 
         Long userId = jwtTokenProvider.getIdFromToken(refreshToken);
         User targetUser = userRepository.findById(userId)
-                .orElseThrow(()->new CustomException(ErrorCode.REFRESH_CODE_EXPIRED));
+                .orElseThrow(() -> new CustomException(ErrorCode.REFRESH_CODE_EXPIRED));
 
         RefreshTokenDto tokenSubject = refreshTokenRepository.findByEmail(targetUser.getEmail());
 
-        if(tokenSubject==null) {
+        if (tokenSubject == null) {
             throw new CustomException(INVALID_TOKEN);
         }
 
@@ -59,7 +59,7 @@ public class RefreshTokenService {
         }
 
         String newAccessToken = jwtTokenProvider.generateAccessToken(
-                TokenDto.of(id,userRole,email)
+                TokenDto.of(id, userRole, email)
         );
         return TokenRefreshDto.of(newAccessToken);
     }

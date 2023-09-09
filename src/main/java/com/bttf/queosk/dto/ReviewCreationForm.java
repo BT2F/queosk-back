@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class ReviewCreationForm {
     @Getter
@@ -18,8 +21,8 @@ public class ReviewCreationForm {
         @NotBlank
         private String subject;
         private String content;
-        @DecimalMin(value= "0.0")
-        @DecimalMax(value= "5.0")
+        @DecimalMin(value = "0.0")
+        @DecimalMax(value = "5.0")
         private Double rate;
     }
 }

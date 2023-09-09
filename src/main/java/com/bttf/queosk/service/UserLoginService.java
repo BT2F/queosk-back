@@ -40,7 +40,7 @@ public class UserLoginService {
         String trimmedPhoneNumber =
                 userSignUpRequest.getPhone().replaceAll("\\D", "");
 
-        User user = User.of(userSignUpRequest,encryptedPassword,trimmedPhoneNumber);
+        User user = User.of(userSignUpRequest, encryptedPassword, trimmedPhoneNumber);
 
         userRepository.save(user);
 
@@ -78,7 +78,7 @@ public class UserLoginService {
         String refreshToken = jwtTokenProvider.generateRefreshToken(user.getEmail());
 
         //리프테시 토큰 저장(기존에 있었다면 덮어쓰기 - 성능상 조회 후 수정보다 덮어쓰기가 더 빠르고 가벼움)
-        refreshTokenRepository.save(user.getEmail(),refreshToken);
+        refreshTokenRepository.save(user.getEmail(), refreshToken);
 
         return UserSignInDto.of(user, refreshToken, accessToken);
     }
