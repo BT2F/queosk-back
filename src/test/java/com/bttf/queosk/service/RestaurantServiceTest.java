@@ -89,7 +89,7 @@ class RestaurantServiceTest {
                         .phone("01001234567")
                         .restaurantPhone("0101234567")
                         .restaurantName("테스트네 식당")
-                        .category(RestaurantCategory.ASIAN)
+                        .category(RestaurantCategory.KOREAN)
                         .businessNumber("123-45-67890")
                         .businessStartDate("19900428")
                         .address("청와대로 1")
