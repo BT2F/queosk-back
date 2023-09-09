@@ -17,6 +17,7 @@ import java.util.List;
 
 import static com.bttf.queosk.enumerate.MenuStatus.SOLD_OUT;
 import static com.bttf.queosk.enumerate.OperationStatus.CLOSED;
+import static com.bttf.queosk.enumerate.OrderStatus.DONE;
 import static com.bttf.queosk.enumerate.OrderStatus.IN_PROGRESS;
 import static com.bttf.queosk.enumerate.TableStatus.USING;
 import static com.bttf.queosk.exception.ErrorCode.*;
@@ -97,6 +98,13 @@ public class OrderService {
         return orderDtoList;
     }
 
+
+    public List<OrderDto> readItodayDoneList(Long restaurantId) {
+        Restaurant restaurant = getRestaurant(restaurantId);
+        List<Order> orderList = orderRepository.findAllByRestaurantAndStatus(DONE, restaurant);
+        return orderToOrderDto(orderList);
+    }
+
     private Menu getMenu(Long menuId, Long restaurantId) {
         return menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
@@ -134,4 +142,5 @@ public class OrderService {
             throw new CustomException(ORDER_RESTAURANT_NOT_MATCH);
         }
     }
+
 }

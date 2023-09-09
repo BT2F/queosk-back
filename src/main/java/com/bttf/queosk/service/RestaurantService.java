@@ -184,10 +184,8 @@ public class RestaurantService {
         return RestaurantDto.of(restaurant);
     }
 
-    public Page<RestaurantDto> getCoordRestaurantInfoForm(RestaurantInfoGetCoordForm.Request restaurantInfoGetCoordRequest) {
-        Pageable pageable = PageRequest.of(restaurantInfoGetCoordRequest.getPage(), restaurantInfoGetCoordRequest.getSize());
-        double x = restaurantInfoGetCoordRequest.getX();
-        double y = restaurantInfoGetCoordRequest.getY();
+    public Page<RestaurantDto> getCoordRestaurantInfoForm(Double x, Double y, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
         return restaurantRepository
                 .getRestaurantListByDistance(kakaoGeoAddressService.coordinateToZone(x, y), x, y, pageable)
