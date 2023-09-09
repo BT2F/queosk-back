@@ -78,4 +78,16 @@ public class OrderController {
                 .collect(Collectors.toList());
         return ResponseEntity.status(OK).body(responses);
     }
+
+    @GetMapping("api/restaurant/orders/today-done")
+    @ApiOperation(value = "매장 금일 주문 처리 완료 리스트 확인", notes = "매장에서 오늘 주문 처리 완료한 리스트를 확인합니다")
+    public ResponseEntity<List<ReadInProgressOrderListForm.Response>> readTodayDoneList(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+        List<OrderDto> doneList = orderService.readItodayDoneList(restaurantId);
+        List<ReadInProgressOrderListForm.Response> responses = doneList
+                .stream().map(ReadInProgressOrderListForm.Response::of)
+                .collect(Collectors.toList());
+        return ResponseEntity.status(OK).body(responses);
+    }
 }
