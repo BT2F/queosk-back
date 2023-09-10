@@ -5,6 +5,7 @@ import com.bttf.queosk.dto.*;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.enumerate.OperationStatus;
+import com.bttf.queosk.enumerate.RestaurantCategory;
 import com.bttf.queosk.enumerate.UserRole;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.repository.MenuRepository;
@@ -185,11 +186,13 @@ public class RestaurantService {
         return RestaurantDto.of(restaurant);
     }
 
-    public Page<RestaurantDto> getCoordRestaurantInfoForm(Double x, Double y, int page, int size) {
+    public Page<RestaurantDto> getCoordRestaurantInfoForm(Double x, Double y, int page, int size, RestaurantCategory restaurantCategory) {
         Pageable pageable = PageRequest.of(page, size);
 
+        String category = restaurantCategory.toString();
+
         return restaurantRepository
-                .getRestaurantListByDistance(kakaoGeoAddressService.coordinateToZone(x, y), x, y, pageable)
+                .getRestaurantListByDistance(x, y, pageable, category)
                 .map(RestaurantDto::of);
     }
 
