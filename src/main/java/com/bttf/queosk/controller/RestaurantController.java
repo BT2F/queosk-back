@@ -2,6 +2,7 @@ package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.*;
+import com.bttf.queosk.enumerate.RestaurantCategory;
 import com.bttf.queosk.service.RefreshTokenService;
 import com.bttf.queosk.service.RestaurantService;
 import io.swagger.annotations.Api;
@@ -30,7 +31,8 @@ public class RestaurantController {
 
     @PostMapping("/signup")
     @ApiOperation(value = "매장 회원가입", notes = "주어진 정보로 매장 회원가입을 진행합니다.")
-    public ResponseEntity<Void> signUp(@Valid @RequestBody RestaurantSignUpForm.Request restaurantSignUpRequest) throws Exception {
+    public ResponseEntity<Void> signUp(
+            @Valid @RequestBody RestaurantSignUpForm.Request restaurantSignUpRequest) throws Exception {
         restaurantService.signUp(restaurantSignUpRequest);
 
         return ResponseEntity.status(CREATED).build();
@@ -38,8 +40,10 @@ public class RestaurantController {
 
     @PostMapping("/signin")
     @ApiOperation(value = "매장 로그인", notes = "주어진 정보로 매장 로그인을 진행합니다.")
-    public ResponseEntity<RestaurantSignInForm.Response> signIn(@Valid @RequestBody RestaurantSignInForm.Request restaurantSignInRequest) {
-        return ResponseEntity.status(OK).body(RestaurantSignInForm.Response.of(restaurantService.signIn(restaurantSignInRequest)));
+    public ResponseEntity<RestaurantSignInForm.Response> signIn(
+            @Valid @RequestBody RestaurantSignInForm.Request restaurantSignInRequest) {
+        return ResponseEntity.status(OK).body(RestaurantSignInForm.Response
+                .of(restaurantService.signIn(restaurantSignInRequest)));
     }
 
     @PostMapping("/image")
@@ -60,17 +64,20 @@ public class RestaurantController {
         return ResponseEntity.status(OK).body(RestaurantGetInfoForm.Response.of(restaurant));
     }
 
-    @PutMapping("/password/reset")
+    @PatchMapping("/password/reset")
     @ApiOperation(value = "매장 비밀번호 초기화", notes = "매장의 비밀번호를 초기화 합니다.")
-    public ResponseEntity<Void> resetRestaurantPassword(@Valid @RequestBody
-                                                        RestaurantResetPasswordForm.Request restaurantResetPasswordRequest) {
-        restaurantService.resetRestaurantPassword(restaurantResetPasswordRequest.getEmail(), restaurantResetPasswordRequest.getOwnerName());
+    public ResponseEntity<Void> resetRestaurantPassword(
+            @Valid @RequestBody RestaurantResetPasswordForm.Request restaurantResetPasswordRequest) {
+        restaurantService.resetRestaurantPassword(restaurantResetPasswordRequest.getEmail(),
+                restaurantResetPasswordRequest.getOwnerName());
         return ResponseEntity.status(CREATED).build();
     }
 
-    @PutMapping("/password/change")
+    @PatchMapping("/password/change")
     @ApiOperation(value = "매장 비밀번호 변경", notes = "매장의 비밀번호를 변경합니다.")
-    ResponseEntity<Void> updateRestaurantPassword(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody RestaurantUpdatePasswordForm.Request updatePasswordRequest) {
+    ResponseEntity<Void> updateRestaurantPassword(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody RestaurantUpdatePasswordForm.Request updatePasswordRequest) {
         Long id = jwtTokenProvider.getIdFromToken(token);
         restaurantService.updateRestaurantPassword(id, updatePasswordRequest);
         return ResponseEntity.status(CREATED).build();
@@ -93,27 +100,37 @@ public class RestaurantController {
 
     @PostMapping
     @ApiOperation(value = "매장 수정", notes = "매장 계정의 정보를 수정합니다.")
-    public ResponseEntity<RestaurantGetInfoForm.Response> updateRestaurantInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                                               UpdateRestaurantInfoForm.Request updateRestaurantInfoRequest) {
+    public ResponseEntity<RestaurantGetInfoForm.Response> updateRestaurantInfo(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            UpdateRestaurantInfoForm.Request updateRestaurantInfoRequest) {
         RestaurantDto restaurantDto = restaurantService.updateRestaurantInfo(token, updateRestaurantInfoRequest);
         return ResponseEntity.status(CREATED).body(RestaurantGetInfoForm.Response.of(restaurantDto));
     }
 
     @GetMapping("/coord")
     @ApiOperation(value = "동네 매장 검색 (좌표)", notes = "해당 좌표가 위치한 동네의 매장 리스트를 제공합니다.")
-    public ResponseEntity<Page<RestaurantInfoGetCoordForm.Response>> getCoordRestaurantInfo(@RequestParam("x") Double x,
-                                                                                            @RequestParam("y") Double y,
-                                                                                            @RequestParam("page") int page,
-                                                                                            @RequestParam("size") int size) {
-        Page<RestaurantDto> restaurantDtoPage = restaurantService.getCoordRestaurantInfoForm(x, y, page, size);
-        Page<RestaurantInfoGetCoordForm.Response> responsePage = restaurantDtoPage.map(RestaurantInfoGetCoordForm.Response::of);
+    public ResponseEntity<Page<RestaurantInfoGetCoordForm.Response>> getCoordRestaurantInfo(
+            @RequestParam(value = "x", defaultValue = "0") Double x,
+            @RequestParam(value = "y", defaultValue = "0") Double y,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam(value = "category",  defaultValue = "ALL") String category) {
+
+        RestaurantCategory restaurantCategory = RestaurantCategory.valueOf(category);
+        Page<RestaurantDto> restaurantDtoPage = restaurantService
+                .getCoordRestaurantInfoForm(x, y, page, size, restaurantCategory);
+        Page<RestaurantInfoGetCoordForm.Response> responsePage =
+                restaurantDtoPage.map(RestaurantInfoGetCoordForm.Response::of);
         return ResponseEntity.status(OK).body(responsePage);
     }
 
     @GetMapping("/{restaurantId}")
     @ApiOperation(value = "매장 상세 보기", notes = "해당하는 매장의 정보와 메뉴를 제공합니댜.")
-    public ResponseEntity<RestaurantInfoMenuGetForm.Response> getRestaurantInfoAndMenu(@PathVariable(name = "restaurantId") Long restaurantId) {
-        RestaurantInfoMenuGetDto restaurantInfoMenu = restaurantService.getRestaurantInfoAndMenu(restaurantId);
-        return ResponseEntity.status(OK).body(RestaurantInfoMenuGetForm.Response.of(restaurantInfoMenu));
+    public ResponseEntity<RestaurantInfoMenuGetForm.Response> getRestaurantInfoAndMenu(
+            @PathVariable(name = "restaurantId") Long restaurantId) {
+        RestaurantInfoMenuGetDto restaurantInfoMenu = restaurantService
+                .getRestaurantInfoAndMenu(restaurantId);
+        return ResponseEntity.status(OK).body(RestaurantInfoMenuGetForm
+                .Response.of(restaurantInfoMenu));
     }
 }

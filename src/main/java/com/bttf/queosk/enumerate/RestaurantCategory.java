@@ -6,5 +6,7 @@ public enum RestaurantCategory {
     CHINESE,
     KOREAN,
     WESTERN,
-    ETC
+    ETC,
+    ALL
+
 }
