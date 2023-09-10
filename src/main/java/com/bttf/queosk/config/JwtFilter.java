@@ -19,8 +19,10 @@ public class JwtFilter extends OncePerRequestFilter {
     private static final String[] ALL_WHITELIST = {
             "/**/signup",                // 로그인전이므로 AccessToken 체크 패스
             "/**/signin",                // 로그인전이므로 AccessToken 체크 패스
+            "/**/reset",                 // 로그인전이므로 AccessToken 체크 패스
             "/**/verification",          // 로그인전이므로 AccessToken 체크 패스
-            "/**/refresh",                 // 토큰갱신이므로 AccessToken 체크 패스
+            "/**/refresh",               // 토큰갱신이므로 AccessToken 체크 패스
+            "/**/users/check",           // 이메일 중복확인
             "/**/callback"               // 외부 api 콜백이므로 AccessToken 체크 패스
     };
     private final JwtTokenProvider jwtTokenProvider;
