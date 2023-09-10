@@ -4,6 +4,7 @@ import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.enumerate.OrderStatus;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class ReadOrderForm {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    @ApiModel(value = "주문 Response")
     public static class Response {
         private Long id;
         private Table table;
