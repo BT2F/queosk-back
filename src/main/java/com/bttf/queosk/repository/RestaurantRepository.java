@@ -18,9 +18,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     Optional<Restaurant> findByEmail(String email);
 
-    @Query(value = "SELECT *, (6371 * acos(cos(radians(:lat)) * cos(radians(latitude)) * cos(radians(longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(latitude)))) AS distance\n" +
-            "FROM restaurant\n" +
-            "WHERE category = CASE WHEN :category = 'ALL' THEN category ELSE :category END\n" +
+    @Query(value = "SELECT *, (6371 * acos(cos(radians(:lat)) * cos(radians(latitude)) * cos(radians(longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(latitude)))) AS distance" +
+            "FROM restaurant" +
+            "WHERE category = CASE WHEN :category = 'ALL' THEN category ELSE :category END" +
             "ORDER BY distance",
             countQuery = "SELECT COUNT(*) FROM restaurant WHERE category = CASE WHEN :category = 'ALL' THEN category ELSE :category END",
             nativeQuery = true)
