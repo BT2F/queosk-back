@@ -69,6 +69,7 @@ public class Restaurant extends BaseTimeEntity {
 
     private Boolean isDeleted;
 
+    @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
     public void updateImage(String imageUrl) {
