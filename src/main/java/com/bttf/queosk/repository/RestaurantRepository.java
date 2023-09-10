@@ -18,12 +18,15 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     Optional<Restaurant> findByEmail(String email);
 
-    @Query(value = "SELECT *, (6371 * acos(cos(radians(:lat)) * cos(radians(latitude)) * cos(radians(longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(\"latitude\")))) AS distance FROM restaurant WHERE region = :region ORDER BY distance",
-            countQuery = "SELECT count(*) FROM restaurant r WHERE region = :region",
+    @Query(value = "SELECT *, (6371 * acos(cos(radians(:lat)) * cos(radians(latitude)) * cos(radians(longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(latitude)))) AS distance\n" +
+            "FROM restaurant\n" +
+            "WHERE category = CASE WHEN :category = 'ALL' THEN category ELSE :category END\n" +
+            "ORDER BY distance",
+            countQuery = "SELECT COUNT(*) FROM restaurant WHERE category = CASE WHEN :category = 'ALL' THEN category ELSE :category END",
             nativeQuery = true)
     Page<Restaurant> getRestaurantListByDistance(
-            @Param("region") String region,
             double lat,
             double lng,
-            Pageable pageable);
+            Pageable pageable,
+            @Param("category") String category);
 }
