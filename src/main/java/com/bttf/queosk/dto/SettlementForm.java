@@ -1,5 +1,6 @@
 package com.bttf.queosk.dto;
 
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,14 +16,15 @@ public class SettlementForm {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @ApiModel(value = "정산 Response")
     public static class Response {
-        private List<OrderdMenu> orderdMenus;
+        private List<OrderdMenu> orderedMenus;
 
         private Long price;
 
         public static Response of(SettlementDto settlementDto) {
             return SettlementForm.Response.builder()
-                    .orderdMenus(Collections.singletonList(
+                    .orderedMenus(Collections.singletonList(
                             OrderdMenu.of((SettlementDto.OrderdMenu) settlementDto.getOrderdMenus())
                     ))
                     .price(settlementDto.getPrice())

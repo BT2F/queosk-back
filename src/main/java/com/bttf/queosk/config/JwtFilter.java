@@ -17,10 +17,14 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private static final String[] ALL_WHITELIST = {
-            "/**/signup",                // 로그인전이므로 AccessToken 체크 패스
-            "/**/signin",                // 로그인전이므로 AccessToken 체크 패스
-            "/**/verification",          // 로그인전이므로 AccessToken 체크 패스
-            "/**/refresh",                 // 토큰갱신이므로 AccessToken 체크 패스
+            "/**/signup",                // 회원가입
+            "/**/signin",                // 로그인
+            "/**/reset",                 // 비밀번호초기화
+            "/**/verification",          // 로그인전 이메일검증
+            "/**/refresh",               // 토큰갱신
+            "/api/restaurants/coord",    // 매장 조회 토큰 미검증
+            "/api/restaurants/*/details",// 매장 상세보기
+            "/**/users/check",           // 이메일 중복확인
             "/**/callback"               // 외부 api 콜백이므로 AccessToken 체크 패스
     };
     private final JwtTokenProvider jwtTokenProvider;

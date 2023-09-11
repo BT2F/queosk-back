@@ -1,5 +1,6 @@
 package com.bttf.queosk.dto;
 
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class UpdateReviewForm {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    @ApiModel(value = "리뷰 수정 Request")
     public static class Request {
         @NotBlank
         private String subject;
