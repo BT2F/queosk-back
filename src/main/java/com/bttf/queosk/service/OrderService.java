@@ -84,7 +84,7 @@ public class OrderService {
 
     public List<OrderDto> readInProgressOrderList(Long restaurantId) {
         Restaurant restaurant = getRestaurant(restaurantId);
-        List<Order> orderList = orderRepository.findAllByRestaurantAndStatus(IN_PROGRESS, restaurant);
+        List<Order> orderList = orderRepository.findAllByRestaurantAndStatus(restaurant, IN_PROGRESS);
         return orderToOrderDto(orderList);
     }
 
@@ -101,7 +101,7 @@ public class OrderService {
 
     public List<OrderDto> readItodayDoneList(Long restaurantId) {
         Restaurant restaurant = getRestaurant(restaurantId);
-        List<Order> orderList = orderRepository.findAllByRestaurantAndStatus(DONE, restaurant);
+        List<Order> orderList = orderRepository.findAllByRestaurantAndStatus(restaurant, DONE);
         return orderToOrderDto(orderList);
     }
 
