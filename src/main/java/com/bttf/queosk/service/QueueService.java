@@ -1,9 +1,6 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.QueueCreateForm;
-import com.bttf.queosk.dto.QueueDto;
-import com.bttf.queosk.dto.QueueIndexDto;
-import com.bttf.queosk.dto.QueueListDto;
+import com.bttf.queosk.dto.*;
 import com.bttf.queosk.entity.Queue;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.exception.CustomException;
@@ -64,6 +61,11 @@ public class QueueService {
                 .collect(Collectors.toList());
 
         return QueueListDto.of(queueDtos);
+    }
+
+    public QueueOfRestaurantDto getQueueOfRestaurant(Long restaurantId) {
+        List<String> queues = queueRedisRepository.findAll(String.valueOf(restaurantId));
+        return QueueOfRestaurantDto.builder().totalQueue(queues.size()).build();
     }
 
     // 본인(사용자)의 순서 조회
