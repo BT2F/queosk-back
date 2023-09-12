@@ -124,7 +124,7 @@ public class RestaurantController {
         return ResponseEntity.status(OK).body(responsePage);
     }
 
-    @GetMapping("/{restaurantId}")
+    @GetMapping("/{restaurantId}/details")
     @ApiOperation(value = "매장 상세 보기", notes = "해당하는 매장의 정보와 메뉴를 제공합니댜.")
     public ResponseEntity<RestaurantInfoMenuGetForm.Response> getRestaurantInfoAndMenu(
             @PathVariable(name = "restaurantId") Long restaurantId) {
