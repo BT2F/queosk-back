@@ -28,6 +28,7 @@ public class UpdateRestaurantInfoForm {
         private RestaurantCategory category;
         private String address;
         private Long maxWaiting;
+        private OperationStatus operationStatus;
     }
 
     @Getter
