@@ -86,7 +86,7 @@ class QueueServiceTest {
                 .getUserWaitingCount(
                         String.valueOf(mockRestaurant.getId()),
                         String.valueOf(mockQueue.getId())))
-                .thenReturn(-1L);
+                .thenReturn(null);
 
         // when
         queueService.createQueue(queueCreationRequest, mockUser.getId(), mockRestaurant.getId());
