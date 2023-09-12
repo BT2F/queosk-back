@@ -49,6 +49,19 @@ public class QueueController {
         return ResponseEntity.status(OK).body(QueueListForm.Response.of(queueListDto));
     }
 
+    @GetMapping("/{restaurantId}/queue")
+    @ApiOperation(value = "선택한 식당 웨이팅 확인",
+            notes = "식당의 현재 웨이팅 수를 알 수 있습니다.")
+    public ResponseEntity<QueueOfRestaurantForm.Response> currentQueue(
+            @PathVariable Long restaurantId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
+        QueueOfRestaurantDto queueListDto = queueService.getQueueOfRestaurant(restaurantId);
+
+        return ResponseEntity.status(OK).body(
+                QueueOfRestaurantForm.Response.of(queueListDto.getTotalQueue()));
+    }
+
     @GetMapping("/{restaurantId}/user/queue")
     @ApiOperation(value = "유저의 웨이팅 순서를 알 수 있습니다.", notes = "현재 유저의 웨이팅 순서를 알 수 있습니다.")
     public ResponseEntity<QueueIndexForm.Response> queueUserWaitingNumberList(
