@@ -81,7 +81,7 @@ public class QueueService {
                 );
 
         // 사용자의 인덱스가 존재하지 않을 경우 (Queue 등록하지 않은상태) 예외 반환
-        if (userQueueIndex < 0) {
+        if (userQueueIndex == null || userQueueIndex < 0) {
             throw new CustomException(QUEUE_DOESNT_EXIST);
         }
 
@@ -132,7 +132,7 @@ public class QueueService {
                             String.valueOf(latestQueue.get().getId())
                     );
 
-            if (userWaitingCount != -1) {
+            if (userWaitingCount != null) {
                 throw new CustomException(QUEUE_ALREADY_EXISTS);
             }
         }
