@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class SettlementForm {
@@ -23,13 +23,16 @@ public class SettlementForm {
         private Long price;
 
         public static Response of(SettlementDto settlementDto) {
+            List<OrderdMenu> orderedMenus = settlementDto.getOrderdMenus().stream()
+                    .map(OrderdMenu::of)
+                    .collect(Collectors.toList());
+
             return SettlementForm.Response.builder()
-                    .orderedMenus(Collections.singletonList(
-                            OrderdMenu.of((SettlementDto.OrderdMenu) settlementDto.getOrderdMenus())
-                    ))
+                    .orderedMenus(orderedMenus)
                     .price(settlementDto.getPrice())
                     .build();
         }
+
 
         @AllArgsConstructor
         @Builder
