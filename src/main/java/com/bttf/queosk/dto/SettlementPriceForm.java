@@ -1,5 +1,6 @@
 package com.bttf.queosk.dto;
 
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ public class SettlementPriceForm {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    @ApiModel(value = "정산금액 Response")
     public static class Response {
         private Long price;
 

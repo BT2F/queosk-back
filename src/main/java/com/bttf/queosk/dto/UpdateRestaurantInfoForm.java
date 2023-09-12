@@ -2,6 +2,7 @@ package com.bttf.queosk.dto;
 
 import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.RestaurantCategory;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class UpdateRestaurantInfoForm {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    @ApiModel(value = "매장정보 수정 Request")
     public static class Request {
         private String ownerId;
         private String cid;
@@ -33,6 +35,7 @@ public class UpdateRestaurantInfoForm {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    @ApiModel(value = "매장정보 수정 Response")
     public static class Response {
         private long id;
         private String ownerId;

@@ -1,6 +1,7 @@
 package com.bttf.queosk.dto;
 
 import com.bttf.queosk.enumerate.TableStatus;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class TableForm {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @ApiModel(value = "테이블 Response")
     public static class Response {
         private Long tableId;
         private TableStatus status;

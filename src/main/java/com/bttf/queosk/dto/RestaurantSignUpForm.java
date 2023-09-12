@@ -1,6 +1,7 @@
 package com.bttf.queosk.dto;
 
 import com.bttf.queosk.enumerate.RestaurantCategory;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class RestaurantSignUpForm {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @ApiModel(value = "매장 회원가입 Request")
     public static class Request {
         @NotBlank(message = "아이디는 비워둘 수 없습니다.")
         private String ownerId;
