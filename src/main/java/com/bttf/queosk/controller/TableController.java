@@ -4,6 +4,7 @@ import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.TableDto;
 import com.bttf.queosk.dto.TableForm;
 import com.bttf.queosk.enumerate.TableStatus;
+import com.bttf.queosk.service.QueueService;
 import com.bttf.queosk.service.TableService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static com.bttf.queosk.enumerate.TableStatus.OPEN;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -24,6 +27,7 @@ import static org.springframework.http.HttpStatus.*;
 public class TableController {
     private final TableService tableService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final QueueService queueService;
 
     @PostMapping("/table")
     @ApiOperation(value = "매장 테이블 생성", notes = "매장의 테이블을 추가합니다.")
@@ -40,7 +44,13 @@ public class TableController {
                                             @RequestParam TableStatus tableStatus,
                                             @PathVariable Long tableId) {
 
+
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
+        if (tableStatus.equals(OPEN)) {
+            queueService.popTheFirstTeamOfQueue(restaurantId);
+        }
+
         tableService.updateTable(tableId, tableStatus, restaurantId);
         return ResponseEntity.status(NO_CONTENT).build();
     }
