@@ -54,6 +54,7 @@ public class SecurityConfig {
                                 "/password/reset",                // 비로그인 비밀번호 리셋
                                 "/swagger-ui/index.html",
                                 "/api/restaurants/coord",         // 매장 조회
+                                "/api/restaurants/*/menus",         // 매장 조회
                                 "/api/restaurants/*/details",     // 매장 상세조회
                                 "/swagger-ui/**",                 // 스웨거 관련
                                 "/v2/api-docs",
