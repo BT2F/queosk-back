@@ -38,7 +38,7 @@ public class OrderController {
     @ApiOperation(value = "주문 상태 수정", notes = "해당 주문의 상태를 수정합니다.")
     public ResponseEntity<Void> updateOrderStatus(@PathVariable(name = "orderId") Long orderId,
                                                   @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                  @RequestBody OrderStatus orderStatus) {
+                                                  @RequestParam OrderStatus orderStatus) {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         orderService.updateOrderStatus(orderId, restaurantId, orderStatus);
         return ResponseEntity.status(CREATED).build();
