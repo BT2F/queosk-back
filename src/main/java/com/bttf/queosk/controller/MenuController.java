@@ -45,7 +45,7 @@ public class MenuController {
     @GetMapping("/{restaurantId}/menus")
     @ApiOperation(value = "식당 메뉴 목록 조회", notes = "점주 또는 고객이 대상 식당의 메뉴목록을 조회합니다.")
     public ResponseEntity<MenuListForm.Response> getMenu(
-            @PathVariable Long restaurantId) {
+            @PathVariable("restaurantId") Long restaurantId) {
 
         List<MenuDto> menuList = menuService.getMenu(restaurantId);
 
