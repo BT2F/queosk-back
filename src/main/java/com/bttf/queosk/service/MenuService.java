@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.bttf.queosk.exception.ErrorCode.MENU_NOT_FOUND;
 
@@ -32,12 +32,10 @@ public class MenuService {
         if (menus.isEmpty()) {
             throw new CustomException(MENU_NOT_FOUND);
         }
-        List<MenuDto> menuDtos = new ArrayList<>();
-        menus.forEach(menu -> {
-            menuDtos.add(MenuDto.of(menu));
-        });
 
-        return menuDtos;
+        return menus.stream()
+                .map(MenuDto::of)
+                .collect(Collectors.toList());
     }
 
     @Transactional
