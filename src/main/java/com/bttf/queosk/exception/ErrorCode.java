@@ -68,7 +68,7 @@ public enum ErrorCode {
     COMMENT_RESTAURANT_NOT_MATCH(HttpStatus.BAD_REQUEST, "해당 코멘트의 작성자가 아닙니다."),
 
     // 미정의 Exception
-    UNDEFINED_EXCEPTION(HttpStatus.BAD_REQUEST, "정의되지 않은 예외가 발생했습니다. 메세지를 참고해주세요."),
+    UNDEFINED_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "정의되지 않은 예외가 발생했습니다. 메세지를 참고해주세요."),
 
     // 리프레시 토큰 Exception
     REFRESH_CODE_EXPIRED(HttpStatus.UNAUTHORIZED, "리프레시토큰이 만료되었습니다. 재로그인이 필요합니다.");

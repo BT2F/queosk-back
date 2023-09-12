@@ -43,7 +43,7 @@ public class JwtTokenProvider {
     public String generateAccessToken(TokenDto tokenDto) {
         Claims claims = Jwts.claims().setSubject(tokenDto.getId().toString());
         claims.put("email", tokenDto.getEmail());
-        claims.put("userRole", tokenDto.getUserRole().getRoleName()); // 역할 정보 추가
+        claims.put("userRole", tokenDto.getUserRole().name()); // 역할 정보 추가
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -114,11 +114,12 @@ public class JwtTokenProvider {
                 .getBody();
 
         String email = claims.get("email", String.class);
-        UserRole userRole = valueOf(claims.get("userRole", String.class));
+        String userRoleString = claims.get("userRole", String.class);
+        UserRole userRole = UserRole.valueOf(userRoleString);
 
         // ROLE에 따라 다른 메서드 호출
         UserDetails userDetails =
-                userRole.getRoleName().equals(ROLE_USER.toString()) ?
+                userRole.getRoleName().equals(ROLE_USER.getRoleName()) ?
                         userDetailsService.loadUserByUsername(email) :
                         userDetailsService.loadRestaurantByUsername(email);
 

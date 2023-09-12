@@ -24,7 +24,6 @@ public class UserTokenDetailService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
-
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -36,6 +35,7 @@ public class UserTokenDetailService implements UserDetailsService {
         return User.builder()
                 .username(userEntity.getEmail())
                 .password(userEntity.getPassword())
+                .roles("USER")
                 .authorities(authorities)
                 .build();
     }
@@ -50,6 +50,7 @@ public class UserTokenDetailService implements UserDetailsService {
         return User.builder()
                 .username(restaurant.getEmail())
                 .password(restaurant.getPassword())
+                .roles("RESTAURANT")
                 .authorities(authorities)
                 .build();
     }

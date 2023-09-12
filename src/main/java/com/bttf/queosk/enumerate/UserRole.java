@@ -12,10 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 public enum UserRole {
     ROLE_USER("ROLE_USER",
-            Collections.singletonList(new SimpleGrantedAuthority("USER"))),
+            Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))),
 
     ROLE_RESTAURANT("ROLE_RESTAURANT",
-            Collections.singletonList(new SimpleGrantedAuthority("RESTAURANT")));
+            Collections.singletonList(new SimpleGrantedAuthority("ROLE_RESTAURANT")));
 
     private final String roleName;
     private final List<GrantedAuthority> authorities;

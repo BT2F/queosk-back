@@ -13,5 +13,5 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByRestaurantAndCreatedAtBetween(Restaurant restaurant, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
-    List<Order> findAllByRestaurantAndStatus(OrderStatus orderStatus, Restaurant restaurant);
+    List<Order> findAllByRestaurantAndStatus(Restaurant restaurant, OrderStatus orderStatus);
 }

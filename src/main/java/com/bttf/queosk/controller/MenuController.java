@@ -45,8 +45,7 @@ public class MenuController {
     @GetMapping("/{restaurantId}/menus")
     @ApiOperation(value = "식당 메뉴 목록 조회", notes = "점주 또는 고객이 대상 식당의 메뉴목록을 조회합니다.")
     public ResponseEntity<MenuListForm.Response> getMenu(
-            @PathVariable Long restaurantId,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+            @PathVariable("restaurantId") Long restaurantId) {
 
         List<MenuDto> menuList = menuService.getMenu(restaurantId);
 
@@ -56,7 +55,7 @@ public class MenuController {
     @PutMapping("/menus/{menuId}")
     @ApiOperation(value = "식당 메뉴정보 수정", notes = "점주가 본인 식당의 메뉴정보를 수정합니다.")
     public ResponseEntity<Void> updateMenuInfo(
-            @PathVariable Long menuId,
+            @PathVariable("menuId") Long menuId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody MenuUpdateForm.Request menuUpdateRequest) {
 
@@ -70,7 +69,7 @@ public class MenuController {
     @PutMapping("/menus/{menuId}/status")
     @ApiOperation(value = "식당 메뉴 주문가능여부 수정", notes = "점주가 본인 식당의 메뉴상태를 수정합니다.")
     public ResponseEntity<Void> updateMenuStatus(
-            @PathVariable Long menuId,
+            @PathVariable("menuId") Long menuId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody MenuStatusForm.Request menuStatusRequest) {
 
@@ -100,7 +99,7 @@ public class MenuController {
     @PostMapping("/menus/{menuId}/image")
     @ApiOperation(value = "메뉴 이미지 변경", notes = "메뉴 이미지를 변경합니다.")
     public ResponseEntity<Void> updateImage(
-            @PathVariable Long menuId,
+            @PathVariable("menuId") Long menuId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody MultipartFile imageFile) throws IOException {
 
@@ -119,7 +118,7 @@ public class MenuController {
     @DeleteMapping("/menus/{menuId}")
     @ApiOperation(value = "메뉴 삭제", notes = "점주 본인 매장의 메뉴를 삭제합니다.")
     public ResponseEntity<Void> deleteMenu(
-            @PathVariable Long menuId,
+            @PathVariable("menuId") Long menuId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);

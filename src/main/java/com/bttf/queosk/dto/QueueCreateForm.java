@@ -15,6 +15,7 @@ public class QueueCreateForm {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    @ApiModel(value = "웨이팅 등록 Request")
     public static class Request {
         @Min(value = 1, message = "식사인원은 1명 이상이어야 합니다.")
         @Max(value = 100, message = "식사인원은 6명 이하이어야 합니다.")
