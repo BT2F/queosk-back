@@ -45,11 +45,11 @@ public class SettlementQueryRepositoryImpl implements SettlementQueryRepository 
     }
 
     private List<SettlementDto.OrderdMenu> getOrderdMenus(Long restaurantId, QOrder order, QMenu menu,
-                                                          LocalDateTime startDateTime, LocalDateTime endDateTime) {
+                                                          LocalDateTime startDateTime,
+                                                          LocalDateTime endDateTime) {
         return jpaQueryFactory
                 .select(
-                        Projections.constructor(
-                                SettlementDto.OrderdMenu.class,
+                        Projections.constructor(SettlementDto.OrderdMenu.class,
                                 menu.name,
                                 order.count.sum(),
                                 menu.price
