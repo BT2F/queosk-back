@@ -4,11 +4,15 @@ import com.bttf.queosk.dto.*;
 import com.bttf.queosk.entity.Queue;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
+import com.bttf.queosk.enumerate.OperationStatus;
+import com.bttf.queosk.enumerate.RestaurantCategory;
+import com.bttf.queosk.enumerate.UserRole;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.repository.QueueRedisRepository;
 import com.bttf.queosk.repository.QueueRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.UserRepository;
+import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -246,6 +250,7 @@ class QueueServiceTest {
     }
 
     @Test
+    @DisplayName("선택한 식당의 웨이팅정보 가져오기 - 성공")
     public void testGetQueueOfRestaurant() {
         //given
         Long restaurantId = 123L;
@@ -257,5 +262,55 @@ class QueueServiceTest {
 
         //then
         assertThat(result.getTotalQueue()).isEqualTo(mockQueues.size());
+    }
+
+    @Test
+    @DisplayName("사용자 현재 웨이팅정보 가져오기 - 성공")
+    public void testGetUserQueueList() {
+        // 가짜 데이터 생성
+        Long userId = 1L;
+        Queue queue1 = Queue.builder().id(1L).restaurantId(1L).build();
+        Queue queue2 = Queue.builder().id(2L).restaurantId(2L).build();
+        Restaurant restaurant1 = Restaurant.builder()
+                .id(1L)
+                .restaurantName("aa")
+                .restaurantPhone("1211212121")
+                .businessNumber("123123123123")
+                .email("aass@dddd.dddd")
+                .businessStartDate(LocalDate.now().toDate())
+                .address("aaa")
+                .imageUrl("aaa")
+                .category(RestaurantCategory.KOREAN)
+                .cid("aaa")
+                .maxWaiting(5L)
+                .operationStatus(OperationStatus.OPEN)
+                .latitude(2.0)
+                .longitude(2.2)
+                .ownerId("aa")
+                .ownerName("aa")
+                .ratingAverage(1.1)
+                .userRole(UserRole.ROLE_RESTAURANT)
+                .build();
+
+        when(queueRepository.findByUserId(userId)).thenReturn(Arrays.asList(queue1, queue2));
+        when(queueRedisRepository.getUserWaitingCount("1", "1")).thenReturn(5L);
+        when(queueRedisRepository.getUserWaitingCount("2", "2")).thenReturn(2L);
+        when(restaurantRepository.findById(1L)).thenReturn(Optional.of(restaurant1));
+
+        // 실제 메서드 호출
+        List<QueueOfUserDto> result = queueService.getUserQueueList(userId);
+
+        // 결과 검증
+        assertThat(result).hasSize(1);
+        QueueOfUserDto dto = result.get(0);
+        assertThat(dto.getId()).isEqualTo(1L);
+        assertThat(dto.getRestaurantDto().getEmail()).isEqualTo(RestaurantDto.of(restaurant1).getEmail());
+        assertThat(dto.getUserQueueIndex()).isEqualTo(6L);
+
+        // 메서드 호출 검증
+        verify(queueRepository).findByUserId(userId);
+        verify(queueRedisRepository).getUserWaitingCount("1", "1");
+        verify(queueRedisRepository).getUserWaitingCount("2", "2");
+        verify(restaurantRepository).findById(1L);
     }
 }
