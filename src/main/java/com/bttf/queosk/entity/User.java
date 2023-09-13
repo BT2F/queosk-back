@@ -71,6 +71,7 @@ public class User extends BaseTimeEntity {
                 .password(encodedPassword)
                 .nickName(nickName)
                 .loginType(KAKAO)
+                .phone("01000000000") // 임시 조치
                 .userRole(ROLE_USER)
                 .status(VERIFIED)
                 .build();
