@@ -27,30 +27,39 @@ public class SettlementQueryRepositoryImpl implements SettlementQueryRepository 
                 .of(today.plusDays(1), LocalTime.MIN)
                 .minusNanos(1);
 
-        return jpaQueryFactory
-                .select(Projections.constructor(SettlementDto.OrderdMenu.class, menu.name, order.count, menu.price))
-                .from(order)
-                .innerJoin(menu).on(order.menuId.eq(menu.id)) // Join을 통해 메뉴 정보 가져오기
-                .where(order.restaurantId.eq(restaurantId)
-                        .and(order.createdAt.between(startDateTime, endDateTime))
-                        .and(order.status.eq(OrderStatus.DONE)))
-                .groupBy(order.menuId)
-                .fetch();
+        return getOrderdMenus(restaurantId, order, menu, startDateTime, endDateTime);
     }
+
 
 
     public List<SettlementDto.OrderdMenu> getPeriodSales(Long restaurantId, LocalDateTime to, LocalDateTime from) {
         QOrder order = QOrder.order;
         QMenu menu = QMenu.menu; // 메뉴 엔티티의 QueryDSL Q클래스를 가져오기
 
+        LocalDateTime startDateTime = LocalDateTime.of(LocalDate.from(from), LocalTime.MIN);
+        LocalDateTime endDateTime = LocalDateTime
+                .of(LocalDate.from(to.plusDays(1)), LocalTime.MIN)
+                .minusNanos(1);
+
+        return getOrderdMenus(restaurantId, order, menu, startDateTime, endDateTime);
+    }
+
+    private List<SettlementDto.OrderdMenu> getOrderdMenus(Long restaurantId, QOrder order, QMenu menu, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         return jpaQueryFactory
-                .select(Projections.constructor(SettlementDto.OrderdMenu.class, menu.name, order.count, menu.price))
+                .select(
+                        Projections.constructor(
+                                SettlementDto.OrderdMenu.class,
+                                menu.name,
+                                order.count.sum(),
+                                menu.price
+                        )
+                )
                 .from(order)
-                .join(menu).on(order.menuId.eq(menu.id)) // 메뉴 엔티티와의 이너 조인 추가
+                .innerJoin(menu).on(order.menuId.eq(menu.id))
                 .where(order.restaurantId.eq(restaurantId)
-                        .and(order.createdAt.between(from, to))
+                        .and(order.createdAt.between(startDateTime, endDateTime))
                         .and(order.status.eq(OrderStatus.DONE)))
-                .groupBy(order.menuId)
+                .groupBy(menu.name)
                 .fetch();
     }
 
