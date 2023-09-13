@@ -21,22 +21,19 @@ public class Order extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "table_id")
-    private Table table;
+    @Column
+    private Long tableId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column
+    private Long userId;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;
+    @Column
+    private Long restaurantId;
 
-    @ManyToOne
-    @JoinColumn(name = "menu_id")
-    private Menu menu;
+    @Column
+    private Long menuId;
 
+    @Column
     private Integer count;
 
     @Enumerated(EnumType.STRING)
