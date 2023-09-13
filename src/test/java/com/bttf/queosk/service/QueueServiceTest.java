@@ -1,9 +1,6 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.QueueCreateForm;
-import com.bttf.queosk.dto.QueueDto;
-import com.bttf.queosk.dto.QueueListDto;
-import com.bttf.queosk.dto.QueueIndexDto;
+import com.bttf.queosk.dto.*;
 import com.bttf.queosk.entity.Queue;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
@@ -181,7 +178,7 @@ class QueueServiceTest {
         when(queueRepository.findFirstByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId))
                 .thenReturn(Optional.of(queue));
         when(queueRedisRepository.getUserWaitingCount(String.valueOf(restaurantId), "5"))
-                .thenReturn(2L);
+                .thenReturn(3L);
 
 
         // when
@@ -246,5 +243,19 @@ class QueueServiceTest {
         // then
         verify(queueRedisRepository, times(1))
                 .popTheFirstTeamOfQueue("1");
+    }
+
+    @Test
+    public void testGetQueueOfRestaurant() {
+        //given
+        Long restaurantId = 123L;
+        List<String> mockQueues = Arrays.asList("Queue1", "Queue2", "Queue3");
+        when(queueRedisRepository.findAll(String.valueOf(restaurantId))).thenReturn(mockQueues);
+
+        //when
+        QueueOfRestaurantDto result = queueService.getQueueOfRestaurant(restaurantId);
+
+        //then
+        assertThat(result.getTotalQueue()).isEqualTo(mockQueues.size());
     }
 }

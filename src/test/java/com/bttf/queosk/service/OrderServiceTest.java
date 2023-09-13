@@ -2,6 +2,7 @@ package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.OrderCreationForm;
 import com.bttf.queosk.entity.*;
+import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.OrderStatus;
 import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.repository.*;
@@ -31,9 +32,6 @@ class OrderServiceTest {
     private OrderRepository orderRepository;
 
     @Mock
-    private UserRepository userRepository;
-
-    @Mock
     private MenuRepository menuRepository;
 
     @Mock
@@ -53,6 +51,7 @@ class OrderServiceTest {
 
         Restaurant restaurant = Restaurant.builder()
                 .id(1L)
+                .operationStatus(OperationStatus.OPEN)
                 .build();
 
         Menu menu1 =
@@ -85,7 +84,6 @@ class OrderServiceTest {
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
         given(menuRepository.findByIdAndRestaurantId(1L, 1L)).willReturn(Optional.of(menu1));
         given(tableRepository.findById(1L)).willReturn(Optional.of(table));
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         // when
 
         orderService.createOrder(orderCreationForm, 1L);
@@ -128,10 +126,10 @@ class OrderServiceTest {
                 .build();
 
         Order order = Order.builder()
-                .user(user)
-                .menu(menu1)
+                .userId(user.getId())
+                .menuId(menu1.getId())
                 .count(1)
-                .restaurant(restaurant)
+                .restaurantId(restaurant.getId())
                 .status(OrderStatus.IN_PROGRESS)
                 .build();
 
