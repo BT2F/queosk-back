@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "order")
 @AuditOverride(forClass = BaseTimeEntity.class)
@@ -30,16 +32,15 @@ public class Order extends BaseTimeEntity {
     @Column
     private Long restaurantId;
 
-    @Column
-    private Long menuId;
-
-    @Column
-    private Integer count;
-
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<MenuItem> menuItemList;
 
     public void setStatus(OrderStatus orderStatus) {
         this.status = orderStatus;
     }
+
 }
+

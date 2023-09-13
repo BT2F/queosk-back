@@ -108,7 +108,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/coord")
-    @ApiOperation(value = "동네 매장 검색 (좌표)", notes = "해당 좌표가 위치한 동네의 매장 리스트를 제공합니다.")
+    @ApiOperation(value = "매장 검색", notes = "해당 좌표에서 가까운 순으로 검색어가 포함된 매장 리스트를 제공합니다.")
     public ResponseEntity<Page<RestaurantInfoGetCoordForm.Response>> getCoordRestaurantInfo(
             @RequestParam(value = "x", defaultValue = "0") Double x,
             @RequestParam(value = "y", defaultValue = "0") Double y,

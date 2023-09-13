@@ -1,10 +1,14 @@
 package com.bttf.queosk.dto;
 
+import com.bttf.queosk.entity.MenuItem;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.Map;
 
 public class OrderCreationForm {
     @Getter
@@ -15,7 +19,15 @@ public class OrderCreationForm {
     public static class Request {
         private Long tableId;
         private Long restaurantId;
-        private Long menuId;
+        private List<MenuItems> menuItems;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class MenuItems {
+        private Long menu;
         private Integer count;
     }
 }

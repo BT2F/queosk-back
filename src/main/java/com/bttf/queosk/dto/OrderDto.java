@@ -1,12 +1,15 @@
 package com.bttf.queosk.dto;
 
 import com.bttf.queosk.entity.Menu;
+import com.bttf.queosk.entity.MenuItem;
 import com.bttf.queosk.entity.Order;
 import com.bttf.queosk.enumerate.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -15,17 +18,15 @@ import lombok.NoArgsConstructor;
 public class OrderDto {
     private Long id;
     private Long tableId;
-    private MenuDto menu;
-    private Integer count;
+    private List<MenuItem> menuItems;
     private Long userId;
     private OrderStatus orderStatus;
 
-    public static OrderDto of(Order order, Menu menu) {
+    public static OrderDto of(Order order) {
         return OrderDto.builder()
                 .id(order.getId())
                 .tableId(order.getTableId())
-                .menu(MenuDto.of(menu))
-                .count(order.getCount())
+                .menuItems(order.getMenuItemList())
                 .orderStatus(order.getStatus())
                 .userId(order.getUserId())
                 .build();
