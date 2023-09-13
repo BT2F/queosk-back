@@ -7,7 +7,9 @@ import com.bttf.queosk.repository.SettlementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -43,8 +45,12 @@ public class SettlementService {
     public Long periodSettlementPriceGet(Long restaurantId,
                                          LocalDateTime to,
                                          LocalDateTime from) {
+        LocalDateTime startDateTime = LocalDateTime.of(LocalDate.from(from), LocalTime.MIN);
+        LocalDateTime endDateTime = LocalDateTime
+                .of(LocalDate.from(to.plusDays(1)), LocalTime.MIN)
+                .minusNanos(1);
         List<Settlement> settlementList =
-                settlementRepository.findSettlementsByRestaurantInDateRange(restaurantId, to, from);
+                settlementRepository.findSettlementsByRestaurantInDateRange(restaurantId, startDateTime, endDateTime);
 
         long totalPrice = settlementList.stream()
                 .mapToLong(Settlement::getPrice)
