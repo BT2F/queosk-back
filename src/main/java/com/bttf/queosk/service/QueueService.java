@@ -146,4 +146,25 @@ public class QueueService {
             fcmService.sendMessageToWaitingUser(user.getEmail());
         });
     }
+
+    public List<QueueOfUserDto> getUserQueueList(Long userId) {
+        List<Queue> userQueues = queueRepository.findByUserId(userId);
+
+        return userQueues.stream()
+                .map(queue -> {
+                    Long userWaitingCount = queueRedisRepository.getUserWaitingCount(
+                            String.valueOf(queue.getRestaurantId()),
+                            String.valueOf(queue.getId())
+                    );
+                    return userWaitingCount != null
+                            ? restaurantRepository.findById(queue.getRestaurantId())
+                            .map(restaurant -> QueueOfUserDto.of(
+                                    queue, restaurant, userWaitingCount)
+                            )
+                            .orElse(null)
+                            : null;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 }
