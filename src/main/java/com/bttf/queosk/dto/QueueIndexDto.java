@@ -15,8 +15,8 @@ public class QueueIndexDto {
 
     public static QueueIndexDto of(Long userQueueIndex) {
         return QueueIndexDto.builder()
-                .queueRemaining(userQueueIndex)
-                .userQueueIndex(userQueueIndex + 1) // 대기번호의 경우 index + 1
+                .queueRemaining(userQueueIndex-1==0?0:userQueueIndex-1)
+                .userQueueIndex(userQueueIndex)
                 .build();
     }
 }
