@@ -178,7 +178,7 @@ class QueueServiceTest {
         when(queueRepository.findFirstByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId))
                 .thenReturn(Optional.of(queue));
         when(queueRedisRepository.getUserWaitingCount(String.valueOf(restaurantId), "5"))
-                .thenReturn(2L);
+                .thenReturn(3L);
 
 
         // when
