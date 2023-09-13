@@ -24,8 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
+import static com.bttf.queosk.enumerate.RestaurantCategory.ALL;
 import static com.bttf.queosk.exception.ErrorCode.*;
 
 @Slf4j
@@ -48,8 +50,14 @@ public class RestaurantService {
             throw new CustomException(EXISTING_USER);
         }
 
+        if (Objects.equals(restaurantSignUpRequest.getCategory(), ALL)) {
+            throw new CustomException(ALL_IS_BLOCKED);
+        }
+
         double x = kakaoGeoAddressService.addressToCoordinate(restaurantSignUpRequest.getAddress(), "x");
         double y = kakaoGeoAddressService.addressToCoordinate(restaurantSignUpRequest.getAddress(), "y");
+
+
 
         Restaurant restaurant =
                 Restaurant.builder()
