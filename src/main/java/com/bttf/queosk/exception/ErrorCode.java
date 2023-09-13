@@ -34,6 +34,7 @@ public enum ErrorCode {
     INVALID_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 상점입니다."),
     OWNER_NAME_NOT_MATCH(HttpStatus.BAD_REQUEST, "매장 계정 사용자 이름이 일치 하지 않습니다."),
     RESTAURANT_CLOSED(HttpStatus.BAD_REQUEST, "현재 매장이 운영 전입니다."),
+    ALL_IS_BLOCKED(HttpStatus.BAD_REQUEST, "매장 카테고리 ALL은 검색용입니다. 관리자에게 문의하세요."),
 
     // Cart 관련 Exception
     CART_IS_EMPTY(HttpStatus.NOT_FOUND, "장바구니가 비어있습니다."),
