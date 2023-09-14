@@ -49,7 +49,7 @@ public class UserLoginService {
                 "Queosk 이메일 인증",
                 String.format("Queosk에 가입해 주셔서 감사합니다. \n" +
                         "아래 링크를 클릭 하시어 이메일 인증을 완료해주세요.\n" +
-                        "http://localhost:8080/api/users/%d/verification", user.getId()));
+                        "https://queosk.kr/api/users/%d/verification", user.getId()));
     }
 
     @Transactional
