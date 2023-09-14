@@ -8,10 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @AuditOverride(forClass = BaseTimeEntity.class)
@@ -24,11 +21,17 @@ public class Queue extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private Long userId;
 
+    @Column
     private Long numberOfParty;
 
+    @Column
     private Long restaurantId;
+
+    @Column
+    private boolean isDone;
 
     public static Queue of(QueueCreateForm.Request queueCreateRequest, Long restaurantId, Long userId) {
         return Queue.builder()
@@ -36,5 +39,9 @@ public class Queue extends BaseTimeEntity {
                 .restaurantId(restaurantId)
                 .userId(userId)
                 .build();
+    }
+
+    public void setDone(boolean done) {
+        this.isDone = done;
     }
 }

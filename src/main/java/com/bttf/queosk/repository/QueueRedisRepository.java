@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Repository
 @RequiredArgsConstructor
@@ -13,6 +14,7 @@ public class QueueRedisRepository {
 
     public void createQueue(String restaurantId, String queueId) {
         redisTemplate.opsForList().rightPush(restaurantId, queueId);
+        redisTemplate.expire(restaurantId, 24, TimeUnit.HOURS);
     }
 
     public List<String> findAll(String restaurantId) {
@@ -23,8 +25,8 @@ public class QueueRedisRepository {
         return redisTemplate.opsForList().indexOf(restaurantId, queueId);
     }
 
-    public void popTheFirstTeamOfQueue(String restaurantId) {
-        redisTemplate.opsForList().leftPop(restaurantId);
+    public String popTheFirstTeamOfQueue(String restaurantId) {
+        return redisTemplate.opsForList().leftPop(restaurantId);
     }
 
     public void deleteQueue(String restaurantId, String queueId) {
