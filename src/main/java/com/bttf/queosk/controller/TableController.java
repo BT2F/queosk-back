@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.bttf.queosk.enumerate.TableStatus.OPEN;
 import static org.springframework.http.HttpStatus.*;
@@ -93,4 +93,20 @@ public class TableController {
         }
         return ResponseEntity.status(OK).body(tableFormList);
     }
+
+    @GetMapping("/{restaurantId}/tables")
+    @ApiOperation(value = "매핑가능 테이블 조회", notes = "고객이 주문 시 매핑 가능한 매장 테이블을 조회 합니다.")
+    public ResponseEntity<List<TableForm.Response>> availableTables(
+            @PathVariable Long restaurantId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
+        List<TableDto> tableList = tableService.getAvailableTables(restaurantId);
+
+        List<TableForm.Response> tableFormList = tableList.stream()
+                .map(TableForm.Response::of)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(OK).body(tableFormList);
+    }
+
 }
