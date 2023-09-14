@@ -72,6 +72,14 @@ public class TableService {
                 .map(TableDto::of)
                 .collect(Collectors.toList());
     }
+    @Transactional(readOnly = true)
+    public List<TableDto> getAvailableTables(Long restaurantId) {
+        return tableRepository.findByRestaurantId(restaurantId)
+                .stream()
+                .filter(table -> table.getStatus() == TableStatus.OPEN)
+                .map(TableDto::of)
+                .collect(Collectors.toList());
+    }
 
     private Table getTableFromRepository(Long tableId) {
         return tableRepository.findById(tableId).orElseThrow(
