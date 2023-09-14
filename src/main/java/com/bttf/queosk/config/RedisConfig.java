@@ -84,7 +84,7 @@ public class RedisConfig {
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration cacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofDays(7)) // 캐시 만료 기간 7일 또는 해당 정보 업데이트 시 삭제
+                .entryTtl(Duration.ofDays(1)) // 캐시 만료 기간 1일 또는 해당 정보 업데이트 시 삭제
                 .serializeKeysWith(
                         RedisSerializationContext.SerializationPair
                                 .fromSerializer(new StringRedisSerializer()))
