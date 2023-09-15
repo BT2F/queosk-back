@@ -8,7 +8,6 @@ import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,9 @@ public class MenuService {
     @Transactional(readOnly = true)
     @Cacheable(value = "menuList", key = "'restaurantId:' + #restaurantId")
     public List<MenuDto> getMenu(Long restaurantId) {
+
         List<Menu> menus = menuRepository.findByRestaurantId(restaurantId);
+
         if (menus.isEmpty()) {
             throw new CustomException(MENU_NOT_FOUND);
         }
@@ -47,6 +48,7 @@ public class MenuService {
     public void updateMenuInfo(Long restaurantId,
                                Long menuId,
                                MenuUpdateForm.Request menuUpdateRequest) {
+
         Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
                 .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
 
@@ -85,6 +87,7 @@ public class MenuService {
     @Transactional
     @CacheEvict(value = "menuList", key = "'restaurantId:' + #restaurantId")
     public void deleteMenu(Long restaurantId, Long menuId) {
+
         Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
                 .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
 
