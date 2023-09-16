@@ -27,6 +27,8 @@ public class UserTokenDetailService implements UserDetailsService {
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        // 커스텀 User
         com.bttf.queosk.entity.User userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
 
@@ -42,10 +44,12 @@ public class UserTokenDetailService implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public UserDetails loadRestaurantByUsername(String email) throws UsernameNotFoundException {
+
         Restaurant restaurant = restaurantRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
 
-        List<GrantedAuthority> authorities = new ArrayList<>(restaurant.getUserRole().getAuthorities());
+        List<GrantedAuthority> authorities =
+                new ArrayList<>(restaurant.getUserRole().getAuthorities());
 
         return User.builder()
                 .username(restaurant.getEmail())
