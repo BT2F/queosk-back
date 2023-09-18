@@ -95,6 +95,47 @@ public class KakaoLoginService {
         return getUserInfoWithToken(accessToken, refreshToken);
     }
 
+    //임시 서비스
+    public UserSignInDto getUserInfoFromKakaoTest(KakaoLoginForm.Request kaKaoLoginRequest) throws CustomException {
+        String accessToken = "";
+        String refreshToken = "";
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add(GRANT_TYPE, "authorization_code");
+            params.add(CLIENT_ID, KAKAO_CLIENT_ID);
+            params.add(CLIENT_SECRET, KAKAO_CLIENT_SECRET);
+            params.add(CODE, kaKaoLoginRequest.getCode());
+            params.add(REDIRECT_URI, "http://localhost:3000/auth/kakao/callback");
+
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    KAKAO_AUTH_URI + "/oauth/token",
+                    HttpMethod.POST,
+                    httpEntity,
+                    String.class
+            );
+
+            String responseBody = response.getBody();
+
+            JsonObject jsonObj = JsonParser.parseString(responseBody).getAsJsonObject();
+
+            accessToken = jsonObj.get("access_token").getAsString();
+            refreshToken = jsonObj.get("refresh_token").getAsString();
+
+        } catch (Exception e) {
+            log.error("Kakao login failed: " + e.getMessage());
+            throw new CustomException(KAKAO_LOGIN_FAILED);
+        }
+
+        return getUserInfoWithToken(accessToken, refreshToken);
+    }
+
+
     private UserSignInDto getUserInfoWithToken(String accessToken, String refreshToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
@@ -118,6 +159,7 @@ public class KakaoLoginService {
         String kakaoId = jsonObj.get("id").getAsString();
         String email = account.get("email").getAsString();
         String nickName = profile.get("nickname").getAsString();
+        String profileImage = profile.get("profile_image_url").getAsString();
 
         // If it's a new user, proceed with registration
         if (!userRepository.findByEmail(email).isPresent()) {
@@ -128,7 +170,7 @@ public class KakaoLoginService {
 
             String encodedPassword = passwordEncoder.encode(password);
 
-            userRepository.save(User.of(email, nickName, encodedPassword));
+            userRepository.save(User.of(email, nickName, encodedPassword, profileImage));
         }
 
         kakaoAuthRepository.save(email, KakaoAuth.of(kakaoId, refreshToken, accessToken));
