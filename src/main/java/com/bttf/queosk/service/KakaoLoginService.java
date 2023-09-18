@@ -159,6 +159,7 @@ public class KakaoLoginService {
         String kakaoId = jsonObj.get("id").getAsString();
         String email = account.get("email").getAsString();
         String nickName = profile.get("nickname").getAsString();
+        String profileImage = profile.get("profile_image_url").getAsString();
 
         // If it's a new user, proceed with registration
         if (!userRepository.findByEmail(email).isPresent()) {
@@ -169,7 +170,7 @@ public class KakaoLoginService {
 
             String encodedPassword = passwordEncoder.encode(password);
 
-            userRepository.save(User.of(email, nickName, encodedPassword));
+            userRepository.save(User.of(email, nickName, encodedPassword, profileImage));
         }
 
         kakaoAuthRepository.save(email, KakaoAuth.of(kakaoId, refreshToken, accessToken));
