@@ -20,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
@@ -60,15 +62,8 @@ public class KakaoLoginService {
         String accessToken = "";
         String refreshToken = "";
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-
-            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-            params.add(GRANT_TYPE, "authorization_code");
-            params.add(CLIENT_ID, KAKAO_CLIENT_ID);
-            params.add(CLIENT_SECRET, KAKAO_CLIENT_SECRET);
-            params.add(CODE, kaKaoLoginRequest.getCode());
-            params.add(REDIRECT_URI, KAKAO_REDIRECT_URL);
+            HttpHeaders headers = createHeaders();
+            MultiValueMap<String, String> params = createRequestBody(kaKaoLoginRequest.getCode());
 
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, headers);
@@ -87,8 +82,17 @@ public class KakaoLoginService {
             accessToken = jsonObj.get("access_token").getAsString();
             refreshToken = jsonObj.get("refresh_token").getAsString();
 
-        } catch (Exception e) {
+        } catch (HttpClientErrorException e) {
+            // HTTP 클라이언트 오류 처리
+            log.error("HTTP Error during Kakao login: " + e.getMessage());
+            throw new CustomException(KAKAO_LOGIN_FAILED);
+        } catch (RestClientException e) {
+            // 기타 RestTemplate 예외 처리
             log.error("Kakao login failed: " + e.getMessage());
+            throw new CustomException(KAKAO_LOGIN_FAILED);
+        } catch (Exception e) {
+            // 그 외 예외 처리
+            log.error("Unexpected error during Kakao login: " + e.getMessage());
             throw new CustomException(KAKAO_LOGIN_FAILED);
         }
 
@@ -100,8 +104,7 @@ public class KakaoLoginService {
         String accessToken = "";
         String refreshToken = "";
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+            HttpHeaders headers = createHeaders();
 
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
             params.add(GRANT_TYPE, "authorization_code");
@@ -127,8 +130,17 @@ public class KakaoLoginService {
             accessToken = jsonObj.get("access_token").getAsString();
             refreshToken = jsonObj.get("refresh_token").getAsString();
 
-        } catch (Exception e) {
+        } catch (HttpClientErrorException e) {
+            // HTTP 클라이언트 오류 처리
+            log.error("HTTP Error during Kakao login: " + e.getMessage());
+            throw new CustomException(KAKAO_LOGIN_FAILED);
+        } catch (RestClientException e) {
+            // 기타 RestTemplate 예외 처리
             log.error("Kakao login failed: " + e.getMessage());
+            throw new CustomException(KAKAO_LOGIN_FAILED);
+        } catch (Exception e) {
+            // 그 외 예외 처리
+            log.error("Unexpected error during Kakao login: " + e.getMessage());
             throw new CustomException(KAKAO_LOGIN_FAILED);
         }
 
@@ -210,6 +222,22 @@ public class KakaoLoginService {
                 jsonResponse.get("id").getAsString().equals(kakaoAuth.getKakaoId())) {
             log.info("Kakao logout complete");
         }
+    }
+
+    private HttpHeaders createHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+        return headers;
+    }
+
+    private MultiValueMap<String, String> createRequestBody(String code) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add(GRANT_TYPE, "authorization_code");
+        params.add(CLIENT_ID, KAKAO_CLIENT_ID);
+        params.add(CLIENT_SECRET, KAKAO_CLIENT_SECRET);
+        params.add(CODE, code);
+        params.add(REDIRECT_URI, KAKAO_REDIRECT_URL);
+        return params;
     }
 }
 
