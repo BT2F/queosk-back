@@ -65,7 +65,7 @@ public class User extends BaseTimeEntity {
                 .build();
     }
 
-    public static User of(String email, String nickName, String encodedPassword) {
+    public static User of(String email, String nickName, String encodedPassword, String imageUrl) {
         return User.builder()
                 .email(email)
                 .password(encodedPassword)
@@ -73,6 +73,7 @@ public class User extends BaseTimeEntity {
                 .loginType(KAKAO)
                 .phone("01000000000") // 임시 조치
                 .userRole(ROLE_USER)
+                .imageUrl(imageUrl.contains("https")?imageUrl:imageUrl.replace("http","https"))
                 .status(VERIFIED)
                 .build();
     }

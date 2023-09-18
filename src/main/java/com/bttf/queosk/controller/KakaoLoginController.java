@@ -34,4 +34,17 @@ public class KakaoLoginController {
 
         return ResponseEntity.status(OK).body(KakaoLoginForm.Response.of(userSignInDto));
     }
+
+    //카카오 소셜로그인 임시 api
+    @PostMapping("/signin/test")
+    @ApiOperation(value = "카카오톡 소셜 로그인 코드를 사용하여 로그인진행(임시)",
+            notes = "카카오톡 로그인 URL을 통해 얻은 code 및 데이터를 사용하여 로그인 또는 회원가입을 진행합니다.")
+    public ResponseEntity<?> kakaoLoginCallbackTest(
+            @Valid @RequestBody KakaoLoginForm.Request kaKaoLoginRequest) {
+
+        UserSignInDto userSignInDto =
+                kakaoLoginService.getUserInfoFromKakaoTest(kaKaoLoginRequest);
+
+        return ResponseEntity.status(OK).body(KakaoLoginForm.Response.of(userSignInDto));
+    }
 }
