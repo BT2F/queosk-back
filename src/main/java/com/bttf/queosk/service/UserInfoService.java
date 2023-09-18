@@ -31,20 +31,31 @@ public class UserInfoService {
 
     @Transactional
     public UserDto editUserInformation(Long userId, UserEditForm.Request userEditRequest) {
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
-        user.setNickName(userEditRequest.getNickName());
-        user.setPhone(userEditRequest.getPhone());
+        String newNickName = userEditRequest.getNickName();
+        String newPhone = userEditRequest.getPhone();
+
+        if (newNickName != null) {
+            user.setNickName(newNickName);
+        }
+
+        if (newPhone != null) {
+            user.setPhone(newPhone);
+        }
 
         userRepository.save(user);
 
         return UserDto.of(user);
     }
 
+
     @Transactional
     public void changeUserPassword(Long userId,
                                    UserPasswordChangeForm.Request userPasswordChangeRequest) {
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
