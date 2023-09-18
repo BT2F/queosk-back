@@ -1,6 +1,7 @@
 package com.bttf.queosk.repository;
 
 import com.bttf.queosk.entity.Restaurant;
+import com.google.common.io.Files;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,16 +18,4 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     Optional<Restaurant> findByOwnerId(String ownerId);
 
     Optional<Restaurant> findByEmail(String email);
-
-    @Query(value = "SELECT *, (6371 * acos(cos(radians(:lat)) * cos(radians(latitude)) * cos(radians(longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(latitude)))) AS distance " +
-            "FROM restaurant " +
-            "WHERE (:category = 'ALL' OR category = :category) " +
-            "ORDER BY distance ASC",
-            countQuery = "SELECT COUNT(*) FROM restaurant WHERE (:category = 'ALL' OR category = :category)",
-            nativeQuery = true)
-    Page<Restaurant> getRestaurantListByDistance(
-            double lat,
-            double lng,
-            Pageable pageable,
-            @Param("category") String category);
 }
