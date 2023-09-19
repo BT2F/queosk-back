@@ -10,6 +10,7 @@ import com.bttf.queosk.enumerate.UserRole;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.repository.RefreshTokenRepository;
+import com.bttf.queosk.repository.RestaurantQueryDSLRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,7 @@ public class RestaurantService {
     private final ImageService imageService;
     private final EmailSender emailSender;
     private final MenuRepository menuRepository;
+    private final RestaurantQueryDSLRepository restaurantQueryDSLRepository;
 
     @Transactional
     public void signUp(RestaurantSignUpForm.Request restaurantSignUpRequest) throws Exception {
@@ -194,13 +196,30 @@ public class RestaurantService {
         return RestaurantDto.of(restaurant);
     }
 
-    public Page<RestaurantDto> getCoordRestaurantInfoForm(Double x, Double y, int page, int size, RestaurantCategory restaurantCategory) {
+    public Page<RestaurantDto> getCoordRestaurantInfoForm(Double x,
+                                                          Double y,
+                                                          int page,
+                                                          int size,
+                                                          RestaurantCategory restaurantCategory) {
         Pageable pageable = PageRequest.of(page, size);
 
         String category = restaurantCategory.toString();
 
-        return restaurantRepository
-                .getRestaurantListByDistance(x, y, pageable, category)
+        return restaurantQueryDSLRepository
+                .getRestaurantListByDistance(x, y, pageable, category, null)
+                .map(RestaurantDto::of);
+    }
+
+    public Page<RestaurantDto> getKeywordRestaurantInfoForm(Double x, Double y,
+                                                            int page, int size,
+                                                            RestaurantCategory restaurantCategory,
+                                                            String keyword) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        String category = restaurantCategory.toString();
+
+        return restaurantQueryDSLRepository
+                .getRestaurantListByDistance(x, y, pageable, category, keyword)
                 .map(RestaurantDto::of);
     }
 
@@ -230,4 +249,6 @@ public class RestaurantService {
     private Restaurant getRestaurantByToken(String token) {
         return getRestaurantById(jwtTokenProvider.getIdFromToken(token));
     }
+
+
 }
