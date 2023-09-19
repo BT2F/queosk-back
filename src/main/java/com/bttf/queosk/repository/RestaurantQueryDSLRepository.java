@@ -7,7 +7,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -21,17 +21,13 @@ import static com.querydsl.core.types.dsl.MathExpressions.cos;
 import static com.querydsl.core.types.dsl.MathExpressions.sin;
 
 @Repository
+@RequiredArgsConstructor
 public class RestaurantQueryDSLRepository {
 
     private final EntityManager entityManager;
     private final JPAQueryFactory queryFactory;
     private final QRestaurant qRestaurant = QRestaurant.restaurant;
 
-    @Autowired
-    public RestaurantQueryDSLRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-        this.queryFactory = new JPAQueryFactory(entityManager);
-    }
 
     public Page<Restaurant> getRestaurantListByDistance(
             double lat, double lng, Pageable pageable, String category, String keyword) {
