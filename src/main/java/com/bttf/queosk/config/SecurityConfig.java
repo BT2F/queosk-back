@@ -52,7 +52,8 @@ public class SecurityConfig {
                                 "/**/callback",                   // 기타 콜백
                                 "/**/users/check",                // 가입전 이메일 중복확인
                                 "/password/reset",                // 비로그인 비밀번호 리셋
-                                "/api/restaurants/coord",         // 매장 조회
+                                "/api/restaurants/coord",         // 매장 조회 (좌표)
+                                "/api/restaurants/keyword",         // 매장 조회 (키워드)
                                 "/api/restaurants/*/menus",       // 매장 메뉴 조회
                                 "/api/restaurants/*/details",     // 매장 상세조회
                                 "/swagger-ui/**",                 // 스웨거 관련

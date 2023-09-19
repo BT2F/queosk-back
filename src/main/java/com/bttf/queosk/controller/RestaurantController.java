@@ -108,7 +108,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/coord")
-    @ApiOperation(value = "동네 매장 검색 (좌표)", notes = "해당 좌표가 위치한 동네의 매장 리스트를 제공합니다.")
+    @ApiOperation(value = "매장 검색 (카테고리)", notes = "해당 좌표에서 가까운 순으로 매장 리스트를 제공합니다.")
     public ResponseEntity<Page<RestaurantInfoGetCoordForm.Response>> getCoordRestaurantInfo(
             @RequestParam(value = "x", defaultValue = "0") Double x,
             @RequestParam(value = "y", defaultValue = "0") Double y,
@@ -121,6 +121,24 @@ public class RestaurantController {
                 .getCoordRestaurantInfoForm(x, y, page, size, restaurantCategory);
         Page<RestaurantInfoGetCoordForm.Response> responsePage =
                 restaurantDtoPage.map(RestaurantInfoGetCoordForm.Response::of);
+        return ResponseEntity.status(OK).body(responsePage);
+    }
+
+    @GetMapping("/keyword")
+    @ApiOperation(value = "매장 검색 (키워드)", notes = "매장을 검색한 결과를 해당 좌표에서 가까운 순으로 제공합니다.")
+    public ResponseEntity<Page<RestaurantInfoGetKeywordForm.Response>> getKeywordRestaurantInfo(
+            @RequestParam(value = "x", defaultValue = "0") Double x,
+            @RequestParam(value = "y", defaultValue = "0") Double y,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam(value = "category",  defaultValue = "ALL") String category,
+            @RequestParam(value = "keyword", defaultValue = "") String keyword) {
+
+        RestaurantCategory restaurantCategory = RestaurantCategory.valueOf(category);
+        Page<RestaurantDto> restaurantDtoPage = restaurantService
+                .getKeywordRestaurantInfoForm(x, y, page, size, restaurantCategory, keyword);
+        Page<RestaurantInfoGetKeywordForm.Response> responsePage =
+                restaurantDtoPage.map(RestaurantInfoGetKeywordForm.Response::of);
         return ResponseEntity.status(OK).body(responsePage);
     }
 
