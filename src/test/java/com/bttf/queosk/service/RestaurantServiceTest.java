@@ -11,6 +11,7 @@ import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.repository.RefreshTokenRepository;
+import com.bttf.queosk.repository.RestaurantQueryDSLRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,6 +66,8 @@ class RestaurantServiceTest {
     private EmailSender emailSender;
     @Mock
     private MenuRepository menuRepository;
+    @Mock
+    private RestaurantQueryDSLRepository restaurantQueryDSLRepository;
 
     private MockMvc mockMvc;
 
@@ -72,7 +75,7 @@ class RestaurantServiceTest {
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(restaurantController).build();
         restaurantService = new RestaurantService(restaurantRepository, refreshTokenRepository,
-                passwordEncoder, jwtTokenProvider, kakaoGeoAddressService, imageService, emailSender, menuRepository);
+                passwordEncoder, jwtTokenProvider, kakaoGeoAddressService, imageService, emailSender, menuRepository, restaurantQueryDSLRepository);
     }
 
     @DisplayName("매장 생성 테스트")
