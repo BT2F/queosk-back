@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-public class RestaurantInfoGetCoordForm {
+public class RestaurantInfoGetKeywordForm {
 
     @Getter
     @AllArgsConstructor
@@ -35,8 +35,8 @@ public class RestaurantInfoGetCoordForm {
         private Long maxWaiting;
         private String region;
 
-        public static RestaurantInfoGetCoordForm.Response of(RestaurantDto restaurantDto) {
-            return RestaurantInfoGetCoordForm.Response.builder()
+        public static RestaurantInfoGetKeywordForm.Response of(RestaurantDto restaurantDto) {
+            return RestaurantInfoGetKeywordForm.Response.builder()
                     .id(restaurantDto.getId())
                     .ownerId(restaurantDto.getOwnerId())
                     .ownerName(restaurantDto.getOwnerName())
