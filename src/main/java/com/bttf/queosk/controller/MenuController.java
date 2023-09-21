@@ -33,7 +33,7 @@ public class MenuController {
     @ApiOperation(value = "식당 메뉴 목록 추가", notes = "점주가 본인 식당의 메뉴목록을 추가합니다.")
     public ResponseEntity<Void> createMenu(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @Valid @RequestBody MenuCreationForm.Request menuCreationRequest) {
+            @Valid @RequestBody MenuCreationRequest menuCreationRequest) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
@@ -44,12 +44,12 @@ public class MenuController {
 
     @GetMapping("/{restaurantId}/menus")
     @ApiOperation(value = "식당 메뉴 목록 조회", notes = "점주 또는 고객이 대상 식당의 메뉴목록을 조회합니다.")
-    public ResponseEntity<MenuListForm.Response> getMenu(
+    public ResponseEntity<MenuListResponse> getMenu(
             @PathVariable("restaurantId") Long restaurantId) {
 
         List<MenuDto> menuList = menuService.getMenu(restaurantId);
 
-        return ResponseEntity.status(OK).body(MenuListForm.Response.of(menuList));
+        return ResponseEntity.status(OK).body(MenuListResponse.of(menuList));
     }
 
     @PutMapping("/menus/{menuId}")
@@ -57,7 +57,7 @@ public class MenuController {
     public ResponseEntity<Void> updateMenuInfo(
             @PathVariable("menuId") Long menuId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody MenuUpdateForm.Request menuUpdateRequest) {
+            @RequestBody MenuUpdateRequest menuUpdateRequest) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
@@ -71,7 +71,7 @@ public class MenuController {
     public ResponseEntity<Void> updateMenuStatus(
             @PathVariable("menuId") Long menuId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody MenuStatusForm.Request menuStatusRequest) {
+            @RequestBody MenuStatusRequest menuStatusRequest) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 

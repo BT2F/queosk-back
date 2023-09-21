@@ -33,7 +33,7 @@ public class UserController {
     @PostMapping("/signup")
     @ApiOperation(value = "사용자 회원가입", notes = "입력된 정보로 회원가입을 진행합니다.")
     public ResponseEntity<Void> createUser(
-            @Valid @RequestBody UserSignUpForm.Request userSignUpRequest) {
+            @Valid @RequestBody UserSignUpRequest userSignUpRequest) {
 
         userLoginService.createUser(userSignUpRequest);
 
@@ -42,18 +42,18 @@ public class UserController {
 
     @PostMapping("/signin")
     @ApiOperation(value = "사용자 로그인", notes = "입력된 정보로 로그인을 진행합니다.")
-    public ResponseEntity<UserSignInForm.Response> signIn(
-            @Valid @RequestBody UserSignInForm.Request userSignInRequest) {
+    public ResponseEntity<UserSignInResponse> signIn(
+            @Valid @RequestBody UserSignInRequest userSignInRequest) {
 
         UserSignInDto userSignInDto = userLoginService.signInUser(userSignInRequest);
 
-        return ResponseEntity.status(OK).body(UserSignInForm.Response.of(userSignInDto));
+        return ResponseEntity.status(OK).body(UserSignInResponse.of(userSignInDto));
     }
 
     @PostMapping("/check")
     @ApiOperation(value = "이메일 중복 확인", notes = "사용하고자 하는 이메일의 중복여부를 확인합니다.")
     public ResponseEntity<String> checkDuplication(
-            @Valid @RequestBody UserCheckForm.Request userCheckRequest) {
+            @Valid @RequestBody UserCheckRequest userCheckRequest) {
 
         return userLoginService.checkDuplication(userCheckRequest.getEmail()) ?
                 ResponseEntity.status(OK).body("사용가능한 이메일 입니다.") :
@@ -62,43 +62,43 @@ public class UserController {
 
     @GetMapping
     @ApiOperation(value = "사용자 본인 상세정보", notes = "사용자 본인의 상세정보를 조회합니다.")
-    public ResponseEntity<UserDetailsForm.Response> getUserDetails(
+    public ResponseEntity<UserDetailsResponse> getUserDetails(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         UserDto userDto = userLoginService.getUserFromToken(token);
 
-        return ResponseEntity.status(OK).body(UserDetailsForm.Response.of(userDto));
+        return ResponseEntity.status(OK).body(UserDetailsResponse.of(userDto));
     }
 
     @GetMapping("/{userId}")
     @ApiOperation(value = "다른 사용자 상세정보", notes = "다른 사용자의 상세정보를 조회합니다.(정보제한 필요)")
-    public ResponseEntity<UserDetailsForm.Response> getOtherUserDetails(
+    public ResponseEntity<UserDetailsResponse> getOtherUserDetails(
             @PathVariable Long userId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         UserDto userDto = userInfoService.getUserDetails(userId);
 
-        return ResponseEntity.status(OK).body(UserDetailsForm.Response.of(userDto));
+        return ResponseEntity.status(OK).body(UserDetailsResponse.of(userDto));
     }
 
     @PutMapping
     @ApiOperation(value = "사용자 정보 수정", notes = "사용자의 상세정보를 수정합니다.")
-    public ResponseEntity<UserEditForm.Response> editUserDetails(
+    public ResponseEntity<UserEditResponse> editUserDetails(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @Valid @RequestBody UserEditForm.Request userEditRequest) {
+            @Valid @RequestBody UserEditRequest userEditRequest) {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
 
         UserDto userDto = userInfoService.editUserInformation(userId, userEditRequest);
 
-        return ResponseEntity.status(OK).body(UserEditForm.Response.of(userDto));
+        return ResponseEntity.status(OK).body(UserEditResponse.of(userDto));
     }
 
     @PutMapping("/password/change")
     @ApiOperation(value = "사용자 비밀번호 변경", notes = "사용자의 비밀번호를 변경합니다.")
     public ResponseEntity<Void> changeUserPassword(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @Valid @RequestBody UserPasswordChangeForm.Request userPasswordChangeRequest) {
+            @Valid @RequestBody UserPasswordChangeRequest userPasswordChangeRequest) {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
 
@@ -110,7 +110,7 @@ public class UserController {
     @PutMapping("/password/reset")
     @ApiOperation(value = "사용자 비밀번호 초기화", notes = "사용자의 비밀번호를 초기화 후 이메일로 새 비밀번호를 전송 합니다.")
     public ResponseEntity<Void> resetUserPassword(
-            @Valid @RequestBody UserResetPasswordForm.Request userResetPasswordRequest) {
+            @Valid @RequestBody UserResetPasswordRequest userResetPasswordRequest) {
 
         userInfoService.resetUserPassword(userResetPasswordRequest.getEmail(),
                 userResetPasswordRequest.getNickName());

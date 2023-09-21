@@ -1,7 +1,7 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.KakaoLoginForm;
+import com.bttf.queosk.dto.KakaoLoginRequest;
 import com.bttf.queosk.dto.TokenDto;
 import com.bttf.queosk.dto.UserSignInDto;
 import com.bttf.queosk.entity.KakaoAuth;
@@ -58,7 +58,7 @@ public class KakaoLoginService {
         }
     }
 
-    public UserSignInDto getUserInfoFromKakao(KakaoLoginForm.Request kaKaoLoginRequest) throws CustomException {
+    public UserSignInDto getUserInfoFromKakao(KakaoLoginRequest kaKaoLoginRequest) throws CustomException {
         String accessToken = "";
         String refreshToken = "";
         try {
@@ -85,6 +85,7 @@ public class KakaoLoginService {
         } catch (HttpClientErrorException e) {
             // HTTP 클라이언트 오류 처리
             log.error("HTTP Error during Kakao login: " + e.getMessage());
+            log.error(e.getResponseBodyAsString());
             throw new CustomException(KAKAO_LOGIN_FAILED);
         } catch (RestClientException e) {
             // 기타 RestTemplate 예외 처리
@@ -100,7 +101,7 @@ public class KakaoLoginService {
     }
 
     //임시 서비스
-    public UserSignInDto getUserInfoFromKakaoTest(KakaoLoginForm.Request kaKaoLoginRequest) throws CustomException {
+    public UserSignInDto getUserInfoFromKakaoTest(KakaoLoginRequest kaKaoLoginRequest) throws CustomException {
         String accessToken = "";
         String refreshToken = "";
         try {

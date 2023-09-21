@@ -1,9 +1,9 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.MenuCreationForm;
+import com.bttf.queosk.dto.MenuCreationRequest;
 import com.bttf.queosk.dto.MenuDto;
-import com.bttf.queosk.dto.MenuStatusForm;
-import com.bttf.queosk.dto.MenuUpdateForm;
+import com.bttf.queosk.dto.MenuStatusRequest;
+import com.bttf.queosk.dto.MenuUpdateRequest;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.repository.MenuRepository;
@@ -24,7 +24,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
 
     @Transactional
-    public void createMenu(Long restaurantId, MenuCreationForm.Request menuCreationRequest) {
+    public void createMenu(Long restaurantId, MenuCreationRequest menuCreationRequest) {
         menuRepository.save(Menu.of(restaurantId, menuCreationRequest));
     }
 
@@ -47,7 +47,7 @@ public class MenuService {
     @CacheEvict(value = "menuList", key = "'restaurantId:' + #restaurantId")
     public void updateMenuInfo(Long restaurantId,
                                Long menuId,
-                               MenuUpdateForm.Request menuUpdateRequest) {
+                               MenuUpdateRequest menuUpdateRequest) {
 
         Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
                 .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
@@ -62,7 +62,7 @@ public class MenuService {
     @CacheEvict(value = "menuList", key = "'restaurantId:' + #restaurantId")
     public void updateMenuStatus(Long restaurantId,
                                  Long menuId,
-                                 MenuStatusForm.Request menuStatusRequest) {
+                                 MenuStatusRequest menuStatusRequest) {
 
         Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
                 .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
