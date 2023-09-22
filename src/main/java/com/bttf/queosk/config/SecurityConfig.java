@@ -59,7 +59,8 @@ public class SecurityConfig {
                                 "/swagger-ui/**",                 // 스웨거 관련
                                 "/v2/api-docs",
                                 "/swagger-resources/**",
-                                "/webjars/**"                     // Webjar 관련
+                                "/webjars/**",                     // Webjar 관련
+                                "/api/autocomplete"               // 매장검색어 자동완성
                         ).permitAll()
                         //외 모든 경로 검증 실시
                         .anyRequest().authenticated()
