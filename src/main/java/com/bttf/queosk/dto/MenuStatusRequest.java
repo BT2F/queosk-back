@@ -7,13 +7,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class MenuStatusForm {
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    @ApiModel(value = "메뉴 상태변경 Request")
-    public static class Request {
-        private MenuStatus status;
-    }
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ApiModel(value = "메뉴 상태변경 Request")
+public class MenuStatusRequest {
+    private MenuStatus status;
 }
+

@@ -25,7 +25,7 @@ public class UserLoginService {
     private final EmailSender emailSender;
 
     @Transactional
-    public void createUser(UserSignUpForm.Request userSignUpRequest) {
+    public void createUser(UserSignUpRequest userSignUpRequest) {
 
         //기존회원 여부 확인
         userRepository.findByEmail(userSignUpRequest.getEmail()).ifPresent(
@@ -53,7 +53,7 @@ public class UserLoginService {
     }
 
     @Transactional
-    public UserSignInDto signInUser(UserSignInForm.Request userSignInRequest) {
+    public UserSignInDto signInUser(UserSignInRequest userSignInRequest) {
 
         //입력된 email 로 사용자 조회
         User user = userRepository.findByEmail(userSignInRequest.getEmail())

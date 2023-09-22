@@ -57,7 +57,7 @@ class UserServiceTest {
     @DisplayName("사용자 생성 테스트 - 성공")
     void testCreateUser_Success() {
         // Given
-        UserSignUpForm.Request userSignUpForm = UserSignUpForm.Request.builder()
+        UserSignUpRequest userSignUpForm = UserSignUpRequest.builder()
                 .email("test@example.com")
                 .nickName("testUser")
                 .password("password")
@@ -81,8 +81,8 @@ class UserServiceTest {
     @DisplayName("사용자 생성 테스트 - 실패(기존 사용자)")
     void testCreateUser_ExistingEmail() {
         // Given
-        UserSignUpForm.Request userSignUpForm =
-                UserSignUpForm.Request.builder()
+        UserSignUpRequest userSignUpForm =
+                UserSignUpRequest.builder()
                         .email("existing@example.com")
                         .build();
 
@@ -123,7 +123,7 @@ class UserServiceTest {
 
         // when
         UserSignInDto result = userLoginService.signInUser(
-                UserSignInForm.Request.builder()
+                UserSignInRequest.builder()
                         .email(user.getEmail())
                         .password(user.getPassword())
                         .build()
@@ -147,7 +147,7 @@ class UserServiceTest {
         // when & then
         assertThatThrownBy(
                 () -> userLoginService.signInUser(
-                                UserSignInForm.Request.builder()
+                                UserSignInRequest.builder()
                                         .email(invalidEmail)
                                         .password(password)
                                         .build()))
@@ -172,7 +172,7 @@ class UserServiceTest {
         // when & then
         assertThatThrownBy(
                 () -> userLoginService.signInUser(
-                        UserSignInForm.Request.builder()
+                        UserSignInRequest.builder()
                                 .email(email)
                                 .password(invalidPassword)
                                 .build())
@@ -288,7 +288,7 @@ class UserServiceTest {
     public void testEditUserInformation_Success() {
         // Given
         Long userId = 1L;
-        UserEditForm.Request userEditForm = new UserEditForm.Request();
+        UserEditRequest userEditForm = new UserEditRequest();
         User user = User.builder()
                 .id(1L)
                 .userRole(ROLE_USER)
@@ -316,7 +316,7 @@ class UserServiceTest {
     public void testEditUserInformation_UserNotExist() {
         // Given
         Long userId = 1L;
-        UserEditForm.Request userEditForm = new UserEditForm.Request();
+        UserEditRequest userEditForm = new UserEditRequest();
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When, Then
@@ -341,8 +341,8 @@ class UserServiceTest {
                 .password("encodedOldPassword")
                 .build();
 
-        UserPasswordChangeForm.Request userPasswordChangeForm =
-                UserPasswordChangeForm.Request.builder()
+        UserPasswordChangeRequest userPasswordChangeForm =
+                UserPasswordChangeRequest.builder()
                         .existingPassword("oldPassword")
                         .newPassword(newPassword)
                         .build();
@@ -376,8 +376,8 @@ class UserServiceTest {
                 .password("encodedOldPassword")
                 .build();
 
-        UserPasswordChangeForm.Request userPasswordChangeForm =
-                UserPasswordChangeForm.Request.builder()
+        UserPasswordChangeRequest userPasswordChangeForm =
+                UserPasswordChangeRequest.builder()
                         .existingPassword("invalidOldPassword")
                         .newPassword(newPassword)
                         .build();
@@ -402,8 +402,8 @@ class UserServiceTest {
         // Given
         Long userId = 1L;
 
-        UserPasswordChangeForm.Request userPasswordChangeForm =
-                UserPasswordChangeForm.Request.builder()
+        UserPasswordChangeRequest userPasswordChangeForm =
+                UserPasswordChangeRequest.builder()
                         .existingPassword("oldPassword")
                         .newPassword("newPassword")
                         .build();
