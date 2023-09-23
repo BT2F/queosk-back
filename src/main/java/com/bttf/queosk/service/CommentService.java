@@ -42,7 +42,10 @@ public class CommentService {
                 .isDeleted(false)
                 .build();
 
+        review.addComment();
+
         commentRepository.save(comment);
+        reviewRepository.save(review);
     }
 
     @Transactional
@@ -61,12 +64,14 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long commentId, Long restaurantId) {
         Comment comment = commentRepository.findByIdAndIsDeletedFalse(commentId);
+        Review review = reviewRepository.findByIdAndIsDeletedFalse(comment.getReview().getId());
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
         commentRestaurantValid(restaurant, comment);
+        reviewCommentExistCheck(review);
+        review.deleteComment();
         comment.delete();
     }
-
 
     public List<CommentDto> getComment(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
@@ -76,6 +81,12 @@ public class CommentService {
                 .stream()
                 .map(CommentDto::of)
                 .collect(Collectors.toList());
+    }
+
+    private static void reviewCommentExistCheck(Review review) {
+        if (review.getCommentNum() <= 0) {
+            throw new CustomException(REVIEW_COMMENT_ZERO);
+        }
     }
 
     private void reviewRestaurantValid(Restaurant restaurant, Review review) {

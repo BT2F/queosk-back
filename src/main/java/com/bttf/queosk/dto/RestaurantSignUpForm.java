@@ -28,17 +28,18 @@ public class RestaurantSignUpForm {
         @Email(message = "이메일 형식에 맞춰주세요.")
         private String email;
         @Pattern(regexp = "^\\d{3}(?:\\d{3}|\\d{4})\\d{4}$", message =
-                "다음의 형식으로 입력해 주세요. \"00000000000\"")
+                "올바른 전화번호가 아닙니다. 다음의 형식으로 입력해 주세요. \"00000000000\"")
         private String phone;
         @NotBlank(message = "가게명은 비워둘 수 없습니다.")
         private String restaurantName;
         @Pattern(regexp = "^\\d{3}(?:\\d{3}|\\d{4})\\d{4}$", message =
-                "다음의 형식으로 입력해 주세요. \"00000000000\"")
+                "올바른 전화번호가 아닙니다. 다음의 형식으로 입력해 주세요. \"00000000000\"")
         private String restaurantPhone;
         @NotNull(message = "업종명은 비워둘 수 없습니다.")
         private RestaurantCategory category;
-        @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{5}$", message = "사업자 번호를 정확히 입력 해 " +
-                "주세요.")
+        @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{5}$",
+                message = "올바른 사업자 번호가 아닙니다. 다음의 형식으로 입력 해 주세요 " +
+                "\"000-00-00000\"")
         private String businessNumber;
         private String businessStartDate;
         @NotBlank(message = "주소는 비워둘 수 없습니다.")
