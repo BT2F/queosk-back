@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -19,6 +20,13 @@ public class AutoCompleteService {
     private final AutoCompleteTrie autoCompleteTrie;
 
     private final RestaurantRepository restaurantRepository;
+
+    private final List<String> consonantsAndVowels = Arrays.asList(
+            "ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ",
+            "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ",
+            "ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ",
+            "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"
+    );
 
     @PostConstruct
     public void initTrieWithRestaurantNames() {
@@ -39,7 +47,10 @@ public class AutoCompleteService {
 
     // 검색어 자동완성 기능을 위한 메서드
     public AutoCompleteDto autoComplete(String prefix) {
-        return AutoCompleteDto.builder().restaurants(autoCompleteTrie.autoComplete(prefix)).build();
+        String afterTrimming = removeKoreanConsonantsAndVowels(prefix).trim();
+        return AutoCompleteDto.builder()
+                .restaurants(autoCompleteTrie.autoComplete(afterTrimming))
+                .build();
     }
 
     // 탈퇴 시 자동검색어완성에서 해당 식당이름을 지우는 메서드
@@ -47,5 +58,12 @@ public class AutoCompleteService {
         restaurantRepository.findById(restaurantId).ifPresent(restaurant -> {
             autoCompleteTrie.delete(restaurant.getRestaurantName());
         });
+    }
+
+    private String removeKoreanConsonantsAndVowels(String text) {
+        for (String character : consonantsAndVowels) {
+            text = text.replace(character, "");
+        }
+        return text;
     }
 }
