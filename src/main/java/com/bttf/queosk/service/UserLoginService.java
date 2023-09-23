@@ -25,7 +25,7 @@ public class UserLoginService {
     private final EmailSender emailSender;
 
     @Transactional
-    public void createUser(UserSignUpForm.Request userSignUpRequest) {
+    public void createUser(UserSignUpRequest userSignUpRequest) {
 
         //기존회원 여부 확인
         userRepository.findByEmail(userSignUpRequest.getEmail()).ifPresent(
@@ -49,11 +49,11 @@ public class UserLoginService {
                 "Queosk 이메일 인증",
                 String.format("Queosk에 가입해 주셔서 감사합니다. \n" +
                         "아래 링크를 클릭 하시어 이메일 인증을 완료해주세요.\n" +
-                        "http://localhost:8080/api/users/%d/verification", user.getId()));
+                        "https://queosk.kr/api/users/%d/verification", user.getId()));
     }
 
     @Transactional
-    public UserSignInDto signInUser(UserSignInForm.Request userSignInRequest) {
+    public UserSignInDto signInUser(UserSignInRequest userSignInRequest) {
 
         //입력된 email 로 사용자 조회
         User user = userRepository.findByEmail(userSignInRequest.getEmail())

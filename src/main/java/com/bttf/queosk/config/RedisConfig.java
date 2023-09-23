@@ -5,14 +5,20 @@ import com.bttf.queosk.entity.RedisQueue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.time.Duration;
 import java.util.List;
 
 @Configuration
@@ -74,5 +80,20 @@ public class RedisConfig {
         redisTemplate.setHashValueSerializer(kakaoAuthSerializer);
 
         return redisTemplate;
+    }
+    @Bean
+    public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+        RedisCacheConfiguration cacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofDays(1)) // 캐시 만료 기간 1일 또는 해당 정보 업데이트 시 삭제
+                .serializeKeysWith(
+                        RedisSerializationContext.SerializationPair
+                                .fromSerializer(new StringRedisSerializer()))
+                .serializeValuesWith(
+                        RedisSerializationContext.SerializationPair
+                                .fromSerializer(new GenericJackson2JsonRedisSerializer()));
+
+        return RedisCacheManager.builder(RedisCacheWriter.lockingRedisCacheWriter(redisConnectionFactory))
+                .cacheDefaults(cacheConfiguration)
+                .build();
     }
 }

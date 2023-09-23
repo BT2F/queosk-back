@@ -1,7 +1,8 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.dto.TokenRefreshDto;
-import com.bttf.queosk.dto.TokenRefreshForm;
+import com.bttf.queosk.dto.TokenRefreshRequest;
+import com.bttf.queosk.dto.TokenRefreshResponse;
 import com.bttf.queosk.service.RefreshTokenService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,9 +26,9 @@ public class RefreshTokenController {
 
     @PostMapping("/api/auth/refresh")
     @ApiOperation(value = "Access 토큰 재발급(고객)", notes = "Refresh 토큰을 입력하여 Access Token을 재발급 받습니다.")
-    public ResponseEntity<TokenRefreshForm.Response> reissueAccessTokenForUser(
+    public ResponseEntity<TokenRefreshResponse> reissueAccessTokenForUser(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @Valid @RequestBody TokenRefreshForm.Request tokenRefreshRequest) {
+            @Valid @RequestBody TokenRefreshRequest tokenRefreshRequest) {
 
         String refreshToken = tokenRefreshRequest.getRefresh_token();
 
@@ -35,6 +36,6 @@ public class RefreshTokenController {
         TokenRefreshDto tokenRefreshDto =
                 refreshTokenService.issueNewAccessToken(token, refreshToken);
 
-        return ResponseEntity.status(OK).body(TokenRefreshForm.Response.of(tokenRefreshDto));
+        return ResponseEntity.status(OK).body(TokenRefreshResponse.of(tokenRefreshDto));
     }
 }

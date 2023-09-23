@@ -66,7 +66,7 @@ class QueueServiceTest {
         // given
         User mockUser = User.builder().id(1L).build();
         Restaurant mockRestaurant = Restaurant.builder().id(1L).build();
-        QueueCreateForm.Request queueCreationRequest = QueueCreateForm.Request.builder().numberOfParty(1L).build();
+        QueueCreationRequest queueCreationRequest = QueueCreationRequest.builder().numberOfParty(1L).build();
         Queue mockQueue = Queue.builder()
                 .id(1L)
                 .numberOfParty(queueCreationRequest.getNumberOfParty())
@@ -106,7 +106,7 @@ class QueueServiceTest {
         CustomException exception = assertThrows(
                 CustomException.class,
                 () -> queueService.createQueue(
-                        QueueCreateForm.Request.builder().numberOfParty(1L).build(), 1L, 1L)
+                        QueueCreationRequest.builder().numberOfParty(1L).build(), 1L, 1L)
         );
         assertThat(exception.getErrorCode()).isEqualTo(INVALID_RESTAURANT);
     }
