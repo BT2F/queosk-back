@@ -3,6 +3,7 @@ package com.bttf.queosk.controller;
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.*;
 import com.bttf.queosk.enumerate.RestaurantCategory;
+import com.bttf.queosk.service.AutoCompleteService;
 import com.bttf.queosk.service.RefreshTokenService;
 import com.bttf.queosk.service.RestaurantService;
 import io.swagger.annotations.Api;
@@ -27,6 +28,7 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
     private final RefreshTokenService refreshTokenService;
+    private final AutoCompleteService autoCompleteService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/signup")
@@ -34,7 +36,7 @@ public class RestaurantController {
     public ResponseEntity<Void> signUp(
             @Valid @RequestBody RestaurantSignUpForm.Request restaurantSignUpRequest) throws Exception {
         restaurantService.signUp(restaurantSignUpRequest);
-
+        autoCompleteService.saveKeyword(restaurantSignUpRequest.getRestaurantName());
         return ResponseEntity.status(CREATED).build();
     }
 
@@ -95,6 +97,8 @@ public class RestaurantController {
     @ApiOperation(value = "사업자 탈퇴", notes = "매장 계정을 삭제합니다.")
     public ResponseEntity<Void> deleteRestaurant(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         restaurantService.deleteRestaurant(token);
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+        autoCompleteService.deleteRestaurantName(restaurantId);
         return ResponseEntity.status(NO_CONTENT).build();
     }
 
