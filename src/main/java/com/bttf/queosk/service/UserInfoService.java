@@ -45,9 +45,7 @@ public class UserInfoService {
             user.setPhone(newPhone);
         }
 
-        userRepository.save(user);
-
-        return UserDto.of(user);
+        return UserDto.of(userRepository.save(user));
     }
 
     @Transactional

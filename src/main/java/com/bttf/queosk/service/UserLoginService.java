@@ -28,8 +28,8 @@ public class UserLoginService {
     public void createUser(UserSignUpRequest userSignUpRequest) {
 
         //기존회원 여부 확인
-        userRepository.findByEmail(userSignUpRequest.getEmail()).ifPresent(
-                user -> {
+        userRepository.findByEmail(userSignUpRequest.getEmail())
+                .ifPresent(user -> {
                     throw new CustomException(EXISTING_USER);
                 });
 
