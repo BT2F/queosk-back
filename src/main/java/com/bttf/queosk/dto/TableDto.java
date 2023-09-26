@@ -9,12 +9,14 @@ import lombok.Getter;
 @Getter
 @Builder
 public class TableDto {
+    private String tableName;
     private Long tableId;
     private TableStatus status;
 
 
     public static TableDto of(Table table) {
         return TableDto.builder()
+                .tableName(table.getName())
                 .tableId(table.getId())
                 .status(table.getStatus())
                 .build();
