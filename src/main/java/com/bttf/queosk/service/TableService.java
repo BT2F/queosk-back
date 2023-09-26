@@ -2,6 +2,7 @@ package com.bttf.queosk.service;
 
 
 import com.bttf.queosk.dto.TableDto;
+import com.bttf.queosk.dto.TableRequestForm;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.exception.CustomException;
@@ -26,9 +27,9 @@ public class TableService {
 
     @Transactional
     @CacheEvict(value = "tableList", key = "'restaurantId:' + #restaurantId")
-    public void createTable(Long restaurantId) {
+    public void createTable(Long restaurantId, TableRequestForm form) {
 
-        tableRepository.save(Table.of(restaurantId));
+        tableRepository.save(Table.of(restaurantId, form));
     }
 
     @Transactional

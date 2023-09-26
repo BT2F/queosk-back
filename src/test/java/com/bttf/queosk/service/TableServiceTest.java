@@ -1,6 +1,7 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.TableDto;
+import com.bttf.queosk.dto.TableRequestForm;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.enumerate.TableStatus;
@@ -53,10 +54,11 @@ class TableServiceTest {
                 .build();
 
         // When
-        tableService.createTable(restaurantId);
+        TableRequestForm form = new TableRequestForm("1번");
+        tableService.createTable(restaurantId, form);
 
         // Then
-        then(tableService).should(times(1)).createTable(restaurantId);
+        then(tableService).should(times(1)).createTable(restaurantId, form);
     }
 
     @Test
