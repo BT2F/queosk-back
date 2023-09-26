@@ -120,7 +120,8 @@ public class UserController {
 
     @PostMapping("/signout")
     @ApiOperation(value = "사용자 로그아웃", notes = "사용자의 계정에서 로그아웃합니다.")
-    public ResponseEntity<Void> signOutUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<Void> signOutUser(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         UserDto userDto = userLoginService.getUserFromToken(token);
 
@@ -164,7 +165,8 @@ public class UserController {
 
     @PutMapping("/withdrawal")
     @ApiOperation(value = "사용자 회원탈퇴", notes = "사용자 상태를 '삭제' 상태로 변경합니다.")
-    public ResponseEntity<Void> withdrawUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<Void> withdrawUser(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
 
