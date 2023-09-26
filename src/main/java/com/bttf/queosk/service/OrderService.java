@@ -2,7 +2,7 @@ package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.OrderCreationForm;
 import com.bttf.queosk.dto.OrderDto;
-import com.bttf.queosk.entity.Menu;
+import com.bttf.queosk.entity.MenuItem;
 import com.bttf.queosk.entity.Order;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Table;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,24 +33,27 @@ import static com.bttf.queosk.exception.ErrorCode.*;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final MenuRepository menuRepository;
     private final RestaurantRepository restaurantRepository;
     private final TableRepository tableRepository;
+    private final MenuRepository menuRepository;
 
     @Transactional
     public void createOrder(OrderCreationForm.Request orderCreationRequest, Long userId) {
         Restaurant restaurant = getRestaurant(orderCreationRequest.getRestaurantId());
         Table table = getTable(orderCreationRequest.getTableId());
-        Menu menu = getMenu(orderCreationRequest.getMenuId(), restaurant.getId());
+        List<MenuItem> menuItemList = orderCreationRequest.getMenuItems().stream().map(menuItems -> MenuItem.builder()
+                .menu(menuRepository.findById(menuItems.getMenu()).orElseThrow(() -> new CustomException(MENU_NOT_FOUND)))
+                .count(menuItems.getCount())
+                .build()).collect(Collectors.toList());
 
-        validOrder(restaurant, table, menu);
+
+        validOrder(restaurant, table, menuItemList);
 
         Order order = Order.builder()
                 .restaurantId(orderCreationRequest.getRestaurantId())
                 .tableId(table.getId())
-                .menuId(menu.getId())
+                .menuItemList(menuItemList)
                 .userId(userId)
-                .count(orderCreationRequest.getCount())
                 .status(IN_PROGRESS)
                 .build();
 
@@ -74,9 +78,7 @@ public class OrderService {
     public OrderDto readOrder(Long orderId, Long restaurantId) {
         Order order = getOrder(orderId);
         orderRestaurantValidation(order, restaurantId);
-        Menu menu = menuRepository.findById(order.getMenuId())
-                .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
-        return OrderDto.of(order, menu);
+        return OrderDto.of(order);
     }
 
     public List<OrderDto> readTodayOrderList(Long restaurantId) {
@@ -97,24 +99,14 @@ public class OrderService {
 
     private List<OrderDto> orderToOrderDto(List<Order> orderList) {
         return orderList.stream()
-                .map(order -> {
-                    Menu menu = menuRepository.findById(order.getMenuId())
-                            .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
-                    return OrderDto.of(order, menu);
-                })
+                .map(OrderDto::of)
                 .collect(Collectors.toList());
     }
-
 
     public List<OrderDto> readItodayDoneList(Long restaurantId) {
         List<Order> orderList =
                 orderRepository.findAllByRestaurantIdAndStatus(restaurantId, DONE);
         return orderToOrderDto(orderList);
-    }
-
-    private Menu getMenu(Long menuId, Long restaurantId) {
-        return menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
     }
 
     private Table getTable(Long tableId) {
@@ -127,13 +119,17 @@ public class OrderService {
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
     }
 
-    private void validOrder(Restaurant restaurant, Table table, Menu menu) {
+    private void validOrder(Restaurant restaurant, Table table, List<MenuItem> menuItems) {
         if (restaurant.getOperationStatus().equals(CLOSED)) {
             throw new CustomException(RESTAURANT_CLOSED);
         }
-        if (menu.getStatus().equals(SOLD_OUT)) {
-            throw new CustomException(MENU_SOLD_OUT);
-        }
+        menuItems.forEach(menuItem -> {
+                    if (menuItem.getMenu().getStatus().equals(SOLD_OUT)) {
+                        throw new CustomException(MENU_SOLD_OUT);
+                    }
+                }
+        );
+
         if (table.getStatus().equals(USING)) {
             throw new CustomException(TABLE_IS_USING);
         }
