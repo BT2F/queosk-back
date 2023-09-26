@@ -16,6 +16,8 @@ import java.util.Optional;
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     Boolean existsByEmail(String email);
 
+    Boolean existsByOwnerId(String ownerId);
+
     Optional<Restaurant> findByOwnerId(String ownerId);
 
     Optional<Restaurant> findByEmail(String email);

@@ -71,9 +71,12 @@ public class User extends BaseTimeEntity {
                 .password(encodedPassword)
                 .nickName(nickName)
                 .loginType(KAKAO)
-                .phone("01000000000") // 임시 조치
+                .phone("01000000000") //카카오톡 로그인의 경우 가입 이후 휴대폰 번호수정 유도
                 .userRole(ROLE_USER)
-                .imageUrl(imageUrl.contains("https")?imageUrl:imageUrl.replace("http","https"))
+                .imageUrl(
+                        imageUrl.contains("https")?
+                        imageUrl:
+                        imageUrl.replace("http","https"))
                 .status(VERIFIED)
                 .build();
     }

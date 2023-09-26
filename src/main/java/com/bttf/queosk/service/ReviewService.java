@@ -44,6 +44,7 @@ public class ReviewService {
                 .subject(reviewCreationRequest.getSubject())
                 .content(reviewCreationRequest.getContent())
                 .rate(reviewCreationRequest.getRate())
+                .commentNum(0)
                 .build();
 
         reviewRepository.save(review);
