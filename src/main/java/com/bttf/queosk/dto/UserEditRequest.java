@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "회원정보변경 Request")
+@ApiModel(value = "사용자 회원정보변경 Request")
 public class UserEditRequest {
     @Size(min = 2, max = 10, message = "닉네임은 2~10자 이내로 입력해주세요.")
     @NotBlank(message = "닉네임은 비워둘 수 없습니다.")

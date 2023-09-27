@@ -1,69 +1,102 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.common.AutoCompleteTrie;
 import com.bttf.queosk.dto.AutoCompleteDto;
-import com.bttf.queosk.entity.Restaurant;
-import com.bttf.queosk.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class AutoCompleteService {
 
-    private final AutoCompleteTrie autoCompleteTrie;
+    private final RedisTemplate<String, String> redisTemplate;
+    private static final String AUTOCOMPLETE_KEY = "autocomplete";
 
-    private final RestaurantRepository restaurantRepository;
+    private final String[] chs = {
+            "ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ",
+            "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"};
 
-    private final List<String> consonantsAndVowels = Arrays.asList(
-            "ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ",
-            "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ",
-            "ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ",
-            "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"
-    );
-
-    @PostConstruct
-    public void initTrieWithRestaurantNames() {
-        // 서버 구동 시 한번실행. 가입된 모든 매장의 리스트를 조회하고 AutoCompleteTrie 에 추가
-        List<Restaurant> restaurants = restaurantRepository.findByIsDeleted(false);
-        restaurants.forEach(restaurant -> {
-            autoCompleteTrie.insert(restaurant.getRestaurantName());
-        });
-        log.info("Auto-Complete Registration Completed (List)");
+    //검색어 등록
+    public void addAutoCompleteWord(String restaurant) {
+        redisTemplate.opsForZSet().add(AUTOCOMPLETE_KEY, restaurant, 0);
     }
 
-    // 검색어를 Trie에 추가하는 메서드
-    public void saveKeyword(String keyword) {
-        // Trie에 검색어 추가
-        autoCompleteTrie.insert(keyword);
-        log.info("Auto-Complete Registration Completed (Single)");
+    //등록된 검색어 삭제
+    public void deleteAutoCompleteWord(String restaurant) {
+        redisTemplate.opsForZSet().remove(AUTOCOMPLETE_KEY, restaurant);
     }
 
-    // 검색어 자동완성 기능을 위한 메서드
-    public AutoCompleteDto autoComplete(String prefix) {
-        String afterTrimming = removeKoreanConsonantsAndVowels(prefix).trim();
+    public AutoCompleteDto autoComplete(String input) {
+        List<String> matchingKeywords = new ArrayList<>();
+
+        if (isKoreanConsonant(input.charAt(0))) {
+            // 초성 검색
+            Set<String> consonantKeywords = redisTemplate.opsForZSet().rangeByScore(AUTOCOMPLETE_KEY, 0, 0);
+            consonantKeywords.forEach(restaurant -> {
+                if (extractConsonant(restaurant).contains(input)) {
+                    matchingKeywords.add(restaurant);
+                }
+            });
+        } else {
+            // 일반 검색
+            Set<ZSetOperations.TypedTuple<String>> rankedKeywords = null;
+            if (!isKoreanConsonant(input.charAt(0))) {
+                rankedKeywords = redisTemplate.opsForZSet().rangeWithScores(AUTOCOMPLETE_KEY, 0, -1);
+            }
+
+            if (rankedKeywords != null && !rankedKeywords.isEmpty()) {
+                List<String> sortedKeywords = rankedKeywords.stream()
+                        .sorted((a, b) -> Double.compare(b.getScore(), a.getScore())) // 내림차순 정렬
+                        .map(ZSetOperations.TypedTuple::getValue)
+                        .collect(Collectors.toList());
+
+                String trimmedInput = removeKoreanCharacters(input).trim();
+                sortedKeywords.forEach(keyword -> {
+                    if (keyword.contains(trimmedInput)) {
+                        matchingKeywords.add(keyword);
+                    }
+                });
+            }
+        }
         return AutoCompleteDto.builder()
-                .restaurants(autoCompleteTrie.autoComplete(afterTrimming))
+                .restaurants(matchingKeywords)
                 .build();
     }
 
-    // 탈퇴 시 자동검색어완성에서 해당 식당이름을 지우는 메서드
-    public void deleteRestaurantName(Long restaurantId) {
-        restaurantRepository.findById(restaurantId).ifPresent(restaurant -> {
-            autoCompleteTrie.delete(restaurant.getRestaurantName());
+    //문자에서 초성을 추출
+    private String extractConsonant(String text) {
+        StringBuilder chosung = new StringBuilder();
+
+        text.chars().forEach(unicode -> {
+            if (isKoreanCharacter((char) unicode)) {
+                int chosungIndex = (unicode - '가') / (28 * 21);
+                chosung.append(chs[chosungIndex]);
+            }
         });
+
+        return chosung.toString();
     }
 
-    private String removeKoreanConsonantsAndVowels(String text) {
-        for (String character : consonantsAndVowels) {
-            text = text.replace(character, "");
-        }
-        return text;
+    //한글 문자인지 확인
+    private boolean isKoreanCharacter(char ch) {
+        return ch >= 0xAC00 && ch <= 0xD7A3;
+    }
+
+    //한글 모음인지 확인
+    private boolean isKoreanConsonant(char ch) {
+        return ch >= 'ㄱ' && ch <= 'ㅎ';
+    }
+
+    //만약 일반조회일 경우 완성되지 않은 한글을 제거
+    private String removeKoreanCharacters(String text) {
+        return text.replaceAll("[ㄱ-ㅎㅏ-ㅣ]+", "");
     }
 }

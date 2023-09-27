@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "로그인 Response")
+@ApiModel(value = "사용자 로그인 Response")
 public class UserSignInResponse {
     private Long id;
     private String accessToken;

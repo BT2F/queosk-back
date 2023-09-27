@@ -1,5 +1,6 @@
 package com.bttf.queosk.dto;
 
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ApiModel(value = "KakaoPaymentCancel Dto")
 public class KakaoPaymentCancelDto {
     private String aid;
     private String tid;

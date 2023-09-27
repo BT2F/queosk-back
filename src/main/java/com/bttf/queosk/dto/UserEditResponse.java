@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "회원정보변경 Response")
+@ApiModel(value = "사용자 회원정보변경 Response")
 public class UserEditResponse {
     private Long id;
     private String nickName;

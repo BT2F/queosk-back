@@ -3,6 +3,7 @@ package com.bttf.queosk.dto;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.enumerate.UserRole;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ApiModel(value = "Token Dto")
 public class TokenDto {
     private String email;
     private Long id;

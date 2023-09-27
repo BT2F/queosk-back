@@ -36,7 +36,7 @@ public class RestaurantController {
     public ResponseEntity<Void> signUp(
             @Valid @RequestBody RestaurantSignUpForm.Request restaurantSignUpRequest) throws Exception {
         restaurantService.signUp(restaurantSignUpRequest);
-        autoCompleteService.saveKeyword(restaurantSignUpRequest.getRestaurantName());
+        autoCompleteService.addAutoCompleteWord(restaurantSignUpRequest.getRestaurantName());
         return ResponseEntity.status(CREATED).build();
     }
 
@@ -97,8 +97,14 @@ public class RestaurantController {
     @ApiOperation(value = "사업자 탈퇴", notes = "매장 계정을 삭제합니다.")
     public ResponseEntity<Void> deleteRestaurant(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         restaurantService.deleteRestaurant(token);
+
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
-        autoCompleteService.deleteRestaurantName(restaurantId);
+
+        RestaurantInfoMenuGetDto restaurantInfoAndMenu =
+                restaurantService.getRestaurantInfoAndMenu(restaurantId);
+
+        autoCompleteService.deleteAutoCompleteWord(restaurantInfoAndMenu.getRestaurantDto().getRestaurantName());
+
         return ResponseEntity.status(NO_CONTENT).build();
     }
 

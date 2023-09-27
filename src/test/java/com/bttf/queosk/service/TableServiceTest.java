@@ -32,6 +32,7 @@ import static org.mockito.Mockito.times;
 
 @Transactional
 @ExtendWith(MockitoExtension.class)
+@DisplayName("테이블 관련 테스트코드")
 class TableServiceTest {
 
     @Spy
@@ -45,7 +46,7 @@ class TableServiceTest {
     private TableRepository tableRepository;
 
     @Test
-    @DisplayName("테이블 생성 테스트 - 성공 케이스")
+    @DisplayName("테이블 생성 (성공)")
     public void testCreateTable_success() {
         // Given
         Long restaurantId = 1L;
@@ -62,7 +63,7 @@ class TableServiceTest {
     }
 
     @Test
-    @DisplayName("테이블 수정 테스트 - 성공 케이스")
+    @DisplayName("테이블 수정 (성공)")
     public void testUpdateTable_success() {
         Long restaurantId = 1L;
         //given
@@ -82,7 +83,7 @@ class TableServiceTest {
     }
 
     @Test
-    @DisplayName("테이블 수정 테스트 - table 찾을 수 없을 경우")
+    @DisplayName("테이블 수정 (실패-table 찾을 수 없을 경우)")
     public void testUpdateTable_fail_invalidTableException() {
         //given
         Table table = Table.builder()
@@ -101,7 +102,7 @@ class TableServiceTest {
     }
 
     @Test
-    @DisplayName("테이블 수정 테스트 - 본인 restaurant 의 table 이 아닌 경우")
+    @DisplayName("테이블 수정 (실패-본인 restaurant 의 table 이 아닌 경우)")
     public void testUpdateTable_fail_NotPermittedTableException() {
         //given
         Table table = Table.builder()
@@ -120,7 +121,7 @@ class TableServiceTest {
     }
 
     @Test
-    @DisplayName("테이블 삭제 테스트 - 성공 케이스")
+    @DisplayName("테이블 삭제 (성공)")
     public void testDeleteTable_success() {
         //given
         Table table = Table.builder()
@@ -140,7 +141,7 @@ class TableServiceTest {
     }
 
     @Test
-    @DisplayName("테이블 삭제 테스트 - table 찾을 수 없을 경우")
+    @DisplayName("테이블 삭제 (실패-table 찾을 수 없을 경우")
     public void testDeleteTable_fail_invalidTableException() {
         //given
         Table table = Table.builder()
@@ -178,7 +179,7 @@ class TableServiceTest {
     }
 
     @Test
-    @DisplayName("테이블 가져오기 테스트 - 성공 케이스")
+    @DisplayName("테이블 가져오기 (성공)")
     public void testGetTable_success() {
         Long tableId = 1L;
         Long restaurantId = 1L;
@@ -199,7 +200,7 @@ class TableServiceTest {
     }
 
     @Test
-    @DisplayName("테이블 가져오기 테스트 - 본인 restaurant 의 table 이 아닌 경우")
+    @DisplayName("테이블 가져오기 (실패-본인 restaurant 의 table 이 아닌 경우)")
     public void testGetTable_fail_NotPermittedException() {
         Long tableId = 1L;
         Long restaurantId = 1L;
@@ -221,7 +222,7 @@ class TableServiceTest {
     }
 
     @Test
-    @DisplayName("가게의 테이블 가져오기 테스트 - 성공 케이스")
+    @DisplayName("가게의 테이블 가져오기 (성공)")
     public void testGetTableList_success() {
         Long tableId = 1L;
         Long restaurantId = 1L;
