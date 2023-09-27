@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "로그인 Request")
+@ApiModel(value = "사용자 로그인 Request")
 public class UserSignInRequest {
 
     @Email(message = "올바른 이메일 형식이 아닙니다.")

@@ -3,6 +3,7 @@ package com.bttf.queosk.dto;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.Order;
 import com.bttf.queosk.enumerate.OrderStatus;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ApiModel(value = "Order Dto")
 public class OrderDto {
     private Long id;
     private Long tableId;
