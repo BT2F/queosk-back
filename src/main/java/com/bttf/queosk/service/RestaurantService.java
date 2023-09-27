@@ -48,9 +48,8 @@ public class RestaurantService {
 
     @Transactional
     public void signUp(RestaurantSignUpForm.Request restaurantSignUpRequest) throws Exception {
-        if (restaurantRepository.existsByEmail(restaurantSignUpRequest.getEmail())) {
-            throw new CustomException(EXISTING_USER);
-        }
+
+        validateExistedId(restaurantSignUpRequest.getEmail(), restaurantSignUpRequest.getOwnerId());
 
         if (Objects.equals(restaurantSignUpRequest.getCategory(), ALL)) {
             throw new CustomException(ALL_IS_BLOCKED);
@@ -87,8 +86,8 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
     }
 
-
     public RestaurantSignInDto signIn(RestaurantSignInForm.Request restaurantSignInRequest) {
+
         Restaurant restaurant = getRestaurantByOwnerId(restaurantSignInRequest.getOwnerId());
 
         if (!passwordEncoder.matches(restaurantSignInRequest.getPassword(), restaurant.getPassword())) {
@@ -250,5 +249,9 @@ public class RestaurantService {
         return getRestaurantById(jwtTokenProvider.getIdFromToken(token));
     }
 
-
+    private void validateExistedId(String email, String userId) {
+        if (restaurantRepository.existsByEmail(email) || restaurantRepository.existsByOwnerId(userId)) {
+            throw new CustomException(EXISTING_USER);
+        }
+    }
 }

@@ -36,10 +36,20 @@ public class Review extends BaseTimeEntity {
 
     private Boolean isDeleted;
 
+    private Integer commentNum;
+
     public void setReview(String subject, String content, Double rate) {
         this.subject = subject;
         this.content = content;
         this.rate = rate;
+    }
+
+    public void addComment() {
+        this.commentNum ++;
+    }
+
+    public void deleteComment() {
+        this.commentNum--;
     }
 
     public void delete() {

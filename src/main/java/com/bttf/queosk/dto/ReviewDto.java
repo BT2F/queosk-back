@@ -19,6 +19,7 @@ public class ReviewDto {
     private String subject;
     private String content;
     private Double rate;
+    private Integer commentNum;
 
     public static ReviewDto of(Review review) {
         return ReviewDto.builder()
@@ -28,6 +29,7 @@ public class ReviewDto {
                 .subject(review.getSubject())
                 .content(review.getContent())
                 .rate(review.getRate())
+                .commentNum(review.getCommentNum())
                 .build();
     }
 }

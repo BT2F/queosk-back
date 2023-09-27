@@ -7,6 +7,7 @@ import com.bttf.queosk.enumerate.OrderStatus;
 import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.repository.*;
 import org.junit.jupiter.api.DisplayName;
+import com.google.api.services.storage.Storage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +15,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.bttf.queosk.enumerate.MenuStatus.ON_SALE;
@@ -77,15 +81,22 @@ class OrderServiceTest {
                 .email(userEmail)
                 .build();
 
-        OrderCreationForm.Request orderCreationForm = OrderCreationForm.Request.builder()
-                .menuId(menuId)
-                .tableId(tableId)
-                .restaurantId(restaurantId)
+        MenuItem menuItem = MenuItem.builder()
+                .menu(menu1)
                 .count(1)
                 .build();
 
+        List<MenuItem> menuItems = List.of(menuItem);
+
+
+
+        OrderCreationForm.Request orderCreationForm = OrderCreationForm.Request.builder()
+                .menuItems(menuItems)
+                .tableId(tableId)
+                .restaurantId(restaurantId)
+                .build();
+
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
-        given(menuRepository.findByIdAndRestaurantId(1L, 1L)).willReturn(Optional.of(menu1));
         given(tableRepository.findById(1L)).willReturn(Optional.of(table));
         // when
 
@@ -131,8 +142,6 @@ class OrderServiceTest {
 
         Order order = Order.builder()
                 .userId(user.getId())
-                .menuId(menu1.getId())
-                .count(1)
                 .restaurantId(restaurant.getId())
                 .status(OrderStatus.IN_PROGRESS)
                 .build();

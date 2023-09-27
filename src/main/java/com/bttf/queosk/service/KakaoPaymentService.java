@@ -1,8 +1,13 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.*;
+import com.bttf.queosk.enumerate.TableStatus;
+import com.bttf.queosk.exception.CustomException;
+import com.bttf.queosk.exception.ErrorCode;
+import com.bttf.queosk.repository.TableRepository;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +24,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 @Service
+@RequiredArgsConstructor
 public class KakaoPaymentService {
 
 
@@ -29,7 +35,11 @@ public class KakaoPaymentService {
     @Value("${url}")
     private String MAIN_URL;
 
+    private final TableRepository tableRepository;
+
     public KakaoPaymentReadyDto kakaoPaymentReady(Long userId, KakaoPaymentReadyForm kakaoPaymentReadyForm) {
+
+        tableValid(kakaoPaymentReadyForm);
 
         MultiValueMap<String, String> parameter = new LinkedMultiValueMap<>();
         String randomUuid = UUID.randomUUID().toString().replace("-", "");
@@ -62,6 +72,15 @@ public class KakaoPaymentService {
 
         return kakaoPaymentReadyDto;
 
+    }
+
+    private void tableValid(KakaoPaymentReadyForm kakaoPaymentReadyForm) {
+        if (!tableRepository.findById(kakaoPaymentReadyForm.getTableId())
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TABLE))
+                .getStatus()
+                .equals(TableStatus.OPEN)) {
+            throw new CustomException(ErrorCode.TABLE_IS_USING);
+        }
     }
 
     public KakaoPaymentApprovalDto kakaoPaymentApprove(Long userId, String pgToken, KakaoPaymentApprovalForm kakaoPaymentApprovalForm) {
