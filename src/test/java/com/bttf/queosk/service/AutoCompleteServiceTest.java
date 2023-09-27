@@ -1,87 +1,115 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.common.AutoCompleteTrie;
 import com.bttf.queosk.dto.AutoCompleteDto;
-import com.bttf.queosk.entity.Restaurant;
-import com.bttf.queosk.repository.RestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
+@DisplayName("검색어 자동완성 관련 테스트코드")
 public class AutoCompleteServiceTest {
-    @Mock
-    private AutoCompleteTrie autoCompleteTrie;
 
     @Mock
-    private RestaurantRepository restaurantRepository;
+    private RedisTemplate<String, String> redisTemplate;
 
+    @Mock
+    private ZSetOperations<String, String> zSetOperations;
+
+    @InjectMocks
     private AutoCompleteService autoCompleteService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        autoCompleteService = new AutoCompleteService(autoCompleteTrie, restaurantRepository);
     }
 
     @Test
-    @DisplayName("검색어자동완성 생성 테스트 - 성공")
-    public void saveKeywordToTrie() {
+    @DisplayName("검색어 추가")
+    public void testAddSearchTerm() {
         // Given
-        String keyword = "TestKeyword";
+        String restaurant = "테스트!!";
 
         // When
-        autoCompleteService.saveKeyword(keyword);
+        when(redisTemplate.opsForZSet()).thenReturn(zSetOperations);
+        when(zSetOperations.add(eq("autocomplete"), eq(restaurant), eq(0.0))).thenReturn(true);
+
+        autoCompleteService.addAutoCompleteWord(restaurant);
 
         // Then
-        verify(autoCompleteTrie, times(1)).insert(keyword);
+        verify(zSetOperations).add(eq("autocomplete"), eq(restaurant), eq(0.0));
     }
 
     @Test
-    @DisplayName("검색어자동완성 조회 테스트 - 성공")
-    public void returnAutoCompleteList() {
+    @DisplayName("검색어 삭제")
+    public void testDeleteSearchTerm() {
         // Given
-        String prefix = "TestPrefix";
-        List<String> autoCompleteList = new ArrayList<>();
-        autoCompleteList.add("TestRestaurant1");
-        autoCompleteList.add("TestRestaurant2");
-
-        when(autoCompleteTrie.autoComplete(prefix)).thenReturn(autoCompleteList);
+        String restaurant = "테스트!!";
 
         // When
-        AutoCompleteDto result = autoCompleteService.autoComplete(prefix);
+        when(redisTemplate.opsForZSet()).thenReturn(zSetOperations);
+        when(zSetOperations.remove(eq("autocomplete"), eq(restaurant))).thenReturn(1L);
+
+        autoCompleteService.deleteAutoCompleteWord(restaurant);
 
         // Then
-        assertThat(result).isNotNull();
-        assertThat(result.getRestaurants()).isEqualTo(autoCompleteList);
+        verify(zSetOperations).remove(eq("autocomplete"), eq(restaurant));
+    }
+
+
+    @Test
+    @DisplayName("검색어 자동완성(일반)")
+    public void testSearchKeywords_NormalSearch() {
+        // Given
+        String input = "테스트";
+        String[] keywords = {"테스트1", "테스트2", "기타"};
+
+        Set<ZSetOperations.TypedTuple<String>> rankedKeywords = new LinkedHashSet<>();
+        for (String keyword : keywords) {
+            ZSetOperations.TypedTuple<String> tuple = mock(ZSetOperations.TypedTuple.class);
+            when(tuple.getValue()).thenReturn(keyword);
+            when(tuple.getScore()).thenReturn(1.0); // 모든 검색어의 점수 동일하게 설정
+            rankedKeywords.add(tuple);
+        }
+
+        when(redisTemplate.opsForZSet()).thenReturn(zSetOperations);
+        when(redisTemplate.opsForZSet().rangeWithScores("autocomplete", 0, -1)).thenReturn(rankedKeywords);
+
+        // When
+        AutoCompleteDto autoCompleteDto = autoCompleteService.autoComplete(input);
+
+        // Then
+        assertThat(autoCompleteDto.getRestaurants()).containsExactly("테스트1", "테스트2");
     }
 
     @Test
-    @DisplayName("검색어자동완성 삭제 테스트 - 성공")
-    public void deleteRestaurantNameFromTrie() {
+    @DisplayName("검색어 자동완성(초성)")
+    public void testSearchKeywords_ConsonantSearch() {
         // Given
-        Long restaurantId = 1L;
-        String restaurantName = "TestRestaurant";
+        String input = "ㄱ";
 
-        Restaurant restaurant = Restaurant.builder()
-                .id(restaurantId)
-                .restaurantName(restaurantName)
-                .build();
+        Set<String> consonantKeywords = new HashSet<>(Arrays.asList("가게", "갈비집", "기타"));
 
-        when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.of(restaurant));
+        when(redisTemplate.opsForZSet()).thenReturn(zSetOperations);
+        when(redisTemplate.opsForZSet().rangeByScore("autocomplete", 0, 0))
+                .thenReturn(consonantKeywords);
 
         // When
-        autoCompleteService.deleteRestaurantName(restaurantId);
+        AutoCompleteDto autoCompleteDto = autoCompleteService.autoComplete(input);
 
         // Then
-        verify(autoCompleteTrie, times(1)).delete(restaurantName);
+        assertThat(autoCompleteDto.getRestaurants())
+                .containsExactly("기타", "갈비집", "가게");
     }
 }

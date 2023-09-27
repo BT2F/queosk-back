@@ -7,6 +7,7 @@ import com.bttf.queosk.entity.Review;
 import com.bttf.queosk.repository.CommentRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.ReviewRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 @Rollback
 @Transactional
+@DisplayName("대댓글 관련 테스트코드")
 class CommentServiceTest {
 
     @InjectMocks
@@ -39,6 +41,7 @@ class CommentServiceTest {
     private ReviewRepository reviewRepository;
 
     @Test
+    @DisplayName("대댓글 생성")
     void createComment_success() throws Exception {
         // given
         Restaurant restaurant = Restaurant.builder().id(1L).build();
@@ -56,6 +59,7 @@ class CommentServiceTest {
     }
 
     @Test
+    @DisplayName("대댓글 수정")
     void updateComment() {
         // given
         Restaurant restaurant = Restaurant.builder().id(1L).build();
@@ -83,6 +87,7 @@ class CommentServiceTest {
     }
 
     @Test
+    @DisplayName("대댓글 삭제")
     void deleteComment() {
         // given
         Restaurant restaurant = Restaurant.builder().id(1L).build();

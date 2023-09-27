@@ -6,6 +6,7 @@ import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.OrderStatus;
 import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.repository.*;
+import org.junit.jupiter.api.DisplayName;
 import com.google.api.services.storage.Storage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.*;
 
 @Transactional
 @ExtendWith(MockitoExtension.class)
+@DisplayName("주문 관련 테스트코드")
 class OrderServiceTest {
 
     @InjectMocks
@@ -45,6 +47,7 @@ class OrderServiceTest {
     private TableRepository tableRepository;
 
     @Test
+    @DisplayName("주문 생성 (성공)")
     public void createOrder_success() {
         // given
 
@@ -105,6 +108,7 @@ class OrderServiceTest {
     }
 
     @Test
+    @DisplayName("주문 상태 수정 (성공)")
     public void updateOrderStatus_success() {
         // given
 

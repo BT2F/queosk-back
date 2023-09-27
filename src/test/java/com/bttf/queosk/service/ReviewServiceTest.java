@@ -12,6 +12,7 @@ import com.bttf.queosk.enumerate.UserStatus;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.ReviewRepository;
 import com.bttf.queosk.repository.UserRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,6 +36,7 @@ import static org.mockito.Mockito.*;
 @Transactional
 @Rollback
 @ExtendWith(MockitoExtension.class)
+@DisplayName("리뷰 관련 테스트코드")
 class ReviewServiceTest {
 
     @InjectMocks
@@ -48,6 +50,7 @@ class ReviewServiceTest {
     private RestaurantRepository restaurantRepository;
 
     @Test
+    @DisplayName("리뷰생성 (성공)")
     void createReview_success() throws Exception {
         // given
         User user = User.builder()
@@ -79,6 +82,7 @@ class ReviewServiceTest {
     }
 
     @Test
+    @DisplayName("리뷰수정 (성공)")
     void updateReview_success() {
 
         // given
@@ -120,6 +124,7 @@ class ReviewServiceTest {
     }
 
     @Test
+    @DisplayName("리뷰 불러오기 (성공)")
     void getReview_success() {
         // given
         Restaurant restaurant = Restaurant.builder()
@@ -146,6 +151,7 @@ class ReviewServiceTest {
     }
 
     @Test
+    @DisplayName("리뷰 삭제 (성공)")
     void deleteReview_success() {
 
         // given
@@ -171,6 +177,7 @@ class ReviewServiceTest {
     }
 
     @Test
+    @DisplayName("리뷰 목록불러오기 (성공)")
     void getReviewList_success() {
         User user = User.builder().id(1L).status(UserStatus.VERIFIED).loginType(NORMAL).build();
         Restaurant restaurant = Restaurant.builder()
@@ -203,6 +210,7 @@ class ReviewServiceTest {
     }
 
     @Test
+    @DisplayName("고객리뷰 가져오기 (성공)")
     void getRestaurantUserReviewList_success() {
         User user = User.builder().id(1L).status(UserStatus.VERIFIED).loginType(NORMAL).build();
         Restaurant restaurant = Restaurant.builder()
