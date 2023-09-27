@@ -1,5 +1,6 @@
 package com.bttf.queosk.dto;
 
+import com.bttf.queosk.entity.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,4 +23,7 @@ public class KakaoPaymentReadyForm {
     private Integer vatAmount;
     private Integer greenDeposit;
     private Integer installMonth;
+
+    private Long tableId;
+    private Long restaurantId;
 }
