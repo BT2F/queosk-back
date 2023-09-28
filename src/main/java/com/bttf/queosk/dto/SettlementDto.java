@@ -14,16 +14,15 @@ import java.util.List;
 public class SettlementDto {
     private List<OrderdMenu> orderdMenus;
 
-    private Long price;
+    private Long total;
 
     public static SettlementDto of(List<SettlementDto.OrderdMenu> settlement, Long price) {
         return SettlementDto.builder()
                 .orderdMenus(settlement)
-                .price(price)
+                .total(price)
                 .build();
     }
 
-    @AllArgsConstructor
     @Getter
     @Builder
     @NoArgsConstructor
@@ -34,6 +33,12 @@ public class SettlementDto {
 
         public Long sumOfPrice() {
             return count * price;
+        }
+
+        public OrderdMenu(String menu, Integer count, Long price) {
+            this.menu = menu;
+            this.count = count;
+            this.price = price;
         }
     }
 
