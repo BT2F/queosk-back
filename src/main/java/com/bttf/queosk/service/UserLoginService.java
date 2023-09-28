@@ -27,8 +27,8 @@ public class UserLoginService {
     @Transactional
     public void createUser(UserSignUpRequest userSignUpRequest) {
 
-        //기존회원 여부 확인
-        userRepository.findByEmail(userSignUpRequest.getEmail())
+        //기존회원 여부 확인 (소문자 치환 후 조회)
+        userRepository.findByEmail(userSignUpRequest.getEmail().toLowerCase())
                 .ifPresent(user -> {
                     throw new CustomException(EXISTING_USER);
                 });
@@ -84,7 +84,7 @@ public class UserLoginService {
     }
 
     public boolean checkDuplication(String email) {
-        return !userRepository.findByEmail(email).isPresent();
+        return !userRepository.findByEmail(email.toLowerCase()).isPresent();
     }
 
     @Transactional(readOnly = true)
