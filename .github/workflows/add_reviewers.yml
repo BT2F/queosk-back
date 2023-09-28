@@ -12,4 +12,4 @@ jobs:
         with:
           assignees: ${{ github.actor }} # assign pull request author
           reviewers: peppone-choi, jodonghyeon3, HyunsooZo
-          max-num-of-reviewers: 1
+          max-num-of-reviewers: 2
