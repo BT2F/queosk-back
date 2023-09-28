@@ -4,6 +4,8 @@ import com.bttf.queosk.dto.CommentForm;
 import com.bttf.queosk.entity.Comment;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Review;
+import com.bttf.queosk.exception.CustomException;
+import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.CommentRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.ReviewRepository;
@@ -21,8 +23,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @Rollback
@@ -40,23 +41,25 @@ class CommentServiceTest {
     @Mock
     private ReviewRepository reviewRepository;
 
-//    @Test
-//    @DisplayName("대댓글 생성")
-//    void createComment_success() throws Exception {
-//        // given
-//        Restaurant restaurant = Restaurant.builder().id(1L).build();
-//        Review review = Review.builder().id(1L).restaurant(restaurant).build();
-//        given(reviewRepository.findById(1L)).willReturn(Optional.of(review));
-//        given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
-//
-//        CommentForm.Request commentForm = CommentForm.Request.builder().content("test").build();
-//
-//        // when
-//        commentService.createComment(1L, 1L, commentForm);
-//
-//        // then
-//        verify(commentRepository, times(1)).save(any(Comment.class));
-//    }
+    @Test
+    @DisplayName("대댓글 생성")
+    void createComment_success() throws Exception {
+        // given
+        Restaurant restaurant = Restaurant.builder().id(1L).build();
+        Review review = Review.builder().id(1L).commentNum(0).restaurant(restaurant).build();
+        given(reviewRepository.findById(1L)).willReturn(Optional.of(review));
+        given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
+
+        CommentForm.Request commentForm = CommentForm.Request.builder().
+                content("test")
+                .build();
+
+        // when
+        commentService.createComment(1L, 1L, commentForm);
+
+        // then
+        verify(commentRepository, times(1)).save(any(Comment.class));
+    }
 
     @Test
     @DisplayName("대댓글 수정")
@@ -86,27 +89,30 @@ class CommentServiceTest {
         assertThat(commentRepository.findByIdAndIsDeletedFalse(1L).getContent()).isEqualTo("test2");
     }
 
-//    @Test
-//    @DisplayName("대댓글 삭제")
-//    void deleteComment() {
-//        // given
-//        Restaurant restaurant = Restaurant.builder().id(1L).build();
-//        given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
-//
-//        Comment comment = Comment.builder()
-//                .id(1L)
-//                .restaurant(restaurant)
-//                .isDeleted(false)
-//                .content("test").build();
-//
-//        given(commentRepository.findByIdAndIsDeletedFalse(1L)).willReturn(comment);
-//
-//        // when
-//        commentService.deleteComment(1L, 1L);
-//
-//
-//        verify(commentRepository, times(1)).findByIdAndIsDeletedFalse(1L);
-//        assertThat(commentRepository.findByIdAndIsDeletedFalse(1L).getIsDeleted()).isEqualTo(true);
-//
-//    }
+    @Test
+    @DisplayName("대댓글 삭제")
+    void deleteComment() {
+        // given
+        Restaurant restaurant = Restaurant.builder().id(1L).build();
+        given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
+
+        Review review = Review.builder().id(1L).commentNum(1)
+                .restaurant(restaurant).build();
+        given(reviewRepository.findByIdAndIsDeletedFalse(1L)).willReturn(review);
+        Comment comment = Comment.builder()
+                .id(1L)
+                .review(review)
+                .restaurant(restaurant)
+                .isDeleted(false)
+                .content("test").build();
+
+        given(commentRepository.findByIdAndIsDeletedFalse(1L)).willReturn(comment);
+        // when
+        commentService.deleteComment(1L, 1L);
+
+
+        verify(commentRepository, times(1)).findByIdAndIsDeletedFalse(1L);
+        assertThat(commentRepository.findByIdAndIsDeletedFalse(1L).getIsDeleted()).isEqualTo(true);
+
+    }
 }
