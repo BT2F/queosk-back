@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
+@DisplayName("메뉴 관련 테스트코드")
 class MenuServiceTest {
 
     @Mock
@@ -39,7 +40,7 @@ class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("메뉴 생성 테스트 - 성공")
+    @DisplayName("메뉴 생성 (성공)")
     void testCreateMenu_Success() {
         // given
         Long restaurantId = 1L;
@@ -58,7 +59,7 @@ class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("메뉴 목록 조회 테스트 - 성공")
+    @DisplayName("메뉴 목록 조회 (성공)")
     void testGetMenu_Success() {
         // Given
         Long restaurantId = 1L;
@@ -92,7 +93,7 @@ class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("메뉴 목록 조회 테스트 - 실패(메뉴 없음)")
+    @DisplayName("메뉴 목록 조회 (실패)")
     void testGetMenu_MenuNotFound() {
         // Given
         Long restaurantId = 1L;
@@ -104,7 +105,7 @@ class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("메뉴 정보 업데이트 테스트 - 성공")
+    @DisplayName("메뉴 정보 업데이트 (성공)")
     void testUpdateMenuInfo_Success() {
         // Given
         Long restaurantId = 1L;
@@ -135,7 +136,7 @@ class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("메뉴 정보 업데이트 테스트 - 실패(메뉴 없음)")
+    @DisplayName("메뉴 정보 업데이트 (실패-메뉴 없음)")
     void testUpdateMenuInfo_MenuNotFound() {
         // Given
         Long restaurantId = 1L;
@@ -153,7 +154,7 @@ class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("메뉴 상태 업데이트 테스트 - 성공")
+    @DisplayName("메뉴 상태 업데이트 (성공)")
     void testUpdateMenuStatus_Success() {
         // Given
         Long restaurantId = 1L;
@@ -182,7 +183,7 @@ class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("메뉴 상태 업데이트 테스트 - 실패(메뉴 없음)")
+    @DisplayName("메뉴 상태 업데이트 (실패-메뉴 없음)")
     void testUpdateMenuStatus_MenuNotFound() {
         // Given
         Long restaurantId = 1L;
@@ -199,7 +200,7 @@ class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("이미지 업데이트 테스트 - 성공")
+    @DisplayName("이미지 업데이트 (성공)")
     void testUpdateImage_Success() {
         // Given
         Long restaurantId = 1L;
@@ -225,7 +226,7 @@ class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("이미지 업데이트 테스트 - 실패(메뉴 없음)")
+    @DisplayName("이미지 업데이트 (실패-메뉴 없음)")
     void testUpdateImage_MenuNotFound() {
         // Given
         Long restaurantId = 1L;
@@ -240,7 +241,7 @@ class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("메뉴 삭제 테스트 - 성공")
+    @DisplayName("메뉴 삭제 (성공)")
     void testDeleteMenu_Success() {
         // Given
         Long restaurantId = 1L;
@@ -265,7 +266,7 @@ class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("메뉴 삭제 테스트 - 실패(메뉴 없음)")
+    @DisplayName("메뉴 삭제 (실패-메뉴 없음)")
     void testDeleteMenu_MenuNotFound() {
         // Given
         Long restaurantId = 1L;

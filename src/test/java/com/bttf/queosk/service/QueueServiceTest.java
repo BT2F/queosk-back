@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@DisplayName("대기열(웨이팅) 관련 테스트코드")
 class QueueServiceTest {
     @Mock
     private UserRepository userRepository;
@@ -61,7 +62,7 @@ class QueueServiceTest {
     }
 
     @Test
-    @DisplayName("큐등록 테스트 - 성공")
+    @DisplayName("웨이팅 등록 (성공)")
     public void testCreateQueue_success() {
         // given
         User mockUser = User.builder().id(1L).build();
@@ -97,7 +98,7 @@ class QueueServiceTest {
     }
 
     @Test
-    @DisplayName("큐등록 테스트 - 실패(식당 유효하지않음)")
+    @DisplayName("웨이팅등록 (실패-식당 유효하지않음)")
     public void testCreateQueue_WithInvalidRestaurant() {
         // given
         when(restaurantRepository.findById(1L)).thenReturn(java.util.Optional.empty());
@@ -112,7 +113,7 @@ class QueueServiceTest {
     }
 
     @Test
-    @DisplayName("큐정보가져오기 테스트 - 성공")
+    @DisplayName("웨이팅정보가져오기 (성공)")
     public void testGetQueueList_success() {
         // given
         String restaurantId = "1";
@@ -153,7 +154,7 @@ class QueueServiceTest {
     }
 
     @Test
-    @DisplayName("큐정보가져오기 테스트 - 실패(빈리스트)")
+    @DisplayName("웨이팅정보가져오기 (성공-빈리스트)")
     public void testGetQueueList_WithEmptyQueue() {
         // given
         String restaurantId = "1";
@@ -167,7 +168,7 @@ class QueueServiceTest {
     }
 
     @Test
-    @DisplayName("고객 대기번호가져오기 - 성공")
+    @DisplayName("고객 대기번호가져오기 (성공)")
     public void testGetUserQueueNumber_Success() {
         // given
         Long restaurantId = 1L;
@@ -194,7 +195,7 @@ class QueueServiceTest {
     }
 
     @Test
-    @DisplayName("고객 대기번호가져오기 - 실패(등록된 큐 없음)")
+    @DisplayName("고객 대기번호가져오기 (실패-등록된 큐 없음)")
     public void testGetUserQueueNumber_NoQueueRegistered() {
         // given
         Long restaurantId = 9L;
@@ -210,7 +211,7 @@ class QueueServiceTest {
     }
 
     @Test
-    @DisplayName("대기열 당기기 테스트 - 성공")
+    @DisplayName("대기열 당기기 (성공)")
     public void testPopTheFirstTeamOfQueue_success() {
         // given
         Long restaurantId = 1L;
@@ -234,7 +235,7 @@ class QueueServiceTest {
     }
 
     @Test
-    @DisplayName("대기열 당기기 테스트 - 실패(빈리스트)")
+    @DisplayName("대기열 당기기 (실패-빈리스트)")
     public void testPopTheFirstTeamOfQueue_emptyQueue() {
         // given
         Long restaurantId = 1L;
@@ -250,7 +251,7 @@ class QueueServiceTest {
     }
 
     @Test
-    @DisplayName("선택한 식당의 웨이팅정보 가져오기 - 성공")
+    @DisplayName("선택한 식당의 웨이팅정보 가져오기 (성공)")
     public void testGetQueueOfRestaurant() {
         //given
         Long restaurantId = 123L;
@@ -265,7 +266,7 @@ class QueueServiceTest {
     }
 
     @Test
-    @DisplayName("사용자 현재 웨이팅정보 가져오기 - 성공")
+    @DisplayName("사용자 현재 웨이팅정보 가져오기 (성공)")
     public void testGetUserQueueList() {
         // 가짜 데이터 생성
         Long userId = 1L;

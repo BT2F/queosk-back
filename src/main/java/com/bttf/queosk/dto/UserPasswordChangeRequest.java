@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "비밀번호 변경 Request")
+@ApiModel(value = "사용자 비밀번호 변경 Request")
 public class UserPasswordChangeRequest {
     @Size(min = 2, max = 10, message = "닉네임은 2~10자 사이로 입력해주세요.")
     @NotBlank(message = "비밀번호는 비워둘 수 없습니다.")

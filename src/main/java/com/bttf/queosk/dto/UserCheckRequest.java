@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "이메일 중복조회 Request")
+@ApiModel(value = "사용자 이메일 중복조회 Request")
 public class UserCheckRequest {
     @Email(message = "올바른 이메일 형식이 아닙니다.")
     @NotBlank(message = "이메일은 비워둘 수 없습니다.")
