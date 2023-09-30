@@ -1,7 +1,7 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.SettlementForm;
+import com.bttf.queosk.dto.SettlementResponseForm;
 import com.bttf.queosk.dto.SettlementPriceForm;
 import com.bttf.queosk.service.SettlementService;
 import io.swagger.annotations.Api;
@@ -27,16 +27,16 @@ public class SettlementController {
 
     @GetMapping("/today")
     @ApiOperation(value = "매장 금일 정산", notes = "매장의 오늘 정산 현황을 알 수 있습니다.")
-    public ResponseEntity<SettlementForm.Response> getTodaySettlement(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<SettlementResponseForm> getTodaySettlement(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         return ResponseEntity.status(OK)
-                .body(SettlementForm.Response.of(settlementService.todaySettlementGet(restaurantId)));
+                .body(SettlementResponseForm.of(settlementService.todaySettlementGet(restaurantId)));
     }
 
     @GetMapping("/period")
     @ApiOperation(value = "매장 기간별 정산", notes = "매장의 기간별 정산 현황을 알 수 있습니다.")
-    public ResponseEntity<SettlementForm.Response> getPeriodSettlement(
+    public ResponseEntity<SettlementResponseForm> getPeriodSettlement(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from) {
@@ -44,7 +44,7 @@ public class SettlementController {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         return ResponseEntity.status(OK)
-                .body(SettlementForm.Response.of(settlementService.periodSettlementGet(
+                .body(SettlementResponseForm.of(settlementService.periodSettlementGet(
                         restaurantId, to.atStartOfDay(), from.atStartOfDay()
                 )));
     }
