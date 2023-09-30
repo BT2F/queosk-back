@@ -31,7 +31,7 @@ public class QueueService {
 
     // 사용자가 웨이팅 등록
     @Transactional
-    public void createQueue(QueueCreateForm.Request queueRequestRequest,
+    public void createQueue(QueueCreationRequest queueRequestRequest,
                             Long userId,
                             Long restaurantId) {
 
@@ -77,11 +77,9 @@ public class QueueService {
                 .findFirstByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId)
                 .orElseThrow(() -> new CustomException(QUEUE_DOESNT_EXIST));
 
-        Long userQueueIndex =
-                queueRedisRepository.getUserWaitingCount(
-                        String.valueOf(restaurantId),
-                        String.valueOf(queue.getId())
-                );
+        Long userQueueIndex = queueRedisRepository.getUserWaitingCount(
+                String.valueOf(restaurantId), String.valueOf(queue.getId())
+        );
 
         // 사용자의 인덱스가 존재하지 않을 경우 (Queue 등록하지 않은상태) 예외 반환
         if (userQueueIndex == null || userQueueIndex < 0) {
@@ -136,21 +134,17 @@ public class QueueService {
     // 유저가 이미 해당 식당에 웨이팅 등록을 했는지 확인
     private void checkIfUserAlreadyInQueue(Long userId, Long restaurantId) {
         // 가장 최근에 생성된 Queue만 필요하므로, 첫 번째 Queue만 조회
-        Optional<Queue> latestQueue =
-                queueRepository.findFirstByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId);
-
-        if (latestQueue.isPresent()) {
-
-            Long userWaitingCount =
-                    queueRedisRepository.getUserWaitingCount(
+        queueRepository.findFirstByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId)
+                .ifPresent(queue -> {
+                    Long userWaitingCount = queueRedisRepository.getUserWaitingCount(
                             String.valueOf(restaurantId),
-                            String.valueOf(latestQueue.get().getId())
+                            String.valueOf(queue.getId())
                     );
 
-            if (userWaitingCount != null) {
-                throw new CustomException(QUEUE_ALREADY_EXISTS);
-            }
-        }
+                    if (userWaitingCount != null) {
+                        throw new CustomException(QUEUE_ALREADY_EXISTS);
+                    }
+                });
     }
 
     //FCM 메세지 전송
@@ -161,28 +155,26 @@ public class QueueService {
     }
 
     public List<QueueOfUserDto> getUserQueueList(Long userId) {
-        List<Queue> userQueues = queueRepository.findByUserId(userId);
-
-        return userQueues.stream()
-                .map(queue -> {
-                    Long userWaitingCount = queueRedisRepository.getUserWaitingCount(
-                            String.valueOf(queue.getRestaurantId()),
-                            String.valueOf(queue.getId())
-                    );
-                    if (userWaitingCount != null || isQueueDone(queue)) {
-                        Optional<Restaurant> restaurant =
-                                restaurantRepository.findById(queue.getRestaurantId());
-                        if (restaurant.isPresent()) {
-                            return QueueOfUserDto.of(
-                                    queue,
-                                    restaurant.get(),
-                                    userWaitingCount != null ? userWaitingCount : -1L);
-                        }
-                    }
-                    return null;
-                })
+        return queueRepository.findByUserId(userId).stream()
+                .map(this::mapToQueueOfUserDto)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    private QueueOfUserDto mapToQueueOfUserDto(Queue queue) {
+        Long userWaitingCount = queueRedisRepository.getUserWaitingCount(
+                String.valueOf(queue.getRestaurantId()),
+                String.valueOf(queue.getId())
+        );
+
+        if (userWaitingCount != null || isQueueDone(queue)) {
+            Optional<Restaurant> restaurant = restaurantRepository.findById(queue.getRestaurantId());
+            if (restaurant.isPresent()) {
+                return QueueOfUserDto.of(queue, restaurant.get(),
+                        userWaitingCount != null ? userWaitingCount : -1L);
+            }
+        }
+        return null;
     }
 
     private boolean isQueueDone(Queue queue) {

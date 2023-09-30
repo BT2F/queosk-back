@@ -30,7 +30,7 @@ class SettlementServiceTest {
 
     @Spy
     @InjectMocks
-    private com.bttf.queosk.service.SettlementService settlementService;
+    private SettlementService settlementService;
 
     @Test
     @DisplayName("금일 정산 (성공)")
@@ -42,20 +42,14 @@ class SettlementServiceTest {
                 new SettlementDto.OrderdMenu("짬뽕", 2, 7000L),
                 new SettlementDto.OrderdMenu("탕수육", 1, 17000L)
         );
-        SettlementDto dto = new SettlementDto(list, 36000L);
-
-        given(queryRepository.getTodaySettlement(restaurantId)).willReturn(dto);
+        given(queryRepository.getTodaySales(restaurantId)).willReturn(list);
 
         //when
         SettlementDto settlementDto = settlementService.todaySettlementGet(restaurantId);
-        for (SettlementDto.OrderdMenu orderdMenu : list) {
-            System.out.println(orderdMenu.getMenu());
-            System.out.println(orderdMenu.getPrice());
-            System.out.println(orderdMenu.getCount());
-        }
+
         //then
         assertThat(settlementDto.getOrderdMenus()).isEqualTo(list);
-        assertThat(settlementDto.getTotal()).isEqualTo(36000L);
+        assertThat(settlementDto.getPrice()).isEqualTo(36000L);
         then(settlementService).should(times(1)).todaySettlementGet(restaurantId);
     }
 
@@ -82,7 +76,7 @@ class SettlementServiceTest {
 
         //then
         assertThat(settlementDto.getOrderdMenus()).isEqualTo(list);
-        assertThat(settlementDto.getTotal()).isEqualTo(36000L);
+        assertThat(settlementDto.getPrice()).isEqualTo(36000L);
         then(settlementService).should(times(1))
                 .periodSettlementGet(restaurantId, to.atStartOfDay(), from.atStartOfDay());
     }

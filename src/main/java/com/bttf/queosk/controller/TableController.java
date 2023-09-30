@@ -2,7 +2,8 @@ package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.TableDto;
-import com.bttf.queosk.dto.TableForm;
+import com.bttf.queosk.dto.TableResponseForm;
+import com.bttf.queosk.dto.TableRequestForm;
 import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.service.QueueService;
 import com.bttf.queosk.service.TableService;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.bttf.queosk.enumerate.TableStatus.OPEN;
 import static org.springframework.http.HttpStatus.*;
@@ -31,10 +31,11 @@ public class TableController {
 
     @PostMapping("/table")
     @ApiOperation(value = "매장 테이블 생성", notes = "매장의 테이블을 추가합니다.")
-    public ResponseEntity<Void> tableCreate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<Void> tableCreate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                            @RequestBody TableRequestForm form) {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        tableService.createTable(restaurantId);
+        tableService.createTable(restaurantId, form);
         return ResponseEntity.status(CREATED).build();
     }
 
@@ -68,45 +69,29 @@ public class TableController {
 
     @GetMapping("/table/{tableId}")
     @ApiOperation(value = "매장 특정테이블 조회", notes = "매장의 특정 테이블을 조회 합니다.")
-    public ResponseEntity<TableForm.Response> tableGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                       @PathVariable Long tableId) {
+    public ResponseEntity<TableResponseForm> tableGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                               @PathVariable Long tableId) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
         TableDto tableDto = tableService.getTable(tableId, restaurantId);
 
-        return ResponseEntity.status(OK).body(TableForm.Response.of(tableDto));
+        return ResponseEntity.status(OK).body(TableResponseForm.of(tableDto));
     }
 
     @GetMapping("/tables")
     @ApiOperation(value = "매장 테이블 조회", notes = "매장 테이블을 조회 합니다.")
-    public ResponseEntity<List<TableForm.Response>> tableListGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<List<TableResponseForm>> tableListGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
         List<TableDto> tableList = tableService.getTableList(restaurantId);
 
-        List<TableForm.Response> tableFormList = new ArrayList<>();
+        List<TableResponseForm> tableFormList = new ArrayList<>();
 
         for (TableDto dto : tableList) {
-            tableFormList.add(TableForm.Response.of(dto));
+            tableFormList.add(TableResponseForm.of(dto));
         }
         return ResponseEntity.status(OK).body(tableFormList);
     }
-
-    @GetMapping("/{restaurantId}/tables")
-    @ApiOperation(value = "매핑가능 테이블 조회", notes = "고객이 주문 시 매핑 가능한 매장 테이블을 조회 합니다.")
-    public ResponseEntity<List<TableForm.Response>> availableTables(
-            @PathVariable Long restaurantId,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-
-        List<TableDto> tableList = tableService.getAvailableTables(restaurantId);
-
-        List<TableForm.Response> tableFormList = tableList.stream()
-                .map(TableForm.Response::of)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.status(OK).body(tableFormList);
-    }
-
 }
