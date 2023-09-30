@@ -22,7 +22,12 @@ public class SettlementService {
 
     public SettlementDto todaySettlementGet(Long restaurantId) {
 
-        return queryRepository.getTodaySettlement(restaurantId);
+        List<SettlementDto.OrderdMenu> settlement = queryRepository.getTodaySales(restaurantId);
+
+        Long sum = settlement.stream().mapToLong(SettlementDto.OrderdMenu::sumOfPrice).sum();
+
+
+        return SettlementDto.of(settlement, sum);
     }
 
     public SettlementDto periodSettlementGet(Long restaurantId,
