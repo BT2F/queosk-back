@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @ApiModel(value = "KakaoPaymentReady Dto")
-public class KakaoPaymentReadyDto {
+public class KakaoPaymentReadyResponseForm {
     private String tid;
     private String nextRedirectMobileUrl;
     private String nextRedirectPcUrl;

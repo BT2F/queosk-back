@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @ApiModel(value = "KakaoPaymentApproval DTO")
-public class KakaoPaymentApprovalDto {
+public class KakaoPaymentApprovalResponseForm {
     private String aid;
     private String tid;
     private String cid;

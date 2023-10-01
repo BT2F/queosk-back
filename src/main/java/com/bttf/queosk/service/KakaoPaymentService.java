@@ -36,8 +36,8 @@ public class KakaoPaymentService {
 
     private final TableRepository tableRepository;
 
-    public KakaoPaymentReadyDto kakaoPaymentReady(Long userId,
-                                                  KakaoPaymentReadyRequestForm kakaoPaymentReadyRequestForm) {
+    public KakaoPaymentReadyResponseForm kakaoPaymentReady(Long userId,
+                                                           KakaoPaymentReadyRequestForm kakaoPaymentReadyRequestForm) {
 
         tableValid(kakaoPaymentReadyRequestForm);
 
@@ -62,7 +62,7 @@ public class KakaoPaymentService {
         String postString = restApiPost(parameter, KAKAOPAY_URL + "ready");
 
         JsonObject json = JsonParser.parseString(postString).getAsJsonObject();
-        KakaoPaymentReadyDto kakaoPaymentReadyDto = KakaoPaymentReadyDto.builder()
+        KakaoPaymentReadyResponseForm kakaoPaymentReadyResponseForm = KakaoPaymentReadyResponseForm.builder()
                 .tid(json.get("tid").getAsString())
                 .OrderId(randomUuid)
                 .nextRedirectPcUrl(json.get("next_redirect_pc_url").getAsString())
@@ -70,7 +70,7 @@ public class KakaoPaymentService {
                 .createdAt(LocalDateTime.parse((json.get("created_at").getAsString())))
                 .build();
 
-        return kakaoPaymentReadyDto;
+        return kakaoPaymentReadyResponseForm;
 
     }
 
@@ -83,9 +83,9 @@ public class KakaoPaymentService {
         }
     }
 
-    public KakaoPaymentApprovalDto kakaoPaymentApprove(Long userId,
-                                                       String pgToken,
-                                                       KakaoPaymentApprovalRequestForm kakaoPaymentApprovalRequestForm) {
+    public KakaoPaymentApprovalResponseForm kakaoPaymentApprove(Long userId,
+                                                                String pgToken,
+                                                                KakaoPaymentApprovalRequestForm kakaoPaymentApprovalRequestForm) {
         MultiValueMap<String, String> parameter = new LinkedMultiValueMap<>();
         parameter.add("cid", CID);
         parameter.add("tid", kakaoPaymentApprovalRequestForm.getTid());
@@ -101,7 +101,7 @@ public class KakaoPaymentService {
         JsonObject jsonObject = JsonParser.parseString(postString).getAsJsonObject();
         JsonObject amountJson = jsonObject.get("amount").getAsJsonObject();
 
-        return KakaoPaymentApprovalDto.builder()
+        return KakaoPaymentApprovalResponseForm.builder()
                 .aid(jsonObject.get("aid").getAsString())
                 .tid(jsonObject.get("tid").getAsString())
                 .cid(jsonObject.get("cid").getAsString())
@@ -125,8 +125,8 @@ public class KakaoPaymentService {
                 .build();
     }
 
-    public KakaoPaymentCancelDto kakaoPaymentCancel(Long userId,
-                                                    KakaoPaymentCancelRequestForm kakaoPaymentCancelRequestForm) {
+    public KakaoPaymentCancelResponseForm kakaoPaymentCancel(Long userId,
+                                                             KakaoPaymentCancelRequestForm kakaoPaymentCancelRequestForm) {
         MultiValueMap<String, String> parameter = new LinkedMultiValueMap<>();
         parameter.add("cid", CID);
         parameter.add("tid", kakaoPaymentCancelRequestForm.getTid());
@@ -141,7 +141,7 @@ public class KakaoPaymentService {
         Integer totalCanceledAmount = getCanceledAmount(jsonObject, "canceled_amount");
         Integer cancelAvailableAmount = getCanceledAmount(jsonObject, "cancel_available_amount");
 
-        return KakaoPaymentCancelDto.builder()
+        return KakaoPaymentCancelResponseForm.builder()
                 .aid(jsonObject.get("aid").getAsString())
                 .tid(jsonObject.get("tid").getAsString())
                 .cid(CID)
