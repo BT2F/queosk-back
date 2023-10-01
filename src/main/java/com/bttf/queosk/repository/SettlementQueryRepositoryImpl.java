@@ -51,12 +51,12 @@ public class SettlementQueryRepositoryImpl implements SettlementQueryRepository 
                 .select(
                         Projections.constructor(SettlementDto.OrderdMenu.class,
                                 menu.name,
-//                                order.count.sum(),  빌드문제로 인한 임시 주석처리
+//                                order.count.sum(),
                                 menu.price
                         )
                 )
                 .from(order)
-//                .innerJoin(menu).on(order.menuId.eq(menu.id))  빌드문제로 인한 임시 주석처리
+//                .innerJoin(menu).on(order.menuId.eq(menu.id))
                 .where(order.restaurantId.eq(restaurantId)
                         .and(order.createdAt.between(startDateTime, endDateTime))
                         .and(order.status.eq(OrderStatus.DONE)))
