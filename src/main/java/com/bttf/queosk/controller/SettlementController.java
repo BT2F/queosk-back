@@ -27,7 +27,8 @@ public class SettlementController {
 
     @GetMapping("/today")
     @ApiOperation(value = "매장 금일 정산", notes = "매장의 오늘 정산 현황을 알 수 있습니다.")
-    public ResponseEntity<SettlementForm.Response> getTodaySettlement(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<SettlementForm.Response> getTodaySettlement(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         return ResponseEntity.status(OK)

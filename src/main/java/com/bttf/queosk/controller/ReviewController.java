@@ -32,8 +32,10 @@ public class ReviewController {
 
     @PostMapping
     @ApiOperation(value = "리뷰 작성", notes = "사용자가 매장에 대해 리뷰를 남깁니다.")
-    public ResponseEntity<Void> createReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                             @RequestBody @Valid ReviewCreationForm.Request reviewCreationRequest) {
+    public ResponseEntity<Void> createReview(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody @Valid ReviewCreationForm.Request reviewCreationRequest) {
+
         Long userId = jwtTokenProvider.getIdFromToken(token);
         reviewService.createReview(userId, reviewCreationRequest);
         return ResponseEntity.status(CREATED).build();
@@ -41,16 +43,20 @@ public class ReviewController {
 
     @GetMapping("{reviewId}")
     @ApiOperation(value = "리뷰 열람", notes = "단건의 리뷰를 열람합니다.")
-    public ResponseEntity<GetReviewForm.Response> getReview(@PathVariable("reviewId") Long reviewId) {
+    public ResponseEntity<GetReviewForm.Response> getReview(
+            @PathVariable("reviewId") Long reviewId) {
+
         ReviewDto reviewDto = reviewService.getReview(reviewId);
         return ResponseEntity.status(OK).body(GetReviewForm.Response.of(reviewDto));
     }
 
     @PutMapping("{reviewId}")
     @ApiOperation(value = "리뷰 수정", notes = "단건의 리뷰를 수정합니다.")
-    public ResponseEntity<Void> updateReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                             @PathVariable("reviewId") Long reviewId,
-                                             @RequestBody @Valid UpdateReviewForm.Request updateReviewRequest) {
+    public ResponseEntity<Void> updateReview(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @PathVariable("reviewId") Long reviewId,
+            @RequestBody @Valid UpdateReviewForm.Request updateReviewRequest) {
+
         Long userId = jwtTokenProvider.getIdFromToken(token);
         reviewService.updateReview(reviewId, userId, updateReviewRequest);
         return ResponseEntity.status(CREATED).build();
@@ -58,8 +64,10 @@ public class ReviewController {
 
     @DeleteMapping("{reviewId}")
     @ApiOperation(value = "리뷰 삭제", notes = "단건의 리뷰를 삭제합니다.")
-    public ResponseEntity<Void> deleteReview(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                             @PathVariable("reviewId") Long reviewId) throws IOException {
+    public ResponseEntity<Void> deleteReview(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @PathVariable("reviewId") Long reviewId) throws IOException {
+
         Long userId = jwtTokenProvider.getIdFromToken(token);
 
         ReviewDto review = reviewService.getReview(reviewId);
@@ -73,7 +81,9 @@ public class ReviewController {
 
     @GetMapping("restaurants/{restaurantId}")
     @ApiOperation(value = "매장 리뷰 리스트 열람", notes = "해당 매장에 쓰인 리뷰를 열람합니다.")
-    public ResponseEntity<List<GetReviewListForm.Response>> getReviewList(@PathVariable("restaurantId") Long restaurantId) {
+    public ResponseEntity<List<GetReviewListForm.Response>> getReviewList(
+            @PathVariable("restaurantId") Long restaurantId) {
+
         List<ReviewDto> reviewDtoList = reviewService.getReviewList(restaurantId);
         List<GetReviewListForm.Response> responseList = reviewDtoList.stream()
                 .map(GetReviewListForm.Response::of)
@@ -83,8 +93,10 @@ public class ReviewController {
 
     @GetMapping("restaurants/{restaurantId}/user")
     @ApiOperation(value = "각 사용자 별 매장 리뷰 열람")
-    public ResponseEntity<List<GetRestaurantUserReviewListForm.Response>> getRestaurantUserReviewList(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                                                                      @PathVariable("restaurantId") Long restaurantId) {
+    public ResponseEntity<List<GetRestaurantUserReviewListForm.Response>> getRestaurantUserReviewList(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @PathVariable("restaurantId") Long restaurantId) {
+
         Long userId = jwtTokenProvider.getIdFromToken(token);
         List<ReviewDto> reviewDtoList = reviewService.getRestaurantUserReviewList(userId, restaurantId);
         List<GetRestaurantUserReviewListForm.Response> responseList = reviewDtoList.stream()
