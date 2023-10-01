@@ -57,7 +57,7 @@ class SettlementServiceTest {
         SettlementDto settlementDto = settlementService.SettlementGet(restaurantId, to, from);
         for (SettlementDto.OrderdMenu orderdMenu : list) {
             System.out.println(orderdMenu.getMenu());
-            System.out.println(orderdMenu.getPrice());
+            System.out.println(orderdMenu.getTotal());
             System.out.println(orderdMenu.getCount());
         }
         //then

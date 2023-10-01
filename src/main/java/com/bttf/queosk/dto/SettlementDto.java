@@ -31,16 +31,16 @@ public class SettlementDto {
     public static class OrderdMenu {
         private String menu;
         private Integer count;
-        private Long price;
+        private Long total;
 
         public Long sumOfPrice() {
-            return count * price;
+            return count * total;
         }
 
-        public OrderdMenu(String menu, Integer count, Long price) {
+        public OrderdMenu(String menu, Integer count, Long total) {
             this.menu = menu;
             this.count = count;
-            this.price = price;
+            this.total = total;
         }
     }
 

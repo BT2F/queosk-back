@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class SettlementResponseForm {
     private List<OrderdMenu> orderedMenus;
 
-    private Long price;
+    private Long total;
 
     public static SettlementResponseForm of(SettlementDto settlementDto) {
         List<OrderdMenu> orderedMenus = settlementDto.getOrderdMenus().stream()
@@ -26,7 +26,7 @@ public class SettlementResponseForm {
 
         return SettlementResponseForm.builder()
                 .orderedMenus(orderedMenus)
-                .price(settlementDto.getTotal())
+                .total(settlementDto.getTotal())
                 .build();
     }
 
@@ -43,7 +43,7 @@ public class SettlementResponseForm {
             return OrderdMenu.builder()
                     .menu(orderdMenu.getMenu())
                     .count(orderdMenu.getCount())
-                    .price(orderdMenu.getPrice())
+                    .price(orderdMenu.getTotal())
                     .build();
         }
 
