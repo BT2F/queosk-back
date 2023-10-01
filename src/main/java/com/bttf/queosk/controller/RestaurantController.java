@@ -85,7 +85,9 @@ public class RestaurantController {
 
     @PostMapping("/signout")
     @ApiOperation(value = "매장 로그 아웃", notes = "매장 계정을 로그아웃 합니다.")
-    public ResponseEntity<Void> restaurantSignOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<Void> restaurantSignOut(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
         RestaurantDto restaurant = restaurantService.getRestaurantInfoFromToken(token);
         refreshTokenService.deleteRefreshToken(restaurant.getEmail());
         return ResponseEntity.status(NO_CONTENT).build();
@@ -93,7 +95,9 @@ public class RestaurantController {
 
     @DeleteMapping
     @ApiOperation(value = "사업자 탈퇴", notes = "매장 계정을 삭제합니다.")
-    public ResponseEntity<Void> deleteRestaurant(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<Void> deleteRestaurant(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
         restaurantService.deleteRestaurant(token);
         return ResponseEntity.status(NO_CONTENT).build();
     }

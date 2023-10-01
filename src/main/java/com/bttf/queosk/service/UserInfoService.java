@@ -35,10 +35,13 @@ public class UserInfoService {
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
         String newNickName = userEditRequest.getNickName();
-        String newPhone = userEditRequest.getPhone();
+
+        //휴대번번호네 문자나 공백이 들어왔다면 처리
+        String newPhone = userEditRequest.getPhone() == null ? null :
+                userEditRequest.getPhone().replaceAll("\\D", "");
 
         if (newNickName != null) {
-            user.setNickName(newNickName);
+            user.setNickName(userEditRequest.getNickName());
         }
 
         if (newPhone != null) {
