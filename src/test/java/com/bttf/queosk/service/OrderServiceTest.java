@@ -1,6 +1,6 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.OrderCreationForm;
+import com.bttf.queosk.dto.OrderCreationRequestForm;
 import com.bttf.queosk.entity.*;
 import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.OrderStatus;
@@ -82,20 +82,20 @@ class OrderServiceTest {
                 .restaurantId(1L)
                 .build();
 
-        OrderCreationForm.MenuItems menuItem1 = OrderCreationForm.MenuItems.builder()
+        OrderCreationRequestForm.MenuItems menuItem1 = OrderCreationRequestForm.MenuItems.builder()
                 .menu(1L)
                 .count(1)
                 .build();
 
-        OrderCreationForm.MenuItems menuItem2 = OrderCreationForm.MenuItems.builder()
+        OrderCreationRequestForm.MenuItems menuItem2 = OrderCreationRequestForm.MenuItems.builder()
                 .menu(2L)
                 .count(1)
                 .build();
 
-        List<OrderCreationForm.MenuItems> menuItems = Arrays.asList(menuItem1, menuItem2);
+        List<OrderCreationRequestForm.MenuItems> menuItems = Arrays.asList(menuItem1, menuItem2);
 
-        OrderCreationForm.Request orderCreationForm =
-                OrderCreationForm.Request.builder()
+        OrderCreationRequestForm orderCreationForm =
+                OrderCreationRequestForm.builder()
                         .menuItems(menuItems)
                         .tableId(tableId)
                         .restaurantId(restaurantId)
