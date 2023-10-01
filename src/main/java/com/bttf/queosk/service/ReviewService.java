@@ -44,6 +44,7 @@ public class ReviewService {
                 .subject(reviewCreationRequest.getSubject())
                 .content(reviewCreationRequest.getContent())
                 .rate(reviewCreationRequest.getRate())
+                .imageUrl(reviewCreationRequest.getImageUrl())
                 .commentNum(0)
                 .build();
 
@@ -81,8 +82,8 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public List<ReviewDto> getRestaurantUserReviewList(Long userId, Long restaurantId) {
         return reviewRepository.findByRestaurantAndUserAndIsDeletedFalse(
-                        getRestaurant(restaurantId), getUser(userId)).stream()
-                .map(ReviewDto::of).collect(Collectors.toList());
+                        getRestaurant(restaurantId), getUser(userId)
+                ).stream().map(ReviewDto::of).collect(Collectors.toList());
     }
 
     private User getUser(Long userId) {

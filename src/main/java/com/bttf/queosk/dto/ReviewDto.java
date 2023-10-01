@@ -18,6 +18,7 @@ public class ReviewDto {
     private UserDto user;
     private String subject;
     private String content;
+    private String imageUrl;
     private Double rate;
     private Integer commentNum;
 
@@ -28,6 +29,7 @@ public class ReviewDto {
                 .user(UserDto.of(review.getUser()))
                 .subject(review.getSubject())
                 .content(review.getContent())
+                .imageUrl(review.getImageUrl())
                 .rate(review.getRate())
                 .commentNum(review.getCommentNum())
                 .build();
