@@ -3,6 +3,7 @@ package com.bttf.queosk.controller;
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.*;
 import com.bttf.queosk.enumerate.RestaurantCategory;
+import com.bttf.queosk.service.AutoCompleteService;
 import com.bttf.queosk.service.RefreshTokenService;
 import com.bttf.queosk.service.RestaurantService;
 import io.swagger.annotations.Api;
@@ -27,6 +28,7 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
     private final RefreshTokenService refreshTokenService;
+    private final AutoCompleteService autoCompleteService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/signup")
@@ -35,7 +37,7 @@ public class RestaurantController {
             @Valid @RequestBody RestaurantSignUpRequestForm restaurantSignUpRequest) throws Exception {
 
         restaurantService.signUp(restaurantSignUpRequest);
-
+        autoCompleteService.addAutoCompleteWord(restaurantSignUpRequest.getRestaurantName());
         return ResponseEntity.status(CREATED).build();
     }
 
@@ -115,6 +117,13 @@ public class RestaurantController {
 
         restaurantService.deleteRestaurant(token);
 
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
+        RestaurantInfoMenuGetDto restaurantInfoAndMenu =
+                restaurantService.getRestaurantInfoAndMenu(restaurantId);
+
+        autoCompleteService.deleteAutoCompleteWord(restaurantInfoAndMenu.getRestaurantDto().getRestaurantName());
+
         return ResponseEntity.status(NO_CONTENT).build();
     }
 
@@ -142,10 +151,26 @@ public class RestaurantController {
 
         Page<RestaurantDto> restaurantDtoPage = restaurantService
                 .getCoordRestaurantInfoForm(x, y, page, size, restaurantCategory);
+        Page<RestaurantInfoGetCoordForm.Response> responsePage =
+                restaurantDtoPage.map(RestaurantInfoGetCoordForm.Response::of);
+        return ResponseEntity.status(OK).body(responsePage);
+    }
 
-        Page<RestaurantResponseForm> responsePage =
-                restaurantDtoPage.map(RestaurantResponseForm::of);
+    @GetMapping("/keyword")
+    @ApiOperation(value = "매장 검색 (키워드)", notes = "매장을 검색한 결과를 해당 좌표에서 가까운 순으로 제공합니다.")
+    public ResponseEntity<Page<RestaurantInfoGetKeywordForm.Response>> getKeywordRestaurantInfo(
+            @RequestParam(value = "x", defaultValue = "0") Double x,
+            @RequestParam(value = "y", defaultValue = "0") Double y,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam(value = "category",  defaultValue = "ALL") String category,
+            @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 
+        RestaurantCategory restaurantCategory = RestaurantCategory.valueOf(category);
+        Page<RestaurantDto> restaurantDtoPage = restaurantService
+                .getKeywordRestaurantInfoForm(x, y, page, size, restaurantCategory, keyword);
+        Page<RestaurantInfoGetKeywordForm.Response> responsePage =
+                restaurantDtoPage.map(RestaurantInfoGetKeywordForm.Response::of);
         return ResponseEntity.status(OK).body(responsePage);
     }
 
