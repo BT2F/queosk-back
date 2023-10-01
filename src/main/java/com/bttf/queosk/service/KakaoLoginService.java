@@ -1,7 +1,7 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.KakaoLoginForm;
+import com.bttf.queosk.dto.KakaoLoginRequest;
 import com.bttf.queosk.dto.TokenDto;
 import com.bttf.queosk.dto.UserSignInDto;
 import com.bttf.queosk.entity.KakaoAuth;
@@ -20,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
@@ -56,19 +58,12 @@ public class KakaoLoginService {
         }
     }
 
-    public UserSignInDto getUserInfoFromKakao(KakaoLoginForm.Request kaKaoLoginRequest) throws CustomException {
+    public UserSignInDto getUserInfoFromKakao(KakaoLoginRequest kaKaoLoginRequest) throws CustomException {
         String accessToken = "";
         String refreshToken = "";
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-
-            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-            params.add(GRANT_TYPE, "authorization_code");
-            params.add(CLIENT_ID, KAKAO_CLIENT_ID);
-            params.add(CLIENT_SECRET, KAKAO_CLIENT_SECRET);
-            params.add(CODE, kaKaoLoginRequest.getCode());
-            params.add(REDIRECT_URI, KAKAO_REDIRECT_URL);
+            HttpHeaders headers = createHeaders();
+            MultiValueMap<String, String> params = createRequestBody(kaKaoLoginRequest.getCode());
 
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, headers);
@@ -87,13 +82,72 @@ public class KakaoLoginService {
             accessToken = jsonObj.get("access_token").getAsString();
             refreshToken = jsonObj.get("refresh_token").getAsString();
 
-        } catch (Exception e) {
+        } catch (HttpClientErrorException e) {
+            // HTTP 클라이언트 오류 처리
+            log.error("HTTP Error during Kakao login: " + e.getMessage());
+            log.error(e.getResponseBodyAsString());
+            throw new CustomException(KAKAO_LOGIN_FAILED);
+        } catch (RestClientException e) {
+            // 기타 RestTemplate 예외 처리
             log.error("Kakao login failed: " + e.getMessage());
+            throw new CustomException(KAKAO_LOGIN_FAILED);
+        } catch (Exception e) {
+            // 그 외 예외 처리
+            log.error("Unexpected error during Kakao login: " + e.getMessage());
             throw new CustomException(KAKAO_LOGIN_FAILED);
         }
 
         return getUserInfoWithToken(accessToken, refreshToken);
     }
+
+    //임시 서비스
+    public UserSignInDto getUserInfoFromKakaoTest(KakaoLoginRequest kaKaoLoginRequest) throws CustomException {
+        String accessToken = "";
+        String refreshToken = "";
+        try {
+            HttpHeaders headers = createHeaders();
+
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add(GRANT_TYPE, "authorization_code");
+            params.add(CLIENT_ID, KAKAO_CLIENT_ID);
+            params.add(CLIENT_SECRET, KAKAO_CLIENT_SECRET);
+            params.add(CODE, kaKaoLoginRequest.getCode());
+            params.add(REDIRECT_URI, "http://localhost:3000/auth/kakao/callback");
+
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    KAKAO_AUTH_URI + "/oauth/token",
+                    HttpMethod.POST,
+                    httpEntity,
+                    String.class
+            );
+
+            String responseBody = response.getBody();
+
+            JsonObject jsonObj = JsonParser.parseString(responseBody).getAsJsonObject();
+
+            accessToken = jsonObj.get("access_token").getAsString();
+            refreshToken = jsonObj.get("refresh_token").getAsString();
+
+        } catch (HttpClientErrorException e) {
+            // HTTP 클라이언트 오류 처리
+            log.error("HTTP Error during Kakao login: " + e.getMessage());
+            throw new CustomException(KAKAO_LOGIN_FAILED);
+        } catch (RestClientException e) {
+            // 기타 RestTemplate 예외 처리
+            log.error("Kakao login failed: " + e.getMessage());
+            throw new CustomException(KAKAO_LOGIN_FAILED);
+        } catch (Exception e) {
+            // 그 외 예외 처리
+            log.error("Unexpected error during Kakao login: " + e.getMessage());
+            throw new CustomException(KAKAO_LOGIN_FAILED);
+        }
+
+        return getUserInfoWithToken(accessToken, refreshToken);
+    }
+
 
     private UserSignInDto getUserInfoWithToken(String accessToken, String refreshToken) {
         HttpHeaders headers = new HttpHeaders();
@@ -118,6 +172,7 @@ public class KakaoLoginService {
         String kakaoId = jsonObj.get("id").getAsString();
         String email = account.get("email").getAsString();
         String nickName = profile.get("nickname").getAsString();
+        String profileImage = profile.get("profile_image_url").getAsString();
 
         // If it's a new user, proceed with registration
         if (!userRepository.findByEmail(email).isPresent()) {
@@ -128,7 +183,7 @@ public class KakaoLoginService {
 
             String encodedPassword = passwordEncoder.encode(password);
 
-            userRepository.save(User.of(email, nickName, encodedPassword));
+            userRepository.save(User.of(email, nickName, encodedPassword, profileImage));
         }
 
         kakaoAuthRepository.save(email, KakaoAuth.of(kakaoId, refreshToken, accessToken));
@@ -168,6 +223,22 @@ public class KakaoLoginService {
                 jsonResponse.get("id").getAsString().equals(kakaoAuth.getKakaoId())) {
             log.info("Kakao logout complete");
         }
+    }
+
+    private HttpHeaders createHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+        return headers;
+    }
+
+    private MultiValueMap<String, String> createRequestBody(String code) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add(GRANT_TYPE, "authorization_code");
+        params.add(CLIENT_ID, KAKAO_CLIENT_ID);
+        params.add(CLIENT_SECRET, KAKAO_CLIENT_SECRET);
+        params.add(CODE, code);
+        params.add(REDIRECT_URI, KAKAO_REDIRECT_URL);
+        return params;
     }
 }
 

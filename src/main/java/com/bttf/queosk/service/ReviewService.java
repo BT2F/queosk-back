@@ -11,6 +11,8 @@ import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.ReviewRepository;
 import com.bttf.queosk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ public class ReviewService {
 
 
     @Transactional
+    @CacheEvict(value = "reviewList", key = "'restaurantId:' + #reviewCreationRequest.restaurantId")
     public void createReview(Long userId, ReviewCreationForm.Request reviewCreationRequest) {
         User user = getUser(userId);
 
@@ -41,6 +44,7 @@ public class ReviewService {
                 .subject(reviewCreationRequest.getSubject())
                 .content(reviewCreationRequest.getContent())
                 .rate(reviewCreationRequest.getRate())
+                .commentNum(0)
                 .build();
 
         reviewRepository.save(review);
@@ -53,6 +57,7 @@ public class ReviewService {
         review.setReview(updateReviewRequest.getSubject(), updateReviewRequest.getContent(), updateReviewRequest.getRate());
     }
 
+    @Transactional(readOnly = true)
     public ReviewDto getReview(Long reviewId) {
         return ReviewDto.of(findReview(reviewId));
     }
@@ -64,6 +69,8 @@ public class ReviewService {
         review.delete();
     }
 
+    @Transactional(readOnly = true)
+    @Cacheable(value = "reviewList", key = "'restaurantId:' + #restaurantId")
     public List<ReviewDto> getReviewList(Long restaurantId) {
         return reviewRepository.
                 findByRestaurantAndIsDeletedFalse(getRestaurant(restaurantId)).stream()
@@ -71,6 +78,7 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<ReviewDto> getRestaurantUserReviewList(Long userId, Long restaurantId) {
         return reviewRepository.findByRestaurantAndUserAndIsDeletedFalse(
                         getRestaurant(restaurantId), getUser(userId)).stream()

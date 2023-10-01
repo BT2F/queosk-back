@@ -2,11 +2,14 @@ package com.bttf.queosk.service;
 
 
 import com.bttf.queosk.dto.TableDto;
+import com.bttf.queosk.dto.TableRequestForm;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.repository.TableRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,12 +26,14 @@ public class TableService {
     private final TableRepository tableRepository;
 
     @Transactional
-    public void createTable(Long restaurantId) {
+    @CacheEvict(value = "tableList", key = "'restaurantId:' + #restaurantId")
+    public void createTable(Long restaurantId, TableRequestForm form) {
 
-        tableRepository.save(Table.of(restaurantId));
+        tableRepository.save(Table.of(restaurantId, form));
     }
 
     @Transactional
+    @CacheEvict(value = "tableList", key = "'restaurantId:' + #restaurantId")
     public void updateTable(Long tableId, TableStatus tableStatus, Long restaurantId) {
 
         Table table = getTableFromRepository(tableId);
@@ -41,6 +46,7 @@ public class TableService {
     }
 
     @Transactional
+    @CacheEvict(value = "tableList", key = "'restaurantId:' + #restaurantId")
     public void deleteTable(Long tableId, Long restaurantId) {
 
         Table table = getTableFromRepository(tableId);
@@ -65,6 +71,7 @@ public class TableService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "tableList", key = "'restaurantId:' + #restaurantId")
     public List<TableDto> getTableList(Long restaurantId) {
 
         return tableRepository.findByRestaurantId(restaurantId)

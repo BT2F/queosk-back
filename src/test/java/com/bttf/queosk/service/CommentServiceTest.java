@@ -4,9 +4,12 @@ import com.bttf.queosk.dto.CommentForm;
 import com.bttf.queosk.entity.Comment;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Review;
+import com.bttf.queosk.exception.CustomException;
+import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.CommentRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.ReviewRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,12 +23,12 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @Rollback
 @Transactional
+@DisplayName("대댓글 관련 테스트코드")
 class CommentServiceTest {
 
     @InjectMocks
@@ -39,14 +42,17 @@ class CommentServiceTest {
     private ReviewRepository reviewRepository;
 
     @Test
+    @DisplayName("대댓글 생성")
     void createComment_success() throws Exception {
         // given
         Restaurant restaurant = Restaurant.builder().id(1L).build();
-        Review review = Review.builder().id(1L).restaurant(restaurant).build();
+        Review review = Review.builder().id(1L).commentNum(0).restaurant(restaurant).build();
         given(reviewRepository.findById(1L)).willReturn(Optional.of(review));
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
 
-        CommentForm.Request commentForm = CommentForm.Request.builder().content("test").build();
+        CommentForm.Request commentForm = CommentForm.Request.builder().
+                content("test")
+                .build();
 
         // when
         commentService.createComment(1L, 1L, commentForm);
@@ -56,6 +62,7 @@ class CommentServiceTest {
     }
 
     @Test
+    @DisplayName("대댓글 수정")
     void updateComment() {
         // given
         Restaurant restaurant = Restaurant.builder().id(1L).build();
@@ -83,19 +90,23 @@ class CommentServiceTest {
     }
 
     @Test
+    @DisplayName("대댓글 삭제")
     void deleteComment() {
         // given
         Restaurant restaurant = Restaurant.builder().id(1L).build();
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
 
+        Review review = Review.builder().id(1L).commentNum(1)
+                .restaurant(restaurant).build();
+        given(reviewRepository.findByIdAndIsDeletedFalse(1L)).willReturn(review);
         Comment comment = Comment.builder()
                 .id(1L)
+                .review(review)
                 .restaurant(restaurant)
                 .isDeleted(false)
                 .content("test").build();
 
         given(commentRepository.findByIdAndIsDeletedFalse(1L)).willReturn(comment);
-
         // when
         commentService.deleteComment(1L, 1L);
 

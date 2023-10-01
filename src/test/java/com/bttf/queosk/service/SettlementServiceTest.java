@@ -2,6 +2,7 @@ package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.SettlementDto;
 import com.bttf.queosk.repository.OrderQueryQueryRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.times;
 
 @Transactional
 @ExtendWith(MockitoExtension.class)
+@DisplayName("정산 관련 테스트코드")
 class SettlementServiceTest {
 
     @Mock
@@ -31,6 +33,7 @@ class SettlementServiceTest {
     private com.bttf.queosk.service.SettlementService settlementService;
 
     @Test
+    @DisplayName("금일 정산 (성공)")
     void testTodaySettlementGet_success() {
         //given
         Long restaurantId = 1L;
@@ -57,6 +60,7 @@ class SettlementServiceTest {
     }
 
     @Test
+    @DisplayName("기간 정산 (성공)")
     void testPeriodSettlementGet_success() {
         //given
         Long restaurantId = 1L;

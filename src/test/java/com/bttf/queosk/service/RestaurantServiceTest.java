@@ -1,7 +1,6 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.controller.RestaurantController;
 import com.bttf.queosk.dto.*;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.Restaurant;
@@ -11,19 +10,17 @@ import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.MenuRepository;
 import com.bttf.queosk.repository.RefreshTokenRepository;
+import com.bttf.queosk.repository.RestaurantQueryDSLRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
@@ -43,10 +40,9 @@ import static org.mockito.Mockito.*;
 @Transactional
 @Rollback
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Restaurant 관련 테스트코드")
 class RestaurantServiceTest {
 
-    @InjectMocks
-    private RestaurantController restaurantController;
     @Mock
     private RestaurantRepository restaurantRepository;
     @Mock
@@ -65,18 +61,18 @@ class RestaurantServiceTest {
     private EmailSender emailSender;
     @Mock
     private MenuRepository menuRepository;
-
-    private MockMvc mockMvc;
+    @Mock
+    private RestaurantQueryDSLRepository restaurantQueryDSLRepository;
 
     @BeforeEach
     public void init() {
-        mockMvc = MockMvcBuilders.standaloneSetup(restaurantController).build();
         restaurantService = new RestaurantService(restaurantRepository, refreshTokenRepository,
-                passwordEncoder, jwtTokenProvider, kakaoGeoAddressService, imageService, emailSender, menuRepository);
+                passwordEncoder, jwtTokenProvider, kakaoGeoAddressService, imageService, emailSender, menuRepository, restaurantQueryDSLRepository);
     }
 
-    @DisplayName("매장 생성 테스트")
+
     @Test
+    @DisplayName("매장 가입 (성공)")
     public void 매장_생성() throws Exception {
         // given
 
@@ -104,6 +100,7 @@ class RestaurantServiceTest {
     }
 
     @Test
+    @DisplayName("매장 로그인 (성공)")
     public void RestaurantSignIn_Test() throws Exception {
         // given
 
@@ -143,6 +140,7 @@ class RestaurantServiceTest {
     }
 
     @Test
+    @DisplayName("매장 비밀번호 수정 (성공)")
     public void testUpdateRestaurantPassword() {
         // Given
         Long restaurantId = 1L;
@@ -173,6 +171,7 @@ class RestaurantServiceTest {
     }
 
     @Test
+    @DisplayName("매장 비밀번호 수정 (실패-비밀번호불일치)")
     public void testUpdateRestaurantPasswordInvalidExistingPassword() {
         // Given
         Long restaurantId = 1L;
@@ -202,6 +201,7 @@ class RestaurantServiceTest {
     }
 
     @Test
+    @DisplayName("매장 비밀번호 수정 (실패-매장정보없음)")
     public void testUpdateRestaurantPasswordRestaurantNotFound() {
         // Given
         Long restaurant = 1L;
@@ -225,6 +225,7 @@ class RestaurantServiceTest {
     }
 
     @Test
+    @DisplayName("매장 비밀번호 초기화 (성공)")
     public void testResetRestaurantPassword_Success() {
         // Given
         Restaurant restaurant = Restaurant.builder().email("user@example.com").ownerName("testuser").build();
@@ -240,6 +241,7 @@ class RestaurantServiceTest {
     }
 
     @Test
+    @DisplayName("매장 비밀번호 초기화 (실패-매장정보없음)")
     public void testResetRestaurantPassword_UserNotExists() {
         // Given
         when(restaurantRepository.findByEmail(anyString())).thenReturn(Optional.empty());
@@ -252,6 +254,7 @@ class RestaurantServiceTest {
     }
 
     @Test
+    @DisplayName("매장 비밀번호 초기화 (실패-사업자이름불일치)")
     public void testResetUserPassword_OwnerNameNotMatch() {
         // Given
         Restaurant restaurant = Restaurant.builder()
@@ -268,6 +271,7 @@ class RestaurantServiceTest {
     }
 
     @Test
+    @DisplayName("매장 삭제 (성공)")
     public void testDeleteRestaurant() throws Exception {
         // Given
         String accessToken = "accessToken";
@@ -286,6 +290,7 @@ class RestaurantServiceTest {
     }
 
     @Test
+    @DisplayName("매장 정보/메뉴 불러오기 (성공)")
     public void testGetRestaurantInfoAndMenu_success() throws Exception {
 
         Long restaurantId = 1L;

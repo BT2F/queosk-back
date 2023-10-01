@@ -1,11 +1,9 @@
 package com.bttf.queosk.entity;
 
+import com.bttf.queosk.dto.TableRequestForm;
 import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
 import com.bttf.queosk.enumerate.TableStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.Entity;
@@ -20,19 +18,22 @@ import static com.bttf.queosk.enumerate.TableStatus.OPEN;
 @Builder
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Table extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
     private TableStatus status;
 
     private Long restaurantId;
 
-    public static Table of(Long restaurantId) {
+    public static Table of(Long restaurantId, TableRequestForm form) {
         return Table.builder()
+                .name(form.getTableName())
                 .restaurantId(restaurantId)
                 .status(OPEN)
                 .build();

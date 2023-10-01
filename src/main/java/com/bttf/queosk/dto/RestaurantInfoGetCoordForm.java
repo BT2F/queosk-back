@@ -16,18 +16,6 @@ public class RestaurantInfoGetCoordForm {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    @ApiModel(value = "위치정보 Request")
-    public static class Request {
-        private Double x;
-        private Double y;
-        private int page;
-        private int size;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
     @ApiModel(value = "위치정보 Response")
     public static class Response {
         private long id;

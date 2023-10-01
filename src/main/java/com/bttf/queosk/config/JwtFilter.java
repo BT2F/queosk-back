@@ -25,7 +25,8 @@ public class JwtFilter extends OncePerRequestFilter {
             "/api/restaurants/coord",    // 매장 조회 토큰 미검증
             "/api/restaurants/*/details",// 매장 상세보기
             "/**/users/check",           // 이메일 중복확인
-            "/**/callback"               // 외부 api 콜백이므로 AccessToken 체크 패스
+            "/**/callback",              // 외부 api 콜백이므로 AccessToken 체크 패스
+            "/**/autocomplete"           // 매장검색어 자동완성
     };
     private final JwtTokenProvider jwtTokenProvider;
 

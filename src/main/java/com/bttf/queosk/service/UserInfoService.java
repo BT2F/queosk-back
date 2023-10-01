@@ -1,8 +1,8 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.UserDto;
-import com.bttf.queosk.dto.UserEditForm;
-import com.bttf.queosk.dto.UserPasswordChangeForm;
+import com.bttf.queosk.dto.UserEditRequest;
+import com.bttf.queosk.dto.UserPasswordChangeRequest;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.enumerate.LoginType;
 import com.bttf.queosk.exception.CustomException;
@@ -30,21 +30,27 @@ public class UserInfoService {
     private final KakaoAuthRepository kakaoAuthRepository;
 
     @Transactional
-    public UserDto editUserInformation(Long userId, UserEditForm.Request userEditRequest) {
+    public UserDto editUserInformation(Long userId, UserEditRequest userEditRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
-        user.setNickName(userEditRequest.getNickName());
-        user.setPhone(userEditRequest.getPhone());
+        String newNickName = userEditRequest.getNickName();
+        String newPhone = userEditRequest.getPhone();
 
-        userRepository.save(user);
+        if (newNickName != null) {
+            user.setNickName(newNickName);
+        }
 
-        return UserDto.of(user);
+        if (newPhone != null) {
+            user.setPhone(newPhone);
+        }
+
+        return UserDto.of(userRepository.save(user));
     }
 
     @Transactional
     public void changeUserPassword(Long userId,
-                                   UserPasswordChangeForm.Request userPasswordChangeRequest) {
+                                   UserPasswordChangeRequest userPasswordChangeRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
