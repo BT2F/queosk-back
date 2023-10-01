@@ -20,7 +20,7 @@ public class KakaoPaymentApprovalDto {
     private String partnerOrderId;
     private String partnerUserId;
     private String paymentMethodType;
-    private KakaoAmount amount;
+    private KakaoAmountDto amount;
     private String itemName;
     private String itemCode;
     private Integer quantity;

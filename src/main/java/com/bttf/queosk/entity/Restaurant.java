@@ -1,7 +1,7 @@
 package com.bttf.queosk.entity;
 
 
-import com.bttf.queosk.dto.UpdateRestaurantInfoForm;
+import com.bttf.queosk.dto.RestaurantUpdateRequestForm;
 import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
 import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.RestaurantCategory;
@@ -84,7 +84,7 @@ public class Restaurant extends BaseTimeEntity {
         this.isDeleted = true;
     }
 
-    public void updateRestaurantInfo(UpdateRestaurantInfoForm.Request updateRestaurantInfoRequest) {
+    public void updateRestaurantInfo(RestaurantUpdateRequestForm updateRestaurantInfoRequest) {
         this.ownerId = updateRestaurantInfoRequest.getOwnerId();
         this.cid = updateRestaurantInfoRequest.getCid();
         this.ownerName = updateRestaurantInfoRequest.getOwnerName();

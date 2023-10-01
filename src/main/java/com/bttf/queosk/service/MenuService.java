@@ -1,9 +1,9 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.MenuCreationRequest;
+import com.bttf.queosk.dto.MenuCreationRequestForm;
 import com.bttf.queosk.dto.MenuDto;
-import com.bttf.queosk.dto.MenuStatusRequest;
-import com.bttf.queosk.dto.MenuUpdateRequest;
+import com.bttf.queosk.dto.MenuStatusRequestForm;
+import com.bttf.queosk.dto.MenuUpdateRequestForm;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.repository.MenuRepository;
@@ -24,8 +24,8 @@ public class MenuService {
     private final MenuRepository menuRepository;
 
     @Transactional
-    public void createMenu(Long restaurantId, MenuCreationRequest menuCreationRequest) {
-        menuRepository.save(Menu.of(restaurantId, menuCreationRequest));
+    public void createMenu(Long restaurantId, MenuCreationRequestForm menuCreationRequestForm) {
+        menuRepository.save(Menu.of(restaurantId, menuCreationRequestForm));
     }
 
     @Transactional(readOnly = true)
@@ -47,13 +47,13 @@ public class MenuService {
     @CacheEvict(value = "menuList", key = "'restaurantId:' + #restaurantId")
     public void updateMenuInfo(Long restaurantId,
                                Long menuId,
-                               MenuUpdateRequest menuUpdateRequest) {
+                               MenuUpdateRequestForm menuUpdateRequestForm) {
 
         Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
                 .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
 
-        menu.setName(menuUpdateRequest.getName());
-        menu.setPrice(menuUpdateRequest.getPrice());
+        menu.setName(menuUpdateRequestForm.getName());
+        menu.setPrice(menuUpdateRequestForm.getPrice());
 
         menuRepository.save(menu);
     }
@@ -62,12 +62,12 @@ public class MenuService {
     @CacheEvict(value = "menuList", key = "'restaurantId:' + #restaurantId")
     public void updateMenuStatus(Long restaurantId,
                                  Long menuId,
-                                 MenuStatusRequest menuStatusRequest) {
+                                 MenuStatusRequestForm menuStatusRequestForm) {
 
         Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId)
                 .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
 
-        menu.setStatus(menuStatusRequest.getStatus());
+        menu.setStatus(menuStatusRequestForm.getStatus());
 
         menuRepository.save(menu);
     }

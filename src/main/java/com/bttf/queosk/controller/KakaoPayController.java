@@ -24,10 +24,13 @@ public class KakaoPayController {
     @ApiOperation(value = "결제 준비 API", notes = "결제를 준비하는 API를 작성 합니다.")
     public ResponseEntity<Object> paymentReady(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @Valid @RequestBody KakaoPaymentReadyForm kakaoPaymentReadyForm) {
+            @Valid @RequestBody KakaoPaymentReadyRequestForm kakaoPaymentReadyRequestForm) {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
-        KakaoPaymentReadyDto paymentReady = kakaoPaymentService.kakaoPaymentReady(userId, kakaoPaymentReadyForm);
+
+        KakaoPaymentReadyDto paymentReady =
+                kakaoPaymentService.kakaoPaymentReady(userId, kakaoPaymentReadyRequestForm);
+
         return ResponseEntity.ok(paymentReady);
     }
 
@@ -36,10 +39,13 @@ public class KakaoPayController {
     public ResponseEntity<Object> paymentApprove(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestParam("pg_token") String pgToken,
-            @Valid @RequestBody KakaoPaymentApprovalForm kakaoPaymentApprovalForm) {
+            @Valid @RequestBody KakaoPaymentApprovalRequestForm kakaoPaymentApprovalRequestForm) {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
-        KakaoPaymentApprovalDto paymentApprove = kakaoPaymentService.kakaoPaymentApprove(userId, pgToken, kakaoPaymentApprovalForm);
+
+        KakaoPaymentApprovalDto paymentApprove =
+                kakaoPaymentService.kakaoPaymentApprove(userId, pgToken, kakaoPaymentApprovalRequestForm);
+
         return ResponseEntity.ok(paymentApprove);
     }
 
@@ -47,10 +53,13 @@ public class KakaoPayController {
     @ApiOperation(value = "결제 취소 API", notes = "결제를 취소하는 API를 작성 합니다.")
     public ResponseEntity<Object> paymentCancel(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @Valid @RequestBody KakaoPaymentCancelForm kakaoPaymentCancelForm) {
+            @Valid @RequestBody KakaoPaymentCancelRequestForm kakaoPaymentCancelRequestForm) {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
-        KakaoPaymentCancelDto paymentCancel = kakaoPaymentService.kakaoPaymentCancel(userId, kakaoPaymentCancelForm);
+
+        KakaoPaymentCancelDto paymentCancel =
+                kakaoPaymentService.kakaoPaymentCancel(userId, kakaoPaymentCancelRequestForm);
+
         return ResponseEntity.ok(paymentCancel);
     }
 }
