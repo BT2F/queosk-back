@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -30,8 +32,17 @@ public class SettlementController {
     public ResponseEntity<SettlementResponseForm> getTodaySettlement(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
+        LocalDate today = LocalDate.now();
+        LocalDateTime from = LocalDateTime.of(today, LocalTime.MIN);
+        LocalDateTime to = LocalDateTime
+                .of(today.plusDays(1), LocalTime.MIN)
+                .minusNanos(1);
+
         return ResponseEntity.status(OK)
-                .body(SettlementResponseForm.of(settlementService.todaySettlementGet(restaurantId)));
+                .body(SettlementResponseForm.of(settlementService.SettlementGet(
+                        restaurantId, to, from
+                )));
     }
 
     @GetMapping("/period")
@@ -44,7 +55,7 @@ public class SettlementController {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         return ResponseEntity.status(OK)
-                .body(SettlementResponseForm.of(settlementService.periodSettlementGet(
+                .body(SettlementResponseForm.of(settlementService.SettlementGet(
                         restaurantId, to.atStartOfDay(), from.atStartOfDay()
                 )));
     }

@@ -12,6 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,11 +45,16 @@ class SettlementServiceTest {
                 new SettlementDto.OrderdMenu("탕수육", 1, 17000L)
         );
         SettlementDto dto = new SettlementDto(list, 36000L);
+        LocalDate today = LocalDate.now();
+        LocalDateTime from = LocalDateTime.of(today, LocalTime.MIN);
+        LocalDateTime to = LocalDateTime
+                .of(today.plusDays(1), LocalTime.MIN)
+                .minusNanos(1);
 
-        given(queryRepository.getTodaySettlement(restaurantId)).willReturn(dto);
+        given(queryRepository.getPeriodSales(restaurantId, to, from)).willReturn(dto.getOrderdMenus());
 
         //when
-        SettlementDto settlementDto = settlementService.todaySettlementGet(restaurantId);
+        SettlementDto settlementDto = settlementService.SettlementGet(restaurantId, to, from);
         for (SettlementDto.OrderdMenu orderdMenu : list) {
             System.out.println(orderdMenu.getMenu());
             System.out.println(orderdMenu.getPrice());
@@ -56,7 +63,7 @@ class SettlementServiceTest {
         //then
         assertThat(settlementDto.getOrderdMenus()).isEqualTo(list);
         assertThat(settlementDto.getTotal()).isEqualTo(36000L);
-        then(settlementService).should(times(1)).todaySettlementGet(restaurantId);
+        then(settlementService).should(times(1)).SettlementGet(restaurantId, to, from);
     }
 
     @Test
@@ -76,7 +83,7 @@ class SettlementServiceTest {
                 .willReturn(list);
 
         //when
-        SettlementDto settlementDto = settlementService.periodSettlementGet(
+        SettlementDto settlementDto = settlementService.SettlementGet(
                 restaurantId, to.atStartOfDay(), from.atStartOfDay()
         );
 
@@ -84,6 +91,6 @@ class SettlementServiceTest {
         assertThat(settlementDto.getOrderdMenus()).isEqualTo(list);
         assertThat(settlementDto.getTotal()).isEqualTo(36000L);
         then(settlementService).should(times(1))
-                .periodSettlementGet(restaurantId, to.atStartOfDay(), from.atStartOfDay());
+                .SettlementGet(restaurantId, to.atStartOfDay(), from.atStartOfDay());
     }
 }

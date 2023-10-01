@@ -20,14 +20,9 @@ public class SettlementService {
 
     private final OrderQueryQueryRepository queryRepository;
 
-    public SettlementDto todaySettlementGet(Long restaurantId) {
-
-        return queryRepository.getTodaySettlement(restaurantId);
-    }
-
-    public SettlementDto periodSettlementGet(Long restaurantId,
-                                             LocalDateTime to,
-                                             LocalDateTime from) {
+    public SettlementDto SettlementGet(Long restaurantId,
+                                       LocalDateTime to,
+                                       LocalDateTime from) {
 
         List<SettlementDto.OrderdMenu> settlement = queryRepository.getPeriodSales(restaurantId, to, from);
 
