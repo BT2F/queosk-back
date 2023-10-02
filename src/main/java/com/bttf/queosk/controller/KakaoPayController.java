@@ -22,8 +22,10 @@ public class KakaoPayController {
 
     @PostMapping("/ready")
     @ApiOperation(value = "결제 준비 API", notes = "결제를 준비하는 API를 작성 합니다.")
-    public ResponseEntity<Object> paymentReady(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                               @Valid @RequestBody KakaoPaymentReadyForm kakaoPaymentReadyForm) {
+    public ResponseEntity<Object> paymentReady(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @Valid @RequestBody KakaoPaymentReadyForm kakaoPaymentReadyForm) {
+
         Long userId = jwtTokenProvider.getIdFromToken(token);
         KakaoPaymentReadyDto paymentReady = kakaoPaymentService.kakaoPaymentReady(userId, kakaoPaymentReadyForm);
         return ResponseEntity.ok(paymentReady);
@@ -31,9 +33,11 @@ public class KakaoPayController {
 
     @PostMapping("/approve")
     @ApiOperation(value = "결제 승인 API", notes = "결제를 승인받는 API를 작성 합니다.")
-    public ResponseEntity<Object> paymentApprove(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                 @RequestParam("pg_token") String pgToken,
-                                                 @Valid @RequestBody KakaoPaymentApprovalForm kakaoPaymentApprovalForm) {
+    public ResponseEntity<Object> paymentApprove(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestParam("pg_token") String pgToken,
+            @Valid @RequestBody KakaoPaymentApprovalForm kakaoPaymentApprovalForm) {
+
         Long userId = jwtTokenProvider.getIdFromToken(token);
         KakaoPaymentApprovalDto paymentApprove = kakaoPaymentService.kakaoPaymentApprove(userId, pgToken, kakaoPaymentApprovalForm);
         return ResponseEntity.ok(paymentApprove);
@@ -41,7 +45,10 @@ public class KakaoPayController {
 
     @PostMapping("/cancel")
     @ApiOperation(value = "결제 취소 API", notes = "결제를 취소하는 API를 작성 합니다.")
-    public ResponseEntity<Object> paymentCancel(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Valid @RequestBody KakaoPaymentCancelForm kakaoPaymentCancelForm) {
+    public ResponseEntity<Object> paymentCancel(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @Valid @RequestBody KakaoPaymentCancelForm kakaoPaymentCancelForm) {
+
         Long userId = jwtTokenProvider.getIdFromToken(token);
         KakaoPaymentCancelDto paymentCancel = kakaoPaymentService.kakaoPaymentCancel(userId, kakaoPaymentCancelForm);
         return ResponseEntity.ok(paymentCancel);

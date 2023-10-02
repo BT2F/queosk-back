@@ -26,5 +26,6 @@ public class ReviewCreationForm {
         @DecimalMin(value = "0.0")
         @DecimalMax(value = "5.0")
         private Double rate;
+        private String imageUrl;
     }
 }

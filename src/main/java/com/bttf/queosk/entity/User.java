@@ -55,7 +55,7 @@ public class User extends BaseTimeEntity {
                           String trimmedPhoneNumber) {
 
         return User.builder()
-                .email(userSignUpRequest.getEmail())
+                .email(userSignUpRequest.getEmail().toLowerCase())
                 .nickName(userSignUpRequest.getNickName())
                 .password(encryptedPassword)
                 .phone(trimmedPhoneNumber)
@@ -67,7 +67,7 @@ public class User extends BaseTimeEntity {
 
     public static User of(String email, String nickName, String encodedPassword, String imageUrl) {
         return User.builder()
-                .email(email)
+                .email(email.toLowerCase())
                 .password(encodedPassword)
                 .nickName(nickName)
                 .loginType(KAKAO)

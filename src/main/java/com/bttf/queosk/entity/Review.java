@@ -34,6 +34,8 @@ public class Review extends BaseTimeEntity {
 
     private Double rate;
 
+    private String imageUrl;
+
     private Boolean isDeleted;
 
     private Integer commentNum;

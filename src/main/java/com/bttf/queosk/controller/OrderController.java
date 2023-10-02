@@ -27,8 +27,10 @@ public class OrderController {
 
     @PostMapping("api/user/order")
     @ApiOperation(value = "주문 등록", notes = "매장의 주문을 생성합니다.")
-    public ResponseEntity<Void> createOrder(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                            @RequestBody OrderCreationForm.Request orderCreationForm) {
+    public ResponseEntity<Void> createOrder(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody OrderCreationForm.Request orderCreationForm) {
+
         Long userId = jwtTokenProvider.getIdFromToken(token);
         orderService.createOrder(orderCreationForm, userId);
         return ResponseEntity.status(CREATED).build();
@@ -36,9 +38,11 @@ public class OrderController {
 
     @PutMapping("api/restaurant/order/{orderId}")
     @ApiOperation(value = "주문 상태 수정", notes = "해당 주문의 상태를 수정합니다.")
-    public ResponseEntity<Void> updateOrderStatus(@PathVariable(name = "orderId") Long orderId,
-                                                  @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                  @RequestParam OrderStatus orderStatus) {
+    public ResponseEntity<Void> updateOrderStatus(
+            @PathVariable(name = "orderId") Long orderId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestParam OrderStatus orderStatus) {
+
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         orderService.updateOrderStatus(orderId, restaurantId, orderStatus);
         return ResponseEntity.status(CREATED).build();
@@ -46,8 +50,10 @@ public class OrderController {
 
     @GetMapping("api/restaurant/order/{orderId}")
     @ApiOperation(value = "매장 단일 주문 확인", notes = "매장에서 단일한 주문의 내용을 확인합니다")
-    public ResponseEntity<ReadOrderForm.Response> readOrder(@PathVariable(name = "orderId") Long orderId,
-                                                            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<ReadOrderForm.Response> readOrder(
+            @PathVariable(name = "orderId") Long orderId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
         ReadOrderForm.Response response = ReadOrderForm.Response
                 .of(orderService.readOrder(orderId, restaurantId));
