@@ -1,8 +1,8 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.ReviewCreationForm;
+import com.bttf.queosk.dto.ReviewCreationRequestForm;
 import com.bttf.queosk.dto.ReviewDto;
-import com.bttf.queosk.dto.UpdateReviewForm.Request;
+import com.bttf.queosk.dto.ReviewUpdateRequestForm;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Review;
 import com.bttf.queosk.entity.User;
@@ -30,10 +30,9 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
 
-
     @Transactional
     @CacheEvict(value = "reviewList", key = "'restaurantId:' + #reviewCreationRequest.restaurantId")
-    public void createReview(Long userId, ReviewCreationForm.Request reviewCreationRequest) {
+    public void createReview(Long userId, ReviewCreationRequestForm reviewCreationRequest) {
         User user = getUser(userId);
 
         Restaurant restaurant = getRestaurant(reviewCreationRequest.getRestaurantId());
@@ -52,10 +51,16 @@ public class ReviewService {
     }
 
     @Transactional
-    public void updateReview(Long reviewId, Long userId, Request updateReviewRequest) {
+    public void updateReview(Long reviewId, Long userId, ReviewUpdateRequestForm updateReviewRequest) {
         Review review = findReview(reviewId);
+
         validReviewUser(userId, review);
-        review.setReview(updateReviewRequest.getSubject(), updateReviewRequest.getContent(), updateReviewRequest.getRate());
+
+        review.setReview(
+                updateReviewRequest.getSubject(),
+                updateReviewRequest.getContent(),
+                updateReviewRequest.getRate()
+        );
     }
 
     @Transactional(readOnly = true)
@@ -82,8 +87,8 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public List<ReviewDto> getRestaurantUserReviewList(Long userId, Long restaurantId) {
         return reviewRepository.findByRestaurantAndUserAndIsDeletedFalse(
-                        getRestaurant(restaurantId), getUser(userId)
-                ).stream().map(ReviewDto::of).collect(Collectors.toList());
+                getRestaurant(restaurantId), getUser(userId)
+        ).stream().map(ReviewDto::of).collect(Collectors.toList());
     }
 
     private User getUser(Long userId) {

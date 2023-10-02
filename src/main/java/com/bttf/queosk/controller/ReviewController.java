@@ -34,20 +34,23 @@ public class ReviewController {
     @ApiOperation(value = "리뷰 작성", notes = "사용자가 매장에 대해 리뷰를 남깁니다.")
     public ResponseEntity<Void> createReview(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody @Valid ReviewCreationForm.Request reviewCreationRequest) {
+            @RequestBody @Valid ReviewCreationRequestForm reviewCreationRequest) {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
+
         reviewService.createReview(userId, reviewCreationRequest);
+
         return ResponseEntity.status(CREATED).build();
     }
 
     @GetMapping("{reviewId}")
     @ApiOperation(value = "리뷰 열람", notes = "단건의 리뷰를 열람합니다.")
-    public ResponseEntity<GetReviewForm.Response> getReview(
+    public ResponseEntity<ReviewResponseForm> getReview(
             @PathVariable("reviewId") Long reviewId) {
 
         ReviewDto reviewDto = reviewService.getReview(reviewId);
-        return ResponseEntity.status(OK).body(GetReviewForm.Response.of(reviewDto));
+
+        return ResponseEntity.status(OK).body(ReviewResponseForm.of(reviewDto));
     }
 
     @PutMapping("{reviewId}")
@@ -55,10 +58,12 @@ public class ReviewController {
     public ResponseEntity<Void> updateReview(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @PathVariable("reviewId") Long reviewId,
-            @RequestBody @Valid UpdateReviewForm.Request updateReviewRequest) {
+            @RequestBody @Valid ReviewUpdateRequestForm updateReviewRequest) {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
+
         reviewService.updateReview(reviewId, userId, updateReviewRequest);
+
         return ResponseEntity.status(CREATED).build();
     }
 
@@ -81,41 +86,45 @@ public class ReviewController {
 
     @GetMapping("restaurants/{restaurantId}")
     @ApiOperation(value = "매장 리뷰 리스트 열람", notes = "해당 매장에 쓰인 리뷰를 열람합니다.")
-    public ResponseEntity<List<GetReviewListForm.Response>> getReviewList(
+    public ResponseEntity<List<ReviewResponseForm>> getReviewList(
             @PathVariable("restaurantId") Long restaurantId) {
 
         List<ReviewDto> reviewDtoList = reviewService.getReviewList(restaurantId);
-        List<GetReviewListForm.Response> responseList = reviewDtoList.stream()
-                .map(GetReviewListForm.Response::of)
+
+        List<ReviewResponseForm> responseList = reviewDtoList.stream()
+                .map(ReviewResponseForm::of)
                 .collect(Collectors.toList());
+
         return ResponseEntity.status(OK).body(responseList);
     }
 
     @GetMapping("restaurants/{restaurantId}/user")
     @ApiOperation(value = "각 사용자 별 매장 리뷰 열람")
-    public ResponseEntity<List<GetRestaurantUserReviewListForm.Response>> getRestaurantUserReviewList(
+    public ResponseEntity<List<ReviewResponseForm>> getRestaurantUserReviewList(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @PathVariable("restaurantId") Long restaurantId) {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
+
         List<ReviewDto> reviewDtoList = reviewService.getRestaurantUserReviewList(userId, restaurantId);
-        List<GetRestaurantUserReviewListForm.Response> responseList = reviewDtoList.stream()
-                .map(GetRestaurantUserReviewListForm.Response::of)
+
+        List<ReviewResponseForm> responseList = reviewDtoList.stream()
+                .map(ReviewResponseForm::of)
                 .collect(Collectors.toList());
+
         return ResponseEntity.status(OK).body(responseList);
     }
 
     @PostMapping("/image")
     @ApiOperation(value = "리뷰이미지 업로드 및 경로 가져오기",
             notes = "리뷰사진을 이미지서버에 업로드 하고 imageUrl을 가져옵니다.")
-    public ResponseEntity<ImageUrlForm.Response> uploadImageAndGetUrl(
+    public ResponseEntity<ImageUrlResponseForm> uploadImageAndGetUrl(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody MultipartFile image) throws IOException {
 
-        String url = imageService.saveFile(
-                image, "review/" + UUID.randomUUID().toString().substring(0, 6)
-        );
+        String url =
+                imageService.saveFile(image, "review/" + UUID.randomUUID().toString().substring(0, 6));
 
-        return ResponseEntity.status(CREATED).body(ImageUrlForm.Response.of(url));
+        return ResponseEntity.status(CREATED).body(ImageUrlResponseForm.of(url));
     }
 }

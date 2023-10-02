@@ -1,8 +1,8 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.UserDto;
-import com.bttf.queosk.dto.UserEditRequest;
-import com.bttf.queosk.dto.UserPasswordChangeRequest;
+import com.bttf.queosk.dto.UserEditRequestForm;
+import com.bttf.queosk.dto.UserPasswordChangeRequestForm;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.enumerate.LoginType;
 import com.bttf.queosk.exception.CustomException;
@@ -30,18 +30,18 @@ public class UserInfoService {
     private final KakaoAuthRepository kakaoAuthRepository;
 
     @Transactional
-    public UserDto editUserInformation(Long userId, UserEditRequest userEditRequest) {
+    public UserDto editUserInformation(Long userId, UserEditRequestForm userEditRequestForm) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
-        String newNickName = userEditRequest.getNickName();
+        String newNickName = userEditRequestForm.getNickName();
 
         //휴대번번호네 문자나 공백이 들어왔다면 처리
-        String newPhone = userEditRequest.getPhone() == null ? null :
-                userEditRequest.getPhone().replaceAll("\\D", "");
+        String newPhone = userEditRequestForm.getPhone() == null ? null :
+                userEditRequestForm.getPhone().replaceAll("\\D", "");
 
         if (newNickName != null) {
-            user.setNickName(userEditRequest.getNickName());
+            user.setNickName(userEditRequestForm.getNickName());
         }
 
         if (newPhone != null) {
@@ -53,7 +53,7 @@ public class UserInfoService {
 
     @Transactional
     public void changeUserPassword(Long userId,
-                                   UserPasswordChangeRequest userPasswordChangeRequest) {
+                                   UserPasswordChangeRequestForm userPasswordChangeRequestForm) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
 
@@ -61,11 +61,11 @@ public class UserInfoService {
             throw new CustomException(KAKAO_USER_UNSUPPORTED_SERVICE);
         }
 
-        if (!passwordEncoder.matches(userPasswordChangeRequest.getExistingPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(userPasswordChangeRequestForm.getExistingPassword(), user.getPassword())) {
             throw new CustomException(PASSWORD_NOT_MATCH);
         }
 
-        user.setPassword(passwordEncoder.encode(userPasswordChangeRequest.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(userPasswordChangeRequestForm.getNewPassword()));
 
         userRepository.save(user);
     }

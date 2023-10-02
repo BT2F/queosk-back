@@ -2,8 +2,8 @@ package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.TableDto;
-import com.bttf.queosk.dto.TableResponseForm;
 import com.bttf.queosk.dto.TableRequestForm;
+import com.bttf.queosk.dto.TableResponseForm;
 import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.service.QueueService;
 import com.bttf.queosk.service.TableService;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.bttf.queosk.enumerate.TableStatus.OPEN;
 import static org.springframework.http.HttpStatus.*;
@@ -38,7 +39,6 @@ public class TableController {
         tableService.createTable(restaurantId, form);
         return ResponseEntity.status(CREATED).build();
     }
-
     @PutMapping("/table/{tableId}")
     @ApiOperation(value = "매장 테이블 상태 변경", notes = "매장 테이블의 상태를 변경 합니다.")
     public ResponseEntity<Void> tableUpdate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -70,7 +70,7 @@ public class TableController {
     @GetMapping("/table/{tableId}")
     @ApiOperation(value = "매장 특정테이블 조회", notes = "매장의 특정 테이블을 조회 합니다.")
     public ResponseEntity<TableResponseForm> tableGet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                               @PathVariable Long tableId) {
+                                                       @PathVariable Long tableId) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
@@ -94,4 +94,20 @@ public class TableController {
         }
         return ResponseEntity.status(OK).body(tableFormList);
     }
+
+    @GetMapping("/{restaurantId}/tables")
+    @ApiOperation(value = "매핑가능 테이블 조회", notes = "고객이 주문 시 매핑 가능한 매장 테이블을 조회 합니다.")
+    public ResponseEntity<List<TableResponseForm>> availableTables(
+            @PathVariable Long restaurantId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
+        List<TableDto> tableList = tableService.getAvailableTables(restaurantId);
+
+        List<TableResponseForm> tableFormList = tableList.stream()
+                .map(TableResponseForm::of)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(OK).body(tableFormList);
+    }
+
 }
