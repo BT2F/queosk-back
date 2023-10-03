@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -67,10 +66,10 @@ class QueueServiceTest {
         // given
         User mockUser = User.builder().id(1L).build();
         Restaurant mockRestaurant = Restaurant.builder().id(1L).build();
-        QueueCreationRequest queueCreationRequest = QueueCreationRequest.builder().numberOfParty(1L).build();
+        QueueCreationRequestForm queueCreationRequestForm = QueueCreationRequestForm.builder().numberOfParty(1L).build();
         Queue mockQueue = Queue.builder()
                 .id(1L)
-                .numberOfParty(queueCreationRequest.getNumberOfParty())
+                .numberOfParty(queueCreationRequestForm.getNumberOfParty())
                 .restaurantId(mockRestaurant.getId())
                 .userId(mockUser.getId())
                 .build();
@@ -91,7 +90,7 @@ class QueueServiceTest {
                 .thenReturn(null);
 
         // when
-        queueService.createQueue(queueCreationRequest, mockUser.getId(), mockRestaurant.getId());
+        queueService.createQueue(queueCreationRequestForm, mockUser.getId(), mockRestaurant.getId());
 
         // then
         verify(queueRedisRepository, times(1)).createQueue(eq("1"), eq("1"));
@@ -107,7 +106,7 @@ class QueueServiceTest {
         CustomException exception = assertThrows(
                 CustomException.class,
                 () -> queueService.createQueue(
-                        QueueCreationRequest.builder().numberOfParty(1L).build(), 1L, 1L)
+                        QueueCreationRequestForm.builder().numberOfParty(1L).build(), 1L, 1L)
         );
         assertThat(exception.getErrorCode()).isEqualTo(INVALID_RESTAURANT);
     }

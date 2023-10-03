@@ -58,7 +58,7 @@ class UserServiceTest {
     @DisplayName("사용자 생성 (성공)")
     void testCreateUser_Success() {
         // Given
-        UserSignUpRequest userSignUpForm = UserSignUpRequest.builder()
+        UserSignUpRequestForm userSignUpForm = UserSignUpRequestForm.builder()
                 .email("test@example.com")
                 .nickName("testUser")
                 .password("password")
@@ -82,8 +82,8 @@ class UserServiceTest {
     @DisplayName("사용자 생성 (실패-기존 사용자)")
     void testCreateUser_ExistingEmail() {
         // Given
-        UserSignUpRequest userSignUpForm =
-                UserSignUpRequest.builder()
+        UserSignUpRequestForm userSignUpForm =
+                UserSignUpRequestForm.builder()
                         .email("existing@example.com")
                         .build();
 
@@ -124,7 +124,7 @@ class UserServiceTest {
 
         // when
         UserSignInDto result = userLoginService.signInUser(
-                UserSignInRequest.builder()
+                UserSignInRequestForm.builder()
                         .email(user.getEmail())
                         .password(user.getPassword())
                         .build()
@@ -148,7 +148,7 @@ class UserServiceTest {
         // when & then
         assertThatThrownBy(
                 () -> userLoginService.signInUser(
-                        UserSignInRequest.builder()
+                        UserSignInRequestForm.builder()
                                 .email(invalidEmail)
                                 .password(password)
                                 .build()))
@@ -173,7 +173,7 @@ class UserServiceTest {
         // when & then
         assertThatThrownBy(
                 () -> userLoginService.signInUser(
-                        UserSignInRequest.builder()
+                        UserSignInRequestForm.builder()
                                 .email(email)
                                 .password(invalidPassword)
                                 .build())
@@ -289,7 +289,7 @@ class UserServiceTest {
     public void testEditUserInformation_Success() {
         // Given
         Long userId = 1L;
-        UserEditRequest userEditForm = UserEditRequest.builder()
+        UserEditRequestForm userEditForm = UserEditRequestForm.builder()
                 .nickName("나나난")
                 .phone("01099998888")
                 .build();
@@ -322,7 +322,7 @@ class UserServiceTest {
     public void testEditUserInformation_UserNotExist() {
         // Given
         Long userId = 1L;
-        UserEditRequest userEditForm = new UserEditRequest();
+        UserEditRequestForm userEditForm = new UserEditRequestForm();
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When, Then
@@ -347,8 +347,8 @@ class UserServiceTest {
                 .password("encodedOldPassword")
                 .build();
 
-        UserPasswordChangeRequest userPasswordChangeForm =
-                UserPasswordChangeRequest.builder()
+        UserPasswordChangeRequestForm userPasswordChangeForm =
+                UserPasswordChangeRequestForm.builder()
                         .existingPassword("oldPassword")
                         .newPassword(newPassword)
                         .build();
@@ -382,8 +382,8 @@ class UserServiceTest {
                 .password("encodedOldPassword")
                 .build();
 
-        UserPasswordChangeRequest userPasswordChangeForm =
-                UserPasswordChangeRequest.builder()
+        UserPasswordChangeRequestForm userPasswordChangeForm =
+                UserPasswordChangeRequestForm.builder()
                         .existingPassword("invalidOldPassword")
                         .newPassword(newPassword)
                         .build();
@@ -408,8 +408,8 @@ class UserServiceTest {
         // Given
         Long userId = 1L;
 
-        UserPasswordChangeRequest userPasswordChangeForm =
-                UserPasswordChangeRequest.builder()
+        UserPasswordChangeRequestForm userPasswordChangeForm =
+                UserPasswordChangeRequestForm.builder()
                         .existingPassword("oldPassword")
                         .newPassword("newPassword")
                         .build();

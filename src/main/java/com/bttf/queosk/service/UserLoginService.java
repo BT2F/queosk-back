@@ -25,27 +25,27 @@ public class UserLoginService {
     private final EmailSender emailSender;
 
     @Transactional
-    public void createUser(UserSignUpRequest userSignUpRequest) {
+    public void createUser(UserSignUpRequestForm userSignUpRequestForm) {
 
-        //기존회원 여부 확인
-        userRepository.findByEmail(userSignUpRequest.getEmail())
+        //기존회원 여부 확인 (소문자 치환 후 조회)
+        userRepository.findByEmail(userSignUpRequestForm.getEmail().toLowerCase())
                 .ifPresent(user -> {
                     throw new CustomException(EXISTING_USER);
                 });
 
         //비밀번호 암호화
-        String encryptedPassword = passwordEncoder.encode(userSignUpRequest.getPassword());
+        String encryptedPassword = passwordEncoder.encode(userSignUpRequestForm.getPassword());
 
         //회원 휴대폰 번호 혹시라도 문자나 공백이 들어왔다면 처리
         String trimmedPhoneNumber =
-                userSignUpRequest.getPhone().replaceAll("\\D", "");
+                userSignUpRequestForm.getPhone().replaceAll("\\D", "");
 
-        User user = User.of(userSignUpRequest, encryptedPassword, trimmedPhoneNumber);
+        User user = User.of(userSignUpRequestForm, encryptedPassword, trimmedPhoneNumber);
 
         userRepository.save(user);
 
         //회원 이메일 주소로 인증이메일 전송
-        emailSender.sendEmail(userSignUpRequest.getEmail(),
+        emailSender.sendEmail(userSignUpRequestForm.getEmail(),
                 "Queosk 이메일 인증",
                 String.format("Queosk에 가입해 주셔서 감사합니다. \n" +
                         "아래 링크를 클릭 하시어 이메일 인증을 완료해주세요.\n" +
@@ -53,14 +53,14 @@ public class UserLoginService {
     }
 
     @Transactional
-    public UserSignInDto signInUser(UserSignInRequest userSignInRequest) {
+    public UserSignInDto signInUser(UserSignInRequestForm userSignInRequestForm) {
 
         //입력된 email 로 사용자 조회
-        User user = userRepository.findByEmail(userSignInRequest.getEmail())
+        User user = userRepository.findByEmail(userSignInRequestForm.getEmail())
                 .orElseThrow(() -> new CustomException(INVALID_USER_ID));
 
         //조회된 사용자의 비밀번호와 입력된 비밀번호 비교
-        if (!passwordEncoder.matches(userSignInRequest.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(userSignInRequestForm.getPassword(), user.getPassword())) {
             throw new CustomException(PASSWORD_NOT_MATCH);
         }
 
@@ -84,7 +84,7 @@ public class UserLoginService {
     }
 
     public boolean checkDuplication(String email) {
-        return !userRepository.findByEmail(email).isPresent();
+        return !userRepository.findByEmail(email.toLowerCase()).isPresent();
     }
 
     @Transactional(readOnly = true)

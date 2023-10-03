@@ -1,6 +1,6 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.OrderCreationForm;
+import com.bttf.queosk.dto.OrderCreationRequestForm;
 import com.bttf.queosk.dto.OrderDto;
 import com.bttf.queosk.entity.MenuItem;
 import com.bttf.queosk.entity.Order;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,14 +37,16 @@ public class OrderService {
     private final MenuRepository menuRepository;
 
     @Transactional
-    public void createOrder(OrderCreationForm.Request orderCreationRequest, Long userId) {
+    public void createOrder(OrderCreationRequestForm orderCreationRequest, Long userId) {
+
         Restaurant restaurant = getRestaurant(orderCreationRequest.getRestaurantId());
+
         Table table = getTable(orderCreationRequest.getTableId());
+
         List<MenuItem> menuItemList = orderCreationRequest.getMenuItems().stream().map(menuItems -> MenuItem.builder()
                 .menu(menuRepository.findById(menuItems.getMenu()).orElseThrow(() -> new CustomException(MENU_NOT_FOUND)))
                 .count(menuItems.getCount())
                 .build()).collect(Collectors.toList());
-
 
         validOrder(restaurant, table, menuItemList);
 
@@ -85,15 +86,18 @@ public class OrderService {
         Restaurant restaurant = getRestaurant(restaurantId);
         LocalDateTime startTime = LocalDateTime.now().toLocalDate().atStartOfDay();
         LocalDateTime endTime = LocalDateTime.now().toLocalDate().atTime(23, 59, 59);
+
         List<Order> orderList = orderRepository.findByRestaurantIdAndCreatedAtBetween(
                 restaurant.getId(), startTime, endTime
         );
+
         return orderToOrderDto(orderList);
     }
 
     public List<OrderDto> readInProgressOrderList(Long restaurantId) {
         List<Order> orderList =
                 orderRepository.findAllByRestaurantIdAndStatus(restaurantId, IN_PROGRESS);
+
         return orderToOrderDto(orderList);
     }
 
@@ -106,6 +110,7 @@ public class OrderService {
     public List<OrderDto> readItodayDoneList(Long restaurantId) {
         List<Order> orderList =
                 orderRepository.findAllByRestaurantIdAndStatus(restaurantId, DONE);
+
         return orderToOrderDto(orderList);
     }
 

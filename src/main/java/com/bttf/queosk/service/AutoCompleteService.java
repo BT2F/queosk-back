@@ -35,40 +35,52 @@ public class AutoCompleteService {
     }
 
     public AutoCompleteDto autoComplete(String input) {
-        List<String> matchingKeywords = new ArrayList<>();
 
-        if (isKoreanConsonant(input.charAt(0))) {
-            // 초성 검색
-            Set<String> consonantKeywords = redisTemplate.opsForZSet().rangeByScore(AUTOCOMPLETE_KEY, 0, 0);
-            consonantKeywords.forEach(restaurant -> {
-                if (extractConsonant(restaurant).contains(input)) {
-                    matchingKeywords.add(restaurant);
-                }
-            });
-        } else {
-            // 일반 검색
-            Set<ZSetOperations.TypedTuple<String>> rankedKeywords = null;
-            if (!isKoreanConsonant(input.charAt(0))) {
-                rankedKeywords = redisTemplate.opsForZSet().rangeWithScores(AUTOCOMPLETE_KEY, 0, -1);
-            }
+        List<String> matchingKeywords = new ArrayList<>(
+                isKoreanConsonant(input.charAt(0)) ?
+                        searchByConsonant(input) :
+                        searchByGeneral(input)
+        );
 
-            if (rankedKeywords != null && !rankedKeywords.isEmpty()) {
-                List<String> sortedKeywords = rankedKeywords.stream()
-                        .sorted((a, b) -> Double.compare(b.getScore(), a.getScore())) // 내림차순 정렬
-                        .map(ZSetOperations.TypedTuple::getValue)
-                        .collect(Collectors.toList());
-
-                String trimmedInput = removeKoreanCharacters(input).trim();
-                sortedKeywords.forEach(keyword -> {
-                    if (keyword.contains(trimmedInput)) {
-                        matchingKeywords.add(keyword);
-                    }
-                });
-            }
-        }
         return AutoCompleteDto.builder()
                 .restaurants(matchingKeywords)
                 .build();
+    }
+
+
+    private List<String> searchByConsonant(String input) {
+        List<String> matchingKeywords = new ArrayList<>();
+        Set<String> consonantKeywords = redisTemplate.opsForZSet().rangeByScore(AUTOCOMPLETE_KEY, 0, 0);
+
+        consonantKeywords.forEach(restaurant -> {
+            String inputTrimmed = removeKoreanCharacters(input).trim();
+            if (extractConsonant(restaurant).contains(inputTrimmed)) {
+                matchingKeywords.add(restaurant);
+            }
+        });
+
+        return matchingKeywords;
+    }
+
+    private List<String> searchByGeneral(String input) {
+        List<String> matchingKeywords = new ArrayList<>();
+        Set<ZSetOperations.TypedTuple<String>> rankedKeywords = redisTemplate.opsForZSet().rangeWithScores(AUTOCOMPLETE_KEY, 0, -1);
+
+        if (rankedKeywords != null && !rankedKeywords.isEmpty()) {
+            List<String> sortedKeywords = rankedKeywords.stream()
+                    .sorted((a, b) -> Double.compare(b.getScore(), a.getScore())) // 내림차순 정렬
+                    .map(ZSetOperations.TypedTuple::getValue)
+                    .collect(Collectors.toList());
+
+            String trimmedInput = removeConsonantsAndVowelsCharacters(input).trim();
+            sortedKeywords.forEach(keyword -> {
+                if (keyword.contains(trimmedInput)) {
+                    matchingKeywords.add(keyword);
+                }
+            });
+        }
+
+        return matchingKeywords;
     }
 
     //문자에서 초성을 추출
@@ -96,7 +108,12 @@ public class AutoCompleteService {
     }
 
     //만약 일반조회일 경우 완성되지 않은 한글을 제거
-    private String removeKoreanCharacters(String text) {
+    private String removeConsonantsAndVowelsCharacters(String text) {
         return text.replaceAll("[ㄱ-ㅎㅏ-ㅣ]+", "");
+    }
+
+    //만약 초성조회일 경우 완성된 한글을 제거
+    private String removeKoreanCharacters(String text) {
+        return text.replaceAll("[가-힣]+", "");
     }
 }

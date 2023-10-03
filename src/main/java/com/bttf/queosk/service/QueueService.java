@@ -31,7 +31,7 @@ public class QueueService {
 
     // 사용자가 웨이팅 등록
     @Transactional
-    public void createQueue(QueueCreateForm.Request queueRequestRequest,
+    public void createQueue(QueueCreationRequestForm queueRequestRequest,
                             Long userId,
                             Long restaurantId) {
 

@@ -1,6 +1,6 @@
 package com.bttf.queosk.entity;
 
-import com.bttf.queosk.dto.UserSignUpRequest;
+import com.bttf.queosk.dto.UserSignUpRequestForm;
 import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
 import com.bttf.queosk.enumerate.LoginType;
 import com.bttf.queosk.enumerate.UserRole;
@@ -50,13 +50,13 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public static User of(UserSignUpRequest userSignUpRequest,
+    public static User of(UserSignUpRequestForm userSignUpRequestForm,
                           String encryptedPassword,
                           String trimmedPhoneNumber) {
 
         return User.builder()
-                .email(userSignUpRequest.getEmail())
-                .nickName(userSignUpRequest.getNickName())
+                .email(userSignUpRequestForm.getEmail().toLowerCase())
+                .nickName(userSignUpRequestForm.getNickName())
                 .password(encryptedPassword)
                 .phone(trimmedPhoneNumber)
                 .loginType(NORMAL)
@@ -67,7 +67,7 @@ public class User extends BaseTimeEntity {
 
     public static User of(String email, String nickName, String encodedPassword, String imageUrl) {
         return User.builder()
-                .email(email)
+                .email(email.toLowerCase())
                 .password(encodedPassword)
                 .nickName(nickName)
                 .loginType(KAKAO)
