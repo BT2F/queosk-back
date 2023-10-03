@@ -20,19 +20,9 @@ public class SettlementService {
 
     private final OrderQueryQueryRepository queryRepository;
 
-    public SettlementDto todaySettlementGet(Long restaurantId) {
-
-        List<SettlementDto.OrderdMenu> settlement = queryRepository.getTodaySales(restaurantId);
-
-        Long sum = settlement.stream().mapToLong(SettlementDto.OrderdMenu::sumOfPrice).sum();
-
-
-        return SettlementDto.of(settlement, sum);
-    }
-
-    public SettlementDto periodSettlementGet(Long restaurantId,
-                                             LocalDateTime to,
-                                             LocalDateTime from) {
+    public SettlementDto SettlementGet(Long restaurantId,
+                                       LocalDateTime to,
+                                       LocalDateTime from) {
 
         List<SettlementDto.OrderdMenu> settlement = queryRepository.getPeriodSales(restaurantId, to, from);
 
