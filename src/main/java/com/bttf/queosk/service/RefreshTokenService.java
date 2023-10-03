@@ -8,7 +8,6 @@ import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.User;
 import com.bttf.queosk.enumerate.UserRole;
 import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.RefreshTokenRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.UserRepository;
@@ -30,14 +29,12 @@ public class RefreshTokenService {
     public TokenRefreshDto issueNewAccessToken(String accessToken, String refreshToken) {
         validateRefreshToken(refreshToken);
 
-        Long userId = jwtTokenProvider.getIdFromToken(refreshToken);
-        User targetUser = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.REFRESH_CODE_EXPIRED));
+        String emailFromToken = jwtTokenProvider.getEmailFromToken(refreshToken);
 
-        RefreshTokenDto tokenSubject = refreshTokenRepository.findByEmail(targetUser.getEmail());
+        RefreshTokenDto tokenSubject = refreshTokenRepository.findByEmail(emailFromToken);
 
         if (tokenSubject == null) {
-            throw new CustomException(INVALID_TOKEN);
+            throw new CustomException(REFRESH_CODE_EXPIRED);
         }
 
         Object tokenHolder = getObject(accessToken, tokenSubject);
@@ -87,7 +84,7 @@ public class RefreshTokenService {
 
     // User 객체 찾기
     private User findUser(String userEmail) {
-        return userRepository.findByEmail(userEmail)
+        return userRepository.findByEmail(userEmail.replace("queosk_auth: ",""))
                 .orElseThrow(() -> new CustomException(USER_NOT_EXISTS));
     }
 
