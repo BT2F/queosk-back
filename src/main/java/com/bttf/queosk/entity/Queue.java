@@ -1,6 +1,6 @@
 package com.bttf.queosk.entity;
 
-import com.bttf.queosk.dto.QueueCreationRequest;
+import com.bttf.queosk.dto.QueueCreationRequestForm;
 import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +33,7 @@ public class Queue extends BaseTimeEntity {
     @Column
     private boolean isDone;
 
-    public static Queue of(QueueCreationRequest queueCreateRequest, Long restaurantId, Long userId) {
+    public static Queue of(QueueCreationRequestForm queueCreateRequest, Long restaurantId, Long userId) {
         return Queue.builder()
                 .numberOfParty(queueCreateRequest.getNumberOfParty())
                 .restaurantId(restaurantId)

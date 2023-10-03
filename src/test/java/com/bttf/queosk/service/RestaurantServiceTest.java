@@ -76,8 +76,8 @@ class RestaurantServiceTest {
     public void 매장_생성() throws Exception {
         // given
 
-        RestaurantSignUpForm.Request restaurantSignUpForm =
-                RestaurantSignUpForm.Request.builder()
+        RestaurantSignUpRequestForm restaurantSignUpForm =
+                RestaurantSignUpRequestForm.builder()
                         .ownerId("test")
                         .ownerName("test")
                         .password("1234")
@@ -110,11 +110,11 @@ class RestaurantServiceTest {
         String accessToken = "accessToken";
         String refreshToken = "refreshToken";
 
-        RestaurantSignInForm.Request restaurantSignInForm = RestaurantSignInForm.Request
-                .builder()
-                .ownerId(id)
-                .password(password)
-                .build();
+        RestaurantSignInRequestForm restaurantSignInForm =
+                RestaurantSignInRequestForm.builder()
+                        .ownerId(id)
+                        .password(password)
+                        .build();
 
         Restaurant restaurant = Restaurant.builder()
                 .ownerId(id)
@@ -149,8 +149,8 @@ class RestaurantServiceTest {
 
         Restaurant restaurant = Restaurant.builder().id(restaurantId).password("encodedOldPassword").build();
 
-        RestaurantUpdatePasswordForm.Request restaurantUpdatePasswordForm =
-                RestaurantUpdatePasswordForm.Request.builder()
+        RestaurantPasswordChangeRequestForm restaurantUpdatePasswordForm =
+                RestaurantPasswordChangeRequestForm.builder()
                         .oldPassword("oldPassword")
                         .newPassword(newPassword)
                         .build();
@@ -180,8 +180,8 @@ class RestaurantServiceTest {
 
         Restaurant restaurant = Restaurant.builder().id(restaurantId).password("encodedOldPassword").build();
 
-        RestaurantUpdatePasswordForm.Request restaurantUpdatePasswordForm =
-                RestaurantUpdatePasswordForm.Request.builder()
+        RestaurantPasswordChangeRequestForm restaurantUpdatePasswordForm =
+                RestaurantPasswordChangeRequestForm.builder()
                         .oldPassword("invalidOldPassword")
                         .newPassword(newPassword)
                         .build();
@@ -206,8 +206,8 @@ class RestaurantServiceTest {
         // Given
         Long restaurant = 1L;
 
-        RestaurantUpdatePasswordForm.Request restaurantUpdatePasswordForm =
-                RestaurantUpdatePasswordForm.Request.builder()
+        RestaurantPasswordChangeRequestForm restaurantUpdatePasswordForm =
+                RestaurantPasswordChangeRequestForm.builder()
                         .oldPassword("oldPassword")
                         .newPassword("newPassword")
                         .build();
@@ -321,19 +321,19 @@ class RestaurantServiceTest {
 
         // when
 
-        RestaurantInfoMenuGetDto restaurantInfoMenuGetDto = restaurantService.getRestaurantInfoAndMenu(1L);
+        RestaurantDetailsDto restaurantDetailsDto = restaurantService.getRestaurantInfoAndMenu(1L);
 
         // then
 
         verify(restaurantRepository, times(1)).findById(1L);
         verify(menuRepository, times(1)).findByRestaurantId(1L);
 
-        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(0).getName()).isEqualTo("왕만두");
-        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(1).getName()).isEqualTo("물만두");
-        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(0).getPrice()).isEqualTo(3000L);
-        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(1).getPrice()).isEqualTo(2000L);
-        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(0).getStatus()).isEqualTo(MenuStatus.ON_SALE);
-        assertThat(restaurantInfoMenuGetDto.getMenuDtoList().get(1).getStatus()).isEqualTo(MenuStatus.SOLD_OUT);
-        assertThat(restaurantInfoMenuGetDto.getRestaurantDto().getId()).isEqualTo(1L);
+        assertThat(restaurantDetailsDto.getMenuDtoList().get(0).getName()).isEqualTo("왕만두");
+        assertThat(restaurantDetailsDto.getMenuDtoList().get(1).getName()).isEqualTo("물만두");
+        assertThat(restaurantDetailsDto.getMenuDtoList().get(0).getPrice()).isEqualTo(3000L);
+        assertThat(restaurantDetailsDto.getMenuDtoList().get(1).getPrice()).isEqualTo(2000L);
+        assertThat(restaurantDetailsDto.getMenuDtoList().get(0).getStatus()).isEqualTo(MenuStatus.ON_SALE);
+        assertThat(restaurantDetailsDto.getMenuDtoList().get(1).getStatus()).isEqualTo(MenuStatus.SOLD_OUT);
+        assertThat(restaurantDetailsDto.getRestaurantDto().getId()).isEqualTo(1L);
     }
 }

@@ -27,7 +27,6 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 @RequiredArgsConstructor
 public class KakaoPaymentService {
 
-
     private static final String KAKAOPAY_URL = "https://kapi.kakao.com/v1/payment/";
     private static final String CID = "TC0ONETIME";
     @Value("${kakao.adminKey}")
@@ -37,9 +36,10 @@ public class KakaoPaymentService {
 
     private final TableRepository tableRepository;
 
-    public KakaoPaymentReadyDto kakaoPaymentReady(Long userId, KakaoPaymentReadyForm kakaoPaymentReadyForm) {
+    public KakaoPaymentReadyResponseForm kakaoPaymentReady(Long userId,
+                                                           KakaoPaymentReadyRequestForm kakaoPaymentReadyRequestForm) {
 
-        tableValid(kakaoPaymentReadyForm);
+        tableValid(kakaoPaymentReadyRequestForm);
 
         MultiValueMap<String, String> parameter = new LinkedMultiValueMap<>();
         String randomUuid = UUID.randomUUID().toString().replace("-", "");
@@ -47,22 +47,22 @@ public class KakaoPaymentService {
         parameter.add("cid", CID);
         parameter.add("partner_order_id", randomUuid);
         parameter.add("partner_user_id", userId.toString());
-        parameter.add("item_name", kakaoPaymentReadyForm.getItemName());
-        parameter.add("item_code", kakaoPaymentReadyForm.getItemCode());
-        parameter.add("quantity", String.valueOf(kakaoPaymentReadyForm.getQuantity()));
-        parameter.add("total_amount", String.valueOf(kakaoPaymentReadyForm.getTotalAmount()));
-        parameter.add("tax_free_amount", String.valueOf(kakaoPaymentReadyForm.getTaxFreeAmount()));
-        parameter.add("vat_amount", String.valueOf(kakaoPaymentReadyForm.getVatAmount()));
-        parameter.add("green_defosit", String.valueOf(kakaoPaymentReadyForm.getGreenDeposit()));
+        parameter.add("item_name", kakaoPaymentReadyRequestForm.getItemName());
+        parameter.add("item_code", kakaoPaymentReadyRequestForm.getItemCode());
+        parameter.add("quantity", String.valueOf(kakaoPaymentReadyRequestForm.getQuantity()));
+        parameter.add("total_amount", String.valueOf(kakaoPaymentReadyRequestForm.getTotalAmount()));
+        parameter.add("tax_free_amount", String.valueOf(kakaoPaymentReadyRequestForm.getTaxFreeAmount()));
+        parameter.add("vat_amount", String.valueOf(kakaoPaymentReadyRequestForm.getVatAmount()));
+        parameter.add("green_defosit", String.valueOf(kakaoPaymentReadyRequestForm.getGreenDeposit()));
         parameter.add("approval_url", MAIN_URL + "/payment/approve");
         parameter.add("cancel_url", MAIN_URL + "/payment/cancel");
         parameter.add("fail_url", MAIN_URL + "/payment/fail");
-        parameter.add("install_month", String.valueOf(kakaoPaymentReadyForm.getInstallMonth()));
+        parameter.add("install_month", String.valueOf(kakaoPaymentReadyRequestForm.getInstallMonth()));
 
         String postString = restApiPost(parameter, KAKAOPAY_URL + "ready");
 
         JsonObject json = JsonParser.parseString(postString).getAsJsonObject();
-        KakaoPaymentReadyDto kakaoPaymentReadyDto = KakaoPaymentReadyDto.builder()
+        KakaoPaymentReadyResponseForm kakaoPaymentReadyResponseForm = KakaoPaymentReadyResponseForm.builder()
                 .tid(json.get("tid").getAsString())
                 .OrderId(randomUuid)
                 .nextRedirectPcUrl(json.get("next_redirect_pc_url").getAsString())
@@ -70,12 +70,12 @@ public class KakaoPaymentService {
                 .createdAt(LocalDateTime.parse((json.get("created_at").getAsString())))
                 .build();
 
-        return kakaoPaymentReadyDto;
+        return kakaoPaymentReadyResponseForm;
 
     }
 
-    private void tableValid(KakaoPaymentReadyForm kakaoPaymentReadyForm) {
-        if (!tableRepository.findById(kakaoPaymentReadyForm.getTableId())
+    private void tableValid(KakaoPaymentReadyRequestForm kakaoPaymentReadyRequestForm) {
+        if (!tableRepository.findById(kakaoPaymentReadyRequestForm.getTableId())
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TABLE))
                 .getStatus()
                 .equals(TableStatus.OPEN)) {
@@ -83,15 +83,17 @@ public class KakaoPaymentService {
         }
     }
 
-    public KakaoPaymentApprovalDto kakaoPaymentApprove(Long userId, String pgToken, KakaoPaymentApprovalForm kakaoPaymentApprovalForm) {
+    public KakaoPaymentApprovalResponseForm kakaoPaymentApprove(Long userId,
+                                                                String pgToken,
+                                                                KakaoPaymentApprovalRequestForm kakaoPaymentApprovalRequestForm) {
         MultiValueMap<String, String> parameter = new LinkedMultiValueMap<>();
         parameter.add("cid", CID);
-        parameter.add("tid", kakaoPaymentApprovalForm.getTid());
-        parameter.add("partner_order_id", kakaoPaymentApprovalForm.getPartnerOrderId());
+        parameter.add("tid", kakaoPaymentApprovalRequestForm.getTid());
+        parameter.add("partner_order_id", kakaoPaymentApprovalRequestForm.getPartnerOrderId());
         parameter.add("partner_user_id", userId.toString());
         parameter.add("pg_token", pgToken);
-        parameter.add("payload", kakaoPaymentApprovalForm.getPayload());
-        parameter.add("total_amount", kakaoPaymentApprovalForm.getTotalAmount().toString());
+        parameter.add("payload", kakaoPaymentApprovalRequestForm.getPayload());
+        parameter.add("total_amount", kakaoPaymentApprovalRequestForm.getTotalAmount().toString());
 
 
         String postString = restApiPost(parameter, KAKAOPAY_URL + "approve");
@@ -99,7 +101,7 @@ public class KakaoPaymentService {
         JsonObject jsonObject = JsonParser.parseString(postString).getAsJsonObject();
         JsonObject amountJson = jsonObject.get("amount").getAsJsonObject();
 
-        return KakaoPaymentApprovalDto.builder()
+        return KakaoPaymentApprovalResponseForm.builder()
                 .aid(jsonObject.get("aid").getAsString())
                 .tid(jsonObject.get("tid").getAsString())
                 .cid(jsonObject.get("cid").getAsString())
@@ -109,7 +111,7 @@ public class KakaoPaymentService {
                 .itemName(jsonObject.get("item_name").getAsString())
                 .itemCode(jsonObject.get("item_code").getAsString())
                 .quantity(jsonObject.get("quantity").getAsInt())
-                .amount(KakaoAmount.builder()
+                .amount(KakaoAmountDto.builder()
                         .total(amountJson.get("total").getAsInt())
                         .taxFree(amountJson.get("tax_free").getAsInt())
                         .vat(amountJson.get("vat").getAsInt())
@@ -123,12 +125,13 @@ public class KakaoPaymentService {
                 .build();
     }
 
-    public KakaoPaymentCancelDto kakaoPaymentCancel(Long userId, KakaoPaymentCancelForm kakaoPaymentCancelForm) {
+    public KakaoPaymentCancelResponseForm kakaoPaymentCancel(Long userId,
+                                                             KakaoPaymentCancelRequestForm kakaoPaymentCancelRequestForm) {
         MultiValueMap<String, String> parameter = new LinkedMultiValueMap<>();
         parameter.add("cid", CID);
-        parameter.add("tid", kakaoPaymentCancelForm.getTid());
-        parameter.add("cancel_amount", kakaoPaymentCancelForm.getCancelAmount().toString());
-        parameter.add("cancel_tax_free_amount", kakaoPaymentCancelForm.getCancelTaxFreeAmount().toString());
+        parameter.add("tid", kakaoPaymentCancelRequestForm.getTid());
+        parameter.add("cancel_amount", kakaoPaymentCancelRequestForm.getCancelAmount().toString());
+        parameter.add("cancel_tax_free_amount", kakaoPaymentCancelRequestForm.getCancelTaxFreeAmount().toString());
 
         String postString = restApiPost(parameter, KAKAOPAY_URL + "cancel");
 
@@ -138,7 +141,7 @@ public class KakaoPaymentService {
         Integer totalCanceledAmount = getCanceledAmount(jsonObject, "canceled_amount");
         Integer cancelAvailableAmount = getCanceledAmount(jsonObject, "cancel_available_amount");
 
-        return KakaoPaymentCancelDto.builder()
+        return KakaoPaymentCancelResponseForm.builder()
                 .aid(jsonObject.get("aid").getAsString())
                 .tid(jsonObject.get("tid").getAsString())
                 .cid(CID)

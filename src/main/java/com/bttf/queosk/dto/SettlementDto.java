@@ -43,6 +43,4 @@ public class SettlementDto {
             this.total = total;
         }
     }
-
-
 }

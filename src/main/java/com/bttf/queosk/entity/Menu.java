@@ -1,6 +1,6 @@
 package com.bttf.queosk.entity;
 
-import com.bttf.queosk.dto.MenuCreationRequest;
+import com.bttf.queosk.dto.MenuCreationRequestForm;
 import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
 import com.bttf.queosk.enumerate.MenuStatus;
 import lombok.AllArgsConstructor;
@@ -35,12 +35,12 @@ public class Menu extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MenuStatus status;
 
-    public static Menu of(Long restaurantId, MenuCreationRequest menuCreationRequest) {
+    public static Menu of(Long restaurantId, MenuCreationRequestForm menuCreationRequestForm) {
         return Menu.builder()
-                .name(menuCreationRequest.getName())
-                .price(menuCreationRequest.getPrice())
+                .name(menuCreationRequestForm.getName())
+                .price(menuCreationRequestForm.getPrice())
                 .status(ON_SALE)
-                .imageUrl(menuCreationRequest.getImageUrl())
+                .imageUrl(menuCreationRequestForm.getImageUrl())
                 .restaurantId(restaurantId)
                 .build();
     }

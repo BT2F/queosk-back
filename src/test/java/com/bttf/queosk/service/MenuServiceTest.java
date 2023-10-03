@@ -1,9 +1,9 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.MenuCreationRequest;
+import com.bttf.queosk.dto.MenuCreationRequestForm;
 import com.bttf.queosk.dto.MenuDto;
-import com.bttf.queosk.dto.MenuStatusRequest;
-import com.bttf.queosk.dto.MenuUpdateRequest;
+import com.bttf.queosk.dto.MenuStatusRequestForm;
+import com.bttf.queosk.dto.MenuUpdateRequestForm;
 import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.repository.MenuRepository;
@@ -45,8 +45,8 @@ class MenuServiceTest {
         // given
         Long restaurantId = 1L;
 
-        MenuCreationRequest menuCreationForm =
-                MenuCreationRequest.builder()
+        MenuCreationRequestForm menuCreationForm =
+                MenuCreationRequestForm.builder()
                         .name("menu")
                         .price(1000L)
                         .imageUrl(null)
@@ -110,8 +110,8 @@ class MenuServiceTest {
         // Given
         Long restaurantId = 1L;
         Long menuId = 1L;
-        MenuUpdateRequest menuUpdateForm =
-                MenuUpdateRequest.builder()
+        MenuUpdateRequestForm menuUpdateForm =
+                MenuUpdateRequestForm.builder()
                         .name("updatedMenu")
                         .price(1500L)
                         .build();
@@ -141,8 +141,8 @@ class MenuServiceTest {
         // Given
         Long restaurantId = 1L;
         Long menuId = 1L;
-        MenuUpdateRequest menuUpdateForm =
-                MenuUpdateRequest.builder()
+        MenuUpdateRequestForm menuUpdateForm =
+                MenuUpdateRequestForm.builder()
                         .name("updatedMenu")
                         .price(1500L)
                         .build();
@@ -159,8 +159,8 @@ class MenuServiceTest {
         // Given
         Long restaurantId = 1L;
         Long menuId = 1L;
-        MenuStatusRequest menuStatusForm =
-                MenuStatusRequest.builder()
+        MenuStatusRequestForm menuStatusForm =
+                MenuStatusRequestForm.builder()
                         .status(SOLD_OUT)
                         .build();
         Menu existingMenu =
@@ -188,8 +188,8 @@ class MenuServiceTest {
         // Given
         Long restaurantId = 1L;
         Long menuId = 1L;
-        MenuStatusRequest menuStatusForm =
-                MenuStatusRequest.builder()
+        MenuStatusRequestForm menuStatusForm =
+                MenuStatusRequestForm.builder()
                         .status(SOLD_OUT)
                         .build();
         when(menuRepository.findByIdAndRestaurantId(menuId, restaurantId)).thenReturn(java.util.Optional.empty());

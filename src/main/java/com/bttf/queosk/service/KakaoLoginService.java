@@ -1,7 +1,7 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.KakaoLoginRequest;
+import com.bttf.queosk.dto.KakaoLoginRequestForm;
 import com.bttf.queosk.dto.TokenDto;
 import com.bttf.queosk.dto.UserSignInDto;
 import com.bttf.queosk.entity.KakaoAuth;
@@ -58,12 +58,12 @@ public class KakaoLoginService {
         }
     }
 
-    public UserSignInDto getUserInfoFromKakao(KakaoLoginRequest kaKaoLoginRequest) throws CustomException {
+    public UserSignInDto getUserInfoFromKakao(KakaoLoginRequestForm kaKaoLoginRequestForm) throws CustomException {
         String accessToken = "";
         String refreshToken = "";
         try {
             HttpHeaders headers = createHeaders();
-            MultiValueMap<String, String> params = createRequestBody(kaKaoLoginRequest.getCode());
+            MultiValueMap<String, String> params = createRequestBody(kaKaoLoginRequestForm.getCode());
 
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, headers);
@@ -101,7 +101,7 @@ public class KakaoLoginService {
     }
 
     //임시 서비스
-    public UserSignInDto getUserInfoFromKakaoTest(KakaoLoginRequest kaKaoLoginRequest) throws CustomException {
+    public UserSignInDto getUserInfoFromKakaoTest(KakaoLoginRequestForm kaKaoLoginRequestForm) throws CustomException {
         String accessToken = "";
         String refreshToken = "";
         try {
@@ -111,7 +111,7 @@ public class KakaoLoginService {
             params.add(GRANT_TYPE, "authorization_code");
             params.add(CLIENT_ID, KAKAO_CLIENT_ID);
             params.add(CLIENT_SECRET, KAKAO_CLIENT_SECRET);
-            params.add(CODE, kaKaoLoginRequest.getCode());
+            params.add(CODE, kaKaoLoginRequestForm.getCode());
             params.add(REDIRECT_URI, "http://localhost:3000/auth/kakao/callback");
 
             RestTemplate restTemplate = new RestTemplate();
