@@ -140,8 +140,7 @@ public class UserController {
     public ResponseEntity<ImageUrlResponseForm> uploadImageAndGetUrl(
             @RequestBody MultipartFile image) throws IOException {
 
-        String url = imageService.saveFile(image, "user/" + UUID.randomUUID()
-                .toString().substring(0, 6));
+        String url = imageService.saveFile(image, "user");
 
         return ResponseEntity.status(CREATED).body(ImageUrlResponseForm.of(url));
     }
@@ -155,8 +154,7 @@ public class UserController {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
 
-        String url = imageService.saveFile(image, "user/" + UUID.randomUUID()
-                .toString().substring(0, 6));
+        String url = imageService.saveFile(image, "user");
 
         userInfoService.updateImageUrl(userId, url);
 
