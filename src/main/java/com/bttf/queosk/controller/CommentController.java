@@ -1,7 +1,8 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.CommentForm;
+import com.bttf.queosk.dto.CommentRequestForm;
+import com.bttf.queosk.dto.CommentResponseForm;
 import com.bttf.queosk.service.CommentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +29,7 @@ public class CommentController {
     @ApiOperation(value = "리뷰 코멘트 작성", notes = "리뷰의 코멘트를 작성합니다.")
     public ResponseEntity<Void> createComment(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                               @PathVariable(value = "reviewId") Long reviewId,
-                                              @RequestBody CommentForm.Request commentRequest) {
+                                              @RequestBody CommentRequestForm commentRequest) {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
         commentService.createComment(reviewId, restaurantId, commentRequest);
@@ -40,7 +41,7 @@ public class CommentController {
     @ApiOperation(value = "리뷰 코멘트 수정", notes = "리뷰의 코멘트를 수정합니다.")
     ResponseEntity<Void> updateComment(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                        @PathVariable(value = "commentId") Long commentId,
-                                       @RequestBody CommentForm.Request commentRequest) {
+                                       @RequestBody CommentRequestForm commentRequest) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
@@ -62,12 +63,12 @@ public class CommentController {
 
     @GetMapping("{reviewId}/comments")
     @ApiOperation(value = "리뷰 코멘트 열람", notes = "해당 리뷰의 코멘트 리스트를 열람합니다.")
-    ResponseEntity<List<CommentForm.Response>> getComment(@PathVariable(value = "reviewId") Long reviewId) {
+    ResponseEntity<List<CommentResponseForm>> getComment(@PathVariable(value = "reviewId") Long reviewId) {
 
-        List<CommentForm.Response> responseList = commentService
+        List<CommentResponseForm> responseList = commentService
                 .getComment(reviewId)
                 .stream()
-                .map(CommentForm.Response::of)
+                .map(CommentResponseForm::of)
                 .collect(Collectors.toList());
 
         return ResponseEntity.status(OK).body(responseList);

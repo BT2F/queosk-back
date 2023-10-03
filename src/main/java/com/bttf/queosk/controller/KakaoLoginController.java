@@ -1,7 +1,7 @@
 package com.bttf.queosk.controller;
 
-import com.bttf.queosk.dto.KakaoLoginRequest;
-import com.bttf.queosk.dto.KakaoLoginResponse;
+import com.bttf.queosk.dto.KakaoLoginRequestForm;
+import com.bttf.queosk.dto.KakaoLoginResponseForm;
 import com.bttf.queosk.dto.UserSignInDto;
 import com.bttf.queosk.service.KakaoLoginService;
 import io.swagger.annotations.Api;
@@ -28,17 +28,17 @@ public class KakaoLoginController {
     @PostMapping("/signin")
     @ApiOperation(value = "카카오톡 소셜 로그인 코드를 사용하여 로그인진행",
             notes = "카카오톡 로그인 URL을 통해 얻은 code 및 데이터를 사용하여 로그인 또는 회원가입을 진행합니다.")
-    public ResponseEntity<KakaoLoginResponse> kakaoLoginCallback(
+    public ResponseEntity<KakaoLoginResponseForm> kakaoLoginCallback(
             HttpServletRequest request,
-            @Valid @RequestBody KakaoLoginRequest kaKaoLoginRequest) {
+            @Valid @RequestBody KakaoLoginRequestForm kaKaoLoginRequestForm) {
 
         String host = request.getHeader("Host");
 
         UserSignInDto userSignInDto =
-            host.contains("localhost")?
-            kakaoLoginService.getUserInfoFromKakaoTest(kaKaoLoginRequest):
-            kakaoLoginService.getUserInfoFromKakao(kaKaoLoginRequest);
+                host.contains("localhost") ?
+                        kakaoLoginService.getUserInfoFromKakaoTest(kaKaoLoginRequestForm) :
+                        kakaoLoginService.getUserInfoFromKakao(kaKaoLoginRequestForm);
 
-        return ResponseEntity.status(OK).body(KakaoLoginResponse.of(userSignInDto));
+        return ResponseEntity.status(OK).body(KakaoLoginResponseForm.of(userSignInDto));
     }
 }

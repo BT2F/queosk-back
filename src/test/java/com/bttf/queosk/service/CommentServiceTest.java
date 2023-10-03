@@ -1,11 +1,10 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.CommentForm;
+import com.bttf.queosk.dto.CommentRequestForm;
+import com.bttf.queosk.dto.CommentResponseForm;
 import com.bttf.queosk.entity.Comment;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Review;
-import com.bttf.queosk.exception.CustomException;
-import com.bttf.queosk.exception.ErrorCode;
 import com.bttf.queosk.repository.CommentRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.ReviewRepository;
@@ -50,7 +49,7 @@ class CommentServiceTest {
         given(reviewRepository.findById(1L)).willReturn(Optional.of(review));
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
 
-        CommentForm.Request commentForm = CommentForm.Request.builder().
+        CommentRequestForm commentForm = CommentRequestForm.builder().
                 content("test")
                 .build();
 
@@ -79,7 +78,7 @@ class CommentServiceTest {
 
         given(commentRepository.findByIdAndIsDeletedFalse(1L)).willReturn(comment);
 
-        CommentForm.Request form = CommentForm.Request.builder().content("test2").build();
+        CommentRequestForm form = CommentRequestForm.builder().content("test2").build();
 
         // when
 

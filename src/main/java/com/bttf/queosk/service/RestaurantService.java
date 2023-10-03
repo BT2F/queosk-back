@@ -47,7 +47,7 @@ public class RestaurantService {
     private final RestaurantQueryDSLRepository restaurantQueryDSLRepository;
 
     @Transactional
-    public void signUp(RestaurantSignUpForm.Request restaurantSignUpRequest) throws Exception {
+    public void signUp(RestaurantSignUpRequestForm restaurantSignUpRequest) throws Exception {
 
         validateExistedId(restaurantSignUpRequest.getEmail(), restaurantSignUpRequest.getOwnerId());
 
@@ -57,8 +57,6 @@ public class RestaurantService {
 
         double x = kakaoGeoAddressService.addressToCoordinate(restaurantSignUpRequest.getAddress(), "x");
         double y = kakaoGeoAddressService.addressToCoordinate(restaurantSignUpRequest.getAddress(), "y");
-
-
 
         Restaurant restaurant =
                 Restaurant.builder()
@@ -86,7 +84,7 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
     }
 
-    public RestaurantSignInDto signIn(RestaurantSignInForm.Request restaurantSignInRequest) {
+    public RestaurantSignInDto signIn(RestaurantSignInRequestForm restaurantSignInRequest) {
 
         Restaurant restaurant = getRestaurantByOwnerId(restaurantSignInRequest.getOwnerId());
 
@@ -135,6 +133,7 @@ public class RestaurantService {
     @Transactional
     public void resetRestaurantPassword(String email, String ownerName) {
         Restaurant restaurant = getRestaurantByEmail(email);
+
         if (!restaurant.getOwnerName().equals(ownerName)) {
             throw new CustomException(OWNER_NAME_NOT_MATCH);
         }
@@ -154,7 +153,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    public void updateRestaurantPassword(Long id, RestaurantUpdatePasswordForm.Request updatePasswordRequest) {
+    public void updateRestaurantPassword(Long id, RestaurantPasswordChangeRequestForm updatePasswordRequest) {
         Restaurant restaurant = getRestaurantById(id);
 
         if (!passwordEncoder.matches(updatePasswordRequest.getOldPassword(), restaurant.getPassword())) {
@@ -176,7 +175,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    public RestaurantDto updateRestaurantInfo(String token, UpdateRestaurantInfoForm.Request updateRestaurantInfoRequest) {
+    public RestaurantDto updateRestaurantInfo(String token, RestaurantUpdateRequestForm updateRestaurantInfoRequest) {
         Restaurant restaurant = getRestaurantByToken(token);
 
         restaurant.updateRestaurantInfo(updateRestaurantInfoRequest);
@@ -222,11 +221,11 @@ public class RestaurantService {
                 .map(RestaurantDto::of);
     }
 
-    public RestaurantInfoMenuGetDto getRestaurantInfoAndMenu(Long restaurantId) {
+    public RestaurantDetailsDto getRestaurantInfoAndMenu(Long restaurantId) {
         Restaurant restaurant = getRestaurantById(restaurantId);
         List<Menu> menu = menuRepository.findByRestaurantId(restaurantId);
 
-        return RestaurantInfoMenuGetDto.of(restaurant, menu);
+        return RestaurantDetailsDto.of(restaurant, menu);
     }
 
     private Restaurant getRestaurantByOwnerId(String restaurantOwnerId) {
