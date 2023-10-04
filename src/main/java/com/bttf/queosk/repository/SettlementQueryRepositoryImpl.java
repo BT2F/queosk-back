@@ -26,16 +26,15 @@ public class SettlementQueryRepositoryImpl implements SettlementQueryRepository 
                 .minusNanos(1);
 
         NumberPath<Long> menuPriceSum = Expressions.numberPath(Long.class, "menuPriceSum");
-        NumberPath<Long> orderCount = Expressions.numberPath(Long.class, "orderCount");
+        NumberPath<Integer> orderCount = Expressions.numberPath(Integer.class, "orderCount");
 
         List<SettlementDto.OrderdMenu> orderdMenus =
                 jpaQueryFactory
                         .select(
                                 Projections.constructor(SettlementDto.OrderdMenu.class,
                                         order.menuItemList.any().menu.name,
-                                        order.menuItemList.any().menu.price,
-                                        menuPriceSum.coalesce(0L),
-                                        orderCount.coalesce(0L)
+                                        orderCount.coalesce(0),
+                                        menuPriceSum.coalesce(0L)
                                 )
                         )
                         .from(order)
