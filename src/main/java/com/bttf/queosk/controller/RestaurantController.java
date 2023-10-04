@@ -131,7 +131,7 @@ public class RestaurantController {
     @ApiOperation(value = "매장 수정", notes = "매장 계정의 정보를 수정합니다.")
     public ResponseEntity<RestaurantResponseForm> updateRestaurantInfo(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            RestaurantUpdateRequestForm updateRestaurantInfoRequest) {
+            @RequestBody RestaurantUpdateRequestForm updateRestaurantInfoRequest) {
 
         RestaurantDto restaurantDto = restaurantService.updateRestaurantInfo(token, updateRestaurantInfoRequest);
 
