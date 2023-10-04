@@ -123,7 +123,7 @@ public class ReviewController {
             @RequestBody MultipartFile image) throws IOException {
 
         String url =
-                imageService.saveFile(image, "review/" + UUID.randomUUID().toString().substring(0, 6));
+                imageService.saveFile(image, "/review");
 
         return ResponseEntity.status(CREATED).body(ImageUrlResponseForm.of(url));
     }

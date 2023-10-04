@@ -88,10 +88,8 @@ public class MenuController {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        String url = imageService.saveFile(
-                imageFile,
-                "/restaurant/" + restaurantId + "/menu/" + UUID.randomUUID().toString().substring(0, 7)
-        );
+        String url =
+                imageService.saveFile(imageFile, "/restaurant/" + restaurantId + "/menu");
 
         return ResponseEntity.status(OK).body(ImageUrlResponseForm.of(url));
     }
@@ -105,10 +103,8 @@ public class MenuController {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        String url = imageService.saveFile(
-                imageFile,
-                "/restaurant/" + restaurantId + "/menu/" + UUID.randomUUID().toString().substring(0, 7)
-        );
+        String url =
+                imageService.saveFile(imageFile, "/restaurant/" + restaurantId + "/menu");
 
         menuService.updateImage(restaurantId, menuId, url);
 
