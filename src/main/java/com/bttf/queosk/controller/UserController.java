@@ -33,76 +33,76 @@ public class UserController {
     @PostMapping("/signup")
     @ApiOperation(value = "사용자 회원가입", notes = "입력된 정보로 회원가입을 진행합니다.")
     public ResponseEntity<Void> createUser(
-            @Valid @RequestBody UserSignUpRequest userSignUpRequest) {
+            @Valid @RequestBody UserSignUpRequestForm userSignUpRequestForm) {
 
-        userLoginService.createUser(userSignUpRequest);
+        userLoginService.createUser(userSignUpRequestForm);
 
         return ResponseEntity.status(CREATED).build();
     }
 
     @PostMapping("/signin")
     @ApiOperation(value = "사용자 로그인", notes = "입력된 정보로 로그인을 진행합니다.")
-    public ResponseEntity<UserSignInResponse> signIn(
-            @Valid @RequestBody UserSignInRequest userSignInRequest) {
+    public ResponseEntity<UserSignInResponseForm> signIn(
+            @Valid @RequestBody UserSignInRequestForm userSignInRequestForm) {
 
-        UserSignInDto userSignInDto = userLoginService.signInUser(userSignInRequest);
+        UserSignInDto userSignInDto = userLoginService.signInUser(userSignInRequestForm);
 
-        return ResponseEntity.status(OK).body(UserSignInResponse.of(userSignInDto));
+        return ResponseEntity.status(OK).body(UserSignInResponseForm.of(userSignInDto));
     }
 
     @PostMapping("/check")
     @ApiOperation(value = "이메일 중복 확인", notes = "사용하고자 하는 이메일의 중복여부를 확인합니다.")
     public ResponseEntity<String> checkDuplication(
-            @Valid @RequestBody UserCheckRequest userCheckRequest) {
+            @Valid @RequestBody UserCheckRequestForm userCheckRequestForm) {
 
-        return userLoginService.checkDuplication(userCheckRequest.getEmail()) ?
+        return userLoginService.checkDuplication(userCheckRequestForm.getEmail()) ?
                 ResponseEntity.status(OK).body("사용가능한 이메일 입니다.") :
                 ResponseEntity.status(BAD_REQUEST).body("이미 사용중인 이메일 입니다.");
     }
 
     @GetMapping
     @ApiOperation(value = "사용자 본인 상세정보", notes = "사용자 본인의 상세정보를 조회합니다.")
-    public ResponseEntity<UserDetailsResponse> getUserDetails(
+    public ResponseEntity<UserDetailsResponseForm> getUserDetails(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         UserDto userDto = userLoginService.getUserFromToken(token);
 
-        return ResponseEntity.status(OK).body(UserDetailsResponse.of(userDto));
+        return ResponseEntity.status(OK).body(UserDetailsResponseForm.of(userDto));
     }
 
     @GetMapping("/{userId}")
     @ApiOperation(value = "다른 사용자 상세정보", notes = "다른 사용자의 상세정보를 조회합니다.(정보제한 필요)")
-    public ResponseEntity<UserDetailsResponse> getOtherUserDetails(
+    public ResponseEntity<UserDetailsResponseForm> getOtherUserDetails(
             @PathVariable Long userId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         UserDto userDto = userInfoService.getUserDetails(userId);
 
-        return ResponseEntity.status(OK).body(UserDetailsResponse.of(userDto));
+        return ResponseEntity.status(OK).body(UserDetailsResponseForm.of(userDto));
     }
 
     @PutMapping
     @ApiOperation(value = "사용자 정보 수정", notes = "사용자의 상세정보를 수정합니다.")
-    public ResponseEntity<UserEditResponse> editUserDetails(
+    public ResponseEntity<UserEditResponseForm> editUserDetails(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @Valid @RequestBody UserEditRequest userEditRequest) {
+            @Valid @RequestBody UserEditRequestForm userEditRequestForm) {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
 
-        UserDto userDto = userInfoService.editUserInformation(userId, userEditRequest);
+        UserDto userDto = userInfoService.editUserInformation(userId, userEditRequestForm);
 
-        return ResponseEntity.status(OK).body(UserEditResponse.of(userDto));
+        return ResponseEntity.status(OK).body(UserEditResponseForm.of(userDto));
     }
 
     @PutMapping("/password/change")
     @ApiOperation(value = "사용자 비밀번호 변경", notes = "사용자의 비밀번호를 변경합니다.")
     public ResponseEntity<Void> changeUserPassword(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @Valid @RequestBody UserPasswordChangeRequest userPasswordChangeRequest) {
+            @Valid @RequestBody UserPasswordChangeRequestForm userPasswordChangeRequestForm) {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
 
-        userInfoService.changeUserPassword(userId, userPasswordChangeRequest);
+        userInfoService.changeUserPassword(userId, userPasswordChangeRequestForm);
 
         return ResponseEntity.status(NO_CONTENT).build();
     }
@@ -110,10 +110,10 @@ public class UserController {
     @PutMapping("/password/reset")
     @ApiOperation(value = "사용자 비밀번호 초기화", notes = "사용자의 비밀번호를 초기화 후 이메일로 새 비밀번호를 전송 합니다.")
     public ResponseEntity<Void> resetUserPassword(
-            @Valid @RequestBody UserResetPasswordRequest userResetPasswordRequest) {
+            @Valid @RequestBody UserPasswordResetRequestForm userPasswordResetRequestForm) {
 
-        userInfoService.resetUserPassword(userResetPasswordRequest.getEmail(),
-                userResetPasswordRequest.getNickName());
+        userInfoService.resetUserPassword(userPasswordResetRequestForm.getEmail(),
+                userPasswordResetRequestForm.getNickName());
 
         return ResponseEntity.status(NO_CONTENT).build();
     }
@@ -137,13 +137,12 @@ public class UserController {
     @PostMapping("/signup/image")
     @ApiOperation(value = "프로필 업로드 및 경로 가져오기(회원가입 이전)",
             notes = "사용자의 새로운 프로필 사진을 이미지서버에 업로드 하고 imageUrl을 가져옵니다.")
-    public ResponseEntity<ImageUrlForm.Response> uploadImageAndGetUrl(
+    public ResponseEntity<ImageUrlResponseForm> uploadImageAndGetUrl(
             @RequestBody MultipartFile image) throws IOException {
 
-        String url = imageService.saveFile(image, "user/" + UUID.randomUUID()
-                .toString().substring(0, 6));
+        String url = imageService.saveFile(image, "user");
 
-        return ResponseEntity.status(CREATED).body(ImageUrlForm.Response.of(url));
+        return ResponseEntity.status(CREATED).body(ImageUrlResponseForm.of(url));
     }
 
     @PutMapping("/image")
@@ -155,8 +154,7 @@ public class UserController {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
 
-        String url = imageService.saveFile(image, "user/" + UUID.randomUUID()
-                .toString().substring(0, 6));
+        String url = imageService.saveFile(image, "user");
 
         userInfoService.updateImageUrl(userId, url);
 

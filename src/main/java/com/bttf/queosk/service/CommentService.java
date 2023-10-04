@@ -1,7 +1,8 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.CommentDto;
-import com.bttf.queosk.dto.CommentForm;
+import com.bttf.queosk.dto.CommentRequestForm;
+import com.bttf.queosk.dto.CommentResponseForm;
 import com.bttf.queosk.entity.Comment;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Review;
@@ -28,11 +29,13 @@ public class CommentService {
     private final ReviewRepository reviewRepository;
 
     @Transactional
-    public void createComment(Long reviewId, Long restaurantId, CommentForm.Request commentRequest) {
+    public void createComment(Long reviewId, Long restaurantId, CommentRequestForm commentRequest) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REVIEW));
+
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
+
         reviewRestaurantValid(restaurant, review);
 
         Comment comment = Comment.builder()
@@ -49,14 +52,16 @@ public class CommentService {
     }
 
     @Transactional
-    public void updateComment(Long commentId, Long restaurantId, CommentForm.Request commentForm) {
+    public void updateComment(Long commentId, Long restaurantId, CommentRequestForm commentForm) {
         Comment comment = commentRepository.findByIdAndIsDeletedFalse(commentId);
-        Review review = reviewRepository.findById(
-                        comment.getReview().getId())
+        Review review = reviewRepository.findById(comment.getReview().getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REVIEW));
+
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
+
         reviewRestaurantValid(restaurant, review);
+
         comment.setContent(commentForm.getContent());
     }
 
@@ -64,18 +69,25 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long commentId, Long restaurantId) {
         Comment comment = commentRepository.findByIdAndIsDeletedFalse(commentId);
+
         Review review = reviewRepository.findByIdAndIsDeletedFalse(comment.getReview().getId());
+
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESTAURANT));
+
         commentRestaurantValid(restaurant, comment);
+
         reviewCommentExistCheck(review);
+
         review.deleteComment();
+
         comment.delete();
     }
 
     public List<CommentDto> getComment(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new CustomException(INVALID_REVIEW));
+
         return commentRepository
                 .findByReviewAndIsDeletedFalse(review)
                 .stream()

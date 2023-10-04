@@ -1,13 +1,11 @@
 package com.bttf.queosk.service;
 
-import com.bttf.queosk.dto.ReviewCreationForm;
+import com.bttf.queosk.dto.ReviewCreationRequestForm;
 import com.bttf.queosk.dto.ReviewDto;
-import com.bttf.queosk.dto.UpdateReviewForm;
+import com.bttf.queosk.dto.ReviewUpdateRequestForm;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Review;
 import com.bttf.queosk.entity.User;
-import com.bttf.queosk.enumerate.LoginType;
-import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.UserStatus;
 import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.ReviewRepository;
@@ -18,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,7 +60,7 @@ class ReviewServiceTest {
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
         given(restaurantRepository.findById(1L)).willReturn(Optional.of(restaurant));
 
-        ReviewCreationForm.Request reviewCreationForm = ReviewCreationForm.Request.builder()
+        ReviewCreationRequestForm reviewCreationForm = ReviewCreationRequestForm.builder()
                 .restaurantId(1L)
                 .subject("test")
                 .content("content test")
@@ -105,7 +102,7 @@ class ReviewServiceTest {
                 .build();
 
         given(reviewRepository.findByIdAndIsDeletedFalse(1L)).willReturn(review);
-        UpdateReviewForm.Request updateReviewForm = UpdateReviewForm.Request.builder()
+        ReviewUpdateRequestForm updateReviewForm = ReviewUpdateRequestForm.builder()
                 .subject("test1")
                 .content("testContent2")
                 .rate(4.0)

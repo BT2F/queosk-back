@@ -33,23 +33,23 @@ public class MenuController {
     @ApiOperation(value = "식당 메뉴 목록 추가", notes = "점주가 본인 식당의 메뉴목록을 추가합니다.")
     public ResponseEntity<Void> createMenu(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @Valid @RequestBody MenuCreationRequest menuCreationRequest) {
+            @Valid @RequestBody MenuCreationRequestForm menuCreationRequestForm) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        menuService.createMenu(restaurantId, menuCreationRequest);
+        menuService.createMenu(restaurantId, menuCreationRequestForm);
 
         return ResponseEntity.status(CREATED).build();
     }
 
     @GetMapping("/{restaurantId}/menus")
     @ApiOperation(value = "식당 메뉴 목록 조회", notes = "점주 또는 고객이 대상 식당의 메뉴목록을 조회합니다.")
-    public ResponseEntity<MenuListResponse> getMenu(
+    public ResponseEntity<MenuListResponseForm> getMenu(
             @PathVariable("restaurantId") Long restaurantId) {
 
         List<MenuDto> menuList = menuService.getMenu(restaurantId);
 
-        return ResponseEntity.status(OK).body(MenuListResponse.of(menuList));
+        return ResponseEntity.status(OK).body(MenuListResponseForm.of(menuList));
     }
 
     @PutMapping("/menus/{menuId}")
@@ -57,11 +57,11 @@ public class MenuController {
     public ResponseEntity<Void> updateMenuInfo(
             @PathVariable("menuId") Long menuId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody MenuUpdateRequest menuUpdateRequest) {
+            @RequestBody MenuUpdateRequestForm menuUpdateRequestForm) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        menuService.updateMenuInfo(restaurantId, menuId, menuUpdateRequest);
+        menuService.updateMenuInfo(restaurantId, menuId, menuUpdateRequestForm);
 
         return ResponseEntity.status(NO_CONTENT).build();
     }
@@ -71,29 +71,27 @@ public class MenuController {
     public ResponseEntity<Void> updateMenuStatus(
             @PathVariable("menuId") Long menuId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody MenuStatusRequest menuStatusRequest) {
+            @RequestBody MenuStatusRequestForm menuStatusRequestForm) {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        menuService.updateMenuStatus(restaurantId, menuId, menuStatusRequest);
+        menuService.updateMenuStatus(restaurantId, menuId, menuStatusRequestForm);
 
         return ResponseEntity.status(NO_CONTENT).build();
     }
 
     @PostMapping("/menus/image")
     @ApiOperation(value = "메뉴 이미지 등록", notes = "메뉴 이미지를 업로드하고 경로를 반환합니다.")
-    public ResponseEntity<ImageUrlForm.Response> uploadImage(
+    public ResponseEntity<ImageUrlResponseForm> uploadImage(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody MultipartFile imageFile) throws IOException {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        String url = imageService.saveFile(
-                imageFile,
-                "/restaurant/" + restaurantId + "/menu/" + UUID.randomUUID().toString().substring(0, 7)
-        );
+        String url =
+                imageService.saveFile(imageFile, "/restaurant/" + restaurantId + "/menu");
 
-        return ResponseEntity.status(OK).body(ImageUrlForm.Response.of(url));
+        return ResponseEntity.status(OK).body(ImageUrlResponseForm.of(url));
     }
 
     @PostMapping("/menus/{menuId}/image")
@@ -105,10 +103,8 @@ public class MenuController {
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        String url = imageService.saveFile(
-                imageFile,
-                "/restaurant/" + restaurantId + "/menu/" + UUID.randomUUID().toString().substring(0, 7)
-        );
+        String url =
+                imageService.saveFile(imageFile, "/restaurant/" + restaurantId + "/menu");
 
         menuService.updateImage(restaurantId, menuId, url);
 

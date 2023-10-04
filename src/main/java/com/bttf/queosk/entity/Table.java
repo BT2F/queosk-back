@@ -6,12 +6,10 @@ import com.bttf.queosk.enumerate.TableStatus;
 import lombok.*;
 import org.hibernate.envers.AuditOverride;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import static com.bttf.queosk.enumerate.TableStatus.OPEN;
+import static javax.persistence.EnumType.STRING;
 
 @Entity(name = "table")
 @AuditOverride(forClass = BaseTimeEntity.class)
@@ -27,6 +25,7 @@ public class Table extends BaseTimeEntity {
 
     private String name;
 
+    @Enumerated(STRING)
     private TableStatus status;
 
     private Long restaurantId;
