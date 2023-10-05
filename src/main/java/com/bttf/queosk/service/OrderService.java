@@ -9,10 +9,7 @@ import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.enumerate.OrderStatus;
 import com.bttf.queosk.exception.CustomException;
 import com.bttf.queosk.exception.ErrorCode;
-import com.bttf.queosk.repository.MenuRepository;
-import com.bttf.queosk.repository.OrderRepository;
-import com.bttf.queosk.repository.RestaurantRepository;
-import com.bttf.queosk.repository.TableRepository;
+import com.bttf.queosk.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +32,7 @@ public class OrderService {
     private final RestaurantRepository restaurantRepository;
     private final TableRepository tableRepository;
     private final MenuRepository menuRepository;
+    private final MenuItemRepository menuItemRepository;
 
     @Transactional
     public void createOrder(OrderCreationRequestForm orderCreationRequest, Long userId) {
@@ -43,22 +41,23 @@ public class OrderService {
 
         Table table = getTable(orderCreationRequest.getTableId());
 
-        List<MenuItem> menuItemList = orderCreationRequest.getMenuItems().stream().map(menuItems -> MenuItem.builder()
-                .menu(menuRepository.findById(menuItems.getMenu()).orElseThrow(() -> new CustomException(MENU_NOT_FOUND)))
-                .count(menuItems.getCount())
-                .build()).collect(Collectors.toList());
-
-        validOrder(restaurant, table, menuItemList);
-
         Order order = Order.builder()
                 .restaurantId(orderCreationRequest.getRestaurantId())
                 .tableId(table.getId())
-                .menuItemList(menuItemList)
                 .userId(userId)
                 .status(IN_PROGRESS)
                 .build();
 
+        List<MenuItem> menuItemList = orderCreationRequest.getMenuItems().stream().map(menuItems -> MenuItem.builder()
+                .menu(menuRepository.findById(menuItems.getMenu()).orElseThrow(() -> new CustomException(MENU_NOT_FOUND)))
+                .count(menuItems.getCount())
+                .order(order)
+                .build()).collect(Collectors.toList());
+
+        validOrder(restaurant, table, menuItemList);
+
         orderRepository.save(order);
+        menuItemRepository.saveAll(menuItemList);
     }
 
     @Transactional
@@ -78,8 +77,9 @@ public class OrderService {
 
     public OrderDto readOrder(Long orderId, Long restaurantId) {
         Order order = getOrder(orderId);
+        List<MenuItem> menuItems = menuItemRepository.findAllByOrderById(orderId);
         orderRestaurantValidation(order, restaurantId);
-        return OrderDto.of(order);
+        return OrderDto.of(order, menuItems);
     }
 
     public List<OrderDto> readTodayOrderList(Long restaurantId) {
@@ -102,8 +102,9 @@ public class OrderService {
     }
 
     private List<OrderDto> orderToOrderDto(List<Order> orderList) {
+
         return orderList.stream()
-                .map(OrderDto::of)
+                .map(order -> OrderDto.of(order, menuItemRepository.findAllByOrderById(order.getId())))
                 .collect(Collectors.toList());
     }
 

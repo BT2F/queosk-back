@@ -19,4 +19,6 @@ public class MenuItem {
     @ManyToOne
     private Menu menu;
     private Integer count;
+    @ManyToOne
+    private Order order;
 }

@@ -26,13 +26,13 @@ public class UserHistoryDto {
     private OrderStatus orderStatus;
     private LocalDateTime orderedAt;
 
-    public static UserHistoryDto of(Order order, String restaurantName){
+    public static UserHistoryDto of(Order order, String restaurantName, List<MenuItem> menuItems){
         return UserHistoryDto.builder()
                 .orderId(order.getId())
                 .userId(order.getUserId())
                 .restaurantId(order.getRestaurantId())
                 .restaurantName(restaurantName)
-                .menuItems(order.getMenuItemList())
+                .menuItems(menuItems)
                 .orderStatus(order.getStatus())
                 .orderedAt(order.getCreatedAt())
                 .build();
