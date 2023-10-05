@@ -1,7 +1,11 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.SettlementDto;
-import com.bttf.queosk.repository.OrderQueryQueryRepository;
+import com.bttf.queosk.entity.Menu;
+import com.bttf.queosk.entity.MenuItem;
+import com.bttf.queosk.entity.Order;
+import com.bttf.queosk.repository.MenuItemRepository;
+import com.bttf.queosk.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,8 +32,10 @@ import static org.mockito.Mockito.times;
 class SettlementServiceTest {
 
     @Mock
-    private OrderQueryQueryRepository queryRepository;
+    private OrderRepository orderRepository;
 
+    @Mock
+    private MenuItemRepository menuItemRepository;
     @Spy
     @InjectMocks
     private com.bttf.queosk.service.SettlementService settlementService;
@@ -37,60 +43,67 @@ class SettlementServiceTest {
     @Test
     @DisplayName("금일 정산 (성공)")
     void testTodaySettlementGet_success() {
+
         //given
         Long restaurantId = 1L;
-        List<SettlementDto.OrderdMenu> list = Arrays.asList(
-                new SettlementDto.OrderdMenu("짜장면", 1, 5000L),
-                new SettlementDto.OrderdMenu("짬뽕", 2, 7000L),
-                new SettlementDto.OrderdMenu("탕수육", 1, 17000L)
-        );
-        SettlementDto dto = new SettlementDto(list, 36000L);
         LocalDate today = LocalDate.now();
         LocalDateTime from = LocalDateTime.of(today, LocalTime.MIN);
         LocalDateTime to = LocalDateTime
                 .of(today.plusDays(1), LocalTime.MIN)
                 .minusNanos(1);
 
-        given(queryRepository.getPeriodSales(restaurantId, to, from)).willReturn(dto.getOrderdMenus());
+        List<Order> orderList = Arrays.asList(
+                Order.builder()
+                        .restaurantId(restaurantId)
+                        .build(),
+                Order.builder()
+                        .restaurantId(restaurantId)
+                        .build(),
+                Order.builder()
+                        .restaurantId(restaurantId)
+                        .build()
+        );
 
-        //when
-        SettlementDto settlementDto = settlementService.SettlementGet(restaurantId, to, from);
-        for (SettlementDto.OrderdMenu orderdMenu : list) {
-            System.out.println(orderdMenu.getMenu());
-            System.out.println(orderdMenu.getTotal());
-            System.out.println(orderdMenu.getCount());
+        List<MenuItem> menuItemList = Arrays.asList(
+                MenuItem.builder()
+                        .order(orderList.get(0))
+                        .menu(Menu.builder()
+                                .name("짜장면")
+                                .price(5000L)
+                                .build())
+                        .count(5)
+                        .build(),
+                MenuItem.builder()
+                        .order(orderList.get(1))
+                        .menu(Menu.builder()
+                                .name("차돌문어짬뽕")
+                                .price(18000L)
+                                .build())
+                        .count(10)
+                        .build(),
+                MenuItem.builder()
+                        .order(orderList.get(2))
+                        .menu(Menu.builder()
+                                .name("사천지옥탕수육")
+                                .price(36000L)
+                                .build())
+                        .count(1)
+                        .build()
+        );
+
+        given(orderRepository.findOrderByRestaurantInDateRange(restaurantId, from, to)).willReturn(orderList);
+        for (Order order : orderList) {
+            given(menuItemRepository.findAllByOrderId(order.getId())).willReturn(menuItemList);
         }
-        //then
-        assertThat(settlementDto.getOrderdMenus()).isEqualTo(list);
-        assertThat(settlementDto.getTotal()).isEqualTo(36000L);
-        then(settlementService).should(times(1)).SettlementGet(restaurantId, to, from);
-    }
-
-    @Test
-    @DisplayName("기간 정산 (성공)")
-    void testPeriodSettlementGet_success() {
-        //given
-        Long restaurantId = 1L;
-        LocalDate to = LocalDate.now();
-        LocalDate from = LocalDate.now().minusDays(3);
-
-        List<SettlementDto.OrderdMenu> list = Arrays.asList(
-                new SettlementDto.OrderdMenu("짜장면", 1, 5000L),
-                new SettlementDto.OrderdMenu("짬뽕", 2, 7000L),
-                new SettlementDto.OrderdMenu("탕수육", 1, 17000L)
-        );
-        given(queryRepository.getPeriodSales(restaurantId, to.atStartOfDay(), from.atStartOfDay()))
-                .willReturn(list);
 
         //when
-        SettlementDto settlementDto = settlementService.SettlementGet(
-                restaurantId, to.atStartOfDay(), from.atStartOfDay()
-        );
+
+        SettlementDto dto = settlementService.SettlementGet(restaurantId, from, to);
 
         //then
-        assertThat(settlementDto.getOrderdMenus()).isEqualTo(list);
-        assertThat(settlementDto.getTotal()).isEqualTo(36000L);
-        then(settlementService).should(times(1))
-                .SettlementGet(restaurantId, to.atStartOfDay(), from.atStartOfDay());
+        assertThat(dto.getOrderdMenus().get(0).getMenu()).isEqualTo(menuItemList.get(0).getMenu().getName());
+        assertThat(dto.getTotal()).isEqualTo(723000L);
+        then(settlementService).should(times(1)).SettlementGet(restaurantId, from, to);
     }
+
 }
