@@ -55,7 +55,7 @@ public class OrderService {
                 .build()).collect(Collectors.toList());
 
         validOrder(restaurant, table, menuItemList);
-
+        table.setStatus(USING);
         orderRepository.save(order);
         menuItemRepository.saveAll(menuItemList);
     }
@@ -77,7 +77,7 @@ public class OrderService {
 
     public OrderDto readOrder(Long orderId, Long restaurantId) {
         Order order = getOrder(orderId);
-        List<MenuItem> menuItems = menuItemRepository.findAllByOrderById(orderId);
+        List<MenuItem> menuItems = menuItemRepository.findAllByOrderId(orderId);
         orderRestaurantValidation(order, restaurantId);
         return OrderDto.of(order, menuItems);
     }
@@ -104,7 +104,7 @@ public class OrderService {
     private List<OrderDto> orderToOrderDto(List<Order> orderList) {
 
         return orderList.stream()
-                .map(order -> OrderDto.of(order, menuItemRepository.findAllByOrderById(order.getId())))
+                .map(order -> OrderDto.of(order, menuItemRepository.findAllByOrderId(order.getId())))
                 .collect(Collectors.toList());
     }
 

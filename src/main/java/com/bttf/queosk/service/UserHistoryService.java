@@ -30,7 +30,7 @@ public class UserHistoryService {
                     String restaurantName = restaurantRepository.findById(order.getRestaurantId())
                             .map(Restaurant::getRestaurantName)
                             .orElse(null);
-                    List<MenuItem> menuItems = menuItemRepository.findAllByOrderById(order.getId());
+                    List<MenuItem> menuItems = menuItemRepository.findAllByOrderId(order.getId());
                     return UserHistoryDto.of(order, restaurantName, menuItems);
                 })
                 .collect(Collectors.toList());
