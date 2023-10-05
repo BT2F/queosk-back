@@ -40,7 +40,6 @@ public class SettlementService {
 
         for (Order order : orderByRestaurantInDateRange) {
             List<MenuItem> allByOrderId = menuItemRepository.findAllByOrderId(order.getId());
-            System.out.println(order.getId());
             for (MenuItem menuItem : allByOrderId) {
                 menuList.put(menuItem.getMenu().getName(), menuList.getOrDefault(menuItem.getMenu().getName(), 0) + menuItem.getCount());
                 total += menuItem.getCount() * menuItem.getMenu().getPrice();
