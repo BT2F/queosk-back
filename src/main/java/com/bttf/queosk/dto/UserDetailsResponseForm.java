@@ -21,8 +21,6 @@ public class UserDetailsResponseForm {
     private String status;
     private String imageUrl;
     private String loginType;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     public static UserDetailsResponseForm of(UserDto userDto) {
         return UserDetailsResponseForm.builder()
@@ -33,8 +31,6 @@ public class UserDetailsResponseForm {
                 .status(userDto.getStatus())
                 .imageUrl(userDto.getImageUrl())
                 .loginType(userDto.getLoginType())
-                .createdAt(userDto.getCreatedAt())
-                .updatedAt(userDto.getUpdatedAt())
                 .build();
     }
 }

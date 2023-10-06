@@ -31,6 +31,7 @@ public class SettlementDto {
     @AllArgsConstructor
     public static class OrderdMenu {
         private String menu;
+        private Long menuPrice;
         private Integer count;
     }
 }

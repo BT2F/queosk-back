@@ -5,6 +5,7 @@ import com.bttf.queosk.entity.Menu;
 import com.bttf.queosk.entity.MenuItem;
 import com.bttf.queosk.entity.Order;
 import com.bttf.queosk.entity.Restaurant;
+import com.bttf.queosk.repository.MenuItemRepository;
 import com.bttf.queosk.repository.OrderRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,10 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.bttf.queosk.enumerate.MenuStatus.ON_SALE;
 import static com.bttf.queosk.enumerate.OrderStatus.DONE;
@@ -33,13 +31,17 @@ public class UserHistoryTest {
 
     @Mock
     private RestaurantRepository restaurantRepository;
+    @Mock
+    private MenuItemRepository menuItemRepositoryRepository;
 
     private UserHistoryService userHistoryService;
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         userHistoryService =
-                new UserHistoryService(orderRepository, restaurantRepository);
+                new UserHistoryService(
+                        orderRepository, restaurantRepository,menuItemRepositoryRepository
+                );
     }
 
     @Test
@@ -74,10 +76,10 @@ public class UserHistoryTest {
         menus.add(menuItem);
 
         Order order = Order.builder()
+                .id(1L)
                 .userId(userId)
                 .restaurantId(restaurant.getId())
                 .status(DONE)
-                .menuItemList(menus)
                 .build();
 
         List<Order> orders = Collections.singletonList(order);
@@ -86,6 +88,8 @@ public class UserHistoryTest {
                 .thenReturn(orders);
         when(restaurantRepository.findById(restaurant.getId()))
                 .thenReturn(Optional.of(restaurant));
+        when(menuItemRepositoryRepository.findAllByOrderId(1L))
+                .thenReturn(Collections.singletonList(menuItem));
         //when
 
         List<UserHistoryDto> userHistories = userHistoryService.getUserHistories(userId);
