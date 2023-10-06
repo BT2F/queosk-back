@@ -52,7 +52,7 @@ public class SettlementController {
 
         return ResponseEntity.status(OK)
                 .body(SettlementResponseForm.of(settlementService.SettlementGet(
-                        restaurantId, getLocalDateTimeOfTo(from), getLocalDateTimeOfTo(to)
+                        restaurantId, getLocalDateTimeOfFrom(from), getLocalDateTimeOfTo(to)
                 )));
     }
 
@@ -67,7 +67,7 @@ public class SettlementController {
 
         return ResponseEntity.status(OK)
                 .body(SettlementPriceForm.Response.of(settlementService.periodSettlementPriceGet(
-                        restaurantId, getLocalDateTimeOfTo(from), getLocalDateTimeOfTo(to)
+                        restaurantId, getLocalDateTimeOfFrom(from), getLocalDateTimeOfTo(to)
                 )));
     }
 
