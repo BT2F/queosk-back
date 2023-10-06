@@ -1,9 +1,11 @@
 package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.UserHistoryDto;
+import com.bttf.queosk.entity.MenuItem;
 import com.bttf.queosk.entity.Order;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.enumerate.OrderStatus;
+import com.bttf.queosk.repository.MenuItemRepository;
 import com.bttf.queosk.repository.OrderRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 public class UserHistoryService {
     private final OrderRepository orderRepository;
     private final RestaurantRepository restaurantRepository;
-
+    private final MenuItemRepository menuItemRepository;
     public List<UserHistoryDto> getUserHistories(Long userId) {
         List<Order> orders = orderRepository.findByUserIdAndStatusNotOrderByCreatedAtDesc(
                 userId, OrderStatus.IN_PROGRESS
@@ -28,7 +30,8 @@ public class UserHistoryService {
                     String restaurantName = restaurantRepository.findById(order.getRestaurantId())
                             .map(Restaurant::getRestaurantName)
                             .orElse(null);
-                    return UserHistoryDto.of(order, restaurantName);
+                    List<MenuItem> menuItems = menuItemRepository.findAllByOrderId(order.getId());
+                    return UserHistoryDto.of(order, restaurantName, menuItems);
                 })
                 .collect(Collectors.toList());
     }

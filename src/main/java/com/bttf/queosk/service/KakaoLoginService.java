@@ -186,7 +186,7 @@ public class KakaoLoginService {
             userRepository.save(User.of(email, nickName, encodedPassword, profileImage));
         }
 
-        kakaoAuthRepository.save(email, KakaoAuth.of(kakaoId, refreshToken, accessToken));
+        kakaoAuthRepository.save(email, KakaoAuth.of(email,kakaoId, refreshToken, accessToken));
 
         User user = userRepository.findByEmail(email).get();
 
@@ -241,5 +241,3 @@ public class KakaoLoginService {
         return params;
     }
 }
-
-

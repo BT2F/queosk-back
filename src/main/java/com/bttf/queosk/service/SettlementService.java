@@ -1,16 +1,20 @@
 package com.bttf.queosk.service;
 
+import com.bttf.queosk.dto.MenuItemDto;
 import com.bttf.queosk.dto.SettlementDto;
+import com.bttf.queosk.entity.Order;
 import com.bttf.queosk.entity.Settlement;
-import com.bttf.queosk.repository.OrderQueryQueryRepository;
+import com.bttf.queosk.repository.MenuItemRepository;
+import com.bttf.queosk.repository.OrderRepository;
 import com.bttf.queosk.repository.SettlementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,35 +22,53 @@ public class SettlementService {
 
     private final SettlementRepository settlementRepository;
 
-    private final OrderQueryQueryRepository queryRepository;
+    private final OrderRepository orderRepository;
 
-    public SettlementDto SettlementGet(Long restaurantId,
-                                       LocalDateTime to,
-                                       LocalDateTime from) {
+    private final MenuItemRepository menuItemRepository;
 
-        List<SettlementDto.OrderdMenu> settlement = queryRepository.getPeriodSales(restaurantId, to, from);
+    public SettlementDto SettlementGet(Long restaurantId, LocalDateTime from, LocalDateTime to) {
+        List<Order> orderByRestaurantInDateRange = orderRepository
+                .findOrderByRestaurantInDateRange(restaurantId, from, to);
 
-        Long sum = settlement.stream().mapToLong(SettlementDto.OrderdMenu::sumOfPrice).sum();
+        //메뉴 별 가격 반환을 위한 Value 에 MenuItemDto 사용
+        Map<String, MenuItemDto> menuList = orderByRestaurantInDateRange.stream()
+                .flatMap(order -> menuItemRepository.findAllByOrderId(order.getId()).stream())
+                .collect(HashMap::new,
+                        (map, menuItem) -> map.merge(
+                                menuItem.getMenu().getName(),
+                                new MenuItemDto(menuItem.getMenu().getPrice(), menuItem.getCount()),
+                                (existing, replacement) -> existing.addCount(replacement.getCount())
+                        ),
+                        (map1, map2) -> map2.forEach((key, value) -> map1.merge(
+                                key,
+                                value,
+                                (existing, replacement) -> existing.addCount(replacement.getCount())
+                        ))
+                );
 
+        List<SettlementDto.OrderdMenu> orderdMenuList = menuList.entrySet().stream()
+                .map(entry -> new SettlementDto.OrderdMenu(
+                        entry.getKey(), entry.getValue().getMenuPrice(), entry.getValue().getCount())
+                )
+                .collect(Collectors.toList());
 
-        return SettlementDto.of(settlement, sum);
+        long total = menuList.values().stream()
+                .mapToLong(menuItemDto -> menuItemDto.getCount() * menuItemDto.getMenuPrice())
+                .sum();
+
+        return SettlementDto.of(orderdMenuList, total);
     }
 
     public Long periodSettlementPriceGet(Long restaurantId,
-                                         LocalDateTime to,
-                                         LocalDateTime from) {
-        LocalDateTime startDateTime = LocalDateTime.of(LocalDate.from(from), LocalTime.MIN);
-        LocalDateTime endDateTime = LocalDateTime
-                .of(LocalDate.from(to.plusDays(1)), LocalTime.MIN)
-                .minusNanos(1);
-        List<Settlement> settlementList =
-                settlementRepository.findSettlementsByRestaurantInDateRange(restaurantId, startDateTime, endDateTime);
+                                         LocalDateTime from,
+                                         LocalDateTime to) {
 
-        long totalPrice = settlementList.stream()
+        List<Settlement> settlementList =
+                settlementRepository.findSettlementsByRestaurantInDateRange(restaurantId, from, to);
+
+        return settlementList.stream()
                 .mapToLong(Settlement::getPrice)
                 .sum();
-
-        return totalPrice;
     }
 
 }

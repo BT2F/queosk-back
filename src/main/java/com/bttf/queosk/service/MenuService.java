@@ -24,6 +24,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
 
     @Transactional
+    @CacheEvict(value = "menuList", key = "'restaurantId:' + #restaurantId")
     public void createMenu(Long restaurantId, MenuCreationRequestForm menuCreationRequestForm) {
         menuRepository.save(Menu.of(restaurantId, menuCreationRequestForm));
     }
