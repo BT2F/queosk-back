@@ -1,8 +1,8 @@
 package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
-import com.bttf.queosk.dto.SettlementResponseForm;
 import com.bttf.queosk.dto.SettlementPriceForm;
+import com.bttf.queosk.dto.SettlementResponseForm;
 import com.bttf.queosk.service.SettlementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,14 +34,10 @@ public class SettlementController {
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
         LocalDate today = LocalDate.now();
-        LocalDateTime from = LocalDateTime.of(today, LocalTime.MIN);
-        LocalDateTime to = LocalDateTime
-                .of(today.plusDays(1), LocalTime.MIN)
-                .minusNanos(1);
 
         return ResponseEntity.status(OK)
                 .body(SettlementResponseForm.of(settlementService.SettlementGet(
-                        restaurantId, from, to
+                        restaurantId, getLocalDateTimeOfFrom(today), getLocalDateTimeOfTo(today)
                 )));
     }
 
@@ -52,11 +48,11 @@ public class SettlementController {
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from) {
 
-
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+
         return ResponseEntity.status(OK)
                 .body(SettlementResponseForm.of(settlementService.SettlementGet(
-                        restaurantId, to.atStartOfDay(), from.atStartOfDay()
+                        restaurantId, getLocalDateTimeOfTo(from), getLocalDateTimeOfTo(to)
                 )));
     }
 
@@ -71,7 +67,15 @@ public class SettlementController {
 
         return ResponseEntity.status(OK)
                 .body(SettlementPriceForm.Response.of(settlementService.periodSettlementPriceGet(
-                        restaurantId, to.atStartOfDay(), from.atStartOfDay()
+                        restaurantId, getLocalDateTimeOfTo(from), getLocalDateTimeOfTo(to)
                 )));
+    }
+
+    private LocalDateTime getLocalDateTimeOfTo(LocalDate localDate) {
+        return LocalDateTime.of(localDate, LocalTime.MAX);
+    }
+
+    private LocalDateTime getLocalDateTimeOfFrom(LocalDate localDate) {
+        return LocalDateTime.of(localDate, LocalTime.MIN);
     }
 }
