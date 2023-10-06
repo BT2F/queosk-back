@@ -56,6 +56,7 @@ public class SecurityConfig {
                                 "/api/restaurants/keyword",         // 매장 조회 (키워드)
                                 "/api/restaurants/*/menus",       // 매장 메뉴 조회
                                 "/api/restaurants/*/details",     // 매장 상세조회
+                                "/api/reviews/restaurants/**",     // 매장 리뷰 조회
                                 "/swagger-ui/**",                 // 스웨거 관련
                                 "/v2/api-docs",
                                 "/swagger-resources/**",
