@@ -22,8 +22,6 @@ public class UserDto {
     private String status;
     private String imageUrl;
     private String loginType;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     public static UserDto of(User user) {
         return UserDto.builder()
@@ -34,8 +32,6 @@ public class UserDto {
                 .status(user.getStatus().toString())
                 .imageUrl(user.getImageUrl())
                 .loginType(user.getLoginType().toString())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 }
