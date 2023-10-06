@@ -28,19 +28,9 @@ public class SettlementDto {
     @Getter
     @Builder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class OrderdMenu {
         private String menu;
         private Integer count;
-        private Long total;
-
-        public Long sumOfPrice() {
-            return count * total;
-        }
-
-        public OrderdMenu(String menu, Integer count, Long total) {
-            this.menu = menu;
-            this.count = count;
-            this.total = total;
-        }
     }
 }

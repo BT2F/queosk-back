@@ -35,9 +35,6 @@ public class Order extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
-    private List<MenuItem> menuItemList;
-
     public void setStatus(OrderStatus orderStatus) {
         this.status = orderStatus;
     }

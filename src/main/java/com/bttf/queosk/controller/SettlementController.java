@@ -41,7 +41,7 @@ public class SettlementController {
 
         return ResponseEntity.status(OK)
                 .body(SettlementResponseForm.of(settlementService.SettlementGet(
-                        restaurantId, to, from
+                        restaurantId, from, to
                 )));
     }
 

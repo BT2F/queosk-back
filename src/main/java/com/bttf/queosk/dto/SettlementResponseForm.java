@@ -37,13 +37,11 @@ public class SettlementResponseForm {
     public static class OrderdMenu {
         private String menu;
         private Integer count;
-        private Long price;
 
         public static OrderdMenu of(SettlementDto.OrderdMenu orderdMenu) {
             return OrderdMenu.builder()
                     .menu(orderdMenu.getMenu())
                     .count(orderdMenu.getCount())
-                    .price(orderdMenu.getTotal())
                     .build();
         }
 

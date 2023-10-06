@@ -24,11 +24,11 @@ public class OrderDto {
     private Long userId;
     private OrderStatus orderStatus;
 
-    public static OrderDto of(Order order) {
+    public static OrderDto of(Order order, List<MenuItem> menuItemList) {
         return OrderDto.builder()
                 .id(order.getId())
                 .tableId(order.getTableId())
-                .menuItems(order.getMenuItemList())
+                .menuItems(menuItemList)
                 .orderStatus(order.getStatus())
                 .userId(order.getUserId())
                 .build();
