@@ -5,16 +5,13 @@ import com.bttf.queosk.entity.*;
 import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.OrderStatus;
 import com.bttf.queosk.enumerate.TableStatus;
-import com.bttf.queosk.repository.MenuRepository;
-import com.bttf.queosk.repository.OrderRepository;
-import com.bttf.queosk.repository.RestaurantRepository;
-import com.bttf.queosk.repository.TableRepository;
+import com.bttf.queosk.repository.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,10 +23,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-
-@Transactional
-@ExtendWith(MockitoExtension.class)
-class OrderServiceTest {
+@DisplayName("주문 관련 테스트코드")
+public class OrderServiceTest {
 
     @InjectMocks
     private OrderService orderService;
@@ -44,14 +39,21 @@ class OrderServiceTest {
     private RestaurantRepository restaurantRepository;
 
     @Mock
+    private MenuItemRepository menuItemRepository;
+
+    @Mock
     private TableRepository tableRepository;
 
-    @Test
-    public void createOrder_success() {
-        // given
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
 
+    @Test
+    @DisplayName("주문생성 (성공)")
+    public void createOrder_success() {
+        // Given
         Long restaurantId = 1L;
-        String userEmail = "a@x.com";
         Long tableId = 1L;
 
         Restaurant restaurant = Restaurant.builder()
@@ -59,22 +61,20 @@ class OrderServiceTest {
                 .operationStatus(OperationStatus.OPEN)
                 .build();
 
-        Menu menu1 =
-                Menu.builder()
-                        .id(1L)
-                        .name("menu1")
-                        .price(1000L)
-                        .status(ON_SALE)
-                        .restaurantId(restaurantId)
-                        .build();
-        Menu menu2 =
-                Menu.builder()
-                        .id(2L)
-                        .name("menu2")
-                        .price(1000L)
-                        .status(ON_SALE)
-                        .restaurantId(restaurantId)
-                        .build();
+        Menu menu1 = Menu.builder()
+                .id(1L)
+                .name("menu1")
+                .price(1000L)
+                .status(ON_SALE)
+                .restaurantId(restaurantId)
+                .build();
+        Menu menu2 = Menu.builder()
+                .id(2L)
+                .name("menu2")
+                .price(1000L)
+                .status(ON_SALE)
+                .restaurantId(restaurantId)
+                .build();
 
         Table table = Table.builder()
                 .id(1L)
@@ -84,7 +84,7 @@ class OrderServiceTest {
 
         OrderCreationRequestForm.MenuItems menuItem1 = OrderCreationRequestForm.MenuItems.builder()
                 .menu(1L)
-                .count(1)
+                .count(2)
                 .build();
 
         OrderCreationRequestForm.MenuItems menuItem2 = OrderCreationRequestForm.MenuItems.builder()
@@ -105,21 +105,19 @@ class OrderServiceTest {
         given(tableRepository.findById(1L)).willReturn(Optional.of(table));
         given(menuRepository.findById(1L)).willReturn(Optional.of(menu1));
         given(menuRepository.findById(2L)).willReturn(Optional.of(menu2));
-        // when
 
+        // When
         orderService.createOrder(orderCreationForm, 1L);
 
-        // then
-
+        // Then
         verify(orderRepository, times(1)).save(any(Order.class));
     }
 
     @Test
+    @DisplayName("주문상태 변경 (성공)")
     public void updateOrderStatus_success() {
-        // given
-
+        // Given
         Long restaurantId = 1L;
-        Long menuId = 1L;
         Long userId = 1L;
         Long tableId = 1L;
 
@@ -127,14 +125,13 @@ class OrderServiceTest {
                 .id(userId)
                 .build();
 
-        Menu menu1 =
-                Menu.builder()
-                        .id(menuId)
-                        .name("menu1")
-                        .price(1000L)
-                        .status(ON_SALE)
-                        .restaurantId(restaurantId)
-                        .build();
+        Menu menu1 = Menu.builder()
+                .id(1L)
+                .name("menu1")
+                .price(1000L)
+                .status(ON_SALE)
+                .restaurantId(restaurantId)
+                .build();
 
         Table table = Table.builder()
                 .id(tableId)
@@ -153,12 +150,11 @@ class OrderServiceTest {
                 .build();
 
         given(orderRepository.findById(1L)).willReturn(Optional.of(order));
-        // when
 
+        // When
         orderService.updateOrderStatus(1L, 1L, OrderStatus.DONE);
 
-        // then
-
+        // Then
         verify(orderRepository, times(1)).save(any(Order.class));
         assertThat(order.getStatus()).isEqualTo(OrderStatus.DONE);
     }
