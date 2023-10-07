@@ -108,8 +108,12 @@ public class OrderService {
     }
 
     public List<OrderDto> readItodayDoneList(Long restaurantId) {
+
+        LocalDateTime startTime = LocalDateTime.now().toLocalDate().atStartOfDay();
+        LocalDateTime endTime = LocalDateTime.now().toLocalDate().atTime(23, 59, 59);
+
         List<Order> orderList =
-                orderRepository.findAllByRestaurantIdAndStatus(restaurantId, DONE);
+                orderRepository.findByRestaurantIdAndCreatedAtBetweenAndStatus(restaurantId, startTime, endTime, DONE);
 
         return orderToOrderDto(orderList);
     }
