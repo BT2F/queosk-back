@@ -31,7 +31,7 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     @Cacheable(value = "menuList", key = "'restaurantId:' + #restaurantId")
-    public List<MenuDto> getMenu(Long restaurantId) {
+    public List<MenuDto> getMenus(Long restaurantId) {
 
         List<Menu> menus = menuRepository.findByRestaurantId(restaurantId);
 
@@ -93,5 +93,12 @@ public class MenuService {
                 .orElseThrow(() -> new CustomException(MENU_NOT_FOUND));
 
         menuRepository.delete(menu);
+    }
+
+    @Transactional(readOnly = true)
+    public MenuDto getMenu(Long menuId) {
+        Menu menu =  menuRepository.findById(menuId).orElseThrow(()->
+                new CustomException(MENU_NOT_FOUND));
+        return MenuDto.of(menu);
     }
 }

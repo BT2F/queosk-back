@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,15 +26,18 @@ public class AutoCompleteService {
             "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"};
 
     //검색어 등록
+    @Transactional
     public void addAutoCompleteWord(String restaurant) {
         redisTemplate.opsForZSet().add(AUTOCOMPLETE_KEY, restaurant, 0);
     }
 
     //등록된 검색어 삭제
+    @Transactional
     public void deleteAutoCompleteWord(String restaurant) {
         redisTemplate.opsForZSet().remove(AUTOCOMPLETE_KEY, restaurant);
     }
 
+    @Transactional(readOnly = true)
     public AutoCompleteDto autoComplete(String input) {
 
         List<String> matchingKeywords = new ArrayList<>(
