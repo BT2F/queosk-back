@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>회원가입 완료(임시화면)</title>
+    <title>회원가입 완료</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,29 +13,34 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
+            padding: 0 30px;
         }
 
         .message {
-            font-size: 24px;
+            font-size: 18px;
             text-align: center;
-            margin-bottom: 20px;
+            margin: -18px 0 20px;
+        }
+        .message p {
+            margin: 18px 0;
         }
 
         .button {
-            background-color: #007bff;
+            background-color: #ff8901;
             color: white;
             padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 16px;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
 <div class="message">
     <p th:text="${message}"></p>
-    <p>아래 버튼을 눌러 앱에서 로그인을 진행해주세요.</p>
+    <p>아래 버튼을 누른 후 <br>앱에서 로그인을 진행해주세요.</p>
 </div>
 <a class="button" href="https://queosk.kr/">앱으로 돌아가기</a>
 </body>
