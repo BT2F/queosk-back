@@ -82,7 +82,7 @@ class MenuServiceTest {
         when(menuRepository.findByRestaurantId(restaurantId)).thenReturn(menus);
 
         // When
-        List<MenuDto> menuDtos = menuService.getMenu(restaurantId);
+        List<MenuDto> menuDtos = menuService.getMenus(restaurantId);
 
         // Then
         assertThat(menuDtos.size()).isEqualTo(2);
@@ -100,7 +100,7 @@ class MenuServiceTest {
         when(menuRepository.findByRestaurantId(restaurantId)).thenReturn(new ArrayList<>());
 
         // When & Then
-        assertThatThrownBy(() -> menuService.getMenu(restaurantId))
+        assertThatThrownBy(() -> menuService.getMenus(restaurantId))
                 .isInstanceOf(CustomException.class);
     }
 
