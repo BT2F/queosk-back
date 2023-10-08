@@ -154,9 +154,13 @@ public class UserController {
 
         Long userId = jwtTokenProvider.getIdFromToken(token);
 
-        String url = imageService.saveFile(image, "user");
+        UserDto userDto = userInfoService.getUserDetails(userId);
 
-        userInfoService.updateImageUrl(userId, url);
+        // 기존 이미지 삭제
+        imageService.deleteFile(userDto.getImageUrl());
+
+        // 새로운 이미지경로 업데이트
+        userInfoService.updateImageUrl(userId, imageService.saveFile(image, "user"));
 
         return ResponseEntity.status(NO_CONTENT).build();
     }
