@@ -160,6 +160,7 @@ public class QueueService {
         });
     }
 
+    @Transactional(readOnly = true)
     public List<QueueOfUserDto> getUserQueueList(Long userId) {
         List<Queue> userQueues = queueRepository.findByUserId(userId);
 
