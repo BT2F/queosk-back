@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -47,7 +46,7 @@ public class MenuController {
     public ResponseEntity<MenuListResponseForm> getMenu(
             @PathVariable("restaurantId") Long restaurantId) {
 
-        List<MenuDto> menuList = menuService.getMenu(restaurantId);
+        List<MenuDto> menuList = menuService.getMenus(restaurantId);
 
         return ResponseEntity.status(OK).body(MenuListResponseForm.of(menuList));
     }
@@ -105,6 +104,10 @@ public class MenuController {
 
         String url =
                 imageService.saveFile(imageFile, "/restaurant/" + restaurantId + "/menu");
+
+        MenuDto menuDto = menuService.getMenu(menuId);
+
+        imageService.deleteFile(menuDto.getImageUrl());
 
         menuService.updateImage(restaurantId, menuId, url);
 

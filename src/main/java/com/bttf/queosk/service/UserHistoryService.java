@@ -10,6 +10,7 @@ import com.bttf.queosk.repository.OrderRepository;
 import com.bttf.queosk.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,8 @@ public class UserHistoryService {
     private final OrderRepository orderRepository;
     private final RestaurantRepository restaurantRepository;
     private final MenuItemRepository menuItemRepository;
+
+    @Transactional(readOnly = true)
     public List<UserHistoryDto> getUserHistories(Long userId) {
         List<Order> orders = orderRepository.findByUserIdAndStatusNotOrderByCreatedAtDesc(
                 userId, OrderStatus.IN_PROGRESS

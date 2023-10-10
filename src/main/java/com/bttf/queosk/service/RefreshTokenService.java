@@ -13,6 +13,7 @@ import com.bttf.queosk.repository.RestaurantRepository;
 import com.bttf.queosk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.bttf.queosk.enumerate.UserRole.ROLE_USER;
 import static com.bttf.queosk.exception.ErrorCode.*;
@@ -26,6 +27,7 @@ public class RefreshTokenService {
     private final JwtTokenProvider jwtTokenProvider;
 
     // 신규 AccessToken 발급
+    @Transactional
     public TokenRefreshDto issueNewAccessToken(String accessToken, String refreshToken) {
         validateRefreshToken(refreshToken);
 
@@ -62,6 +64,7 @@ public class RefreshTokenService {
     }
 
     // 리프레시 토큰 삭제
+    @Transactional
     public void deleteRefreshToken(String email) {
         refreshTokenRepository.deleteByEmail(email);
     }
