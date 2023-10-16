@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
@@ -49,6 +50,7 @@ public class KakaoLoginService {
     @Value("${kakao.redirectUrl}")
     private String KAKAO_REDIRECT_URL;
 
+    @Transactional
     public void logoutKakaoUser(String email) {
         KakaoAuth kakaoAuth = kakaoAuthRepository.findById(email);
 
@@ -58,6 +60,7 @@ public class KakaoLoginService {
         }
     }
 
+    @Transactional
     public UserSignInDto getUserInfoFromKakao(KakaoLoginRequestForm kaKaoLoginRequestForm) throws CustomException {
         String accessToken = "";
         String refreshToken = "";
@@ -101,6 +104,7 @@ public class KakaoLoginService {
     }
 
     //임시 서비스
+    @Transactional
     public UserSignInDto getUserInfoFromKakaoTest(KakaoLoginRequestForm kaKaoLoginRequestForm) throws CustomException {
         String accessToken = "";
         String refreshToken = "";
