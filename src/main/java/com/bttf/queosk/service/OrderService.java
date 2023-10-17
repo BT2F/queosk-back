@@ -55,7 +55,7 @@ public class OrderService {
                 .build()).collect(Collectors.toList());
 
         validOrder(restaurant, table, menuItemList);
-        table.setStatus(USING);
+        table.setStatusAndName(USING, table.getName());
         orderRepository.save(order);
         menuItemRepository.saveAll(menuItemList);
     }

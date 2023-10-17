@@ -4,6 +4,7 @@ import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.TableDto;
 import com.bttf.queosk.dto.TableRequestForm;
 import com.bttf.queosk.dto.TableResponseForm;
+import com.bttf.queosk.dto.TableUpdateForm;
 import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.service.QueueService;
 import com.bttf.queosk.service.TableService;
@@ -40,19 +41,19 @@ public class TableController {
         return ResponseEntity.status(CREATED).build();
     }
     @PutMapping("/table/{tableId}")
-    @ApiOperation(value = "매장 테이블 상태 변경", notes = "매장 테이블의 상태를 변경 합니다.")
+    @ApiOperation(value = "매장 테이블 수정", notes = "매장 테이블의 상태와 이름을 변경 합니다.")
     public ResponseEntity<Void> tableUpdate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                            @RequestParam TableStatus tableStatus,
+                                            @RequestBody TableUpdateForm form,
                                             @PathVariable Long tableId) {
 
 
         Long restaurantId = jwtTokenProvider.getIdFromToken(token);
 
-        if (tableStatus.equals(OPEN)) {
+        if (form.getTableStatus().equals(OPEN)) {
             queueService.popTheFirstTeamOfQueue(restaurantId);
         }
 
-        tableService.updateTable(tableId, tableStatus, restaurantId);
+        tableService.updateTable(tableId, form, restaurantId);
         return ResponseEntity.status(NO_CONTENT).build();
     }
 

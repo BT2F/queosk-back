@@ -3,6 +3,7 @@ package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.TableDto;
 import com.bttf.queosk.dto.TableRequestForm;
+import com.bttf.queosk.dto.TableUpdateForm;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.enumerate.TableStatus;
 import com.bttf.queosk.exception.CustomException;
@@ -34,7 +35,7 @@ public class TableService {
 
     @Transactional
     @CacheEvict(value = "tableList", key = "'restaurantId:' + #restaurantId")
-    public void updateTable(Long tableId, TableStatus tableStatus, Long restaurantId) {
+    public void updateTable(Long tableId, TableUpdateForm form, Long restaurantId) {
 
         Table table = getTableFromRepository(tableId);
 
@@ -42,7 +43,7 @@ public class TableService {
             throw new CustomException(NOT_PERMITTED);
         }
 
-        table.setStatus(tableStatus);
+        table.setStatusAndName(form.getTableStatus(), form.getName());
     }
 
     @Transactional

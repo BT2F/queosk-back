@@ -2,6 +2,7 @@ package com.bttf.queosk.service;
 
 import com.bttf.queosk.dto.TableDto;
 import com.bttf.queosk.dto.TableRequestForm;
+import com.bttf.queosk.dto.TableUpdateForm;
 import com.bttf.queosk.entity.Restaurant;
 import com.bttf.queosk.entity.Table;
 import com.bttf.queosk.enumerate.TableStatus;
@@ -73,13 +74,19 @@ class TableServiceTest {
                 .restaurantId(1L)
                 .build();
 
+        TableUpdateForm form = TableUpdateForm.builder()
+                .tableStatus(TableStatus.USING)
+                .name("name")
+                .build();
+
         given(tableRepository.findById(table.getId())).willReturn(Optional.of(table));
 
         //when
-        tableService.updateTable(table.getId(), TableStatus.USING, restaurantId);
+        tableService.updateTable(table.getId(), form, restaurantId);
 
         //then
-        then(tableService).should(times(1)).updateTable(table.getId(), TableStatus.USING, restaurantId);
+        then(tableService).should(times(1)).updateTable(table.getId(), form, restaurantId);
+        assertThat(table.getName()).isEqualTo("name");
     }
 
     @Test
@@ -92,13 +99,18 @@ class TableServiceTest {
                 .restaurantId(1L)
                 .build();
 
+        TableUpdateForm form = TableUpdateForm.builder()
+                .tableStatus(TableStatus.USING)
+                .name("name")
+                .build();
+
         given(tableRepository.findById(anyLong())).willReturn(Optional.empty());
 
         //then
-        assertThatThrownBy(() -> tableService.updateTable(table.getId(), TableStatus.USING, table.getRestaurantId()))
+        assertThatThrownBy(() -> tableService.updateTable(table.getId(), form, table.getRestaurantId()))
                 .isExactlyInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.INVALID_TABLE.getMessage());
-        then(tableService).should(times(1)).updateTable(table.getId(), TableStatus.USING, table.getRestaurantId());
+        then(tableService).should(times(1)).updateTable(table.getId(), form, table.getRestaurantId());
     }
 
     @Test
@@ -111,13 +123,18 @@ class TableServiceTest {
                 .restaurantId(1L)
                 .build();
 
+        TableUpdateForm form = TableUpdateForm.builder()
+                .tableStatus(TableStatus.USING)
+                .name("name")
+                .build();
+
         given(tableRepository.findById(table.getId())).willReturn(Optional.of(table));
 
         //then
-        assertThatThrownBy(() -> tableService.updateTable(table.getId(), TableStatus.USING, 2L))
+        assertThatThrownBy(() -> tableService.updateTable(table.getId(), form, 2L))
                 .isExactlyInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.NOT_PERMITTED.getMessage());
-        then(tableService).should(times(1)).updateTable(table.getId(), TableStatus.USING, 2L);
+        then(tableService).should(times(1)).updateTable(table.getId(), form, 2L);
     }
 
     @Test
