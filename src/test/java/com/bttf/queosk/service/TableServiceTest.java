@@ -96,10 +96,10 @@ class TableServiceTest {
         given(tableRepository.findById(anyLong())).willReturn(Optional.empty());
 
         //then
-        assertThatThrownBy(() -> tableService.updateTable(table.getId(), TableStatus.USING, table.getRestaurantId()))
+        assertThatThrownBy(() -> tableService.updateTableStatus(table.getId(), TableStatus.USING, table.getRestaurantId()))
                 .isExactlyInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.INVALID_TABLE.getMessage());
-        then(tableService).should(times(1)).updateTable(table.getId(), TableStatus.USING, table.getRestaurantId());
+        then(tableService).should(times(1)).updateTableStatus(table.getId(), TableStatus.USING, table.getRestaurantId());
     }
 
     @Test
@@ -115,10 +115,10 @@ class TableServiceTest {
         given(tableRepository.findById(table.getId())).willReturn(Optional.of(table));
 
         //then
-        assertThatThrownBy(() -> tableService.updateTable(table.getId(), TableStatus.USING, 2L))
+        assertThatThrownBy(() -> tableService.updateTableStatus(table.getId(), TableStatus.USING, 2L))
                 .isExactlyInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.NOT_PERMITTED.getMessage());
-        then(tableService).should(times(1)).updateTable(table.getId(), TableStatus.USING, 2L);
+        then(tableService).should(times(1)).updateTableStatus(table.getId(), TableStatus.USING, 2L);
     }
 
     @Test
