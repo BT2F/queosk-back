@@ -77,10 +77,10 @@ class TableServiceTest {
         given(tableRepository.findById(table.getId())).willReturn(Optional.of(table));
 
         //when
-        tableService.updateTable(table.getId(), TableStatus.USING, restaurantId);
+        tableService.updateTableStatus(table.getId(), TableStatus.USING, restaurantId);
 
         //then
-        then(tableService).should(times(1)).updateTable(table.getId(), TableStatus.USING, restaurantId);
+        then(tableService).should(times(1)).updateTableStatus(table.getId(), TableStatus.USING, restaurantId);
     }
 
     @Test
