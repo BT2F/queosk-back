@@ -2,6 +2,7 @@ package com.bttf.queosk.controller;
 
 import com.bttf.queosk.config.JwtTokenProvider;
 import com.bttf.queosk.dto.TableDto;
+import com.bttf.queosk.dto.TableNameUpdateForm;
 import com.bttf.queosk.dto.TableRequestForm;
 import com.bttf.queosk.dto.TableResponseForm;
 import com.bttf.queosk.enumerate.TableStatus;
@@ -39,9 +40,9 @@ public class TableController {
         tableService.createTable(restaurantId, form);
         return ResponseEntity.status(CREATED).build();
     }
-    @PutMapping("/table/{tableId}")
+    @PutMapping("/table/{tableId}/status")
     @ApiOperation(value = "매장 테이블 상태 변경", notes = "매장 테이블의 상태를 변경 합니다.")
-    public ResponseEntity<Void> tableUpdate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+    public ResponseEntity<Void> tableStatusUpdate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                             @RequestParam TableStatus tableStatus,
                                             @PathVariable Long tableId) {
 
@@ -52,7 +53,17 @@ public class TableController {
             queueService.popTheFirstTeamOfQueue(restaurantId);
         }
 
-        tableService.updateTable(tableId, tableStatus, restaurantId);
+        tableService.updateTableStatus(tableId, tableStatus, restaurantId);
+        return ResponseEntity.status(NO_CONTENT).build();
+    }
+
+    @PatchMapping("/table/{tableId}/name")
+    @ApiOperation(value = "매장 테이블 이름 변경", notes = "매장 테이블의 이름을 변경 합니다.")
+    public ResponseEntity<Void> tableNameUpdate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                @RequestBody TableNameUpdateForm tableNameUpdateForm,
+                                                @PathVariable Long tableId) {
+        Long restaurantId = jwtTokenProvider.getIdFromToken(token);
+        tableService.updateTableName(tableId, tableNameUpdateForm, restaurantId);
         return ResponseEntity.status(NO_CONTENT).build();
     }
 
