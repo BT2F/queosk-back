@@ -41,4 +41,6 @@ public class Table extends BaseTimeEntity {
     public void setStatus(TableStatus status) {
         this.status = status;
     }
+
+    public void setName(String name) { this.name = name; }
 }
