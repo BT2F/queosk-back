@@ -14,8 +14,10 @@ import lombok.NoArgsConstructor;
 @ApiModel(value = "Review Dto")
 public class ReviewDto {
     private Long id;
-    private RestaurantDto restaurant;
-    private UserDto user;
+    private Long restaurantId;
+    private String restaurantName;
+    private String userNickname;
+    private String userImage;
     private String subject;
     private String content;
     private String imageUrl;
@@ -25,8 +27,10 @@ public class ReviewDto {
     public static ReviewDto of(Review review) {
         return ReviewDto.builder()
                 .id(review.getId())
-                .restaurant(RestaurantDto.of(review.getRestaurant()))
-                .user(UserDto.of(review.getUser()))
+                .restaurantId(review.getRestaurant().getId())
+                .restaurantName(review.getRestaurant().getRestaurantName())
+                .userNickname(review.getUser().getNickName())
+                .userImage(review.getUser().getImageUrl())
                 .subject(review.getSubject())
                 .content(review.getContent())
                 .imageUrl(review.getImageUrl())

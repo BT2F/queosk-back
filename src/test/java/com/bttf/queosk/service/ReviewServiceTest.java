@@ -209,7 +209,7 @@ class ReviewServiceTest {
     @Test
     @DisplayName("고객리뷰 가져오기 (성공)")
     void getRestaurantUserReviewList_success() {
-        User user = User.builder().id(1L).status(UserStatus.VERIFIED).loginType(NORMAL).build();
+        User user = User.builder().id(1L).nickName("test").status(UserStatus.VERIFIED).loginType(NORMAL).build();
         Restaurant restaurant = Restaurant.builder()
                 .id(1L)
                 .build();
@@ -236,7 +236,7 @@ class ReviewServiceTest {
 
         List<ReviewDto> reviewList = reviewService.getRestaurantUserReviewList(1L, 1L);
         assertThat(reviewList.size()).isEqualTo(1);
-        assertThat(reviewList.get(0).getUser().getId()).isEqualTo(1L);
+        assertThat(reviewList.get(0).getUserNickname()).isEqualTo("test");
 
     }
 }

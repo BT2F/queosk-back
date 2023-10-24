@@ -13,8 +13,10 @@ import lombok.NoArgsConstructor;
 @ApiModel(value = "리뷰 Response")
 public class ReviewResponseForm {
     private Long id;
-    private RestaurantDto restaurant;
-    private UserDto user;
+    private Long restaurantId;
+    private String restaurantName;
+    private String userNickname;
+    private String userImage;
     private String subject;
     private String content;
     private Double rate;
@@ -22,8 +24,10 @@ public class ReviewResponseForm {
     public static ReviewResponseForm of(ReviewDto reviewDto) {
         return ReviewResponseForm.builder()
                 .id(reviewDto.getId())
-                .restaurant(reviewDto.getRestaurant())
-                .user(reviewDto.getUser())
+                .restaurantId(reviewDto.getRestaurantId())
+                .restaurantName(reviewDto.getRestaurantName())
+                .userNickname(reviewDto.getUserNickname())
+                .userImage(reviewDto.getUserImage())
                 .subject(reviewDto.getSubject())
                 .content(reviewDto.getContent())
                 .rate(reviewDto.getRate())
