@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import static com.bttf.queosk.exception.ErrorCode.*;
@@ -29,6 +31,8 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
+
+    private static final Lock reviewLock = new ReentrantLock();
 
     @Transactional
     @CacheEvict(value = "reviewList", key = "'restaurantId:' + #reviewCreationRequest.restaurantId")
@@ -47,7 +51,21 @@ public class ReviewService {
                 .commentNum(0)
                 .build();
 
-        reviewRepository.save(review);
+        Double newAverageRating = calculateReviewAverage(restaurant, review.getRate());
+
+        reviewLock.lock();
+        try {
+            restaurant.setRatingAverage(newAverageRating);
+            reviewRepository.save(review);
+        } finally {
+            reviewLock.unlock();
+        }
+    }
+
+    private Double calculateReviewAverage(Restaurant restaurant, Double newRating) {
+        List<Review> reviews =
+                reviewRepository.findByRestaurantAndIsDeletedFalse(restaurant);
+        return (restaurant.getRatingAverage() + newRating) / (reviews.size() + 1);
     }
 
     @Transactional
@@ -87,8 +105,8 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public List<ReviewDto> getRestaurantUserReviewList(Long userId, Long restaurantId) {
         return reviewRepository.findByRestaurantAndUserAndIsDeletedFalse(
-                        getRestaurant(restaurantId), getUser(userId)
-                ).stream().map(ReviewDto::of).collect(Collectors.toList());
+                getRestaurant(restaurantId), getUser(userId)
+        ).stream().map(ReviewDto::of).collect(Collectors.toList());
     }
 
     private User getUser(Long userId) {
