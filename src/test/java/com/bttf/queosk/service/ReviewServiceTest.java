@@ -55,6 +55,7 @@ class ReviewServiceTest {
                 .build();
 
         Restaurant restaurant = Restaurant.builder()
+                .ratingAverage(1.0)
                 .id(1L)
                 .build();
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
