@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.bttf.queosk.enumerate.EmailComponents.VERIFICATION_SUBJECT;
+import static com.bttf.queosk.enumerate.EmailComponents.VERIFICATION_TEXT;
 import static com.bttf.queosk.enumerate.UserStatus.DELETED;
 import static com.bttf.queosk.enumerate.UserStatus.NOT_VERIFIED;
 import static com.bttf.queosk.exception.ErrorCode.*;
@@ -46,10 +48,8 @@ public class UserLoginService {
 
         //회원 이메일 주소로 인증이메일 전송
         emailSender.sendEmail(userSignUpRequestForm.getEmail(),
-                "Queosk 이메일 인증",
-                String.format("Queosk에 가입해 주셔서 감사합니다. \n" +
-                        "아래 링크를 클릭 하시어 이메일 인증을 완료해주세요.\n" +
-                        "https://queosk.kr/api/users/%d/verification", user.getId()));
+                VERIFICATION_SUBJECT,
+                String.format(VERIFICATION_TEXT, user.getId()));
     }
 
     @Transactional
