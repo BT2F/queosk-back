@@ -73,8 +73,8 @@ public enum ErrorCode {
     UNDEFINED_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "정의되지 않은 예외가 발생했습니다. 메세지를 참고해주세요."),
 
     // 리프레시 토큰 Exception
-    REFRESH_CODE_EXPIRED(HttpStatus.UNAUTHORIZED, "리프레시토큰이 만료되었습니다. 재로그인이 필요합니다.");
-
+    REFRESH_CODE_EXPIRED(HttpStatus.UNAUTHORIZED, "리프레시토큰이 만료되었습니다. 재로그인이 필요합니다."),
+    RETRY_TO_CREATE_QUEUE(HttpStatus.INTERNAL_SERVER_ERROR, "웨이팅 생성에 실패했습니다. 다시 시도해주세요");
 
     private final HttpStatus status;
     private final String message;
