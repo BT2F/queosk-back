@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+import static com.bttf.queosk.enumerate.EmailComponents.PASSWORD_RESET_SUBJECT;
+import static com.bttf.queosk.enumerate.EmailComponents.PASSWORD_RESET_TEXT;
 import static com.bttf.queosk.enumerate.UserStatus.DELETED;
 import static com.bttf.queosk.enumerate.UserStatus.VERIFIED;
 import static com.bttf.queosk.exception.ErrorCode.*;
@@ -88,15 +90,14 @@ public class UserInfoService {
 
         String encryptedPassword = passwordEncoder.encode(randomPassword);
 
-        emailSender.sendEmail(
-                user.getEmail(),
-                "비밀번호 초기화 완료",
-                "새로운 비밀번호 : " + randomPassword + "를 입력해 로그인 해주세요."
-        );
-
         user.setPassword(encryptedPassword);
 
         userRepository.save(user);
+
+        emailSender.sendEmail(
+                user.getEmail(),
+                PASSWORD_RESET_SUBJECT,
+                String.format(PASSWORD_RESET_TEXT, randomPassword));
     }
 
     @Transactional

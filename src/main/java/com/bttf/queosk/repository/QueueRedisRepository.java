@@ -12,9 +12,10 @@ import java.util.concurrent.TimeUnit;
 public class QueueRedisRepository {
     private final RedisTemplate<String, String> redisTemplate;
 
-    public void createQueue(String restaurantId, String queueId) {
+    public String createQueue(String restaurantId, String queueId) {
         redisTemplate.opsForList().rightPush(restaurantId, queueId);
         redisTemplate.expire(restaurantId, 24, TimeUnit.HOURS);
+        return queueId;
     }
 
     public List<String> findAll(String restaurantId) {
@@ -31,5 +32,17 @@ public class QueueRedisRepository {
 
     public void deleteQueue(String restaurantId, String queueId) {
         redisTemplate.opsForList().remove(restaurantId, 0, queueId);
+    }
+
+    public boolean setIfNotExists(String key, String value) {
+        return Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(key, value));
+    }
+
+    public void deleteLockKey(String key) {
+        redisTemplate.delete(key);
+    }
+
+    public void expire(String key, int expireSeconds) {
+        redisTemplate.expire(key, expireSeconds, TimeUnit.SECONDS);
     }
 }

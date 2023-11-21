@@ -6,10 +6,7 @@ import com.bttf.queosk.entity.baseentity.BaseTimeEntity;
 import com.bttf.queosk.enumerate.OperationStatus;
 import com.bttf.queosk.enumerate.RestaurantCategory;
 import com.bttf.queosk.enumerate.UserRole;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
@@ -58,6 +55,7 @@ public class Restaurant extends BaseTimeEntity {
 
     private String region;
 
+    @Setter
     private Double ratingAverage;
 
     private String imageUrl;
@@ -105,4 +103,5 @@ public class Restaurant extends BaseTimeEntity {
     public void setRegion(String region) {
         this.region = region;
     }
+
 }
