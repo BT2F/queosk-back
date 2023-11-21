@@ -35,6 +35,8 @@ public class QueueService {
                             Long userId,
                             Long restaurantId) {
 
+        String lockKey = "lock:" + restaurantId; // 레디스 락 키 생성
+
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new CustomException(INVALID_RESTAURANT));
 
@@ -44,10 +46,13 @@ public class QueueService {
                 Queue.of(queueRequestRequest, restaurant.getId(), userId)
         );
 
-        queueRedisRepository.createQueue(
-                String.valueOf(restaurant.getId()),
-                String.valueOf(queue.getId())
-        );
+        acquireLockAndPerformTask(lockKey, 5, 100, () -> {
+            queueRedisRepository.createQueue(
+                    String.valueOf(restaurant.getId()),
+                    String.valueOf(queue.getId())
+            );
+        });
+
     }
 
     //웨이팅 중인 팀들의 예약정보 가져오기
@@ -97,8 +102,17 @@ public class QueueService {
     // 웨이팅 수를 앞에서 1개 당김.
     @Transactional
     public void popTheFirstTeamOfQueue(Long restaurantId) {
-        String poppedQueueId =
-                queueRedisRepository.popTheFirstTeamOfQueue(String.valueOf(restaurantId));
+        String lockKey = "lock:" + restaurantId; // 레디스 락 키 생성
+        String poppedQueueId = null;
+
+        boolean isLockAcquired = acquireLockWithRetry(lockKey, 5, 100);
+        if (!isLockAcquired) {
+            try {
+                poppedQueueId = queueRedisRepository.popTheFirstTeamOfQueue(String.valueOf(restaurantId));
+            } finally {
+                releaseLock(String.valueOf(restaurantId));
+            }
+        }
 
         // pop된 Queue의 경우 quque 의 isDone 을 true처리
         if (poppedQueueId != null) {
@@ -122,15 +136,18 @@ public class QueueService {
     // 사용자가 본인의 웨이팅을 삭제(취소)
     @Transactional
     public void deleteUserQueue(Long restaurantId, Long userId) {
+        String lockKey = "lock:" + restaurantId; // 레디스 락 키 생성
 
         Queue queue = queueRepository
                 .findFirstByUserIdAndRestaurantIdOrderByCreatedAtDesc(userId, restaurantId)
                 .orElseThrow(() -> new CustomException(QUEUE_DOESNT_EXIST));
 
-        queueRedisRepository.deleteQueue(
-                String.valueOf(restaurantId),
-                String.valueOf(queue.getId())
-        );
+        acquireLockAndPerformTask(lockKey, 5, 100, () -> {
+            queueRedisRepository.deleteQueue(
+                    String.valueOf(restaurantId),
+                    String.valueOf(queue.getId())
+            );
+        });
     }
 
     // 유저가 이미 해당 식당에 웨이팅 등록을 했는지 확인
@@ -189,5 +206,74 @@ public class QueueService {
     private boolean isQueueDone(Queue queue) {
         //만약 큐가 처리되었고 처리된 시간이 10분 이내일 경우 입장가능 인원으로 판단하여 -1 반환(이후 +1 하는것 감안)
         return queue.isDone() && queue.getUpdatedAt().plusMinutes(11).isAfter(LocalDateTime.now());
+    }
+
+    // 레디스를 이용하여 락 획득
+    private boolean acquireLock(String key, int expireSeconds) {
+        // SETNX 명령어를 사용하여 락을 획득
+        boolean isSet = queueRedisRepository.setIfNotExists(key, "LOCK_VALUE");
+        if (isSet) {
+            // 락 획득 시간을 설정하여 만료시간을 지정
+            queueRedisRepository.expire(key, expireSeconds);
+        }
+        return isSet;
+    }
+
+    // 레디스를 이용하여 락 해제
+    private void releaseLock(String key) {
+        // 락을 해제하기 위해 키를 삭제
+        queueRedisRepository.deleteLockKey(key);
+    }
+
+    private boolean acquireLockAndPerformTask(String lockKey,
+                                              int maxRetries,
+                                              int retryIntervalMs,
+                                              Runnable task) {
+
+        int retryCount = 0;
+        boolean isLockAcquired = false;
+
+        while (retryCount < maxRetries && !(isLockAcquired = acquireLock(lockKey, 10))) {
+            try {
+                Thread.sleep(retryIntervalMs);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            retryCount++;
+        }
+
+        try {
+            if (isLockAcquired) {
+                task.run();
+            } else {
+                // 락을 획득하지 못한 경우에 대한 처리
+                // 예를 들어 다른 작업을 수행하거나 로깅 등을 수행
+            }
+        } finally {
+            if (isLockAcquired) {
+                // 락을 성공적으로 획득한 경우에만 락을 해제
+                releaseLock(lockKey);
+            }
+        }
+
+        return isLockAcquired;
+    }
+
+    // 레디스를 이용하여 락 획득 (재시도 로직 포함)
+    private boolean acquireLockWithRetry(String key, int maxRetries, int retryIntervalMs) {
+        int retryCount = 0;
+        boolean isLockAcquired = false;
+        while (!isLockAcquired && retryCount < maxRetries) {
+            isLockAcquired = acquireLock(key,10);
+            if (!isLockAcquired) {
+                try {
+                    Thread.sleep(retryIntervalMs); // 일정 시간 대기 후 재시도
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                retryCount++;
+            }
+        }
+        return isLockAcquired;
     }
 }
