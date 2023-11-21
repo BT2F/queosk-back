@@ -89,6 +89,8 @@ class QueueServiceTest {
                         String.valueOf(mockQueue.getId())))
                 .thenReturn(null);
 
+        when(queueRedisRepository.setIfNotExists(anyString(), anyString())).thenReturn(true);
+
         // when
         queueService.createQueue(queueCreationRequestForm, mockUser.getId(), mockRestaurant.getId());
 
